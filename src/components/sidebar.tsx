@@ -63,6 +63,11 @@ const ExampleSidebar: FC = function () {
                   Home
                 </SidebarNavLink>
               </SidebarGroup>
+              <SidebarGroup title="Test Dashboards">
+                <SidebarNavLink to={"/dashboard/3dlsample"} icon={HiChartPie}>
+                  3DL Sample
+                </SidebarNavLink>
+              </SidebarGroup>
               <SidebarGroup title="Dashboards">
                 <SidebarNavLink to={"/a"} icon={HiChartPie}>
                   AAA + AAA

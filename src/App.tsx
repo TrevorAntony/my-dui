@@ -8,6 +8,7 @@ import SamplePage from "./pages";
 import FlowbiteWrapper from "./components/flowbite-wrapper";
 import ComponentD from "./content-components/ComponentD";
 import APITestComponent from "./content-components/APITestComponent";
+import Dashboard3DL from "./api/3dlcomponents/Dashboard3DL";
 
 // const ComponentAA: React.FC = () => <div>Component A</div>;
 // const ComponentBB: React.FC = () => <div>Component B</div>;
@@ -18,6 +19,7 @@ const App: React.FC = () => {
       <Routes>
         <Route element={<FlowbiteWrapper />}>
           <Route path="/" element={<AppLayout />}>
+            <Route path="dashboard/:id?" element={<Dashboard3DL />} />
             <Route path="a/:id?" element={<ComponentA />} />
             <Route path="b" element={<ComponentB />} />
             <Route path="c" element={<ComponentC />} />
