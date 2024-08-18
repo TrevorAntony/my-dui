@@ -6,24 +6,16 @@ import { useEffect, useState } from "react";
 import {
   HiAdjustments,
   HiChartPie,
-  HiChartSquareBar,
   HiClipboard,
   HiCog,
-  HiCollection,
   HiHashtag,
   HiHome,
-  HiInboxIn,
-  HiInformationCircle,
-  HiLockClosed,
   HiSearch,
-  HiShoppingBag,
-  HiUsers,
-  HiViewGrid,
 } from "react-icons/hi";
 
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
-import { NavLink } from "react-router-dom";
+
 import { SidebarNavLink } from "./ui-wrappers";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
@@ -34,16 +26,12 @@ const ExampleSidebar: FC = function () {
     useSidebarContext();
 
   const [currentPage, setCurrentPage] = useState("");
-  const [isEcommerceOpen, setEcommerceOpen] = useState(true);
-  const [isUsersOpen, setUsersOpen] = useState(true);
 
   useEffect(() => {
     const newPage = window.location.pathname;
 
     setCurrentPage(newPage);
-    setEcommerceOpen(newPage.includes("/e-commerce/"));
-    setUsersOpen(newPage.includes("/users/"));
-  }, [setCurrentPage, setEcommerceOpen, setUsersOpen]);
+  }, [setCurrentPage]);
 
   console.log("currentPage", currentPage);
   return (
@@ -68,8 +56,8 @@ const ExampleSidebar: FC = function () {
               />
             </form>
 
-            <SystemSidebar />
             <Sidebar.Items>
+              <SystemSidebar />
               <SidebarGroup>
                 <SidebarNavLink to={"/"} icon={HiHome}>
                   Home

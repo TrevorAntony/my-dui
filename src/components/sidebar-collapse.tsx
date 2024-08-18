@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Sidebar } from "flowbite-react"; // Adjust according to your imports
-import { HiShoppingBag, HiChartPie } from "react-icons/hi";
-import SidebarNavLink from "./ui-wrappers"; // Adjust the import according to your project structure
+import { Sidebar } from "flowbite-react";
 
 type SidebarCollapseProps = {
-  icon: React.ElementType;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>; // Restrict to SVG components
   label: string;
   children: React.ReactNode;
   paths: string[]; // Paths that should trigger the collapse to be open
 };
 
 const SidebarCollapse: React.FC<SidebarCollapseProps> = ({
-  icon,
+  icon: Icon,
   label,
   children,
   paths,
@@ -31,7 +29,7 @@ const SidebarCollapse: React.FC<SidebarCollapseProps> = ({
 
   return (
     <Sidebar.Collapse
-      icon={icon}
+      icon={Icon}
       label={label}
       open={isCollapseOpen}
       onClick={() => setIsCollapseOpen(!isCollapseOpen)} // Toggle open state
