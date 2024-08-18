@@ -32,11 +32,13 @@ const MainContent: FC<PropsWithChildren<NavbarSidebarLayoutProps>> = function ({
   return (
     <main
       className={classNames(
-        "overflow-y-auto relative w-full h-full bg-gray-50 dark:bg-gray-900",
+        "overflow-y-auto relative w-full h-full bg-gray-50 dark:bg-gray-900 p-0",
         isSidebarOpen ? "lg:ml-16" : "lg:ml-64"
       )}
     >
-      <Outlet />
+      <div className="px-4 pt-6">
+        <Outlet />
+      </div>
       {isFooter && (
         <div className="mx-4 mt-4">
           <MainContentFooter />

@@ -1,0 +1,48 @@
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  NavLink,
+} from "react-router-dom";
+import AppLayout from "./AppLayout";
+import ComponentA from "./content-components/ComponentA";
+import ComponentB from "./content-components/ComponentB";
+import ComponentC from "./content-components/ComponentC";
+import "./App.css";
+import SamplePage from "./pages";
+import FlowbiteWrapper from "./components/flowbite-wrapper";
+import { Sidebar } from "flowbite-react";
+
+const ComponentAA: React.FC = () => <div>Component A</div>;
+const ComponentBB: React.FC = () => <div>Component B</div>;
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <Sidebar aria-label="Sidebar with navigation links">
+        <Sidebar.Items>
+          <Sidebar.ItemGroup>
+            <NavLink
+              to="/a"
+              className={({ isActive }) => (isActive ? "active-link" : "")}
+            >
+              <Sidebar.Item as="div">Link A</Sidebar.Item>
+            </NavLink>
+            <NavLink
+              to="/b"
+              className={({ isActive }) => (isActive ? "active-link" : "")}
+            >
+              <Sidebar.Item as="div">Link B</Sidebar.Item>
+            </NavLink>
+          </Sidebar.ItemGroup>
+        </Sidebar.Items>
+      </Sidebar>
+      <Routes>
+        <Route path="a" element={<ComponentA />} />
+        <Route path="b" element={<ComponentB />} />
+      </Routes>
+    </Router>
+  );
+};
+
+export default App;

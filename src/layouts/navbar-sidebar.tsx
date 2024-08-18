@@ -18,6 +18,7 @@ const NavbarSidebarLayout: FC<PropsWithChildren<NavbarSidebarLayoutProps>> =
         <Navbar />
         <div className="flex items-start pt-16">
           <Sidebar />
+
           <MainContent isFooter={isFooter}>{children}</MainContent>
         </div>
       </SidebarProvider>
@@ -37,7 +38,7 @@ const MainContent: FC<PropsWithChildren<NavbarSidebarLayoutProps>> = function ({
         isSidebarOpen ? "lg:ml-16" : "lg:ml-64"
       )}
     >
-      {children}
+      <div className="px-4 pt-6">{children}</div>
       {isFooter && (
         <div className="mx-4 mt-4">
           <MainContentFooter />

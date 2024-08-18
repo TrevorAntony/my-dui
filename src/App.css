@@ -1,5 +1,3 @@
-
-
 .App {
   text-align: center;
 }
@@ -85,4 +83,20 @@ main {
   flex: 1;
   padding: 2rem;
   background-color: #fff;
+}
+
+.apexcharts-legend {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: auto; /* Ensure the height is auto to fit content */
+  padding-bottom: 20px; /* Additional padding to ensure space for the legend */
+  overflow: hidden; /* Prevent overflow issues */
 }

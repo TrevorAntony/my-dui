@@ -10,6 +10,8 @@ import {
   HiClipboard,
   HiCog,
   HiCollection,
+  HiHashtag,
+  HiHome,
   HiInboxIn,
   HiInformationCircle,
   HiLockClosed,
@@ -22,6 +24,10 @@ import {
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
 import { NavLink } from "react-router-dom";
+import { SidebarNavLink } from "./ui-wrappers";
+import SidebarCollapse from "./sidebar-collapse";
+import SidebarGroup from "./sidebar-group";
+import SystemSidebar from "./api-navigation-sidebar";
 
 const ExampleSidebar: FC = function () {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =
@@ -39,6 +45,7 @@ const ExampleSidebar: FC = function () {
     setUsersOpen(newPage.includes("/users/"));
   }, [setCurrentPage, setEcommerceOpen, setUsersOpen]);
 
+  console.log("currentPage", currentPage);
   return (
     <div
       className={classNames("lg:!block", {
@@ -61,58 +68,35 @@ const ExampleSidebar: FC = function () {
               />
             </form>
 
+            <SystemSidebar />
             <Sidebar.Items>
-              <Sidebar.ItemGroup>
-                <NavLink
-                  to="/a"
-                  className={({ isActive }) => (isActive ? "active-link" : "")}
+              <SidebarGroup>
+                <SidebarNavLink to={"/"} icon={HiHome}>
+                  Home
+                </SidebarNavLink>
+              </SidebarGroup>
+              <SidebarGroup title="Dashboards">
+                <SidebarNavLink to={"/a"} icon={HiChartPie}>
+                  AAA + AAA
+                </SidebarNavLink>
+                <SidebarNavLink to={"/b"} icon={HiChartPie}>
+                  BBB + BBB
+                </SidebarNavLink>
+                <SidebarNavLink to={"/c"} icon={HiChartPie}>
+                  CCC + CCC
+                </SidebarNavLink>
+                <SidebarNavLink to={"/D"} icon={HiChartPie}>
+                  DDD + DDD
+                </SidebarNavLink>
+                <SidebarCollapse
+                  icon={HiHashtag}
+                  label="APIs"
+                  paths={["/api", "/api/dashboard", "/api/settings"]}
                 >
-                  <Sidebar.Item
-                    as="div"
-                    icon={HiChartPie}
-                    className={
-                      "/a" === currentPage ? "bg-gray-100 dark:bg-gray-700" : ""
-                    }
-                  >
-                    A A A A
-                  </Sidebar.Item>
-                </NavLink>
-
-                <NavLink
-                  to="/b"
-                  className={({ isActive }) => (isActive ? "active-link" : "")}
-                >
-                  <Sidebar.Item
-                    as="div"
-                    icon={HiChartPie}
-                    className={
-                      "/b" === currentPage ? "bg-gray-100 dark:bg-gray-700" : ""
-                    }
-                  >
-                    B B B B
-                  </Sidebar.Item>
-                </NavLink>
-
-                <Sidebar.Item
-                  href="/b"
-                  icon={HiChartPie}
-                  className={
-                    "/b" === currentPage ? "bg-gray-100 dark:bg-gray-700" : ""
-                  }
-                >
-                  B
-                </Sidebar.Item>
-
-                <Sidebar.Item
-                  href="/c"
-                  icon={HiChartPie}
-                  className={
-                    "/c" === currentPage ? "bg-gray-100 dark:bg-gray-700" : ""
-                  }
-                >
-                  C
-                </Sidebar.Item>
-
+                  <SidebarNavLink to={"/api"} icon={HiChartPie}>
+                    API
+                  </SidebarNavLink>
+                </SidebarCollapse>
                 <Sidebar.Item
                   href="/s"
                   icon={HiChartPie}
@@ -122,169 +106,11 @@ const ExampleSidebar: FC = function () {
                 >
                   S
                 </Sidebar.Item>
+              </SidebarGroup>
 
-                <Sidebar.Item
-                  href="/"
-                  icon={HiChartPie}
-                  className={
-                    "/" === currentPage ? "bg-gray-100 dark:bg-gray-700" : ""
-                  }
-                >
-                  Dashboard
-                </Sidebar.Item>
-                <Sidebar.Item
-                  href="/kanban"
-                  icon={HiViewGrid}
-                  className={
-                    "/kanban" === currentPage
-                      ? "bg-gray-100 dark:bg-gray-700"
-                      : ""
-                  }
-                >
-                  Kanban
-                </Sidebar.Item>
-                <Sidebar.Item
-                  href="/mailing/inbox"
-                  icon={HiInboxIn}
-                  label="3"
-                  className={
-                    "/mailing/inbox" === currentPage
-                      ? "bg-gray-100 dark:bg-gray-700"
-                      : ""
-                  }
-                >
-                  Inbox
-                </Sidebar.Item>
-                <Sidebar.Collapse
-                  icon={HiShoppingBag}
-                  label="E-commerce"
-                  open={isEcommerceOpen}
-                >
-                  <Sidebar.Item
-                    href="/e-commerce/products"
-                    className={
-                      "/e-commerce/products" === currentPage
-                        ? "bg-gray-100 dark:bg-gray-700"
-                        : ""
-                    }
-                  >
-                    Products
-                  </Sidebar.Item>
-                  <Sidebar.Item
-                    href="/e-commerce/billing"
-                    className={
-                      "/e-commerce/billing" === currentPage
-                        ? "bg-gray-100 dark:bg-gray-700"
-                        : ""
-                    }
-                  >
-                    Billing
-                  </Sidebar.Item>
-                  <Sidebar.Item
-                    href="/e-commerce/invoice"
-                    className={
-                      "/e-commerce/invoice" === currentPage
-                        ? "bg-gray-100 dark:bg-gray-700"
-                        : ""
-                    }
-                  >
-                    Invoice
-                  </Sidebar.Item>
-                </Sidebar.Collapse>
-                <Sidebar.Collapse
-                  icon={HiUsers}
-                  label="Users"
-                  open={isUsersOpen}
-                >
-                  <Sidebar.Item
-                    href="/users/list"
-                    className={
-                      "/users/list" === currentPage
-                        ? "bg-gray-100 dark:bg-gray-700"
-                        : ""
-                    }
-                  >
-                    Users list
-                  </Sidebar.Item>
-                  <Sidebar.Item
-                    href="/users/profile"
-                    className={
-                      "/users/profile" === currentPage
-                        ? "bg-gray-100 dark:bg-gray-700"
-                        : ""
-                    }
-                  >
-                    Profile
-                  </Sidebar.Item>
-                  <Sidebar.Item
-                    href="/users/feed"
-                    className={
-                      "/users/feed" === currentPage
-                        ? "bg-gray-100 dark:bg-gray-700"
-                        : ""
-                    }
-                  >
-                    Feed
-                  </Sidebar.Item>
-                  <Sidebar.Item
-                    href="/users/settings"
-                    className={
-                      "/users/settings" === currentPage
-                        ? "bg-gray-100 dark:bg-gray-700"
-                        : ""
-                    }
-                  >
-                    Settings
-                  </Sidebar.Item>
-                </Sidebar.Collapse>
-                <Sidebar.Collapse icon={HiChartSquareBar} label="Pages">
-                  <Sidebar.Item href="/pages/pricing">Pricing</Sidebar.Item>
-                  <Sidebar.Item href="/pages/maintenance">
-                    Maintenace
-                  </Sidebar.Item>
-                  <Sidebar.Item href="/pages/404">404 not found</Sidebar.Item>
-                  <Sidebar.Item href="/pages/500">
-                    500 server error
-                  </Sidebar.Item>
-                </Sidebar.Collapse>
-                <Sidebar.Collapse icon={HiLockClosed} label="Authentication">
-                  <Sidebar.Item href="/authentication/sign-in">
-                    Sign in
-                  </Sidebar.Item>
-                  <Sidebar.Item href="/authentication/sign-up">
-                    Sign up
-                  </Sidebar.Item>
-                  <Sidebar.Item href="/authentication/forgot-password">
-                    Forgot password
-                  </Sidebar.Item>
-                  <Sidebar.Item href="/authentication/reset-password">
-                    Reset password
-                  </Sidebar.Item>
-                  <Sidebar.Item href="/authentication/profile-lock">
-                    Profile lock
-                  </Sidebar.Item>
-                </Sidebar.Collapse>
-              </Sidebar.ItemGroup>
-              <Sidebar.ItemGroup>
-                <Sidebar.Item
-                  href="https://github.com/themesberg/flowbite-react/"
-                  icon={HiClipboard}
-                >
-                  Docs
-                </Sidebar.Item>
-                <Sidebar.Item
-                  href="https://flowbite-react.com/"
-                  icon={HiCollection}
-                >
-                  Components
-                </Sidebar.Item>
-                <Sidebar.Item
-                  href="https://github.com/themesberg/flowbite-react/issues"
-                  icon={HiInformationCircle}
-                >
-                  Help
-                </Sidebar.Item>
-              </Sidebar.ItemGroup>
+              <SidebarGroup title="Data tasks">
+                <Sidebar.Item icon={HiClipboard}>Data Tasks</Sidebar.Item>
+              </SidebarGroup>
             </Sidebar.Items>
           </div>
           <BottomMenu />
