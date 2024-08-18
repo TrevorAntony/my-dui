@@ -30,12 +30,12 @@ const CardComponent: FC<CardComponentProps> = ({
       <div>
         <div className="mb-4">
           <div className="shrink-0">
-            <span className="text-2xl font-bold leading-none text-gray-900 dark:text-white sm:text-3xl">
+            <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
               {header}
-            </span>
-            <h3 className="text-base font-normal text-gray-600 dark:text-gray-400">
-              {subHeader}
             </h3>
+            <span className="text-base font-normal text-gray-600 dark:text-gray-400">
+              {subHeader}
+            </span>
           </div>
         </div>
         <div>{children}</div>

@@ -135,7 +135,6 @@ const SystemSidebar = () => {
     const loadSidebarConfig = async () => {
       try {
         const config = await fetchDataWithoutStore("/navigation");
-        console.log("Fetched config:", config);
         setSidebarConfig(config || defaultSidebarConfig);
       } catch (error) {
         console.error("Failed to load sidebar config", error);

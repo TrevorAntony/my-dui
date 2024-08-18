@@ -30,8 +30,8 @@ const useQuery = (query) => {
         if (!response.ok) {
           throw new Error('Network response was not ok: ' + result.message + "\n" + "Original query: " + query);
         }
-        
-        console.log(result)
+
+
         setData(result); // Assuming the data is an array of options
       } catch (error) {
         setError(error);
