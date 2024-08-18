@@ -58,17 +58,7 @@ const ExampleSidebar: FC = function () {
 
             <Sidebar.Items>
               <SystemSidebar />
-              <SidebarGroup>
-                <SidebarNavLink to={"/"} icon={HiHome}>
-                  Home
-                </SidebarNavLink>
-              </SidebarGroup>
-              <SidebarGroup title="Test Dashboards">
-                <SidebarNavLink to={"/dashboard/3dlsample"} icon={HiChartPie}>
-                  3DL Sample
-                </SidebarNavLink>
-              </SidebarGroup>
-              <SidebarGroup title="Dashboards">
+              <SidebarGroup title="Test Components">
                 <SidebarNavLink to={"/a"} icon={HiChartPie}>
                   AAA + AAA
                 </SidebarNavLink>
