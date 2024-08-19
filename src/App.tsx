@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AppLayout from "./AppLayout";
+import AppLayout from "./AppLayout.tsx";
 import ComponentA from "./content-components/ComponentA";
 import ComponentB from "./content-components/ComponentB";
 import ComponentC from "./content-components/ComponentC";
@@ -9,6 +9,7 @@ import FlowbiteWrapper from "./components/flowbite-wrapper";
 import ComponentD from "./content-components/ComponentD";
 import APITestComponent from "./content-components/APITestComponent";
 import Dashboard3DL from "./3dlcomponents/Dashboard3DL";
+import GridLayoutTester from "./content-components/GridLayoutTester";
 
 // const ComponentAA: React.FC = () => <div>Component A</div>;
 // const ComponentBB: React.FC = () => <div>Component B</div>;
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             <Route path="c" element={<ComponentC />} />
             <Route path="d" element={<ComponentD />} />
             <Route path="api" element={<APITestComponent />} />
+            <Route path="grid" element={<GridLayoutTester />} />
           </Route>
           <Route path="s" element={<SamplePage />} />
         </Route>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HiHome, HiChartPie, HiHashtag } from "react-icons/hi";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
-import { SidebarNavLink } from "./ui-wrappers";
+import { SidebarNavLink } from "./SidebarNavLink";
 import { fetchDataWithoutStore } from "../api/api";
 import { Sidebar } from "flowbite-react";
 

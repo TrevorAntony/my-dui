@@ -9,14 +9,13 @@ import {
   HiClipboard,
   HiCog,
   HiHashtag,
-  HiHome,
   HiSearch,
 } from "react-icons/hi";
 
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
 
-import { SidebarNavLink } from "./ui-wrappers";
+import { SidebarNavLink } from "./SidebarNavLink";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
@@ -59,6 +58,9 @@ const ExampleSidebar: FC = function () {
             <Sidebar.Items>
               <SystemSidebar />
               <SidebarGroup title="Test Components">
+                <SidebarNavLink to={"/grid"} icon={HiChartPie}>
+                  Grid Layout
+                </SidebarNavLink>
                 <SidebarNavLink to={"/a"} icon={HiChartPie}>
                   AAA + AAA
                 </SidebarNavLink>

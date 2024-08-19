@@ -24,6 +24,7 @@ const AppLayout: React.FC = () => {
   );
 };
 
+// Removed xl:grid-cols-2
 const MainContent: FC<PropsWithChildren<NavbarSidebarLayoutProps>> = function ({
   isFooter,
 }) {
@@ -36,7 +37,7 @@ const MainContent: FC<PropsWithChildren<NavbarSidebarLayoutProps>> = function ({
         isSidebarOpen ? "lg:ml-16" : "lg:ml-64"
       )}
     >
-      <div className="px-4 pt-6">
+      <div className="mb-6 grid grid-cols-1 gap-y-4 px-4 pt-6 dark:border-gray-700 dark:bg-gray-900 xl:gap-4">
         <Outlet />
       </div>
       {isFooter && (
