@@ -28,13 +28,19 @@ import {
   PreviewPage,
   PivotTable,
   JSONVisual,
+  Row,
+  Tab,
+  TabHeader,
+  TabSet,
+  DashBoardBody,
+  DashboardBodyOverride,
 } from "../3dl";
 import { Grid } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
 
-const Dashboard3DLJSX = () => {
-  return <Dashboard></Dashboard>;
-};
+// const Dashboard3DLJSX = () => {
+//   return <Dashboard></Dashboard>;
+// };
 
 const Dashboard3DL: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -92,6 +98,16 @@ const Dashboard3DL: React.FC = () => {
                     PreviewPage,
                     PivotTable,
                     JSONVisual,
+                    Row,
+                    Tab,
+                    TabHeader,
+                    TabSet,
+                    DashBoardBody: (props: unknown) => (
+                      <DashBoardBody
+                        {...props}
+                        OverrideComponent={DashboardBodyOverride}
+                      />
+                    ),
                   }}
                   jsx={dashboardData}
                 />
