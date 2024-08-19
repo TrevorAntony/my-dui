@@ -1,24 +1,30 @@
 import { Card } from "flowbite-react";
 
 import React, { FC } from "react";
-import { GridFullRow, GridHeader } from "../ui-components/grid-components";
+import {
+  Grid,
+  GridFullRow,
+  GridHeader,
+} from "../ui-components/grid-components";
 
 const GridLayoutTester: React.FC = () => {
   return (
     <>
-      <GridFullRow>
-        <GridHeader>Billing</GridHeader>
-      </GridFullRow>
+      <Grid>
+        <GridFullRow>
+          <GridHeader>Billing</GridHeader>
+        </GridFullRow>
 
-      <div className="w-full">
-        <IntroCard />
-      </div>
+        <div className="w-full">
+          <IntroCard />
+        </div>
 
-      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <IntroCard />
-        <IntroCard />
-        <IntroCard />
-      </div>
+        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <IntroCard />
+          <IntroCard />
+          <IntroCard />
+        </div>
+      </Grid>
     </>
   );
 };

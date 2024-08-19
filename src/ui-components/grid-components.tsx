@@ -4,6 +4,14 @@ interface RowProps {
   children: ReactNode;
 }
 
+const Grid: React.FC<RowProps> = ({ children }) => {
+  return (
+    <div className="mb-6 grid grid-cols-1 gap-y-4 px-4 pt-6 dark:border-gray-700 dark:bg-gray-900 xl:gap-4">
+      {children}
+    </div>
+  );
+};
+
 const GridFullRow: React.FC<RowProps> = ({ children }) => {
   return <div className="col-span-full">{children}</div>;
 };
@@ -16,4 +24,4 @@ const GridHeader: React.FC<RowProps> = ({ children }) => {
   );
 };
 
-export { GridFullRow as GridFullRow, GridHeader };
+export { Grid, GridFullRow, GridHeader };

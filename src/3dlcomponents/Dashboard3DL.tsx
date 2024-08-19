@@ -29,6 +29,7 @@ import {
   PivotTable,
   JSONVisual,
 } from "../3dl";
+import { Grid } from "../ui-components/grid-components";
 
 const Dashboard3DLJSX = () => {
   return <Dashboard></Dashboard>;
@@ -50,55 +51,57 @@ const Dashboard3DL: React.FC = () => {
   }, [id]);
 
   return (
-    <div className="mb-6 grid grid-cols-1 gap-y-6 dark:border-gray-700 dark:bg-gray-900 xl:grid-cols-2">
-      <div>
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-          Dashboard 3D Layout
-        </h1>
-      </div>
-      <CardRow columns={1}>
-        <CardComponent
-          header="Dashboard 3D Layout"
-          subHeader="This was received from the server"
-        >
-          {id ? (
-            dashboardData ? (
-              <JSXParser
-                components={{
-                  Dashboard,
-                  Filters,
-                  Filter,
-                  DataContainer,
-                  Visual1,
-                  Visual3,
-                  Visual4,
-                  Visual5,
-                  Section,
-                  PieChart,
-                  DonutChart,
-                  RadialBarChart,
-                  PolarAreaChart,
-                  BarChart,
-                  LineChart,
-                  HeatmapChart,
-                  RadarChart,
-                  SmartDataTable,
-                  DataTable,
-                  PreviewPage,
-                  PivotTable,
-                  JSONVisual,
-                }}
-                jsx={dashboardData}
-              />
+    <Grid>
+      <div className="mb-6 grid grid-cols-1 gap-y-6 dark:border-gray-700 dark:bg-gray-900 xl:grid-cols-2">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+            Dashboard 3D Layout
+          </h1>
+        </div>
+        <CardRow columns={1}>
+          <CardComponent
+            header="Dashboard 3D Layout"
+            subHeader="This was received from the server"
+          >
+            {id ? (
+              dashboardData ? (
+                <JSXParser
+                  components={{
+                    Dashboard,
+                    Filters,
+                    Filter,
+                    DataContainer,
+                    Visual1,
+                    Visual3,
+                    Visual4,
+                    Visual5,
+                    Section,
+                    PieChart,
+                    DonutChart,
+                    RadialBarChart,
+                    PolarAreaChart,
+                    BarChart,
+                    LineChart,
+                    HeatmapChart,
+                    RadarChart,
+                    SmartDataTable,
+                    DataTable,
+                    PreviewPage,
+                    PivotTable,
+                    JSONVisual,
+                  }}
+                  jsx={dashboardData}
+                />
+              ) : (
+                <p>Loading dashboard data...</p>
+              )
             ) : (
-              <p>Loading dashboard data...</p>
-            )
-          ) : (
-            <p>No ID provided</p>
-          )}
-        </CardComponent>
-      </CardRow>
-    </div>
+              <p>No ID provided</p>
+            )}
+          </CardComponent>
+        </CardRow>
+      </div>
+    </Grid>
   );
 };
 
