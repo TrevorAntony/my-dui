@@ -30,6 +30,7 @@ import {
   JSONVisual,
 } from "../3dl";
 import { Grid } from "../ui-components/grid-components";
+import useDuftQuery from "./resources/useDuftQuery";
 
 const Dashboard3DLJSX = () => {
   return <Dashboard></Dashboard>;
@@ -70,7 +71,9 @@ const Dashboard3DL: React.FC = () => {
                     Dashboard,
                     Filters,
                     Filter,
-                    DataContainer,
+                    DataContainer: (props: unknown) => (
+                      <DataContainer {...props} useQuery={useDuftQuery} />
+                    ),
                     Visual1,
                     Visual3,
                     Visual4,
