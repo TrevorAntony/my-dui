@@ -4,7 +4,7 @@ interface RowProps {
   children: ReactNode;
 }
 
-const Grid: React.FC<RowProps> = ({ children }) => {
+const DuftGrid: React.FC<RowProps> = ({ children }) => {
   return (
     <div className="mb-6 grid grid-cols-1 gap-y-4 px-4 pt-6 dark:border-gray-700 dark:bg-gray-900 xl:gap-4">
       {children}
@@ -12,11 +12,11 @@ const Grid: React.FC<RowProps> = ({ children }) => {
   );
 };
 
-const GridFullRow: React.FC<RowProps> = ({ children }) => {
+const DuftGridFullRow: React.FC<RowProps> = ({ children }) => {
   return <div className="col-span-full">{children}</div>;
 };
 
-const GridHeader: React.FC<RowProps> = ({ children }) => {
+const DuftGridHeader: React.FC<RowProps> = ({ children }) => {
   return (
     <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
       {children}
@@ -24,4 +24,4 @@ const GridHeader: React.FC<RowProps> = ({ children }) => {
   );
 };
 
-export { Grid, GridFullRow, GridHeader };
+export { DuftGrid, DuftGridFullRow, DuftGridHeader };

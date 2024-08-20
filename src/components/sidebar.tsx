@@ -57,9 +57,30 @@ const ExampleSidebar: FC = function () {
 
             <Sidebar.Items>
               <SystemSidebar />
-              <SidebarGroup title="Test Components">
+              <SidebarGroup title="Test 3DL Components">
+                <SidebarCollapse
+                  icon={HiChartPie}
+                  label="3DL Sample"
+                  paths={["/dashboard/raw/3dlsample"]}
+                >
+                  <SidebarNavLink
+                    to={"/dashboard/raw/3dlsample"}
+                    icon={HiChartPie}
+                  >
+                    Sample 1
+                  </SidebarNavLink>
+                  <SidebarNavLink
+                    to={"/dashboard/raw/3dlsample-2"}
+                    icon={HiChartPie}
+                  >
+                    Sample 2
+                  </SidebarNavLink>
+                </SidebarCollapse>
                 <SidebarNavLink to={"/grid"} icon={HiChartPie}>
                   Grid Layout
+                </SidebarNavLink>
+                <SidebarNavLink to={"/tab"} icon={HiChartPie}>
+                  Tab Layout
                 </SidebarNavLink>
                 <SidebarNavLink to={"/a"} icon={HiChartPie}>
                   AAA + AAA

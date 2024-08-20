@@ -10,6 +10,8 @@ import ComponentD from "./content-components/ComponentD";
 import APITestComponent from "./content-components/APITestComponent";
 import Dashboard3DL from "./3dlcomponents/Dashboard3DL";
 import GridLayoutTester from "./content-components/GridLayoutTester";
+import TabLayoutTester from "./content-components/TabLayoutTester.js";
+import DashboardRaw3DL from "./3dlcomponents/DashboardRaw3DL.js";
 
 // const ComponentAA: React.FC = () => <div>Component A</div>;
 // const ComponentBB: React.FC = () => <div>Component B</div>;
@@ -20,13 +22,15 @@ const App: React.FC = () => {
       <Routes>
         <Route element={<FlowbiteWrapper />}>
           <Route path="/" element={<AppLayout />}>
-            <Route path="dashboard/:id?" element={<Dashboard3DL />} />
+            <Route path="dashboard/raw/:id?" element={<Dashboard3DL />} />
+            <Route path="dashboard/:id?" element={<DashboardRaw3DL />} />
             <Route path="a/:id?" element={<ComponentA />} />
             <Route path="b" element={<ComponentB />} />
             <Route path="c" element={<ComponentC />} />
             <Route path="d" element={<ComponentD />} />
             <Route path="api" element={<APITestComponent />} />
             <Route path="grid" element={<GridLayoutTester />} />
+            <Route path="tab" element={<TabLayoutTester />} />
           </Route>
           <Route path="s" element={<SamplePage />} />
         </Route>

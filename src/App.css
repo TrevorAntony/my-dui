@@ -100,3 +100,10 @@ main {
   padding-bottom: 20px; /* Additional padding to ensure space for the legend */
   overflow: hidden; /* Prevent overflow issues */
 }
+:root {
+  --highlight-color: #e64980; /* Default magenta for light mode */
+}
+
+.dark {
+  --highlight-color: #faa2c1; /* Darker magenta for dark mode */
+}

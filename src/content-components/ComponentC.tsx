@@ -2,14 +2,14 @@ import React from "react";
 import CardComponent from "../components/card-component";
 import CardRow from "../components/card-row";
 import PieChartComponent from "./PieChartComponent";
-import { Grid } from "../ui-components/grid-components";
+import { DuftGrid } from "../ui-components/grid-components";
 
 const ComponentC: React.FC = () => {
   const labels = ["Apple", "Mango", "Orange", "Banana"];
   const series = [44, 55, 13, 43];
 
   return (
-    <Grid>
+    <DuftGrid>
       <CardRow columns={2}>
         <CardComponent
           header="A simple chart"
@@ -67,7 +67,7 @@ const ComponentC: React.FC = () => {
           </div>
         </CardComponent>
       </CardRow>
-    </Grid>
+    </DuftGrid>
   );
 };
 

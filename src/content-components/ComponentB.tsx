@@ -1,14 +1,14 @@
 import React from "react";
 import { Button } from "flowbite-react";
-import { Grid, GridHeader } from "../ui-components/grid-components";
+import { DuftGrid, DuftGridHeader } from "../ui-components/grid-components";
 
 const ComponentB: React.FC = () => {
   return (
-    <Grid>
-      <GridHeader>Component B</GridHeader>
+    <DuftGrid>
+      <DuftGridHeader>Component B</DuftGridHeader>
       This is Component B{" "}
       <Button className="bg-red-500 hover:bg-red-600">Click me</Button>{" "}
-    </Grid>
+    </DuftGrid>
   );
 };
 

@@ -20,6 +20,22 @@ module.exports = {
         800: "#1e40af",
         900: "#1e3a8a",
       },
+      highlight: {
+        DEFAULT: "var(--highlight-color)", // Use the CSS variable for the default color
+        50: "#fff5fa", // Extremely light magenta (almost white)
+        100: "#ffebf2", // Very light magenta
+        150: "#ffd6e5", // Light pastel magenta
+        200: "#ffbfd7", // Light magenta
+        300: "#ff99b3", // Soft magenta
+        400: "#ff73a0", // Medium magenta
+        500: "var(--highlight-color)", // Base magenta
+        600: "#e05288", // Slightly darker magenta
+        700: "#b8396f", // Dark magenta
+        800: "#922157", // Very dark magenta
+        850: "#7a1b47", // Deeper dark magenta
+        900: "#611437", // Deepest magenta
+        950: "#490e27", // Extremely dark magenta (almost black)
+      },
     },
     fontFamily: {
       sans: [
