@@ -16,6 +16,7 @@ export { default as RadialBarChart } from "./visuals/radial-bar-chart.visual";
 export { default as PolarAreaChart } from "./visuals/polar-area-chart.visual";
 export { default as BarChart } from "./visuals/bar-chart.visual";
 export { default as LineChart } from "./visuals/line-chart.visual";
+export { default as StackedBarChart } from "./visuals/stacked-bar-chart.visual";
 export { default as HeatmapChart } from "./visuals/heat-map-chart.visual";
 export { default as RadarChart } from "./visuals/radar-chart.visual";
 export { default as SmartDataTable } from "./visuals/smart-data-table.visual";

@@ -22,8 +22,8 @@ const App: React.FC = () => {
       <Routes>
         <Route element={<FlowbiteWrapper />}>
           <Route path="/" element={<AppLayout />}>
-            <Route path="dashboard/raw/:id?" element={<Dashboard3DL />} />
-            <Route path="dashboard/:id?" element={<DashboardRaw3DL />} />
+            <Route path="dashboard/raw/:id?" element={<DashboardRaw3DL />} />
+            <Route path="dashboard/:id?" element={<Dashboard3DL />} />
             <Route path="a/:id?" element={<ComponentA />} />
             <Route path="b" element={<ComponentB />} />
             <Route path="c" element={<ComponentC />} />
