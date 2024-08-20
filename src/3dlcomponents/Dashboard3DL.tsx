@@ -36,6 +36,7 @@ import {
   DashboardBodyOverride,
   Tile,
   StackedBarChart,
+  PercentStackedBarChart,
 } from "../3dl";
 import { DuftGrid } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
@@ -115,6 +116,7 @@ const Dashboard3DL: React.FC = () => {
                   ),
                   Tile,
                   StackedBarChart,
+                  PercentStackedBarChart,
                   DashBoardBody,
                 }}
                 jsx={dashboardData}
