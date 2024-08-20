@@ -35,7 +35,8 @@ import {
   DashBoardBody,
   DashboardBodyOverride,
   Tile,
-  StackedBarChart
+  StackedBarChart,
+  PercentStackedBarChart,
 } from "../3dl";
 import { DuftGrid } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
@@ -48,8 +49,8 @@ const Dashboard3DL: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const [dashboardData, setDashboardData] = useState<string | null>(null);
 
-  console.log(StackedBarChart)
-  
+  console.log(StackedBarChart);
+
   useEffect(() => {
     if (id) {
       fetchDataWithoutStore(`/3dldashboard/${id}`)
@@ -107,6 +108,7 @@ const Dashboard3DL: React.FC = () => {
                   TabSet,
                   Tile,
                   StackedBarChart,
+                  PercentStackedBarChart,
                   DashBoardBody: (props: unknown) => (
                     <DashBoardBody
                       {...props}
