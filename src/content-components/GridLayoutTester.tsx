@@ -2,9 +2,9 @@ import { Card, Label, TextInput } from "flowbite-react";
 
 import React, { FC } from "react";
 import {
-  Grid,
-  GridFullRow,
-  GridHeader,
+  DuftGrid,
+  DuftGridFullRow,
+  DuftGridHeader,
 } from "../ui-components/grid-components";
 import {
   HiCog,
@@ -13,25 +13,47 @@ import {
   HiFilter,
   HiPrinter,
 } from "react-icons/hi";
+import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 
 const GridLayoutTester: React.FC = () => {
   return (
     <>
-      <Grid>
-        <GridFullRow>
-          <GridHeader>Billing</GridHeader>
-        </GridFullRow>
-        <Menu2 />
-        <div className="w-full">
-          <IntroCard />
-        </div>
+      <DuftTabset>
+        <DuftTab title="Dashboard 1">
+          <DuftGrid>
+            <DuftGridFullRow>
+              <DuftGridHeader>Dashboard 1</DuftGridHeader>
+            </DuftGridFullRow>
+            <Menu2 />
+            <div className="w-full">
+              <IntroCard />
+            </div>
 
-        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <IntroCard />
-          <IntroCard />
-          <IntroCard />
-        </div>
-      </Grid>
+            <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <IntroCard />
+              <IntroCard />
+              <IntroCard />
+            </div>
+          </DuftGrid>
+        </DuftTab>
+        <DuftTab title="Dashboard 2">
+          <DuftGrid>
+            <DuftGridFullRow>
+              <DuftGridHeader>Dashboard 2</DuftGridHeader>
+            </DuftGridFullRow>
+            <Menu2 />
+            <div className="w-full">
+              <IntroCard />
+            </div>
+
+            <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <IntroCard />
+              <IntroCard />
+              <IntroCard />
+            </div>
+          </DuftGrid>
+        </DuftTab>
+      </DuftTabset>
     </>
   );
 };
