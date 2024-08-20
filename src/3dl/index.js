@@ -29,3 +29,4 @@ export { default as TabHeader } from "../3dl/ui-elements/tab-header";
 export { default as TabSet } from "../3dl/ui-elements/tab-set";
 export { default as DashBoardBody } from "./ui-elements/dashboard-body";
 export { default as DashboardBodyOverride } from "./override-components/dashboard-body-override";
+export { default as Tile } from "./visuals/tile.visual";

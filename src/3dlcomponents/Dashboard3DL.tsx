@@ -34,6 +34,7 @@ import {
   TabSet,
   DashBoardBody,
   DashboardBodyOverride,
+  Tile,
 } from "../3dl";
 import { DuftGrid } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
@@ -101,6 +102,7 @@ const Dashboard3DL: React.FC = () => {
                   Tab,
                   TabHeader,
                   TabSet,
+                  Tile,
                   DashBoardBody: (props: unknown) => (
                     <DashBoardBody
                       {...props}
