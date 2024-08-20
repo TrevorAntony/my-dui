@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "flowbite-react";
-import { Grid, GridHeader } from "../ui-components/grid-components";
+import { DuftGrid, DuftGridHeader } from "../ui-components/grid-components";
 
 const ComponentB: React.FC = () => {
   return (
