@@ -1,10 +1,10 @@
 import React from "react";
 
-const Tile = ({ label, value }) => {
+const Tile = ({ label, data }) => {
   return (
     <div style={styles.tileContainer}>
       <div style={styles.label}>{label}</div>
-      <div style={styles.value}>{value}</div>
+      <div style={styles.value}>{data[0].value}</div>
     </div>
   );
 };
