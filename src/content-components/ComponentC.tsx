@@ -3,7 +3,7 @@ import CardComponent from '../components/card-component';
 import CardRow from '../components/card-row';
 import PieChartComponent from './PieChartComponent';
 import { DuftGrid } from '../ui-components/grid-components';
-import PercentStackedBarChart from '../3dl/visuals/percent-stacked-bar-charts.visual';
+import PercentStackedBarChart from '../3dl/visuals/percent-stacked-bar-chart.visual';
 
 const ComponentC: React.FC = () => {
   const labels = ['Apple', 'Mango', 'Orange', 'Banana'];
