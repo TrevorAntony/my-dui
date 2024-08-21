@@ -3,7 +3,7 @@ import BaseXYChart from "../base-visuals/base-xy-chart";
 
 const HeatmapChart = ({
   container: Container,
-  header,
+  header = "Heat-map Chart",
   subHeader = header,
   ...props
 }) => {

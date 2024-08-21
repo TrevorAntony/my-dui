@@ -1,9 +1,10 @@
 import React from "react";
 import BaseXYChart from "../base-visuals/base-xy-chart";
+import ChartComponent from "../ui-elements/chart-component";
 
 const BarChart = ({
   container: Container,
-  header,
+  header = "Bar Chart",
   subHeader = header,
   ...props
 }) => {

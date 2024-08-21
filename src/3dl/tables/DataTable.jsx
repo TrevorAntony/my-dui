@@ -1,9 +1,8 @@
 import React from "react";
-import ChartComponent from "../ui-elements/chart-component"; // Import your ChartComponent
 
 const DataTable = ({
   container: ContainerComponent,
-  header,
+  header = "Data Table",
   subHeader = header,
   data,
 }) => {
@@ -55,11 +54,7 @@ const DataTable = ({
   );
 
   // Wrap the content in ChartComponent
-  const wrappedContent = (
-    <ChartComponent header={header} subHeader={subHeader}>
-      {content}
-    </ChartComponent>
-  );
+  const wrappedContent = <>{content}</>;
 
   // Conditionally wrap the ChartComponent in Container if provided
   return ContainerComponent ? (

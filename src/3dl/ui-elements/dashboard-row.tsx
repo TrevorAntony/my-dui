@@ -7,11 +7,11 @@ const DashboardRow = ({ children, data, style = {}, ...props }) => {
     flexWrap: "wrap", // Allows wrapping on smaller screens
     alignItems: "flex-start", // Align items at the start
     gap: "1rem",
-    backgroundColor: "#f9f9f9", // Light gray background
+    backgroundColor: "#FFF", // Light gray background
     borderRadius: "8px", // Rounded corners
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
     padding: "1rem", // Padding inside the row
-    margin: "1rem 0", // Margin outside the row
+    margin: "0.25rem 0", // Margin outside the row
     ...style,
   };
 

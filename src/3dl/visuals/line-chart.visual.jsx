@@ -3,7 +3,7 @@ import BaseXYChart from "../base-visuals/base-xy-chart";
 
 const LineChart = ({
   container: Container,
-  header,
+  header = "Line Chart",
   subHeader = header,
   ...props
 }) => {

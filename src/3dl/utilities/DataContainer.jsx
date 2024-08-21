@@ -36,14 +36,13 @@ const DataContainer = ({ query, staticData, useQuery, children }) => {
   );
 
   return (
-    <div style={{ padding: "10px", margin: "10px" }}>
-      {/* <h1>Data Container</h1> */}
+    <>
       {/* Conditionally render Debug On if debug is true */}
       {state.debug && (
         <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
       )}
       {childrenWithProps}
-    </div>
+    </>
   );
 };
 

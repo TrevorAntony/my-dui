@@ -3,7 +3,7 @@ import BaseCircularChart from "../base-visuals/base-circular-chart";
 
 const PolarAreaChart = ({
   container: Container,
-  header,
+  header = "Polar Area Chart",
   subHeader = header,
   ...props
 }) => {

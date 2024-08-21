@@ -4,7 +4,7 @@ import ChartComponent from "../ui-elements/chart-component"; // Import your Char
 
 const SmartDataTable = ({
   container: ContainerComponent,
-  header,
+  header = "Smart Data Table",
   subHeader = header,
   data,
   ...props

@@ -3,11 +3,10 @@ import PivotTableUI from "react-pivottable/PivotTableUI";
 import "react-pivottable/pivottable.css";
 import { useState } from "react";
 import { useDashboardContext } from "../utilities/Dashboard";
-import ChartComponent from "../ui-elements/chart-component"; // Import your ChartComponent
 
 const PivotTable = ({
   container: ContainerComponent,
-  header,
+  header = "Pivot Table",
   subHeader = header,
   data,
 }) => {
@@ -29,11 +28,7 @@ const PivotTable = ({
   );
 
   // Wrap the content in ChartComponent
-  const wrappedContent = (
-    <ChartComponent header={header} subHeader={subHeader}>
-      {content}
-    </ChartComponent>
-  );
+  const wrappedContent = <>{content}</>;
 
   // Conditionally wrap the ChartComponent in Container if provided
   return ContainerComponent ? (

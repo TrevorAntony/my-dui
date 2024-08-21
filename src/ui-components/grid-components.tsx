@@ -13,7 +13,7 @@ interface DuftGridProps {
 const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
   return (
     <div
-      className="mb-6 grid grid-cols-1 gap-y-4 px-4 pt-6 dark:border-gray-700 dark:bg-gray-900 xl:gap-4"
+      className="mb-6 grid grid-cols-1 gap-y-4 px-4 dark:border-gray-700 dark:bg-gray-900 xl:gap-4"
       {...props} // Pass additional props to the grid container
     >
       {React.Children.map(children, (child) =>

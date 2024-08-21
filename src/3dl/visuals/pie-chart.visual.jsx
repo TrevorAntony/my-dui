@@ -3,7 +3,7 @@ import BaseCircularChart from "../base-visuals/base-circular-chart";
 
 const PieChart = ({
   container: Container,
-  header,
+  header = "Pie Chart",
   subHeader = header,
   ...props
 }) => {

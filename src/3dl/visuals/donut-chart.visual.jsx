@@ -3,7 +3,7 @@ import BaseCircularChart from "../base-visuals/base-circular-chart";
 
 const DonutChart = ({
   container: Container,
-  header,
+  header = "Donut Chart",
   subHeader = header,
   ...props
 }) => {

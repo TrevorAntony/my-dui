@@ -3,7 +3,7 @@ import BaseCircularChart from "../base-visuals/base-circular-chart";
 
 const RadialBarChart = ({
   container: Container,
-  header,
+  header = "Radial Bar Chart",
   subHeader = header,
   ...props
 }) => {

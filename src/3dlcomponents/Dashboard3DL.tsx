@@ -33,14 +33,12 @@ import {
   TabHeader,
   TabSet,
   DashBoardBody,
-  DashboardBodyOverride,
   Tile,
   StackedBarChart,
   PercentStackedBarChart,
-  Grid,
   DashboardRow,
 } from "../3dl";
-import { DuftGrid } from "../ui-components/grid-components";
+import { DuftGrid, DuftGridFullRow } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
 import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 
@@ -69,148 +67,82 @@ const Dashboard3DL: React.FC = () => {
   }, [id]);
 
   return (
-    <DuftGrid>
-      <div>
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-          Dashboard 3D Layout
-        </h1>
-      </div>
-      <CardRow columns={1}>
-        <CardComponent
-          header="Dashboard 3D Layout"
-          subHeader="This was received from the server"
-        >
-          {id ? (
-            dashboardData ? (
-              <JSXParser
-                components={{
-                  Dashboard,
-                  Filters,
-                  Filter,
-                  Visual1,
-                  Visual3,
-                  Visual4,
-                  Visual5,
-                  Section,
-                  DataContainer: (props: unknown) => (
-                    <DataContainer {...props} useQuery={useDuftQuery} />
-                  ),
-                  PieChart: (props: unknown) => (
-                    <PieChart
-                      {...props}
-                      container={CardComponent}
-                      header="Pie Chart Chart"
-                      subHeader="A pie chart representative visual"
-                    />
-                  ),
-                  DonutChart: (props: unknown) => (
-                    <DonutChart
-                      {...props}
-                      container={CardComponent}
-                      header="Donut Chart Chart"
-                      subHeader="A donut chart representative visual"
-                    />
-                  ),
-                  RadialBarChart: (props: unknown) => (
-                    <RadialBarChart
-                      {...props}
-                      container={CardComponent}
-                      header="Radial Bar Chart"
-                      subHeader="A radial bar chart representative visual"
-                    />
-                  ),
-                  PolarAreaChart: (props: unknown) => (
-                    <PolarAreaChart
-                      {...props}
-                      container={CardComponent}
-                      header="Polar area Chart"
-                      subHeader="A polar area representative visual"
-                    />
-                  ),
-                  BarChart: (props: unknown) => (
-                    <BarChart
-                      {...props}
-                      container={CardComponent}
-                      header="Bar Chart"
-                      subHeader="A bar chart representative visual"
-                    />
-                  ),
-                  LineChart: (props: unknown) => (
-                    <LineChart
-                      {...props}
-                      container={CardComponent}
-                      header="Line Chart"
-                      subHeader="A line chart representative visual"
-                    />
-                  ),
-                  HeatmapChart: (props: unknown) => (
-                    <HeatmapChart
-                      {...props}
-                      container={CardComponent}
-                      header="Heat Map Chart"
-                      subHeader="A heat map chart representative visual"
-                    />
-                  ),
-                  RadarChart: (props: unknown) => (
-                    <RadarChart
-                      {...props}
-                      container={CardComponent}
-                      header="Heat Map Chart"
-                      subHeader="A heat map chart representative visual"
-                    />
-                  ),
-                  SmartDataTable: (props: unknown) => (
-                    <SmartDataTable
-                      {...props}
-                      container={CardComponent}
-                      header="Smart data table"
-                      subHeader="A smart data table representative visual"
-                    />
-                  ),
-                  PivotTable: (props: unknown) => (
-                    <PivotTable
-                      {...props}
-                      container={CardComponent}
-                      header="Pivot Table"
-                      subHeader="A pivot table representative visual"
-                    />
-                  ),
-                  DataTable: (props: unknown) => (
-                    <DataTable
-                      {...props}
-                      container={CardComponent}
-                      header="Data table Chart"
-                      subHeader="A data table representative visual"
-                    />
-                  ),
-                  TabSet: (props: unknown) => (
-                    <TabSet {...props} override={DuftTabset} />
-                  ),
-                  Tab: (props: unknown) => (
-                    <Tab {...props} override={DuftTab} />
-                  ),
-                  PreviewPage,
-                  JSONVisual,
-                  Row,
-                  TabHeader,
-                  Tile,
-                  StackedBarChart,
-                  PercentStackedBarChart,
-                  DashBoardBody,
-                  Grid,
-                  DashboardRow,
-                }}
-                jsx={dashboardData}
-              />
-            ) : (
-              <p>Loading dashboard data...</p>
-            )
-          ) : (
-            <p>No ID provided</p>
-          )}
-        </CardComponent>
-      </CardRow>
-    </DuftGrid>
+    <>
+      {id ? (
+        dashboardData ? (
+          <JSXParser
+            components={{
+              Dashboard,
+              Filters,
+              Filter,
+              Visual1,
+              Visual3,
+              Visual4,
+              Visual5,
+              Section,
+              DataContainer: (props: unknown) => (
+                <DataContainer {...props} useQuery={useDuftQuery} />
+              ),
+              PieChart: (props: unknown) => (
+                <PieChart {...props} container={CardComponent} />
+              ),
+              DonutChart: (props: unknown) => (
+                <DonutChart {...props} container={CardComponent} />
+              ),
+              RadialBarChart: (props: unknown) => (
+                <RadialBarChart {...props} container={CardComponent} />
+              ),
+              PolarAreaChart: (props: unknown) => (
+                <PolarAreaChart {...props} container={CardComponent} />
+              ),
+              BarChart: (props: unknown) => (
+                <BarChart {...props} container={CardComponent} />
+              ),
+              LineChart: (props: unknown) => (
+                <LineChart {...props} container={CardComponent} />
+              ),
+              HeatmapChart: (props: unknown) => (
+                <HeatmapChart {...props} container={CardComponent} />
+              ),
+              RadarChart: (props: unknown) => (
+                <RadarChart {...props} container={CardComponent} />
+              ),
+              SmartDataTable: (props: unknown) => (
+                <SmartDataTable {...props} container={CardComponent} />
+              ),
+              PivotTable: (props: unknown) => (
+                <PivotTable {...props} container={CardComponent} />
+              ),
+              DataTable: (props: unknown) => (
+                <DataTable {...props} container={CardComponent} />
+              ),
+              TabSet: DuftTabset, //will try this implementation for overrides
+              // Tab: (props: unknown) => <Tab {...props} override={DuftTab} />,
+              Tab: DuftTab,
+              PreviewPage,
+              JSONVisual,
+              Row,
+              TabHeader,
+              Tile,
+              StackedBarChart,
+              PercentStackedBarChart,
+              DashBoardBody,
+              // Grid: (props: unknown) => <DuftGrid {...props} />, //figure out what this Grid does and if/how we can adapt it to our implementation
+              // DashboardRow: (props: unknown) => <DuftGridFullRow {...props} />, //this row does not work
+              DashboardRow, //implement row using a grid (1fr, 1fr, 1fr) or based on the components inside, ie data-table should take up full width...
+              //this row may also need to be injected, so we may move this to DUFT and inject based guidance.
+              Grid: (props: unknown) => <DuftGrid {...props} />,
+              ChartComponent: CardComponent,
+            }}
+            jsx={dashboardData}
+          />
+        ) : (
+          <p>Loading dashboard data...</p>
+        )
+      ) : (
+        <p>No ID provided</p>
+      )}
+    </>
   );
 };
 
