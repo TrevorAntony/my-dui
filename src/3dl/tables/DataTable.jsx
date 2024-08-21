@@ -1,6 +1,12 @@
-import React from 'react';
+import React from "react";
+import ChartComponent from "../ui-elements/chart-component"; // Import your ChartComponent
 
-const DataTable = ({ data }) => {
+const DataTable = ({
+  container: ContainerComponent,
+  header,
+  subHeader = header,
+  data,
+}) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div>No data available</div>;
   }
@@ -8,18 +14,19 @@ const DataTable = ({ data }) => {
   // Get table headers from the keys of the first data object
   const headers = Object.keys(data[0]);
 
-  return (
-    <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+  // Content to be rendered inside the ChartComponent
+  const content = (
+    <table style={{ borderCollapse: "collapse", width: "100%" }}>
       <thead>
         <tr>
           {headers.map((header) => (
             <th
               key={header}
               style={{
-                border: '1px solid #ddd',
-                padding: '8px',
-                textAlign: 'left',
-                backgroundColor: '#f2f2f2',
+                border: "1px solid #ddd",
+                padding: "8px",
+                textAlign: "left",
+                backgroundColor: "#f2f2f2",
               }}
             >
               {header.charAt(0).toUpperCase() + header.slice(1)}
@@ -34,8 +41,8 @@ const DataTable = ({ data }) => {
               <td
                 key={header}
                 style={{
-                  border: '1px solid #ddd',
-                  padding: '8px',
+                  border: "1px solid #ddd",
+                  padding: "8px",
                 }}
               >
                 {item[header]}
@@ -45,6 +52,22 @@ const DataTable = ({ data }) => {
         ))}
       </tbody>
     </table>
+  );
+
+  // Wrap the content in ChartComponent
+  const wrappedContent = (
+    <ChartComponent header={header} subHeader={subHeader}>
+      {content}
+    </ChartComponent>
+  );
+
+  // Conditionally wrap the ChartComponent in Container if provided
+  return ContainerComponent ? (
+    <ContainerComponent header={header} subHeader={subHeader}>
+      {wrappedContent}
+    </ContainerComponent>
+  ) : (
+    wrappedContent
   );
 };
 

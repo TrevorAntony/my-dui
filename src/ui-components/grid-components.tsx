@@ -1,16 +1,31 @@
-import React, { ReactNode } from "react";
+import type { ReactNode } from "react";
+import React from "react";
 
 interface RowProps {
   children: ReactNode;
 }
 
-const DuftGrid: React.FC<RowProps> = ({ children }) => {
+interface DuftGridProps {
+  children: React.ReactNode;
+  [key: string]: any; // Accept additional props
+}
+
+const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
   return (
-    <div className="mb-6 grid grid-cols-1 gap-y-4 px-4 pt-6 dark:border-gray-700 dark:bg-gray-900 xl:gap-4">
-      {children}
+    <div
+      className="mb-6 grid grid-cols-1 gap-y-4 px-4 pt-6 dark:border-gray-700 dark:bg-gray-900 xl:gap-4"
+      {...props} // Pass additional props to the grid container
+    >
+      {React.Children.map(children, (child) =>
+        React.isValidElement(child)
+          ? React.cloneElement(child, { ...props }) // Pass additional props to each child
+          : child
+      )}
     </div>
   );
 };
+
+export default DuftGrid;
 
 const DuftGridFullRow: React.FC<RowProps> = ({ children }) => {
   return <div className="col-span-full">{children}</div>;

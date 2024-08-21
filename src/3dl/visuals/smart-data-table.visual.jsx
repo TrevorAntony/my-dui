@@ -1,9 +1,14 @@
-import React from 'react';
-import { MantineReactTable } from 'mantine-react-table';
-import ChartComponent from '../ui-elements/chart-component';
+import React from "react";
+import { MantineReactTable } from "mantine-react-table";
+import ChartComponent from "../ui-elements/chart-component"; // Import your ChartComponent
 
-const SmartDataTable = ({ data, header }) => {
-
+const SmartDataTable = ({
+  container: ContainerComponent,
+  header,
+  subHeader = header,
+  data,
+  ...props
+}) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div>No data available</div>;
   }
@@ -14,19 +19,35 @@ const SmartDataTable = ({ data, header }) => {
     header: key.charAt(0).toUpperCase() + key.slice(1),
   }));
 
-  return (
-    <ChartComponent header={header}>
-      <MantineReactTable
-        columns={columns}
-        data={data}
-        enableSorting
-        enableGlobalFilter
-        enableColumnResizing
-        enablePagination
-        enableRowSelection
-        initialState={{ pagination: { pageSize: 5 } }}
-      />
+  // Content to be rendered inside the ChartComponent
+  const content = (
+    <MantineReactTable
+      columns={columns}
+      data={data}
+      enableSorting
+      enableGlobalFilter
+      enableColumnResizing
+      enablePagination
+      enableRowSelection
+      initialState={{ pagination: { pageSize: 5 } }}
+      {...props}
+    />
+  );
+
+  // Wrap the content in ChartComponent
+  const wrappedContent = (
+    <ChartComponent header={header} subHeader={subHeader}>
+      {content}
     </ChartComponent>
+  );
+
+  // Conditionally wrap the ChartComponent in Container if provided
+  return ContainerComponent ? (
+    <ContainerComponent header={header} subHeader={subHeader}>
+      {wrappedContent}
+    </ContainerComponent>
+  ) : (
+    wrappedContent
   );
 };
 
