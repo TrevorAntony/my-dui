@@ -2,40 +2,46 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 import ChartComponent from "../ui-elements/chart-component";
 
-const PercentStackedBarChart = ({ header, data, colors, isHorizontal }) => {
-    // Get the category column label
-    const categoryColumn = Object.keys(data[0])[0];
+const ClusteredBarChart = ({ header, data, colors, isHorizontal }) => {
+    // Get the category column label and group key label
+    const categoryColumn = Object.keys(data[0])[0];  // Assuming the first key is the category column
+    const groupColumn = Object.keys(data[0])[0];
+
     // Extract categories and series data from the rectangular data
-    const categories = data.map((item) => item[categoryColumn]);
+    const categories = [...new Set(data.map((item) => item[categoryColumn]))];
+    const groups = [...new Set(data.map((item) => item[groupColumn]))];
 
-    // Prepare series data
-    const series = Object.keys(data[0] || {})
-        .filter((key) => key !== categoryColumn)
-        .map((key) => {
-            return {
-                name: key,
-                data: data.map((item) => item[key]),
-            };
-        });
+    // Prepare series data for each group
+    const series = groups.map((group) => {
+        return Object.keys(data[0])
+            .filter((key) => key !== categoryColumn && key !== groupColumn)
+            .map((key) => {
+                return {
+                    name: `${key} (${group})`,
+                    data: data
+                        .filter((item) => item[groupColumn] === group)
+                        .map((item) => item[key]),
+                };
+            });
+    }).flat(); // Flatten the array to make sure all series are in the same array
 
-    // Chart options
+    // Chart options for grouped bars
     const chartOptions = {
         chart: {
             type: 'bar',
-            stacked: true,
-            stackType: '100%',
+            stacked: false, // Disable stacking to make grouped bars
         },
         plotOptions: {
             bar: {
                 horizontal: isHorizontal || false,
-                borderRadius: 5, // Optional: adds a border radius to the bars
+                borderRadius: 5,
+                columnWidth: '100%'
             },
         },
         xaxis: {
             categories: categories || [], // Use provided categories or default to empty array
         },
         yaxis: {
-            max: 100,
             labels: {
                 formatter: (val) => `${val}`,
             },
@@ -56,10 +62,10 @@ const PercentStackedBarChart = ({ header, data, colors, isHorizontal }) => {
         stroke: {
             show: true,
             width: 1,
-            colors: ["#fff"] // White line between stacked bars
+            colors: ["#fff"], // White line between stacked bars
         },
         title: {
-            text: header || 'Chart Title', // Adding the header as title
+            text: header || 'Chart Title',
             align: 'left',
         },
     };
@@ -70,8 +76,7 @@ const PercentStackedBarChart = ({ header, data, colors, isHorizontal }) => {
                 <Chart options={chartOptions} series={series} type="bar" width="500" />
             </ChartComponent>
         </div>
-
     );
 };
 
-export default PercentStackedBarChart;
+export default ClusteredBarChart;

@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import ChartComponent from "../ui-elements/chart-component";
 
 // BaseXYChart component that accepts chartType as a prop
-const BaseXYChart = ({ header, data, colors, chartType = "bar" }) => {
+const BaseXYChart = ({ header, data, colors, chartType = "bar", isHorizontal }) => {
   // Check if data is provided and is an array
   if (!data || !Array.isArray(data)) {
     return <div>No data available</div>; // Handle case where data is not an array
@@ -46,7 +46,7 @@ const BaseXYChart = ({ header, data, colors, chartType = "bar" }) => {
     },
     plotOptions: {
       bar: {
-        horizontal: false, // Set to true if you want horizontal bars
+        horizontal: isHorizontal || false, // Set to true if you want horizontal bars
         distributed: !isMultiSeries, // Distributed colors only for single series
         borderRadius: 5, // Optional: adds a border radius to the bars
       },

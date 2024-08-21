@@ -3,22 +3,20 @@ import CardComponent from '../components/card-component';
 import CardRow from '../components/card-row';
 import PieChartComponent from './PieChartComponent';
 import { DuftGrid } from '../ui-components/grid-components';
-import PercentStackedBarChart from '../3dl/visuals/percent-stacked-bar-chart.visual';
+import ClusteredBarChart from '../3dl/visuals/clustered-bar-chart.visual';
 
 const ComponentC: React.FC = () => {
   const labels = ['Apple', 'Mango', 'Orange', 'Banana'];
   const series = [44, 55, 13, 43];
 
-  const data = [
-    { 'Age Group': '0-9', Male: 258, Female: 287 },
-    { 'Age Group': '10-19', Male: 1134, Female: 1394 },
-    { 'Age Group': '20-29', Male: 841, Female: 4041 },
-    { 'Age Group': '30-39', Male: 2637, Female: 8882 },
-    { 'Age Group': '40-49', Male: 3876, Female: 6530 },
-    { 'Age Group': '50-59', Male: 2291, Female: 3202 },
-    { 'Age Group': '60-69', Male: 1297, Female: 1647 },
-    { 'Age Group': '70+', Male: 529, Female: 508 },
-  ];
+const data = [
+  { Year: '2023', 'Age Group': '0-9', Male: 258, Female: 287 },
+  { Year: '2023', 'Age Group': '10-19', Male: 1134, Female: 1394 },
+  { Year: '2023', 'Age Group': '20-29', Male: 841, Female: 4041 },
+  { Year: '2024', 'Age Group': '0-9', Male: 300, Female: 320 },
+  { Year: '2024', 'Age Group': '10-19', Male: 1200, Female: 1500 },
+  { Year: '2024', 'Age Group': '20-29', Male: 900, Female: 4100 },
+];
 
   return (
     <DuftGrid>
@@ -29,11 +27,13 @@ const ComponentC: React.FC = () => {
           moreInfo={{ text: 'Sales Report', link: '/b' }}
           footer={<div>Footer</div>}
         >
-          <PercentStackedBarChart
-            header="Sales Data by Age Group"
-            data={data}
-            colors={['#00E396', '#FF4560']}
-          />
+
+        <ClusteredBarChart
+          header="Sales Data by Age Group and Year"
+          data={data}
+          colors={['#00E396', '#FF4560', '#775DD0', '#FEB019']}
+        />
+
         </CardComponent>
         <CardComponent
           header="A simple chart"
