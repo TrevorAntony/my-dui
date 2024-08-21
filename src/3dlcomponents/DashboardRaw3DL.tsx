@@ -40,6 +40,7 @@ import {
 } from "../3dl";
 import { DuftGrid } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
+import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 
 // const Dashboard3DLJSX = () => {
 //   return <Dashboard></Dashboard>;
@@ -103,18 +104,16 @@ const Dashboard3DL: React.FC = () => {
                   PivotTable,
                   JSONVisual,
                   Row,
-                  Tab,
-                  TabHeader,
-                  TabSet,
+                  TabSet: (props: unknown) => (
+                    <TabSet {...props} override={DuftTabset} />
+                  ),
+                  Tab: (props: unknown) => (
+                    <Tab {...props} override={DuftTab} />
+                  ),
                   Tile,
                   StackedBarChart,
                   PercentStackedBarChart,
-                  DashBoardBody: (props: unknown) => (
-                    <DashBoardBody
-                      {...props}
-                      OverrideComponent={DashboardBodyOverride}
-                    />
-                  ),
+                  DashBoardBody,
                 }}
                 jsx={dashboardData}
               />
