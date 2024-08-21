@@ -9,11 +9,15 @@ const ComponentC: React.FC = () => {
   const labels = ['Apple', 'Mango', 'Orange', 'Banana'];
   const series = [44, 55, 13, 43];
 
-  const percentStackedBarChartData = [
-    { category: 'Q1 2024', ProductA: 30, ProductB: 40, ProductC: 30 },
-    { category: 'Q2 2024', ProductA: 20, ProductB: 50, ProductC: 30 },
-    { category: 'Q3 2024', ProductA: 25, ProductB: 35, ProductC: 40 },
-    { category: 'Q4 2024', ProductA: 35, ProductB: 25, ProductC: 40 },
+  const data = [
+    { 'Age Group': '0-9', Male: 258, Female: 287 },
+    { 'Age Group': '10-19', Male: 1134, Female: 1394 },
+    { 'Age Group': '20-29', Male: 841, Female: 4041 },
+    { 'Age Group': '30-39', Male: 2637, Female: 8882 },
+    { 'Age Group': '40-49', Male: 3876, Female: 6530 },
+    { 'Age Group': '50-59', Male: 2291, Female: 3202 },
+    { 'Age Group': '60-69', Male: 1297, Female: 1647 },
+    { 'Age Group': '70+', Male: 529, Female: 508 },
   ];
 
   return (
@@ -26,9 +30,9 @@ const ComponentC: React.FC = () => {
           footer={<div>Footer</div>}
         >
           <PercentStackedBarChart
-            header="Sales Data by Quarter (2026)"
-            data={percentStackedBarChartData}
-            colors={['#00E396', '#FF4560', '#775DD0']} // Optional: Custom colors
+            header="Sales Data by Age Group"
+            data={data}
+            colors={['#00E396', '#FF4560']}
           />
         </CardComponent>
         <CardComponent

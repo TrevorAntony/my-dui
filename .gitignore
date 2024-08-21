@@ -4,3 +4,4 @@ tsconfig.tsbuildinfo
 yarn-error.log
 .DS_Store
 .prettierrc
+.eslintrc

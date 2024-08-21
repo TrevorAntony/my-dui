@@ -1,34 +1,61 @@
 import React from 'react';
-import BaseXYChart from '../base-visuals/base-xy-chart';
+import Chart from 'react-apexcharts';
 
-const PercentStackedBarChart = (props) => {
-    // Define options specifically for a 100% stacked bar chart
+const PercentStackedBarChart = ({ header, data, colors }) => {
+    // Get the category column label
+    const categoryColumn = Object.keys(data[0])[0];
+    // Extract categories and series data from the rectangular data
+    const categories = data.map((item) => item[categoryColumn]);
+
+    // Prepare series data
+    const series = Object.keys(data[0] || {})
+        .filter((key) => key !== categoryColumn)
+        .map((key) => {
+            return {
+                name: key,
+                data: data.map((item) => item[key]),
+            };
+        });
+
+    // Chart options
     const chartOptions = {
         chart: {
-            stacked: true, // Ensure the chart is stacked
+            type: 'bar',
+            stacked: true,
+            stackType: '100%',
         },
         plotOptions: {
             bar: {
-                horizontal: false, // Set to true if you want horizontal bars
-                distributed: false, // Disable distributed colors as we're stacking
-                barHeight: '100%', // Ensure the bars fill 100% of the chart height
+                horizontal: false,
             },
         },
+        xaxis: {
+            categories: categories || [], // Use provided categories or default to empty array
+        },
         yaxis: {
-            max: 100, // Ensure the y-axis is scaled to 100%
+            max: 100,
             labels: {
-                formatter: (val) => `${val}%`, // Format y-axis labels as percentages
+                formatter: (val) => `${val}`,
             },
         },
         tooltip: {
             y: {
-                formatter: (val) => `${val}%`, // Format tooltip values as percentages
+                formatter: (val) => `${val}`,
             },
         },
-        ...props.options, // Allow overriding any other options
+        legend: {
+            show: true,
+        },
+        colors: colors || ['#00E396', '#FF4560', '#775DD0'], // Default colors if not provided
+        title: {
+            text: header || 'Chart Title', // Adding the header as title
+            align: 'left',
+        },
     };
 
-    return <BaseXYChart {...props} chartType="bar" options={chartOptions} />;
+    return (
+        <Chart options={chartOptions} series={series} type="bar" height={350} />
+    );
 };
 
 export default PercentStackedBarChart;
