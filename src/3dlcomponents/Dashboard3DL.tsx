@@ -131,6 +131,8 @@ const Dashboard3DL: React.FC = () => {
               // DashboardRow: (props: unknown) => <DuftGridFullRow {...props} />, //this row does not work
               DashboardRow, //implement row using a grid (1fr, 1fr, 1fr) or based on the components inside, ie data-table should take up full width...
               //this row may also need to be injected, so we may move this to DUFT and inject based guidance.
+              //NB: ability to add design system through state update in dashboard component.
+              //Also, how to pass themes to the visual through context.
               Grid: (props: unknown) => <DuftGrid {...props} />,
               ChartComponent: CardComponent,
             }}
