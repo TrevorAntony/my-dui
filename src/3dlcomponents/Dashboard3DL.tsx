@@ -38,7 +38,11 @@ import {
   PercentStackedBarChart,
   DashboardRow,
 } from "../3dl";
-import { DuftGrid, DuftGridFullRow } from "../ui-components/grid-components";
+import {
+  DuftGrid,
+  DuftGridFullRow,
+  DuftRow,
+} from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
 import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 
@@ -116,24 +120,21 @@ const Dashboard3DL: React.FC = () => {
               DataTable: (props: unknown) => (
                 <DataTable {...props} container={CardComponent} />
               ),
-              TabSet: DuftTabset, //will try this implementation for overrides
-              // Tab: (props: unknown) => <Tab {...props} override={DuftTab} />,
+              TabSet: DuftTabset,
               Tab: DuftTab,
               PreviewPage,
               JSONVisual,
-              Row,
+              Row: DuftGridFullRow,
               TabHeader,
               Tile,
               StackedBarChart,
               PercentStackedBarChart,
-              DashBoardBody,
+              // DashBoardBody,
+              // DashboardRow: DuftRow,
               // Grid: (props: unknown) => <DuftGrid {...props} />, //figure out what this Grid does and if/how we can adapt it to our implementation
-              // DashboardRow: (props: unknown) => <DuftGridFullRow {...props} />, //this row does not work
-              DashboardRow, //implement row using a grid (1fr, 1fr, 1fr) or based on the components inside, ie data-table should take up full width...
-              //this row may also need to be injected, so we may move this to DUFT and inject based guidance.
               //NB: ability to add design system through state update in dashboard component.
               //Also, how to pass themes to the visual through context.
-              Grid: (props: unknown) => <DuftGrid {...props} />,
+              Grid: DuftGrid,
               ChartComponent: CardComponent,
             }}
             jsx={dashboardData}

@@ -34,20 +34,13 @@ const SmartDataTable = ({
     />
   );
 
-  // Wrap the content in ChartComponent
-  const wrappedContent = (
-    <ChartComponent header={header} subHeader={subHeader}>
-      {content}
-    </ChartComponent>
-  );
-
   // Conditionally wrap the ChartComponent in Container if provided
   return ContainerComponent ? (
     <ContainerComponent header={header} subHeader={subHeader}>
-      {wrappedContent}
+      {content}
     </ContainerComponent>
   ) : (
-    wrappedContent
+    content
   );
 };
 

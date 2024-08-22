@@ -11,7 +11,7 @@ const BarChart = ({
   const content = <BaseXYChart {...props} chartType="bar" />;
 
   return Container ? (
-    <Container header={header} subHeader={subHeader}>
+    <Container header="hellooowwww" subHeader={subHeader}>
       {content}
     </Container>
   ) : (
