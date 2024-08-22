@@ -21,6 +21,7 @@ import {
   PolarAreaChart,
   BarChart,
   LineChart,
+  AreaChart,
   HeatmapChart,
   RadarChart,
   SmartDataTable,
@@ -36,6 +37,7 @@ import {
   Tile,
   StackedBarChart,
   PercentStackedBarChart,
+  ClusteredBarChart,
   DashboardRow,
 } from "../3dl";
 import {
@@ -129,6 +131,8 @@ const Dashboard3DL: React.FC = () => {
               Tile,
               StackedBarChart,
               PercentStackedBarChart,
+              ClusteredBarChart,
+              AreaChart,
               // DashBoardBody,
               // DashboardRow: DuftRow,
               // Grid: (props: unknown) => <DuftGrid {...props} />, //figure out what this Grid does and if/how we can adapt it to our implementation

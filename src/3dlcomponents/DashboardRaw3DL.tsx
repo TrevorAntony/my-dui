@@ -21,6 +21,7 @@ import {
   PolarAreaChart,
   BarChart,
   LineChart,
+  AreaChart,
   HeatmapChart,
   RadarChart,
   SmartDataTable,
@@ -37,6 +38,7 @@ import {
   Tile,
   StackedBarChart,
   PercentStackedBarChart,
+  ClusteredBarChart
 } from "../3dl";
 import { DuftGrid } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
@@ -96,6 +98,7 @@ const Dashboard3DL: React.FC = () => {
                   PolarAreaChart,
                   BarChart,
                   LineChart,
+                  AreaChart,
                   HeatmapChart,
                   RadarChart,
                   SmartDataTable,
@@ -113,6 +116,7 @@ const Dashboard3DL: React.FC = () => {
                   Tile,
                   StackedBarChart,
                   PercentStackedBarChart,
+                  ClusteredBarChart,
                   DashBoardBody,
                 }}
                 jsx={dashboardData}
