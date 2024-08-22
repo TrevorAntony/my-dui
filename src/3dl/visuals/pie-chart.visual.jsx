@@ -1,8 +1,21 @@
 import React from "react";
 import BaseCircularChart from "../base-visuals/base-circular-chart";
 
-const PieChart = (props) => {
-  return <BaseCircularChart {...props} chartType="pie" />;
+const PieChart = ({
+  container: Container,
+  header = "Pie Chart",
+  subHeader = header,
+  ...props
+}) => {
+  const content = <BaseCircularChart {...props} chartType="pie" />;
+
+  return Container ? (
+    <Container header={header} subHeader={subHeader}>
+      {content}
+    </Container>
+  ) : (
+    content
+  );
 };
 
 export default PieChart;
