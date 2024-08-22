@@ -39,10 +39,12 @@ import {
   PercentStackedBarChart,
   ClusteredBarChart,
   DashboardRow,
+  DashboardHeader,
 } from "../3dl";
 import {
   DuftGrid,
   DuftGridFullRow,
+  DuftGridHeader,
   DuftRow,
 } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
@@ -79,6 +81,7 @@ const Dashboard3DL: React.FC = () => {
           <JSXParser
             components={{
               Dashboard,
+              DashboardHeader: DuftGridHeader,
               Filters,
               Filter,
               Visual1,
@@ -128,7 +131,7 @@ const Dashboard3DL: React.FC = () => {
               JSONVisual,
               Row: DuftGridFullRow,
               TabHeader,
-              Tile,
+              Tile, //Insert DuftTile here,
               StackedBarChart,
               PercentStackedBarChart,
               ClusteredBarChart,

@@ -16,7 +16,7 @@ export { default as RadialBarChart } from "./visuals/radial-bar-chart.visual";
 export { default as PolarAreaChart } from "./visuals/polar-area-chart.visual";
 export { default as BarChart } from "./visuals/bar-chart.visual";
 export { default as LineChart } from "./visuals/line-chart.visual";
-export { default as AreaChart } from './visuals/area-chart.visual';
+export { default as AreaChart } from "./visuals/area-chart.visual";
 export { default as StackedBarChart } from "./visuals/stacked-bar-chart.visual";
 export { default as PercentStackedBarChart } from "./visuals/percent-stacked-bar-chart.visual";
 export { default as ClusteredBarChart } from "./visuals/clustered-bar-chart.visual";
@@ -36,3 +36,4 @@ export { default as DashboardBodyOverride } from "./override-components/dashboar
 export { default as Tile } from "./visuals/tile.visual";
 export { default as Grid } from "./ui-elements/grid";
 export { default as DashboardRow } from "./ui-elements/dashboard-row";
+export { default as DashboardHeader } from "./ui-elements/dashboard-header";
