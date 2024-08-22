@@ -28,7 +28,6 @@ import {
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
 
-
 const ExampleNavbar: FC = function () {
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
@@ -54,11 +53,11 @@ const ExampleNavbar: FC = function () {
             <Navbar.Brand href="/">
               <img
                 alt=""
-                src="https://flowbite.com/docs/images/logo.svg"
+                src="/public/images/duft.png"
                 className="mr-3 h-6 sm:h-8"
               />
-              <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
-                Flowbite
+              <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-highlight-200 text-highlight-800">
+                DUFT
               </span>
             </Navbar.Brand>
             <form className="ml-16 hidden md:block">

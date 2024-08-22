@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { HiHome, HiChartPie, HiHashtag } from "react-icons/hi";
+import {
+  HiHome,
+  HiChartPie,
+  HiHashtag,
+  HiFolder,
+  HiOutlineFolder,
+} from "react-icons/hi";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import { SidebarNavLink } from "./SidebarNavLink";
@@ -57,7 +63,7 @@ const renderSidebarMenu = (config: any) => {
             return (
               <SidebarCollapse
                 key={index}
-                icon={Icon}
+                icon={HiOutlineFolder}
                 label={item.title}
                 paths={item.dashboards.map((d: any) => d.dashboard)}
               >

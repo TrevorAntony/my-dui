@@ -55,14 +55,33 @@ const flowbiteTheme: CustomFlowbiteTheme = {
   },
   sidebar: {
     root: {
-      base: "flex fixed top-0 left-0 z-20 flex-col flex-shrink-0 pt-16 h-full duration-75 border-r border-gray-200 lg:flex transition-width dark:border-gray-700",
+      base: "flex fixed top-0 left-0 z-20 flex-col flex-shrink-0 pt-16 h-full duration-75 border-r border-gray-200 lg:flex transition-width dark:border-gray-700 bg-white",
+      inner:
+        "h-full overflow-y-auto overflow-x-hidden rounded bg-white py-4 px-3 dark:bg-gray-800",
     },
     item: {
-      base: "flex items-center justify-center rounded-lg p-2 text-base font-medium text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
+      base: "flex items-center justify-center rounded-lg p-2 text-base font-medium text-gray-900 hover:bg-highlight-200 dark:text-white dark:hover:bg-highlight-600",
+      active:
+        "bg-green-100 dark:bg-green-700 text-base font-medium text-red-900",
+      icon: {
+        base: "h-6 w-6 flex-shrink-0 text-highlight-500 transition duration-75 group-hover:text-highlight-600 dark:text-highlight-400 dark:group-hover:text-white",
+        active: "text-highlight-200 dark:text-gray-100",
+      },
     },
     collapse: {
       button:
-        "group flex w-full items-center rounded-lg p-2 text-base font-medium text-gray-900 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
+        "group flex w-full items-center rounded-lg p-2 text-base font-medium text-gray-900 transition duration-75 hover:bg-highlight-200 dark:text-white dark:hover:bg-gray-700",
+      icon: {
+        base: "h-6 w-6 flex-shrink-0 text-highlight-500 transition duration-75 group-hover:text-highlight-600 dark:text-highlight-400 dark:group-hover:text-white",
+        open: {
+          off: "text-highlight-800",
+          on: "text-highlight-500",
+        },
+      },
+    },
+    icon: {
+      base: "h-6 w-6 flex-shrink-0 text-highlight-500 transition duration-75 group-hover:text-highlight-600 dark:text-highlight-400 dark:group-hover:text-white",
+      active: "text-highlight-200 dark:text-gray-100",
     },
   },
   textarea: {
@@ -90,7 +109,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
     },
   },
   tab: {
-    base: "flex flex-col gap-2 CRAP",
+    base: "flex flex-col",
     tablist: {
       base: "flex text-center",
       styles: {
@@ -103,7 +122,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
           "grid w-full grid-flow-col divide-x divide-gray-200 rounded-none text-sm font-medium shadow dark:divide-gray-700 dark:text-gray-400",
       },
       tabitem: {
-        base: "flex items-center justify-center rounded-t-lg p-4 text-sm font-medium first:ml-0 focus:outline-none focus:ring-0 focus:ring-red-300 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500",
+        base: "flex items-center justify-center rounded-t-lg p-4 font-medium first:ml-0 focus:outline-none focus:ring-0 focus:ring-red-300 disabled:cursor-not-allowed disabled:text-gray-400 disabled:dark:text-gray-500",
         styles: {
           default: {
             base: "rounded-t-lg",
@@ -138,7 +157,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
       },
     },
 
-    tabpanel: "py-3",
+    tabpanel: "",
   },
 };
 
