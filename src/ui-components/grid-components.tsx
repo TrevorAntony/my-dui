@@ -27,10 +27,23 @@ const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
 
 export default DuftGrid;
 
-const DuftGridFullRow: React.FC<RowProps> = ({ children }) => {
-  // return <div className="col-span-full">{children}</div>;
+interface DuftGridFullRowProps {
+  children: React.ReactNode;
+  mediumCols?: number;
+  largeCols?: number;
+}
+
+const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
+  children,
+  mediumCols = 2,
+  largeCols = 3,
+}) => {
+  const largeScreenCols = largeCols || mediumCols;
+
   return (
-    <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <div
+      className={`md:grid-cols- grid w-full grid-cols-1 gap-4${mediumCols} xl:grid-cols-${largeScreenCols}`}
+    >
       {children}
     </div>
   );
