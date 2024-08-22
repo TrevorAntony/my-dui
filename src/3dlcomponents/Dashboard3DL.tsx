@@ -81,7 +81,8 @@ const Dashboard3DL: React.FC = () => {
           <JSXParser
             components={{
               Dashboard,
-              DashboardHeader: DuftGridHeader,
+              //DashboardHeader: DuftGridHeader,
+              Header: DuftGridHeader,
               Filters,
               Filter,
               Visual1,

@@ -49,12 +49,18 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
   );
 };
 
-const DuftGridHeader: React.FC<RowProps> = ({ children }) => {
-  return (
-    <h1 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-      {children}
-    </h1>
-  );
+interface RowProps {
+  children: React.ReactNode;
+  small?: boolean;
+}
+
+const DuftGridHeader: React.FC<RowProps> = ({ children, small }) => {
+  const Tag = small ? "h2" : "h1";
+  const className = small
+    ? "mt-4 text-lg font-semibold text-gray-900 dark:text-white sm:text-xl"
+    : "mt-4 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl";
+
+  return <Tag className={className}>{children}</Tag>;
 };
 
 export { DuftGrid, DuftGridFullRow, DuftGridHeader };
