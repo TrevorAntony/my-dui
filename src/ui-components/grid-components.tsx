@@ -42,7 +42,7 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
 
   return (
     <div
-      className={`md:grid-cols- grid w-full grid-cols-1 gap-4${mediumCols} xl:grid-cols-${largeScreenCols}`}
+      className={`md:grid-cols-${mediumCols} xl:grid-cols-${largeScreenCols} grid w-full grid-cols-1 gap-4`}
     >
       {children}
     </div>
