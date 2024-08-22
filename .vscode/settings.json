@@ -10,6 +10,6 @@
   "eslint.validate": ["javascript", "typescript", "typescriptreact"],
   "files.exclude": {
     "**/dist": true,
-    "**/node_modules": true
+    "**/node_modules": false
   }
 }

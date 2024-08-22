@@ -22,14 +22,12 @@ const BaseCircularChart = ({ data, header, chartType = "pie" }) => {
   };
 
   return (
-    <ChartComponent header={header}>
-      <Chart
-        options={chartData.options}
-        series={chartData.series}
-        type={chartType}
-        height={400}
-      />
-    </ChartComponent>
+    <Chart
+      options={chartData.options}
+      series={chartData.series}
+      type={chartType}
+      height={400}
+    />
   );
 };
 

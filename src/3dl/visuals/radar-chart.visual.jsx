@@ -1,8 +1,21 @@
 import React from "react";
 import BaseXYChart from "../base-visuals/base-xy-chart";
 
-const RadarChart = (props) => {
-  return <BaseXYChart {...props} chartType="radar" />;
+const RadarChart = ({
+  container: Container,
+  header = "Radar Chart",
+  subHeader = header,
+  ...props
+}) => {
+  const content = <BaseXYChart {...props} chartType="radar" />;
+
+  return Container ? (
+    <Container header={header} subHeader={subHeader}>
+      {content}
+    </Container>
+  ) : (
+    content
+  );
 };
 
 export default RadarChart;

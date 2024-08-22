@@ -1,6 +1,6 @@
 import React from "react";
 
-const Row = ({ children, data, style = {}, ...props }) => {
+const DashboardRow = ({ children, data, style = {}, ...props }) => {
   const childrenCount = React.Children.count(children);
 
   const rowStyle = {
@@ -21,4 +21,4 @@ const Row = ({ children, data, style = {}, ...props }) => {
   );
 };
 
-export default Row;
+export default DashboardRow;

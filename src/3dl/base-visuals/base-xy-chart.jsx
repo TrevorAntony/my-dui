@@ -71,16 +71,12 @@ const BaseXYChart = ({ header, data, colors, chartType = "bar", isHorizontal }) 
   };
 
   return (
-    <div>
-      <ChartComponent header={header}>
-        <Chart
-          options={chartOptions}
-          series={chartSeries}
-          type={chartType}
-          width="500"
-        />
-      </ChartComponent>
-    </div>
+    <Chart
+      options={chartOptions}
+      series={chartSeries}
+      type={chartType}
+      width="500"
+    />
   );
 };
 

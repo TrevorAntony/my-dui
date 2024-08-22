@@ -1,4 +1,5 @@
-import React, { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 
 type MoreInfoProps = {
@@ -25,15 +26,15 @@ const CardComponent: FC<CardComponentProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col justify-between h-full rounded-lg bg-white p-4 shadow dark:bg-gray-800 sm:p-6 xl:p-8 ${className}`}
+      className={`flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${className}`}
     >
       <div>
-        <div className="mb-4">
+        <div className="mb-3">
           <div className="shrink-0">
-            <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+            <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
               {header}
             </h3>
-            <span className="text-base font-normal text-gray-600 dark:text-gray-400">
+            <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
               {subHeader}
             </span>
           </div>
@@ -41,17 +42,17 @@ const CardComponent: FC<CardComponentProps> = ({
         <div>{children}</div>
       </div>
       {footer && (
-        <div className="mt-5 flex items-center justify-between border-t border-gray-200 pt-3 dark:border-gray-700 sm:pt-6">
+        <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-2 dark:border-gray-700 sm:pt-4">
           {footer}
           {moreInfo && (
             <div className="shrink-0">
               <NavLink
                 to={moreInfo.link}
-                className="inline-flex items-center rounded-lg p-2 text-xs font-medium uppercase text-primary-700 hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700 sm:text-sm"
+                className="inline-flex items-center rounded-md p-1 text-xs font-medium uppercase text-primary-700 hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700 sm:text-sm"
               >
                 {moreInfo.text}
                 <svg
-                  className="ml-1 h-4 w-4 sm:h-5 sm:w-5"
+                  className="ml-1 h-4 w-4 sm:h-4 sm:w-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

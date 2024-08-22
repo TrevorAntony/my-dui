@@ -8,7 +8,9 @@ import {
   HiChartPie,
   HiClipboard,
   HiCog,
+  HiFolder,
   HiHashtag,
+  HiOutlineFolder,
   HiSearch,
 } from "react-icons/hi";
 
@@ -39,89 +41,95 @@ const ExampleSidebar: FC = function () {
         hidden: !isSidebarOpenOnSmallScreens,
       })}
     >
-      <Sidebar
-        aria-label="Sidebar with multi-level dropdown example"
-        collapsed={isSidebarOpenOnSmallScreens && !isSmallScreen()}
-      >
-        <div className="flex h-full flex-col justify-between py-2">
-          <div>
-            <form className="pb-3 md:hidden">
-              <TextInput
-                icon={HiSearch}
-                type="search"
-                placeholder="Search"
-                required
-                size={32}
-              />
-            </form>
+      <div className="relative bg-green-100">
+        <Sidebar
+          aria-label="Sidebar with multi-level dropdown example"
+          collapsed={isSidebarOpenOnSmallScreens && !isSmallScreen()}
+          className="bg-white"
+        >
+          <div className="flex h-full flex-col justify-between py-2">
+            <div className="FLUP 2">
+              <form className="pb-3 md:hidden">
+                <TextInput
+                  icon={HiSearch}
+                  type="search"
+                  placeholder="Search"
+                  required
+                  size={32}
+                />
+              </form>
 
-            <Sidebar.Items>
-              <SystemSidebar />
-              <SidebarGroup title="Test 3DL Components">
-                <SidebarCollapse
-                  icon={HiChartPie}
-                  label="3DL Sample"
-                  paths={["/dashboard/raw/3dlsample"]}
-                >
-                  <SidebarNavLink
-                    to={"/dashboard/raw/3dlsample"}
-                    icon={HiChartPie}
+              <Sidebar.Items>
+                <SystemSidebar />
+                <SidebarGroup title="Test 3DL Components">
+                  <SidebarCollapse
+                    icon={HiOutlineFolder}
+                    label="3DL Sample"
+                    paths={["/dashboard/raw/3dlsample"]}
                   >
-                    Sample 1
+                    <SidebarNavLink
+                      to={"/dashboard/raw/3dlsample"}
+                      icon={HiChartPie}
+                    >
+                      Sample 1
+                    </SidebarNavLink>
+                    <SidebarNavLink
+                      to={"/dashboard/raw/3dlsample-2"}
+                      icon={HiChartPie}
+                    >
+                      Sample 2
+                    </SidebarNavLink>
+                  </SidebarCollapse>
+                  <SidebarNavLink to={"/grid"} icon={HiChartPie}>
+                    Grid Layout
                   </SidebarNavLink>
-                  <SidebarNavLink
-                    to={"/dashboard/raw/3dlsample-2"}
-                    icon={HiChartPie}
+                  <SidebarNavLink to={"/tab"} icon={HiChartPie}>
+                    Tab Layout
+                  </SidebarNavLink>
+                  <SidebarNavLink to={"/table"} icon={HiChartPie}>
+                    Table Layout
+                  </SidebarNavLink>
+                  <SidebarNavLink to={"/a"} icon={HiChartPie}>
+                    AAA + AAA
+                  </SidebarNavLink>
+                  <SidebarNavLink to={"/b"} icon={HiChartPie}>
+                    BBB + BBB
+                  </SidebarNavLink>
+                  <SidebarNavLink to={"/c"} icon={HiChartPie}>
+                    CCC + CCC
+                  </SidebarNavLink>
+                  <SidebarNavLink to={"/D"} icon={HiChartPie}>
+                    DDD + DDD
+                  </SidebarNavLink>
+                  <SidebarCollapse
+                    icon={HiHashtag}
+                    label="APIs"
+                    paths={["/api", "/api/dashboard", "/api/settings"]}
                   >
-                    Sample 2
-                  </SidebarNavLink>
-                </SidebarCollapse>
-                <SidebarNavLink to={"/grid"} icon={HiChartPie}>
-                  Grid Layout
-                </SidebarNavLink>
-                <SidebarNavLink to={"/tab"} icon={HiChartPie}>
-                  Tab Layout
-                </SidebarNavLink>
-                <SidebarNavLink to={"/a"} icon={HiChartPie}>
-                  AAA + AAA
-                </SidebarNavLink>
-                <SidebarNavLink to={"/b"} icon={HiChartPie}>
-                  BBB + BBB
-                </SidebarNavLink>
-                <SidebarNavLink to={"/c"} icon={HiChartPie}>
-                  CCC + CCC
-                </SidebarNavLink>
-                <SidebarNavLink to={"/D"} icon={HiChartPie}>
-                  DDD + DDD
-                </SidebarNavLink>
-                <SidebarCollapse
-                  icon={HiHashtag}
-                  label="APIs"
-                  paths={["/api", "/api/dashboard", "/api/settings"]}
-                >
-                  <SidebarNavLink to={"/api"} icon={HiChartPie}>
-                    API
-                  </SidebarNavLink>
-                </SidebarCollapse>
-                <Sidebar.Item
-                  href="/s"
-                  icon={HiChartPie}
-                  className={
-                    "/s" === currentPage ? "bg-gray-100 dark:bg-gray-700" : ""
-                  }
-                >
-                  S
-                </Sidebar.Item>
-              </SidebarGroup>
+                    <SidebarNavLink to={"/api"} icon={HiChartPie}>
+                      API
+                    </SidebarNavLink>
+                  </SidebarCollapse>
+                  <Sidebar.Item
+                    href="/s"
+                    icon={HiChartPie}
+                    className={
+                      "/s" === currentPage ? "bg-gray-100 dark:bg-gray-700" : ""
+                    }
+                  >
+                    S
+                  </Sidebar.Item>
+                </SidebarGroup>
 
-              <SidebarGroup title="Data tasks">
-                <Sidebar.Item icon={HiClipboard}>Data Tasks</Sidebar.Item>
-              </SidebarGroup>
-            </Sidebar.Items>
+                <SidebarGroup title="Data tasks">
+                  <Sidebar.Item icon={HiClipboard}>Data Tasks</Sidebar.Item>
+                </SidebarGroup>
+              </Sidebar.Items>
+            </div>
+            <BottomMenu />
           </div>
-          <BottomMenu />
-        </div>
-      </Sidebar>
+        </Sidebar>
+      </div>
     </div>
   );
 };
