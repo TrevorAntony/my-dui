@@ -16,7 +16,7 @@ const DuftTabset: React.FC<DuftTabChildren> = ({ children }) => {
 
 interface DuftTabProps {
   active?: boolean;
-  title: string;
+  title: ReactNode;
   icon: IconType;
   children: ReactNode;
 }

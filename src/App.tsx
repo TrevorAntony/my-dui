@@ -8,10 +8,11 @@ import SamplePage from "./pages";
 import FlowbiteWrapper from "./components/flowbite-wrapper";
 import ComponentD from "./content-components/ComponentD";
 import APITestComponent from "./content-components/APITestComponent";
-import Dashboard3DL from "./3dlcomponents/Dashboard3DL";
+import Dashboard3DL from "./3dlcomponents/Dashboard3DL.js";
 import GridLayoutTester from "./content-components/GridLayoutTester";
 import TabLayoutTester from "./content-components/TabLayoutTester.js";
 import DashboardRaw3DL from "./3dlcomponents/DashboardRaw3DL.js";
+import SingleTableLayoutTester from "./content-components/SingleTableLayoutTester.js";
 
 // const ComponentAA: React.FC = () => <div>Component A</div>;
 // const ComponentBB: React.FC = () => <div>Component B</div>;
@@ -31,6 +32,7 @@ const App: React.FC = () => {
             <Route path="api" element={<APITestComponent />} />
             <Route path="grid" element={<GridLayoutTester />} />
             <Route path="tab" element={<TabLayoutTester />} />
+            <Route path="table" element={<SingleTableLayoutTester />} />
           </Route>
           <Route path="s" element={<SamplePage />} />
         </Route>
