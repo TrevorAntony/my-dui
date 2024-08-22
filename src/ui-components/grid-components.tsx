@@ -38,7 +38,7 @@ const DuftGridFullRow: React.FC<RowProps> = ({ children }) => {
 
 const DuftGridHeader: React.FC<RowProps> = ({ children }) => {
   return (
-    <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+    <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl mt-4">
       {children}
     </h1>
   );
