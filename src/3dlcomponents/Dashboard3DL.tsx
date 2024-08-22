@@ -36,9 +36,11 @@ import {
   DashboardBodyOverride,
   Tile,
   StackedBarChart,
+  PercentStackedBarChart,
 } from "../3dl";
 import { DuftGrid } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
+import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 
 // const Dashboard3DLJSX = () => {
 //   return <Dashboard></Dashboard>;
@@ -48,14 +50,17 @@ const Dashboard3DL: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const [dashboardData, setDashboardData] = useState<string | null>(null);
 
-  console.log(StackedBarChart);
-
   useEffect(() => {
     if (id) {
       fetchDataWithoutStore(`/3dldashboard/${id}`)
         .then((data) => {
           //console.log("Fetched Dashboard Data:", data); // Log the fetched data
-          setDashboardData(data);
+
+          const cleanedJSX = data
+            .replace(/>\s+</g, "><") // Remove whitespace between tags
+            .replace(/<>\s*<\/>/g, ""); // Remove empty fragments
+
+          setDashboardData(cleanedJSX);
         })
         .catch((error) => console.error("Error loading dashboard data", error));
     }
@@ -102,17 +107,17 @@ const Dashboard3DL: React.FC = () => {
                   PivotTable,
                   JSONVisual,
                   Row,
-                  Tab,
                   TabHeader,
-                  TabSet,
+                  TabSet: (props: unknown) => (
+                    <TabSet {...props} override={DuftTabset} />
+                  ),
+                  Tab: (props: unknown) => (
+                    <Tab {...props} override={DuftTab} />
+                  ),
                   Tile,
                   StackedBarChart,
-                  DashBoardBody: (props: unknown) => (
-                    <DashBoardBody
-                      {...props}
-                      OverrideComponent={DashboardBodyOverride}
-                    />
-                  ),
+                  PercentStackedBarChart,
+                  DashBoardBody,
                 }}
                 jsx={dashboardData}
               />
