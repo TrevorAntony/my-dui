@@ -1,11 +1,15 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import { useThemeContext } from "../utilities/Dashboard";
 
 const BaseCircularChart = ({ data, header, chartType = "pie" }) => {
-  // Ensure data is an array and contains valid items
+  const theme = useThemeContext();
+
   if (!Array.isArray(data) || data.length === 0) {
     return <div>No data available to render the chart.</div>;
   }
+
+  const { apex: apexOptions } = theme.themes[0];
 
   const chartData = {
     series: data.map((item) => item.value || 0),
@@ -36,11 +40,24 @@ const BaseCircularChart = ({ data, header, chartType = "pie" }) => {
     },
   };
 
+  const copiedOptions = deepCopy(apexOptions);
+  let mergedOptions = deepMerge(chartData, copiedOptions);
+
+  mergedOptions = {
+    ...mergedOptions,
+    options: {
+      ...mergedOptions,
+      colors: mergedOptions.colors,
+      theme: mergedOptions.theme,
+    },
+  };
+
+  // console.log({ mergedOptions });
   return (
     <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
       <Chart
-        options={chartData.options}
-        series={chartData.series}
+        options={mergedOptions.options}
+        series={mergedOptions.series}
         type={chartType}
         height={400}
       />
@@ -49,3 +66,17 @@ const BaseCircularChart = ({ data, header, chartType = "pie" }) => {
 };
 
 export default BaseCircularChart;
+
+function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function deepMerge(target, source) {
+  for (const key in source) {
+    if (source[key] instanceof Object && key in target) {
+      Object.assign(source[key], deepMerge(target[key], source[key]));
+    }
+  }
+  Object.assign(target || {}, source);
+  return target;
+}

@@ -1,8 +1,17 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import ChartComponent from "../ui-elements/chart-component";
+import { useThemeContext } from "../utilities/Dashboard";
 
-const BaseXYChart = ({ header, data, colors, chartType = "bar", isHorizontal }) => {
+const BaseXYChart = ({
+  header,
+  data,
+  colors,
+  chartType = "bar",
+  isHorizontal,
+  userOptions,
+}) => {
+  const theme = useThemeContext();
+
   if (!data || !Array.isArray(data)) {
     return <div>No data available</div>;
   }
@@ -29,6 +38,8 @@ const BaseXYChart = ({ header, data, colors, chartType = "bar", isHorizontal }) 
       },
     ];
   }
+
+  const { apex: apexOptions } = theme.themes[0];
 
   const chartOptions = {
     chart: {
@@ -74,11 +85,30 @@ const BaseXYChart = ({ header, data, colors, chartType = "bar", isHorizontal }) 
     ],
   };
 
+  const copiedOptions = deepCopy(apexOptions);
+  let mergerdOptions = deepMerge(chartOptions, copiedOptions);
+  mergerdOptions = deepMerge(mergerdOptions, userOptions);
+
   return (
     <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
-      <Chart options={chartOptions} series={chartSeries} type={chartType} />
+      <Chart options={mergerdOptions} series={chartSeries} type={chartType} />
     </div>
   );
 };
 
 export default BaseXYChart;
+
+function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function deepMerge(target, source) {
+  for (const key in source) {
+    if (source[key] instanceof Object && key in target) {
+      Object.assign(source[key], deepMerge(target[key], source[key]));
+    }
+  }
+
+  Object.assign(target || {}, source);
+  return target;
+}
