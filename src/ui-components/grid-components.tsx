@@ -37,6 +37,7 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
   children,
   mediumCols = 2,
   largeCols = 3,
+  ...props
 }) => {
   const largeScreenCols = largeCols || mediumCols;
 
@@ -44,7 +45,11 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
     <div
       className={`md:grid-cols-${mediumCols} xl:grid-cols-${largeScreenCols} grid w-full grid-cols-1 gap-4`}
     >
-      {children}
+      {React.Children.map(children, (child) =>
+        React.isValidElement(child)
+          ? React.cloneElement(child, { ...props }) // Pass additional props to each child
+          : child
+      )}
     </div>
   );
 };

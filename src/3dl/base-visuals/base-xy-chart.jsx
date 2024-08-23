@@ -8,6 +8,7 @@ const BaseXYChart = ({
   colors,
   chartType = "bar",
   isHorizontal,
+  userOptions,
 }) => {
   const theme = useThemeContext();
 
@@ -84,48 +85,9 @@ const BaseXYChart = ({
     ],
   };
 
-  const deepCopy = (obj) => {
-    if (obj === null || typeof obj !== "object") {
-      return obj;
-    }
-
-    if (Array.isArray(obj)) {
-      return obj.map((item) => deepCopy(item));
-    }
-
-    const copy = {};
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        copy[key] = deepCopy(obj[key]);
-      }
-    }
-
-    return copy;
-  };
-
-  const deepMerge = (target, source) => {
-    if (typeof target !== "object" || typeof source !== "object") {
-      return source;
-    }
-
-    for (const key in source) {
-      if (source.hasOwnProperty(key)) {
-        if (typeof source[key] === "object" && !Array.isArray(source[key])) {
-          if (!target[key]) {
-            target[key] = {};
-          }
-          deepMerge(target[key], source[key]);
-        } else {
-          target[key] = deepCopy(source[key]);
-        }
-      }
-    }
-
-    return target;
-  };
-
   const copiedOptions = deepCopy(apexOptions);
-  const mergerdOptions = deepMerge(copiedOptions, copiedOptions);
+  let mergerdOptions = deepMerge(chartOptions, copiedOptions);
+  mergerdOptions = deepMerge(mergerdOptions, userOptions);
 
   return (
     <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
@@ -135,3 +97,18 @@ const BaseXYChart = ({
 };
 
 export default BaseXYChart;
+
+function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function deepMerge(target, source) {
+  for (const key in source) {
+    if (source[key] instanceof Object && key in target) {
+      Object.assign(source[key], deepMerge(target[key], source[key]));
+    }
+  }
+
+  Object.assign(target || {}, source);
+  return target;
+}
