@@ -107,3 +107,19 @@ main {
 .dark {
   --highlight-color: #faa2c1; /* Darker magenta for dark mode */
 }
+
+/* override toggle density from mantine react table */
+.mantine-l1yogr>tbody>tr>td,
+.mantine-augnbd>tbody>tr>td,
+.mantine-l1yogr>tfoot>tr>th, 
+.mantine-augnbd>tfoot>tr>th,
+.mantine-l1yogr>thead>tr>th, 
+.mantine-augnbd>thead>tr>th {
+    padding: 0.625rem 0.625rem !important;
+}
+
+.mantine-1tue5jz, .mantine-6bbrnk  {
+    padding: 10px !important;
+}
+
+

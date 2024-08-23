@@ -21,17 +21,17 @@ const SmartDataTable = ({
 
   // Content to be rendered inside the ChartComponent
   const content = (
-    <MantineReactTable
-      columns={columns}
-      data={data}
-      enableSorting
-      enableGlobalFilter
-      enableColumnResizing
-      enablePagination
-      enableRowSelection
-      initialState={{ pagination: { pageSize: 5 } }}
-      {...props}
-    />
+    <div style={{ height: '400px', overflowY: 'auto' }}>
+      <MantineReactTable
+        columns={columns}
+        data={data}
+        enableGlobalFilter
+        enablePagination={false}
+        enableRowSelection
+        initialState={{ pagination: { pageSize: 10 } }}
+        {...props}
+      />
+    </div>
   );
 
   // Conditionally wrap the ChartComponent in Container if provided
