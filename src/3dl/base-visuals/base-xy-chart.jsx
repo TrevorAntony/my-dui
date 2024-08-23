@@ -1,8 +1,16 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import ChartComponent from "../ui-elements/chart-component";
+import { useThemeContext } from "../utilities/Dashboard";
 
-const BaseXYChart = ({ header, data, colors, chartType = "bar", isHorizontal }) => {
+const BaseXYChart = ({
+  header,
+  data,
+  colors,
+  chartType = "bar",
+  isHorizontal,
+}) => {
+  const theme = useThemeContext();
+
   if (!data || !Array.isArray(data)) {
     return <div>No data available</div>;
   }
@@ -29,6 +37,8 @@ const BaseXYChart = ({ header, data, colors, chartType = "bar", isHorizontal }) 
       },
     ];
   }
+
+  const { apex: apexOptions } = theme.themes[0];
 
   const chartOptions = {
     chart: {
@@ -74,9 +84,52 @@ const BaseXYChart = ({ header, data, colors, chartType = "bar", isHorizontal }) 
     ],
   };
 
+  const deepCopy = (obj) => {
+    if (obj === null || typeof obj !== "object") {
+      return obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map((item) => deepCopy(item));
+    }
+
+    const copy = {};
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        copy[key] = deepCopy(obj[key]);
+      }
+    }
+
+    return copy;
+  };
+
+  const deepMerge = (target, source) => {
+    if (typeof target !== "object" || typeof source !== "object") {
+      return source;
+    }
+
+    for (const key in source) {
+      if (source.hasOwnProperty(key)) {
+        if (typeof source[key] === "object" && !Array.isArray(source[key])) {
+          if (!target[key]) {
+            target[key] = {};
+          }
+          deepMerge(target[key], source[key]);
+        } else {
+          target[key] = deepCopy(source[key]);
+        }
+      }
+    }
+
+    return target;
+  };
+
+  const copiedOptions = deepCopy(apexOptions);
+  const mergerdOptions = deepMerge(copiedOptions, copiedOptions);
+
   return (
     <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
-      <Chart options={chartOptions} series={chartSeries} type={chartType} />
+      <Chart options={mergerdOptions} series={chartSeries} type={chartType} />
     </div>
   );
 };

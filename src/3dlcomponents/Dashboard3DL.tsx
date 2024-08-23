@@ -54,16 +54,14 @@ import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 //   return <Dashboard></Dashboard>;
 // };
 
-const Dashboard3DL: React.FC = () => {
-  const { id } = useParams<{ id?: string }>();
-  const [dashboardData, setDashboardData] = useState<string | null>(null);
+const useDashboardData = (id) => {
+  const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
     if (id) {
       fetchDataWithoutStore(`/3dldashboard/${id}`)
         .then((data) => {
-          //console.log("Fetched Dashboard Data:", data); // Log the fetched data
-
+          // Remove unnecessary whitespace and empty fragments
           const cleanedJSX = data
             .replace(/>\s+</g, "><") // Remove whitespace between tags
             .replace(/<>\s*<\/>/g, ""); // Remove empty fragments
@@ -74,13 +72,47 @@ const Dashboard3DL: React.FC = () => {
     }
   }, [id]);
 
+  return dashboardData;
+};
+
+const useThemeData = () => {
+  const [themeData, setThemeData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTheme = async () => {
+      try {
+        const data = await fetchDataWithoutStore("/theme");
+        setThemeData(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTheme();
+  }, []);
+
+  return { themeData, loading, error };
+};
+
+const Dashboard3DL: React.FC = () => {
+  const { id } = useParams<{ id?: string }>();
+  const dashboardData = useDashboardData(id);
+  const { themeData, loading, error } = useThemeData();
+
+  console.log({ themeData, loading, error });
   return (
     <>
       {id ? (
         dashboardData ? (
           <JSXParser
             components={{
-              Dashboard,
+              Dashboard: (props: unknown) => (
+                <Dashboard {...props} theme={themeData} />
+              ),
               //DashboardHeader: DuftGridHeader,
               Header: DuftGridHeader,
               Filters,
