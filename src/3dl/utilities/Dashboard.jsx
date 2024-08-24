@@ -45,12 +45,13 @@ const dashboardReducer = (state, action) => {
 };
 
 // Dashboard component for managing state
-const Dashboard = ({ children, debug = false, designSystem = 'plain' }) => {
+const Dashboard = ({ children, debug = false, designSystem = 'plain', theme }) => {
   const [state, dispatch] = useReducer(dashboardReducer, {
     filters: {}, // Initialize filters state
     data: {},
     debug,
     designSystem,
+    theme, // Initialize theme state
   });
 
   return (
@@ -74,6 +75,11 @@ const setDebugMode = (dispatch, value) => {
 // Utility function to set design system
 const setDesignSystem = (dispatch, value) => {
   dispatch({ type: SET_DESIGN_SYSTEM, payload: value });
+};
+
+// Utility function to set theme
+const setTheme = (dispatch, value) => {
+  dispatch({ type: SET_THEME, payload: value });
 };
 
 // Custom hook to use the Dashboard context
