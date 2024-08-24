@@ -1,8 +1,11 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import { useDataContext } from "../utilities/DataContainer";
 
 // Visual4 component using data from its DataContainer
-const Visual4 = ({ data, colors, chartType = "bar" }) => {
+const Visual4 = ({ colors, chartType = "bar" }) => {
+  const data = useDataContext();
+
   // Check if data is provided and is an array
   if (!data || !Array.isArray(data)) {
     return <div>No data available</div>; // Handle case where data is not an array

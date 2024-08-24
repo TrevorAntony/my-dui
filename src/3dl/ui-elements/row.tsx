@@ -11,13 +11,9 @@ const Row = ({ children, data, style = {}, ...props }) => {
     ...style,
   };
 
-  const childrenWithProps = React.Children.map(children, (child) =>
-    React.cloneElement(child, { data })
-  );
-
   return (
     <div style={rowStyle} {...props}>
-      {childrenWithProps}
+      {children}
     </div>
   );
 };

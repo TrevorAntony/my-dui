@@ -1,8 +1,11 @@
 import React from "react";
 import Chart from "react-apexcharts";
 import ChartComponent from "../ui-elements/chart-component";
+import { useDataContext } from "../utilities/DataContainer";
 
-const ClusteredBarChart = ({ header, data, colors, isHorizontal }) => {
+const ClusteredBarChart = ({ header, colors, isHorizontal }) => {
+  const data = useDataContext();
+
   // Get the category column label and group key label
   const categoryColumn = Object.keys(data[0])[0]; // Assuming the first key is the category column
   const groupColumn = Object.keys(data[0])[0];
