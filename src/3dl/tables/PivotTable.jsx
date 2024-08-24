@@ -3,15 +3,16 @@ import PivotTableUI from "react-pivottable/PivotTableUI";
 import "react-pivottable/pivottable.css";
 import { useState } from "react";
 import { useDashboardContext } from "../utilities/Dashboard";
+import { useDataContext } from "../utilities/DataContainer";
 
 const PivotTable = ({
   container: ContainerComponent,
   header = "Pivot Table",
   subHeader = header,
-  data,
 }) => {
   const [pivotState, setPivotState] = useState({});
   const { state } = useDashboardContext();
+  const data = useDataContext();
 
   // Content to be rendered inside the ChartComponent
   const content = (

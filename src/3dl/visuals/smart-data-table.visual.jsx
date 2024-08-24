@@ -1,14 +1,16 @@
 import React from "react";
 import { MantineReactTable } from "mantine-react-table";
-import ChartComponent from "../ui-elements/chart-component"; // Import your ChartComponent
+import ChartComponent from "../ui-elements/chart-component";
+import { useDataContext } from "../utilities/DataContainer";
 
 const SmartDataTable = ({
   container: ContainerComponent,
   header = "Smart Data Table",
   subHeader = header,
-  data,
   ...props
 }) => {
+  const data = useDataContext();
+
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div>No data available</div>;
   }
@@ -21,7 +23,7 @@ const SmartDataTable = ({
 
   // Content to be rendered inside the ChartComponent
   const content = (
-    <div style={{ height: '400px', overflowY: 'auto' }}>
+    <div style={{ height: "400px", overflowY: "auto" }}>
       <MantineReactTable
         columns={columns}
         data={data}

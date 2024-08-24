@@ -1,11 +1,12 @@
 import React from "react";
+import { useDataContext } from "../utilities/DataContainer";
 
 const DataTable = ({
   container: ContainerComponent,
   header = "Data Table",
   subHeader = header,
-  data,
 }) => {
+  const data = useDataContext();
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div>No data available</div>;
   }
