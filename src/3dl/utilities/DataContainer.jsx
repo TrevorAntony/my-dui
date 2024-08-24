@@ -1,7 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { DashboardContext } from "./Dashboard";
 
-// DataContainer component that uses filters and renders visuals
+const DataContext = createContext();
+
+export const useDataContext = () => useContext(DataContext);
+
 const DataContainer = ({ query, staticData, useQuery, children }) => {
   const { state, dispatch } = useContext(DashboardContext);
   const { data: fetchedData, loading, error } = useQuery(query);
@@ -30,19 +33,14 @@ const DataContainer = ({ query, staticData, useQuery, children }) => {
     return <div>Error fetching data: {error.message}</div>;
   }
 
-  // Clone each child and pass the data as a prop
-  const childrenWithProps = React.Children.map(children, (child) =>
-    React.cloneElement(child, { data }),
-  );
-
   return (
-    <>
+    <DataContext.Provider value={data}>
       {/* Conditionally render Debug On if debug is true */}
       {state.debug && (
         <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
       )}
-      {childrenWithProps}
-    </>
+      {children}
+    </DataContext.Provider>
   );
 };
 
