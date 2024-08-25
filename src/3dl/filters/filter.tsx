@@ -8,6 +8,7 @@ export interface FilterProps {
   values?: string;
   values_query?: string;
   caption?: string;
+  className?: string;
 }
 
 // Individual Filter component that fetches options or uses hard-coded values
@@ -16,6 +17,7 @@ const Filter: React.FC<FilterProps> = ({
   values,
   values_query,
   caption,
+  className,
 }) => {
   const { state, dispatch } = useDashboardContext();
   const [selectedValue, setSelectedValue] = useState<string>("");
@@ -31,9 +33,11 @@ const Filter: React.FC<FilterProps> = ({
         loadedOptions = values.split(",");
       } else if (values_query && options) {
         // Extract strings from the JSON blobs returned by the query
-        loadedOptions = options.map((option) => {
-          return Object.values(option)[0];
-        });
+        loadedOptions = (options as { [key: string]: string }[]).map(
+          (option) => {
+            return Object.values(option)[0] || "";
+          }
+        );
       }
 
       // Dispatch the loaded options to data state
@@ -72,7 +76,7 @@ const Filter: React.FC<FilterProps> = ({
     <select
       value={selectedValue}
       onChange={handleSelectChange}
-      className="rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-sm text-gray-900 focus:ring-primary-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:focus:ring-primary-800"
+      className={className}
     >
       <option value="">{caption || `Filter ${name}`}</option>
       {(state.data[name] || []).map((option: string, index: number) => (

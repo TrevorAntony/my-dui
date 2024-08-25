@@ -56,7 +56,7 @@ const Dashboard = ({ children, debug = false, designSystem = 'plain', theme }) =
 
   return (
     <DashboardContext.Provider value={{ state, dispatch }}>
-      <pre>{JSON.stringify(state.filters, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(state.filters, null, 2)}</pre> */}
       <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
     </DashboardContext.Provider>
   );

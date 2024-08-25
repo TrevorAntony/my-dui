@@ -50,6 +50,7 @@ import {
 import useDuftQuery from "./resources/useDuftQuery";
 import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 import DuftFilter from "../ui-components/filter-components";
+import DuftSingleView from "../ui-components/table-components";
 
 // const Dashboard3DLJSX = () => {
 //   return <Dashboard></Dashboard>;
@@ -145,6 +146,8 @@ const Dashboard3DL: React.FC = () => {
               //Also, how to pass themes to the visual through context.
               Grid: DuftGrid,
               ChartComponent: CardComponent,
+              SingleView: DuftSingleView,
+              SingleViewHeader: DuftSingleView.Header,
             }}
             jsx={dashboardData}
           />
