@@ -1,8 +1,8 @@
 // Re-export React components
 export { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 export { default as Dashboard } from "./utilities/Dashboard";
-export { default as Filters } from "./filters/Filters";
-export { default as Filter } from "./filters/Filter";
+export { default as Filters } from "./filters/filters";
+export { default as Filter } from "./filters/filter";
 export { default as DataContainer } from "./utilities/DataContainer";
 export { default as JSXParser } from "react-jsx-parser";
 export { default as Visual1 } from "./old-visuals/Visual1";

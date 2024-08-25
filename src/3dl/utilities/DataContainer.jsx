@@ -36,6 +36,7 @@ const DataContainer = ({ query = "", staticData, useQuery, children }) => {
         payload: { key: query || "static", data: staticData },
       });
     } else if (!loading && !error) {
+      console.log("DataContainer: Dispatching data", query, fetchedData);
       dispatch({
         type: "SET_DATA",
         payload: { key: query, data: fetchedData },

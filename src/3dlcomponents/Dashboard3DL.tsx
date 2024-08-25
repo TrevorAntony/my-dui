@@ -49,6 +49,7 @@ import {
 } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
 import { DuftTabset, DuftTab } from "../ui-components/tab-components";
+import DuftFilter from "../ui-components/filter-components";
 
 // const Dashboard3DLJSX = () => {
 //   return <Dashboard></Dashboard>;
@@ -84,7 +85,7 @@ const Dashboard3DL: React.FC = () => {
               //DashboardHeader: DuftGridHeader,
               Header: DuftGridHeader,
               Filters,
-              Filter,
+              Filter: DuftFilter,
               Visual1,
               Visual3,
               Visual4,
