@@ -6,6 +6,9 @@ import { useDataContext } from "../utilities/DataContainer";
 const ClusteredBarChart = ({ header, colors, isHorizontal }) => {
   const data = useDataContext();
 
+  if (!data || !Array.isArray(data)) {
+    return <div>No data available</div>;
+  }
   // Get the category column label and group key label
   const categoryColumn = Object.keys(data[0])[0]; // Assuming the first key is the category column
   const groupColumn = Object.keys(data[0])[0];

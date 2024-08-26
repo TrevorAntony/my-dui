@@ -45,7 +45,7 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
 
   return (
     <div
-      className={`md:grid-cols- grid-cols-1 sm:grid-cols-2${columns} xl:grid-cols-${largeScreenCols} grid w-full gap-4`}
+      className={`md:grid-cols-${columns} xl:grid-cols- grid-cols-1 sm:grid-cols-2${largeScreenCols} grid w-full gap-4`}
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
