@@ -103,7 +103,7 @@ const useThemeData = () => {
 const Dashboard3DL: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const dashboardData = useDashboardData(id);
-  const { themeData, loading, error } = useThemeData();
+  const { themeData } = useThemeData();
 
   return (
     <>
