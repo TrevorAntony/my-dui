@@ -68,6 +68,7 @@ const BaseCircularChart = ({ data, header, chartType = "pie" }) => {
 export default BaseCircularChart;
 
 function deepCopy(obj) {
+  if (!obj) return {};
   return JSON.parse(JSON.stringify(obj));
 }
 
