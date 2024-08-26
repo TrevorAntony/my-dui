@@ -23,9 +23,17 @@ const SmartDataTable = ({
 
   // Content to be rendered inside the ChartComponent
   const content = (
-    <div style={{ height: "400px", overflowY: "auto" }}>
+    <div
+      style={{
+        height: "400px",
+        overflow: "auto",
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+      }}
+    >
       <MantineReactTable
         columns={columns}
+        enableStickyHeader
         data={data}
         enableGlobalFilter
         enablePagination={false}

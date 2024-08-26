@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import JSXParser from "react-jsx-parser";
 import { fetchDataWithoutStore } from "../api/api";
 import CardComponent from "../components/card-component";
-import CardRow from "../components/card-row";
 
 import {
   Dashboard,
@@ -160,6 +159,18 @@ const Dashboard3DL: React.FC = () => {
               DataTable: (props: unknown) => (
                 <DataTable {...props} container={CardComponent} />
               ),
+              StackedBarChart: (props: unknown) => (
+                <StackedBarChart {...props} container={CardComponent} />
+              ),
+              AreaChart: (props: unknown) => (
+                <AreaChart {...props} container={CardComponent} />
+              ),
+              PercentStackedBarChart: (props: unknown) => (
+                <PercentStackedBarChart {...props} container={CardComponent} />
+              ),
+              ClusteredBarChart: (props: unknown) => (
+                <ClusteredBarChart {...props} container={CardComponent} />
+              ),
               TabSet: DuftTabset,
               Tab: DuftTab,
               PreviewPage,
@@ -167,10 +178,6 @@ const Dashboard3DL: React.FC = () => {
               Row: DuftGridFullRow,
               TabHeader,
               Tile: DuftTile,
-              StackedBarChart,
-              PercentStackedBarChart,
-              ClusteredBarChart,
-              AreaChart,
               // DashBoardBody,
               // DashboardRow: DuftRow,
               // Grid: (props: unknown) => <DuftGrid {...props} />, //figure out what this Grid does and if/how we can adapt it to our implementation
