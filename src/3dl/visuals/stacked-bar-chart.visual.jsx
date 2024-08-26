@@ -1,22 +1,33 @@
-import React from "react";
-import BaseXYChart from "../base-visuals/base-xy-chart";
+import React from 'react';
+import BaseXYChart from '../base-visuals/base-xy-chart';
+import ChartComponent from '../ui-elements/chart-component';
 
-const StackedBarChart = (props) => {
-    // Pass the "stacked" configuration to the BaseXYChart component
+const StackedBarChart = ({
+    container: Container,
+    header = 'Bar Chart',
+    subHeader = header,
+    ...props
+}) => {
     const chartOptions = {
-        chart: {
-            stacked: true, // Ensure the chart is always stacked
-        },
         plotOptions: {
             bar: {
-                horizontal: false, // Optional: Set to true if you want horizontal stacked bars
                 distributed: false, // Disable distributed colors as we're stacking
             },
         },
         ...props.options, // Allow overriding any other options
     };
 
-    return <BaseXYChart {...props} chartType="bar" options={chartOptions} />;
+    const content = (
+        <BaseXYChart {...props} chartType="bar" options={chartOptions} />
+    );
+
+    return Container ? (
+        <Container header={header} subHeader={subHeader}>
+            {content}
+        </Container>
+    ) : (
+        content
+    );
 };
 
 export default StackedBarChart;

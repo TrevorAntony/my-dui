@@ -1,10 +1,10 @@
-import React from "react";
-import { MantineReactTable } from "mantine-react-table";
-import ChartComponent from "../ui-elements/chart-component"; // Import your ChartComponent
+import React from 'react';
+import { MantineReactTable } from 'mantine-react-table';
+import ChartComponent from '../ui-elements/chart-component'; // Import your ChartComponent
 
 const SmartDataTable = ({
   container: ContainerComponent,
-  header = "Smart Data Table",
+  header = 'Smart Data Table',
   subHeader = header,
   data,
   ...props
@@ -21,9 +21,17 @@ const SmartDataTable = ({
 
   // Content to be rendered inside the ChartComponent
   const content = (
-    <div style={{ height: '400px', overflowY: 'auto' }}>
+    <div
+      style={{
+        height: '400px',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      }}
+    >
       <MantineReactTable
         columns={columns}
+        enableStickyHeader
         data={data}
         enableGlobalFilter
         enablePagination={false}

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import JSXParser from "react-jsx-parser";
-import { fetchDataWithoutStore } from "../api/api";
-import CardComponent from "../components/card-component";
-import CardRow from "../components/card-row";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import JSXParser from 'react-jsx-parser';
+import { fetchDataWithoutStore } from '../api/api';
+import CardComponent from '../components/card-component';
+import CardRow from '../components/card-row';
 
 import {
   Dashboard,
@@ -40,15 +40,15 @@ import {
   ClusteredBarChart,
   DashboardRow,
   DashboardHeader,
-} from "../3dl";
+} from '../3dl';
 import {
   DuftGrid,
   DuftGridFullRow,
   DuftGridHeader,
   DuftRow,
-} from "../ui-components/grid-components";
-import useDuftQuery from "./resources/useDuftQuery";
-import { DuftTabset, DuftTab } from "../ui-components/tab-components";
+} from '../ui-components/grid-components';
+import useDuftQuery from './resources/useDuftQuery';
+import { DuftTabset, DuftTab } from '../ui-components/tab-components';
 
 // const Dashboard3DLJSX = () => {
 //   return <Dashboard></Dashboard>;
@@ -63,12 +63,12 @@ const useDashboardData = (id) => {
         .then((data) => {
           // Remove unnecessary whitespace and empty fragments
           const cleanedJSX = data
-            .replace(/>\s+</g, "><") // Remove whitespace between tags
-            .replace(/<>\s*<\/>/g, ""); // Remove empty fragments
+            .replace(/>\s+</g, '><') // Remove whitespace between tags
+            .replace(/<>\s*<\/>/g, ''); // Remove empty fragments
 
           setDashboardData(cleanedJSX);
         })
-        .catch((error) => console.error("Error loading dashboard data", error));
+        .catch((error) => console.error('Error loading dashboard data', error));
     }
   }, [id]);
 
@@ -83,7 +83,7 @@ const useThemeData = () => {
   useEffect(() => {
     const fetchTheme = async () => {
       try {
-        const data = await fetchDataWithoutStore("/theme");
+        const data = await fetchDataWithoutStore('/theme');
         setThemeData(data);
       } catch (err) {
         setError(err);
@@ -158,17 +158,25 @@ const Dashboard3DL: React.FC = () => {
               DataTable: (props: unknown) => (
                 <DataTable {...props} container={CardComponent} />
               ),
+              StackedBarChart: (props: unknown) => (
+                <StackedBarChart {...props} container={CardComponent} />
+              ),
+              AreaChart: (props: unknown) => (
+                <AreaChart {...props} container={CardComponent} />
+              ),
+              PercentStackedBarChart: (props: unknown) => (
+                <PercentStackedBarChart {...props} container={CardComponent} />
+              ),
+              ClusteredBarChart: (props: unknown) => (
+                <ClusteredBarChart {...props} container={CardComponent} />
+              ),
               TabSet: DuftTabset,
               Tab: DuftTab,
               PreviewPage,
               JSONVisual,
               Row: DuftGridFullRow,
               TabHeader,
-              Tile, //Insert DuftTile here,
-              StackedBarChart,
-              PercentStackedBarChart,
-              ClusteredBarChart,
-              AreaChart,
+              Tile,
               // DashBoardBody,
               // DashboardRow: DuftRow,
               // Grid: (props: unknown) => <DuftGrid {...props} />, //figure out what this Grid does and if/how we can adapt it to our implementation
