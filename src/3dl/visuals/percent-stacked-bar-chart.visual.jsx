@@ -6,6 +6,10 @@ import { useDataContext } from "../utilities/DataContainer";
 const PercentStackedBarChart = ({ header, colors, isHorizontal }) => {
   const data = useDataContext();
 
+  if (!data || !Array.isArray(data)) {
+    return <div>No data available</div>;
+  }
+
   // Get the category column label
   const categoryColumn = Object.keys(data[0])[0];
   // Extract categories and series data from the rectangular data

@@ -106,7 +106,6 @@ const Dashboard3DL: React.FC = () => {
   const dashboardData = useDashboardData(id);
   const { themeData, loading, error } = useThemeData();
 
-  console.log({ themeData, loading, error });
   return (
     <>
       {id ? (

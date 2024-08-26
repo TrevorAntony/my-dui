@@ -13,7 +13,6 @@ const APITestComponent: React.FC = () => {
 
   const handleFetchWithoutStore = async () => {
     const data = await fetchDataWithoutStore("/other-endpoint");
-    console.log(data); // Handle this data without storing it globally
   };
 
   return (

@@ -33,7 +33,6 @@ const DataContainer = ({ query = "", staticData, useQuery, children }) => {
       });
 
       if (!allFiltersExist) {
-        console.log("Aborting query execution due to missing filters.");
         setQueryReady(false); // Ensure query is not executed
         return;
       }
@@ -49,14 +48,12 @@ const DataContainer = ({ query = "", staticData, useQuery, children }) => {
       });
 
       setModifiedQuery(tempQuery);
-      console.log("Temp query: ", tempQuery);
       setQueryReady(true); // Allow query execution
     }
   }, [query, state.filters]);
 
   useEffect(() => {
     if (queryReady && !loading && !error) {
-      console.log("Data: ", data);
       dispatch({
         type: "SET_DATA",
         payload: { key: query, data: fetchedData },

@@ -13,9 +13,11 @@ const PivotTable = ({
   const [pivotState, setPivotState] = useState({});
   const { state } = useDashboardContext();
   const data = useDataContext();
+  // Defensive check for data
+  const hasValidData = data && Array.isArray(data) && data.length > 0;
 
   // Content to be rendered inside the ChartComponent
-  const content = (
+  const content = hasValidData ? (
     <div>
       {state.debug && (
         <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
@@ -26,6 +28,8 @@ const PivotTable = ({
         {...pivotState}
       />
     </div>
+  ) : (
+    <div>No data available to display the pivot table.</div>
   );
 
   // Wrap the content in ChartComponent
