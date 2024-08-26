@@ -1,16 +1,11 @@
 import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
+import { useDataContext } from "../utilities/DataContainer";
 
-const BaseXYChart = ({
-  header,
-  data,
-  colors,
-  chartType = "bar",
-  isHorizontal,
-  userOptions,
-}) => {
+const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions }) => {
   const theme = useThemeContext();
+  const data = useDataContext();
 
   if (!data || !Array.isArray(data)) {
     return <div>No data available</div>;
@@ -56,7 +51,7 @@ const BaseXYChart = ({
         borderRadius: 5,
       },
     },
-    colors: colors || ["#00E396", "#FF4560", "#775DD0", "#FEB019"],
+    colors: ["#00E396", "#FF4560", "#775DD0", "#FEB019"],
     stroke: {
       show: true,
       width: isMultiSeries ? 1 : 2,

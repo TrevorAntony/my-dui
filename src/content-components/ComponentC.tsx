@@ -1,154 +1,154 @@
-import React from 'react';
-import CardComponent from '../components/card-component';
-import CardRow from '../components/card-row';
-import PieChartComponent from './PieChartComponent';
-import { DuftGrid } from '../ui-components/grid-components';
-import SmartDataTable from '../3dl/visuals/smart-data-table.visual';
+import React from "react";
+import CardComponent from "../components/card-component";
+import CardRow from "../components/card-row";
+import PieChartComponent from "./PieChartComponent";
+import { DuftGrid } from "../ui-components/grid-components";
+import SmartDataTable from "../3dl/visuals/smart-data-table.visual";
 
 const ComponentC: React.FC = () => {
-  const labels = ['Apple', 'Mango', 'Orange', 'Banana'];
+  const labels = ["Apple", "Mango", "Orange", "Banana"];
   const series = [44, 55, 13, 43];
 
   const data = [
     {
-      CID: '1025682',
-      'Date of Birth': '24/12/1960',
-      Age: '62',
-      Gender: 'Female',
-      Marital: 'Single',
+      CID: "1025682",
+      "Date of Birth": "24/12/1960",
+      Age: "62",
+      Gender: "Female",
+      Marital: "Single",
     },
     {
-      CID: '1132573',
-      'Date of Birth': '14/10/1979',
-      Age: '44',
-      Gender: 'Male',
-      Marital: 'Married monogamous',
+      CID: "1132573",
+      "Date of Birth": "14/10/1979",
+      Age: "44",
+      Gender: "Male",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132580',
-      'Date of Birth': '15/6/1981',
-      Age: '42',
-      Gender: 'Male',
-      Marital: 'Married monogamous',
+      CID: "1132580",
+      "Date of Birth": "15/6/1981",
+      Age: "42",
+      Gender: "Male",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132585',
-      'Date of Birth': '28/11/1976',
-      Age: '47',
-      Gender: 'Female',
-      Marital: 'Married monogamous',
+      CID: "1132585",
+      "Date of Birth": "28/11/1976",
+      Age: "47",
+      Gender: "Female",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132596',
-      'Date of Birth': '15/6/1990',
-      Age: '33',
-      Gender: 'Female',
-      Marital: 'Married monogamous',
+      CID: "1132596",
+      "Date of Birth": "15/6/1990",
+      Age: "33",
+      Gender: "Female",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1025682',
-      'Date of Birth': '24/12/1960',
-      Age: '62',
-      Gender: 'Female',
-      Marital: 'Single',
+      CID: "1025682",
+      "Date of Birth": "24/12/1960",
+      Age: "62",
+      Gender: "Female",
+      Marital: "Single",
     },
     {
-      CID: '1132573',
-      'Date of Birth': '14/10/1979',
-      Age: '44',
-      Gender: 'Male',
-      Marital: 'Married monogamous',
+      CID: "1132573",
+      "Date of Birth": "14/10/1979",
+      Age: "44",
+      Gender: "Male",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132580',
-      'Date of Birth': '15/6/1981',
-      Age: '42',
-      Gender: 'Male',
-      Marital: 'Married monogamous',
+      CID: "1132580",
+      "Date of Birth": "15/6/1981",
+      Age: "42",
+      Gender: "Male",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132585',
-      'Date of Birth': '28/11/1976',
-      Age: '47',
-      Gender: 'Female',
-      Marital: 'Married monogamous',
+      CID: "1132585",
+      "Date of Birth": "28/11/1976",
+      Age: "47",
+      Gender: "Female",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132596',
-      'Date of Birth': '15/6/1990',
-      Age: '33',
-      Gender: 'Female',
-      Marital: 'Married monogamous',
+      CID: "1132596",
+      "Date of Birth": "15/6/1990",
+      Age: "33",
+      Gender: "Female",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1025682',
-      'Date of Birth': '24/12/1960',
-      Age: '62',
-      Gender: 'Female',
-      Marital: 'Single',
+      CID: "1025682",
+      "Date of Birth": "24/12/1960",
+      Age: "62",
+      Gender: "Female",
+      Marital: "Single",
     },
     {
-      CID: '1132573',
-      'Date of Birth': '14/10/1979',
-      Age: '44',
-      Gender: 'Male',
-      Marital: 'Married monogamous',
+      CID: "1132573",
+      "Date of Birth": "14/10/1979",
+      Age: "44",
+      Gender: "Male",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132580',
-      'Date of Birth': '15/6/1981',
-      Age: '42',
-      Gender: 'Male',
-      Marital: 'Married monogamous',
+      CID: "1132580",
+      "Date of Birth": "15/6/1981",
+      Age: "42",
+      Gender: "Male",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132585',
-      'Date of Birth': '28/11/1976',
-      Age: '47',
-      Gender: 'Female',
-      Marital: 'Married monogamous',
+      CID: "1132585",
+      "Date of Birth": "28/11/1976",
+      Age: "47",
+      Gender: "Female",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132596',
-      'Date of Birth': '15/6/1990',
-      Age: '33',
-      Gender: 'Female',
-      Marital: 'Married monogamous',
+      CID: "1132596",
+      "Date of Birth": "15/6/1990",
+      Age: "33",
+      Gender: "Female",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1025682',
-      'Date of Birth': '24/12/1960',
-      Age: '62',
-      Gender: 'Female',
-      Marital: 'Single',
+      CID: "1025682",
+      "Date of Birth": "24/12/1960",
+      Age: "62",
+      Gender: "Female",
+      Marital: "Single",
     },
     {
-      CID: '1132573',
-      'Date of Birth': '14/10/1979',
-      Age: '44',
-      Gender: 'Male',
-      Marital: 'Married monogamous',
+      CID: "1132573",
+      "Date of Birth": "14/10/1979",
+      Age: "44",
+      Gender: "Male",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132580',
-      'Date of Birth': '15/6/1981',
-      Age: '42',
-      Gender: 'Male',
-      Marital: 'Married monogamous',
+      CID: "1132580",
+      "Date of Birth": "15/6/1981",
+      Age: "42",
+      Gender: "Male",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132585',
-      'Date of Birth': '28/11/1976',
-      Age: '47',
-      Gender: 'Female',
-      Marital: 'Married monogamous',
+      CID: "1132585",
+      "Date of Birth": "28/11/1976",
+      Age: "47",
+      Gender: "Female",
+      Marital: "Married monogamous",
     },
     {
-      CID: '1132596',
-      'Date of Birth': '15/6/1990',
-      Age: '33',
-      Gender: 'Female',
-      Marital: 'Married monogamous',
+      CID: "1132596",
+      "Date of Birth": "15/6/1990",
+      Age: "33",
+      Gender: "Female",
+      Marital: "Married monogamous",
     },
   ];
 
@@ -158,15 +158,15 @@ const ComponentC: React.FC = () => {
         <CardComponent
           header="A simple chart"
           subHeader="Showing nothing you don't like Showing nothing you don't like Showing nothing you don't like"
-          moreInfo={{ text: 'Sales Report', link: '/b' }}
+          moreInfo={{ text: "Sales Report", link: "/b" }}
           footer={<div>Footer</div>}
         >
-          <SmartDataTable data={data} />
+          <SmartDataTable data={data} container={CardComponent} />
         </CardComponent>
         <CardComponent
           header="A simple chart"
           subHeader="Showing nothing you don't like Showing nothing you don't like Showing nothing you don't like"
-          moreInfo={{ text: 'Sales Report', link: '/b' }}
+          moreInfo={{ text: "Sales Report", link: "/b" }}
           footer={<div>Footer</div>}
         >
           <div>
@@ -192,7 +192,7 @@ const ComponentC: React.FC = () => {
         <CardComponent
           header="A simple chart"
           subHeader="Showing nothing you don't like Showing nothing you don't like Showing nothing you don't like"
-          moreInfo={{ text: 'Sales Report', link: '/b' }}
+          moreInfo={{ text: "Sales Report", link: "/b" }}
           footer={<div>Footer</div>}
         >
           <div>

@@ -5,11 +5,11 @@ const SET_FILTER = "SET_FILTER";
 const SET_DATA = "SET_DATA";
 const SET_DEBUG = "SET_DEBUG";
 const SET_DESIGN_SYSTEM = "SET_DESIGN_SYSTEM";
-const SET_THEME = "SET_THEME"; // Add action for setting theme
+const SET_THEME = "SET_THEME"; // Action for setting theme
 
 // Create a context for dashboard state
 const DashboardContext = createContext();
-const ThemeContext = createContext(); // Create a Theme context
+const ThemeContext = createContext(); // Theme context
 
 // Reducer function to handle state updates
 const dashboardReducer = (state, action) => {
@@ -37,7 +37,7 @@ const dashboardReducer = (state, action) => {
         ...state,
         designSystem: action.payload,
       };
-    case SET_THEME: // Handle setting theme
+    case SET_THEME:
       return {
         ...state,
         theme: action.payload,
@@ -55,7 +55,7 @@ const Dashboard = ({
   theme,
 }) => {
   const [state, dispatch] = useReducer(dashboardReducer, {
-    filters: {},
+    filters: {}, // Initialize filters state
     data: {},
     debug,
     designSystem,
@@ -67,6 +67,11 @@ const Dashboard = ({
       <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
     </DashboardContext.Provider>
   );
+};
+
+// Utility function to set a filter
+const setFilter = (dispatch, name, value) => {
+  dispatch({ type: SET_FILTER, payload: { name, value } });
 };
 
 // Utility function to set debug mode
@@ -84,9 +89,9 @@ const setTheme = (dispatch, value) => {
   dispatch({ type: SET_THEME, payload: value });
 };
 
-// Custom hooks to use the contexts
+// Custom hook to use the Dashboard context
 const useDashboardContext = () => useContext(DashboardContext);
-const useThemeContext = () => useContext(ThemeContext); // Create a custom hook for the theme context
+const useThemeContext = () => useContext(ThemeContext);
 
 export default Dashboard;
 export {
@@ -95,6 +100,7 @@ export {
   setDebugMode,
   setDesignSystem,
   setTheme,
+  setFilter, // Export setFilter
   useDashboardContext,
   useThemeContext,
 };

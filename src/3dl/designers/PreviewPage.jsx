@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Dashboard from '../utilities/Dashboard';
-import Filters from '../filters/Filters';
-import Filter from '../filters/Filter';
+import Filters from '../filters/filters';
+import Filter from '../filters/filter';
 import DataContainer from '../utilities/DataContainer';
 import JSXParser from 'react-jsx-parser';
 import Visual1 from '../old-visuals/Visual1';

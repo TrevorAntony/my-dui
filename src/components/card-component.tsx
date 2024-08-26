@@ -9,7 +9,7 @@ type MoreInfoProps = {
 
 type CardComponentProps = {
   header: string;
-  subHeader: string;
+  subHeader?: string;
   children: ReactNode;
   footer?: ReactNode;
   moreInfo?: MoreInfoProps;
@@ -35,7 +35,7 @@ const CardComponent: FC<CardComponentProps> = ({
               {header}
             </h3>
             <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
-              {subHeader}
+              {subHeader || ""}
             </span>
           </div>
         </div>

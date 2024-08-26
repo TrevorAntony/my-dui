@@ -1,6 +1,9 @@
 import React from "react";
+import { useDataContext } from "../utilities/DataContainer";
 
-const Tile = ({ label, data }) => {
+const Tile = ({ label }) => {
+  const data = useDataContext();
+
   return (
     <div style={styles.tileContainer}>
       <div style={styles.label}>{label}</div>

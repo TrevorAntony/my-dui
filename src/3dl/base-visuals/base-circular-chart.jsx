@@ -1,9 +1,11 @@
 import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
+import { useDataContext } from "../utilities/DataContainer";
 
-const BaseCircularChart = ({ data, header, chartType = "pie" }) => {
+const BaseCircularChart = ({ chartType = "pie" }) => {
   const theme = useThemeContext();
+  const data = useDataContext();
 
   if (!Array.isArray(data) || data.length === 0) {
     return <div>No data available to render the chart.</div>;

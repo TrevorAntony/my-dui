@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import JSXParser from 'react-jsx-parser';
-import { fetchDataWithoutStore } from '../api/api';
-import CardComponent from '../components/card-component';
-import CardRow from '../components/card-row';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import JSXParser from "react-jsx-parser";
+import { fetchDataWithoutStore } from "../api/api";
+import CardComponent from "../components/card-component";
 
 import {
   Dashboard,
@@ -40,15 +39,18 @@ import {
   ClusteredBarChart,
   DashboardRow,
   DashboardHeader,
-} from '../3dl';
+} from "../3dl";
 import {
   DuftGrid,
   DuftGridFullRow,
   DuftGridHeader,
   DuftRow,
-} from '../ui-components/grid-components';
-import useDuftQuery from './resources/useDuftQuery';
-import { DuftTabset, DuftTab } from '../ui-components/tab-components';
+} from "../ui-components/grid-components";
+import useDuftQuery from "./resources/useDuftQuery";
+import { DuftTabset, DuftTab } from "../ui-components/tab-components";
+import DuftTile from "../components/duft-tile";
+import DuftFilter from "../ui-components/filter-components";
+import DuftSingleView from "../ui-components/table-components";
 
 // const Dashboard3DLJSX = () => {
 //   return <Dashboard></Dashboard>;
@@ -63,12 +65,12 @@ const useDashboardData = (id) => {
         .then((data) => {
           // Remove unnecessary whitespace and empty fragments
           const cleanedJSX = data
-            .replace(/>\s+</g, '><') // Remove whitespace between tags
-            .replace(/<>\s*<\/>/g, ''); // Remove empty fragments
+            .replace(/>\s+</g, "><") // Remove whitespace between tags
+            .replace(/<>\s*<\/>/g, ""); // Remove empty fragments
 
           setDashboardData(cleanedJSX);
         })
-        .catch((error) => console.error('Error loading dashboard data', error));
+        .catch((error) => console.error("Error loading dashboard data", error));
     }
   }, [id]);
 
@@ -83,7 +85,7 @@ const useThemeData = () => {
   useEffect(() => {
     const fetchTheme = async () => {
       try {
-        const data = await fetchDataWithoutStore('/theme');
+        const data = await fetchDataWithoutStore("/theme");
         setThemeData(data);
       } catch (err) {
         setError(err);
@@ -101,9 +103,8 @@ const useThemeData = () => {
 const Dashboard3DL: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const dashboardData = useDashboardData(id);
-  const { themeData, loading, error } = useThemeData();
+  const { themeData } = useThemeData();
 
-  console.log({ themeData, loading, error });
   return (
     <>
       {id ? (
@@ -116,7 +117,7 @@ const Dashboard3DL: React.FC = () => {
               //DashboardHeader: DuftGridHeader,
               Header: DuftGridHeader,
               Filters,
-              Filter,
+              Filter: DuftFilter,
               Visual1,
               Visual3,
               Visual4,
@@ -176,7 +177,7 @@ const Dashboard3DL: React.FC = () => {
               JSONVisual,
               Row: DuftGridFullRow,
               TabHeader,
-              Tile,
+              Tile: DuftTile,
               // DashBoardBody,
               // DashboardRow: DuftRow,
               // Grid: (props: unknown) => <DuftGrid {...props} />, //figure out what this Grid does and if/how we can adapt it to our implementation
@@ -184,6 +185,8 @@ const Dashboard3DL: React.FC = () => {
               //Also, how to pass themes to the visual through context.
               Grid: DuftGrid,
               ChartComponent: CardComponent,
+              SingleView: DuftSingleView,
+              SingleViewHeader: DuftSingleView.Header,
             }}
             jsx={dashboardData}
           />

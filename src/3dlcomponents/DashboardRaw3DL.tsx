@@ -38,7 +38,7 @@ import {
   Tile,
   StackedBarChart,
   PercentStackedBarChart,
-  ClusteredBarChart
+  ClusteredBarChart,
 } from "../3dl";
 import { DuftGrid } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
@@ -52,13 +52,10 @@ const Dashboard3DL: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const [dashboardData, setDashboardData] = useState<string | null>(null);
 
-  console.log(StackedBarChart);
-
   useEffect(() => {
     if (id) {
       fetchDataWithoutStore(`/3dldashboard/${id}`)
         .then((data) => {
-          //console.log("Fetched Dashboard Data:", data); // Log the fetched data
           setDashboardData(data);
         })
         .catch((error) => console.error("Error loading dashboard data", error));
