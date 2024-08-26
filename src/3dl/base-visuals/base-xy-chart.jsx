@@ -99,6 +99,7 @@ const BaseXYChart = ({
 export default BaseXYChart;
 
 function deepCopy(obj) {
+  if (!obj) return {};
   return JSON.parse(JSON.stringify(obj));
 }
 
