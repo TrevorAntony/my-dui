@@ -10,6 +10,7 @@ const SET_THEME = "SET_THEME"; // Action for setting theme
 // Create a context for dashboard state
 const DashboardContext = createContext();
 const ThemeContext = createContext(); // Theme context
+const LayoutContext = createContext();
 
 // Reducer function to handle state updates
 const dashboardReducer = (state, action) => {
@@ -53,6 +54,7 @@ const Dashboard = ({
   debug = false,
   designSystem = "plain",
   theme,
+  layout = "grid",
 }) => {
   const [state, dispatch] = useReducer(dashboardReducer, {
     filters: {}, // Initialize filters state
@@ -60,11 +62,14 @@ const Dashboard = ({
     debug,
     designSystem,
     theme, // Initialize theme state
+    layout,
   });
 
   return (
     <DashboardContext.Provider value={{ state, dispatch }}>
-      <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
+      <LayoutContext.Provider value={layout}>
+        <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
+      </LayoutContext.Provider>
     </DashboardContext.Provider>
   );
 };
@@ -92,6 +97,7 @@ const setTheme = (dispatch, value) => {
 // Custom hook to use the Dashboard context
 const useDashboardContext = () => useContext(DashboardContext);
 const useThemeContext = () => useContext(ThemeContext);
+const useLayout = () => useContext(LayoutContext);
 
 export default Dashboard;
 export {
@@ -103,4 +109,5 @@ export {
   setFilter, // Export setFilter
   useDashboardContext,
   useThemeContext,
+  useLayout,
 };

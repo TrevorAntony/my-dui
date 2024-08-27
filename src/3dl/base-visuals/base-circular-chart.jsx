@@ -51,10 +51,10 @@ const BaseCircularChart = ({ chartType = "pie" }) => {
       ...mergedOptions,
       colors: mergedOptions.colors,
       theme: mergedOptions.theme,
+      labels: mergedOptions.options.labels,
     },
   };
 
-  // console.log({ mergedOptions });
   return (
     <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
       <Chart
