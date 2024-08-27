@@ -44,8 +44,6 @@ const BaseCircularChart = ({ chartType = "pie", userOptions }) => {
   let mergedOptions = deepMerge(chartData, copiedOptions);
   mergedOptions = deepMerge(mergedOptions, userOptions);
 
-  console.log(mergedOptions);
-
   return (
     <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
       <Chart
