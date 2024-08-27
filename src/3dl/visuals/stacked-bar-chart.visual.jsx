@@ -1,33 +1,93 @@
 import React from "react";
-import BaseXYChart from "../base-visuals/base-xy-chart";
-import ChartComponent from "../ui-elements/chart-component";
+import Chart from "react-apexcharts";
+import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme context
+import { useDataContext } from "../utilities/DataContainer";
+import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
 
 const StackedBarChart = ({
-  container: Container,
-  header = "Bar Chart",
-  subHeader = header,
-  ...props
+    container: Container,
+    header,
+    subHeader = "",
+    ...props
 }) => {
-  const chartOptions = {
-    plotOptions: {
-      bar: {
-        distributed: false, // Disable distributed colors as we're stacking
-      },
-    },
-    ...props.options, // Allow overriding any other options
-  };
+    const theme = useThemeContext(); // Accessing the theme context
+    const data = useDataContext();
 
-  const content = (
-    <BaseXYChart {...props} chartType="bar" options={chartOptions} />
-  );
+    if (!data || !Array.isArray(data)) {
+        return <div>No data available</div>;
+    }
 
-  return Container ? (
-    <Container header={header} subHeader={subHeader}>
-      {content}
-    </Container>
-  ) : (
-    content
-  );
+    // Extract categories
+    const categories = data.map(item => item.category);
+
+    // Extract series data
+    const seriesNames = Object.keys(data[0]).filter(key => key !== 'category');
+    const series = seriesNames.map(name => ({
+        name,
+        data: data.map(item => item[name])
+    }));
+
+    const { apex: apexOptions } = theme.themes[0];
+
+    const options = {
+        chart: {
+            type: 'bar',
+            stacked: true,
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                borderRadius: 5,
+            },
+        },
+        colors: ["#00E396", "#FF4560", "#775DD0", "#FEB019"],
+        stroke: {
+            show: true,
+            width: 1,
+            colors: ['#fff'],
+        },
+        xaxis: {
+            categories: categories,
+        },
+        tooltip: {
+            y: {
+                formatter: (val) => val,
+            },
+        },
+        responsive: [
+            {
+                breakpoint: 1000, // Adjust the breakpoint as necessary
+                options: {
+                    chart: {
+                        width: "100%", // Set to 100% width below the breakpoint
+                    },
+                },
+            },
+        ],
+        fill: {
+            opacity: 1,
+        },
+        legend: {
+            position: 'top',
+        },
+    };
+
+    const copiedOptions = deepCopy(apexOptions);
+    let mergedOptions = deepMerge(options, copiedOptions);
+
+    const content = (
+        <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
+            <Chart options={mergedOptions} series={series} type="bar" />
+        </div>
+    );
+
+    return Container ? (
+        <Container header={header} subHeader={subHeader}>
+            {content}
+        </Container>
+    ) : (
+        content
+    );
 };
 
 export default StackedBarChart;
