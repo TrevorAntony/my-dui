@@ -2,6 +2,7 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../utilities/DataContainer";
+import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 
 const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions }) => {
   const theme = useThemeContext();
@@ -39,7 +40,7 @@ const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions }) => {
   const chartOptions = {
     chart: {
       id: "basic-chart",
-      stacked: isMultiSeries,
+      stacked: isMultiSeries
     },
     xaxis: {
       categories,
@@ -92,19 +93,3 @@ const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions }) => {
 };
 
 export default BaseXYChart;
-
-function deepCopy(obj) {
-  if (!obj) return {};
-  return JSON.parse(JSON.stringify(obj));
-}
-
-function deepMerge(target, source) {
-  for (const key in source) {
-    if (source[key] instanceof Object && key in target) {
-      Object.assign(source[key], deepMerge(target[key], source[key]));
-    }
-  }
-
-  Object.assign(target || {}, source);
-  return target;
-}
