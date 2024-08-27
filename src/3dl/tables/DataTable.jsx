@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useDataContext } from "../utilities/DataContainer";
+import { useLayout } from "../utilities/Dashboard";
 
 const DataTable = ({
   container: ContainerComponent,
@@ -7,6 +8,8 @@ const DataTable = ({
   subHeader = header,
 }) => {
   const data = useDataContext();
+  const layout = useLayout();
+
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div>No data available</div>;
   }
@@ -54,11 +57,18 @@ const DataTable = ({
     </table>
   );
 
-  // Wrap the content in ChartComponent
-  const wrappedContent = <>{content}</>;
+  // Conditionally render the content based on layout
+  const wrappedContent =
+    layout === "single-layout" ? (
+      <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+        {content}
+      </div>
+    ) : (
+      content
+    );
 
-  // Conditionally wrap the ChartComponent in Container if provided
-  return ContainerComponent ? (
+  // Conditionally wrap the content in ContainerComponent if provided
+  return ContainerComponent && layout !== "single-layout" ? (
     <ContainerComponent header={header} subHeader={subHeader}>
       {wrappedContent}
     </ContainerComponent>

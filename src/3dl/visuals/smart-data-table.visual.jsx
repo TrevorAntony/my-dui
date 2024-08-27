@@ -1,7 +1,7 @@
 import React from "react";
 import { MantineReactTable } from "mantine-react-table";
-import ChartComponent from "../ui-elements/chart-component";
 import { useDataContext } from "../utilities/DataContainer";
+import { useLayout } from "../utilities/Dashboard";
 
 const SmartDataTable = ({
   container: ContainerComponent,
@@ -10,6 +10,7 @@ const SmartDataTable = ({
   ...props
 }) => {
   const data = useDataContext();
+  const layout = useLayout();
 
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div>No data available</div>;
@@ -29,6 +30,7 @@ const SmartDataTable = ({
         overflow: "auto",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
+        width: layout === "single-layout" ? "100%" : "auto", // Full width if single-layout
       }}
     >
       <MantineReactTable
@@ -45,7 +47,9 @@ const SmartDataTable = ({
   );
 
   // Conditionally wrap the ChartComponent in Container if provided
-  return ContainerComponent ? (
+  return layout === "single-layout" ? (
+    content
+  ) : ContainerComponent ? (
     <ContainerComponent header={header} subHeader={subHeader}>
       {content}
     </ContainerComponent>

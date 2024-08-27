@@ -22,7 +22,6 @@ const DuftTile: React.FC<DuftTileProps> = ({ title }) => {
     return <div>No valid data available</div>;
   }
 
-  console.log(data);
   const tileData = data[0].value;
 
   const titleStyle: React.CSSProperties = {

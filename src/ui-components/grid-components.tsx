@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import React from "react";
+import { useLayout } from "../3dl/utilities/Dashboard";
 
 interface RowProps {
   children: ReactNode;
@@ -11,9 +12,15 @@ interface DuftGridProps {
 }
 
 const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
+  const layout = useLayout();
   return (
     <div
-      className="mb-6 grid grid-cols-1 gap-y-4 px-4 dark:border-gray-700 dark:bg-gray-900 xl:gap-4"
+      // className="mb-6 grid grid-cols-1 gap-y-4 px-4 dark:border-gray-700 dark:bg-gray-900 xl:gap-4"
+      className={`mb-6 ${
+        layout === "single-layout"
+          ? "flex flex-col gap-y-4" // Vertically align rows in single-layout
+          : "grid grid-cols-1 gap-y-4 px-4 xl:gap-4"
+      } dark:border-gray-700 dark:bg-gray-900`}
       {...props} // Pass additional props to the grid container
     >
       {React.Children.map(children, (child) =>
@@ -35,17 +42,21 @@ interface DuftGridFullRowProps {
 
 const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
   children,
-  // mediumCols = 2,
-  // largeCols = 3,
   columns = 3,
   largeColumns,
   ...props
 }) => {
+  const layout = useLayout();
   const largeScreenCols = largeColumns || columns;
 
   return (
     <div
-      className={`md:grid-cols-${columns} xl:grid-cols-${largeScreenCols} grid w-full grid-cols-1 gap-4 sm:grid-cols-2`}
+      // className={`md:grid-cols-${columns} xl:grid-cols-${largeScreenCols} grid w-full grid-cols-1 gap-4 sm:grid-cols-1`}
+      className={
+        layout === "single-layout"
+          ? "mb-1 w-full"
+          : `md:grid-cols-${columns} xl:grid-cols-${largeScreenCols} grid w-full grid-cols-1 gap-4 sm:grid-cols-1`
+      }
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
