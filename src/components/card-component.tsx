@@ -14,6 +14,7 @@ type CardComponentProps = {
   footer?: ReactNode;
   moreInfo?: MoreInfoProps;
   className?: string; // Optional className to override styles
+  variant?: "card" | "no-card" | "plain"; // New variant prop
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -23,25 +24,26 @@ const CardComponent: FC<CardComponentProps> = ({
   footer,
   moreInfo,
   className = "",
+  variant = "card", // Default to "card"
 }) => {
-  return (
-    <div
-      className={`flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${className}`}
-    >
-      <div>
+  const renderContent = () => (
+    <>
+      {variant !== "plain" && (
         <div className="mb-3">
           <div className="shrink-0">
             <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
               {header}
             </h3>
-            <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
-              {subHeader || ""}
-            </span>
+            {subHeader && (
+              <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
+                {subHeader}
+              </span>
+            )}
           </div>
         </div>
-        <div>{children}</div>
-      </div>
-      {footer && (
+      )}
+      <div>{children}</div>
+      {footer && variant !== "plain" && (
         <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-2 dark:border-gray-700 sm:pt-4">
           {footer}
           {moreInfo && (
@@ -70,7 +72,19 @@ const CardComponent: FC<CardComponentProps> = ({
           )}
         </div>
       )}
+    </>
+  );
+
+  return variant === "card" ? (
+    <div
+      className={`flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${className}`}
+    >
+      {renderContent()}
     </div>
+  ) : variant === "no-card" ? (
+    <div className={className}>{renderContent()}</div>
+  ) : (
+    <>{children}</>
   );
 };
 
