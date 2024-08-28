@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../utilities/DataContainer";
 
-const BaseCircularChart = ({ chartType = "pie" }) => {
+const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
   const theme = useThemeContext();
   const data = useDataContext();
 
@@ -54,6 +54,8 @@ const BaseCircularChart = ({ chartType = "pie" }) => {
       labels: mergedOptions.options.labels,
     },
   };
+
+  mergedOptions = deepMerge(mergedOptions, userOptions);
 
   return (
     <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
