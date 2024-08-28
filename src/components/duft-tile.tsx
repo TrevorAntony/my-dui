@@ -66,11 +66,14 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
         className="flex h-auto cursor-pointer flex-col justify-between rounded-lg bg-white p-3 shadow transition duration-300 ease-in-out hover:bg-gray-100 hover:shadow-lg dark:bg-gray-800 sm:p-4 xl:p-5"
         onClick={handleClick}
       >
-        <div style={titleStyle} className="dark:text-white">
+        <div
+          style={titleStyle}
+          className="text-highlight-900 dark:text-highlight-100"
+        >
           {title}
         </div>
         <div style={valueContainerStyle}>
-          <div style={valueStyle} className="dark:text-white">
+          <div style={valueStyle} className="text-black dark:text-white">
             {firstValue}
           </div>
           <div style={secondaryValueStyle}>{secondValue || "N/A"}</div>
