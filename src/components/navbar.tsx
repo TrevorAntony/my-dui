@@ -56,40 +56,14 @@ const ExampleNavbar: FC = function () {
                 src="/public/images/duft.png"
                 className="mr-3 h-6 sm:h-8"
               />
-              <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-highlight-200 text-highlight-800">
+              <span className="self-center whitespace-nowrap text-2xl font-semibold text-highlight-800 dark:text-highlight-200">
                 DUFT
               </span>
             </Navbar.Brand>
-            <form className="ml-16 hidden md:block">
-              <Label htmlFor="search" className="sr-only">
-                Search
-              </Label>
-              <TextInput
-                icon={HiSearch}
-                id="search"
-                name="search"
-                placeholder="Search"
-                required
-                size={32}
-                type="search"
-              />
-            </form>
           </div>
           <div className="flex items-center lg:gap-3">
             <div className="flex items-center">
-              <button
-                onClick={() => setOpenOnSmallScreens(!isOpenOnSmallScreens)}
-                className="cursor-pointer rounded p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:bg-gray-700 dark:focus:ring-gray-700 lg:hidden"
-              >
-                <span className="sr-only">Search</span>
-                <HiSearch className="h-6 w-6" />
-              </button>
-              <NotificationBellDropdown />
-              <AppDrawerDropdown />
               <DarkThemeToggle />
-            </div>
-            <div className="hidden lg:block">
-              <UserDropdown />
             </div>
           </div>
         </div>
@@ -111,13 +85,13 @@ const NotificationBellDropdown: FC = function () {
       }
     >
       <div className="max-w-[24rem]">
-        <div className="block rounded-t-xl bg-gray-50 py-2 px-4 text-center text-base font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+        <div className="block rounded-t-xl bg-gray-50 px-4 py-2 text-center text-base font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-400">
           Notifications
         </div>
         <div>
           <a
             href="#"
-            className="flex border-y py-3 px-4 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
+            className="flex border-y px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
           >
             <div className="shrink-0">
               <img
@@ -144,7 +118,7 @@ const NotificationBellDropdown: FC = function () {
           </a>
           <a
             href="#"
-            className="flex border-b py-3 px-4 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
+            className="flex border-b px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
           >
             <div className="shrink-0">
               <img
@@ -174,7 +148,7 @@ const NotificationBellDropdown: FC = function () {
           </a>
           <a
             href="#"
-            className="flex border-b py-3 px-4 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
+            className="flex border-b px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
           >
             <div className="shrink-0">
               <img
@@ -204,7 +178,7 @@ const NotificationBellDropdown: FC = function () {
           </a>
           <a
             href="#"
-            className="flex border-b py-3 px-4 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
+            className="flex border-b px-4 py-3 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-600"
           >
             <div className="shrink-0">
               <img
@@ -234,7 +208,7 @@ const NotificationBellDropdown: FC = function () {
           </a>
           <a
             href="#"
-            className="flex py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+            className="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-600"
           >
             <div className="shrink-0">
               <img
@@ -360,7 +334,7 @@ const AppDrawerDropdown: FC = function () {
         </span>
       }
     >
-      <div className="block rounded-t-lg border-b bg-gray-50 py-2 px-4 text-center text-base font-medium text-gray-700 dark:border-b-gray-600 dark:bg-gray-700 dark:text-white">
+      <div className="block rounded-t-lg border-b bg-gray-50 px-4 py-2 text-center text-base font-medium text-gray-700 dark:border-b-gray-600 dark:bg-gray-700 dark:text-white">
         Apps
       </div>
       <div className="grid grid-cols-3 gap-4 p-4">
