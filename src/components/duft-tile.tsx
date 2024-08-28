@@ -76,17 +76,18 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
           <div style={valueStyle} className="text-black dark:text-white">
             {firstValue}
           </div>
-          <div style={secondaryValueStyle}>{secondValue || "N/A"}</div>
+          <div style={secondaryValueStyle}>{secondValue || ""}</div>
         </div>
       </div>
-
-      <Modal show={isModalOpen} onClose={handleCloseModal} size="7xl">
-        <Modal.Header>{title}</Modal.Header>
+      <Modal show={isModalOpen} onClose={handleCloseModal} size="3xl">
+        <Modal.Header className="border-b border-gray-200 !p-6 dark:border-gray-700">
+          <strong>{title}</strong>
+        </Modal.Header>
         <Modal.Body className="">
           <div className="space-y-6">{children}</div>
         </Modal.Body>
         <Modal.Footer>
-          <Button color="gray" onClick={handleCloseModal}>
+          <Button color="primary" onClick={handleCloseModal}>
             Close
           </Button>
         </Modal.Footer>
