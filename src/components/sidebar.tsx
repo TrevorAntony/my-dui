@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import config from "../config";
 import classNames from "classnames";
 import { Dropdown, Sidebar, TextInput, Tooltip } from "flowbite-react";
 import type { FC } from "react";
@@ -61,69 +62,79 @@ const ExampleSidebar: FC = function () {
 
               <Sidebar.Items>
                 <SystemSidebar />
-                <SidebarGroup title="Test 3DL Components">
-                  <SidebarCollapse
-                    icon={HiOutlineFolder}
-                    label="3DL Sample"
-                    paths={["/dashboard/raw/3dlsample"]}
-                  >
-                    <SidebarNavLink
-                      to={"/dashboard/raw/3dlsample"}
-                      icon={HiChartPie}
-                    >
-                      Sample 1
-                    </SidebarNavLink>
-                    <SidebarNavLink
-                      to={"/dashboard/raw/3dlsample-2"}
-                      icon={HiChartPie}
-                    >
-                      Sample 2
-                    </SidebarNavLink>
-                  </SidebarCollapse>
-                  <SidebarNavLink to={"/grid"} icon={HiChartPie}>
-                    Grid Layout
-                  </SidebarNavLink>
-                  <SidebarNavLink to={"/tab"} icon={HiChartPie}>
-                    Tab Layout
-                  </SidebarNavLink>
-                  <SidebarNavLink to={"/table"} icon={HiChartPie}>
-                    Table Layout
-                  </SidebarNavLink>
-                  <SidebarNavLink to={"/a"} icon={HiChartPie}>
-                    AAA + AAA
-                  </SidebarNavLink>
-                  <SidebarNavLink to={"/b"} icon={HiChartPie}>
-                    BBB + BBB
-                  </SidebarNavLink>
-                  <SidebarNavLink to={"/c"} icon={HiChartPie}>
-                    CCC + CCC
-                  </SidebarNavLink>
-                  <SidebarNavLink to={"/D"} icon={HiChartPie}>
-                    DDD + DDD
-                  </SidebarNavLink>
-                  <SidebarCollapse
-                    icon={HiHashtag}
-                    label="APIs"
-                    paths={["/api", "/api/dashboard", "/api/settings"]}
-                  >
-                    <SidebarNavLink to={"/api"} icon={HiChartPie}>
-                      API
-                    </SidebarNavLink>
-                  </SidebarCollapse>
-                  <Sidebar.Item
-                    href="/s"
-                    icon={HiChartPie}
-                    className={
-                      "/s" === currentPage ? "bg-gray-100 dark:bg-gray-700" : ""
-                    }
-                  >
-                    S
-                  </Sidebar.Item>
-                </SidebarGroup>
+                {config.debugMode === "true" ? (
+                  <>
+                    <SidebarGroup title="Test 3DL Components">
+                      <SidebarCollapse
+                        icon={HiOutlineFolder}
+                        label="3DL Sample"
+                        paths={["/dashboard/raw/3dlsample"]}
+                      >
+                        <SidebarNavLink
+                          to={"/dashboard/raw/3dlsample"}
+                          icon={HiChartPie}
+                        >
+                          Sample 1
+                        </SidebarNavLink>
+                        <SidebarNavLink
+                          to={"/dashboard/raw/3dlsample-2"}
+                          icon={HiChartPie}
+                        >
+                          Sample 2
+                        </SidebarNavLink>
+                      </SidebarCollapse>
 
-                <SidebarGroup title="Data tasks">
-                  <Sidebar.Item icon={HiClipboard}>Data Tasks</Sidebar.Item>
-                </SidebarGroup>
+                      <SidebarNavLink to={"/grid"} icon={HiChartPie}>
+                        Grid Layout
+                      </SidebarNavLink>
+                      <SidebarNavLink to={"/tab"} icon={HiChartPie}>
+                        Tab Layout
+                      </SidebarNavLink>
+                      <SidebarNavLink to={"/table"} icon={HiChartPie}>
+                        Table Layout
+                      </SidebarNavLink>
+                      <SidebarNavLink to={"/a"} icon={HiChartPie}>
+                        AAA + AAA
+                      </SidebarNavLink>
+                      <SidebarNavLink to={"/b"} icon={HiChartPie}>
+                        BBB + BBB
+                      </SidebarNavLink>
+                      <SidebarNavLink to={"/c"} icon={HiChartPie}>
+                        CCC + CCC
+                      </SidebarNavLink>
+                      <SidebarNavLink to={"/D"} icon={HiChartPie}>
+                        DDD + DDD
+                      </SidebarNavLink>
+
+                      <SidebarCollapse
+                        icon={HiHashtag}
+                        label="APIs"
+                        paths={["/api", "/api/dashboard", "/api/settings"]}
+                      >
+                        <SidebarNavLink to={"/api"} icon={HiChartPie}>
+                          API
+                        </SidebarNavLink>
+                      </SidebarCollapse>
+
+                      <Sidebar.Item
+                        href="/s"
+                        icon={HiChartPie}
+                        className={
+                          "/s" === currentPage
+                            ? "bg-gray-100 dark:bg-gray-700"
+                            : ""
+                        }
+                      >
+                        S
+                      </Sidebar.Item>
+                    </SidebarGroup>
+                    <SidebarGroup title="Data tasks">
+                      <Sidebar.Item icon={HiClipboard}>Data Tasks</Sidebar.Item>
+                    </SidebarGroup>
+                  </>
+                ) : (
+                  <></>
+                )}
               </Sidebar.Items>
             </div>
             <BottomMenu />
@@ -211,7 +222,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
           >
             <div className="inline-flex items-center">
               <svg
@@ -252,7 +263,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
           >
             <div className="inline-flex items-center">
               <svg
@@ -272,7 +283,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
           >
             <div className="inline-flex items-center">
               <svg
@@ -294,7 +305,7 @@ const LanguageDropdown: FC = function () {
         <li>
           <a
             href="#"
-            className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
           >
             <div className="inline-flex items-center">
               <svg
