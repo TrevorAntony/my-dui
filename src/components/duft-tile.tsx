@@ -29,7 +29,9 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
   const secondValue = data[0][secondKey];
 
   const handleClick = () => {
-    setIsModalOpen(true);
+    if (React.Children.count(children) > 0) {
+      setIsModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {
