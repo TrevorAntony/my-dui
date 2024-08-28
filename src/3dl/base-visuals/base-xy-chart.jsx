@@ -4,7 +4,7 @@ import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../utilities/DataContainer";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 
-const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions }) => {
+const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
   const theme = useThemeContext();
   const data = useDataContext();
 
@@ -40,7 +40,7 @@ const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions }) => {
   const chartOptions = {
     chart: {
       id: "basic-chart",
-      stacked: isMultiSeries
+      stacked: isMultiSeries,
     },
     xaxis: {
       categories,
