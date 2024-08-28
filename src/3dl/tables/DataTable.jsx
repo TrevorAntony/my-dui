@@ -2,18 +2,11 @@ import React from "react";
 import { useDataContext } from "../utilities/DataContainer";
 import { useLayout } from "../utilities/Dashboard";
 
-// interface DataTableProps {
-//   container?: React.ComponentType<any>;
-//   header?: string;
-//   subHeader?: string;
-//   variant?: "card" | "no-card" | "plain";
-// }
-
 const DataTable = ({
   container: ContainerComponent,
   header,
   subHeader = "",
-  variant = "card", // Default to "card" variant
+  variant = "card",
 }) => {
   const data = useDataContext();
   const layout = useLayout();
@@ -22,11 +15,8 @@ const DataTable = ({
     return <div>No data available</div>;
   }
 
-  console.log(variant);
-  // Get table headers from the keys of the first data object
   const headers = Object.keys(data[0]);
 
-  // Content to be rendered inside the ChartComponent
   const content = (
     <table style={{ borderCollapse: "collapse", width: "100%" }}>
       <thead>
@@ -66,7 +56,6 @@ const DataTable = ({
     </table>
   );
 
-  // Conditionally render the content based on layout
   const wrappedContent =
     layout === "single-layout" ? (
       <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
@@ -76,7 +65,6 @@ const DataTable = ({
       content
     );
 
-  // Conditionally wrap the content in ContainerComponent if provided
   return ContainerComponent && layout !== "single-layout" ? (
     <ContainerComponent header={header} subHeader={subHeader} variant={variant}>
       {wrappedContent}
