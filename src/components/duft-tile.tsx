@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDataContext } from "../3dl/utilities/DataContainer";
 import { Modal, Button } from "flowbite-react";
+import { HiOutlineExternalLink } from "react-icons/hi";
 
 interface DuftTileProps {
   title: string;
@@ -13,7 +14,6 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
   const data = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Defensive checks for data
   const isValidData =
     data &&
     Array.isArray(data) &&
@@ -60,13 +60,28 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
     color: "#A9A9A9", // Lighter gray color for secondary value
   };
 
+  const iconStyle: React.CSSProperties = {
+    position: "absolute",
+    top: "8px",
+    right: "8px",
+    color: "#A9A9A9", // Adjust the icon color as needed
+  };
+
+  const tileClasses =
+    React.Children.count(children) > 0
+      ? "cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100 hover:shadow-lg"
+      : "";
+
   return (
     <>
       <div
         role="button"
         tabIndex={0}
-        className="flex h-auto cursor-pointer flex-col justify-between rounded-lg bg-white p-3 shadow transition duration-300 ease-in-out hover:bg-gray-100 hover:shadow-lg dark:bg-gray-800 sm:p-4 xl:p-5"
+        className={`relative flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${tileClasses}`}
         onClick={handleClick}
+        style={{
+          cursor: React.Children.count(children) > 0 ? "pointer" : "default",
+        }}
       >
         <div
           style={titleStyle}
@@ -80,6 +95,9 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
           </div>
           <div style={secondaryValueStyle}>{secondValue || ""}</div>
         </div>
+        {React.Children.count(children) > 0 && (
+          <HiOutlineExternalLink style={iconStyle} size={20} />
+        )}
       </div>
       <Modal show={isModalOpen} onClose={handleCloseModal} size="3xl">
         <Modal.Header className="border-b border-gray-200 !p-6 dark:border-gray-700">
