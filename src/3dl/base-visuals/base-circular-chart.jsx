@@ -2,6 +2,7 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../utilities/DataContainer";
+import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 
 const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
   const theme = useThemeContext();
@@ -20,13 +21,18 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
         type: chartType,
         id: "circular-chart",
       },
+      dataLabels: {
+        formatter: function (val, opts) {
+          return opts.w.globals.labels[opts.seriesIndex]; // Return the label instead of the percentage
+        },
+      },
       labels: data.map((item) => item.category || "Unknown"),
       legend: {
         position: "bottom",
       },
       responsive: [
         {
-          breakpoint: 768, // Adjust the breakpoint as necessary
+          breakpoint: 1000, // Adjust the breakpoint as necessary, similar to BaseXYChart
           options: {
             chart: {
               width: "100%", // Set to 100% width below the breakpoint
@@ -45,10 +51,11 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
   const copiedOptions = deepCopy(apexOptions);
   let mergedOptions = deepMerge(chartData, copiedOptions);
 
+  // Preserve specific options and merge with userOptions
   mergedOptions = {
     ...mergedOptions,
     options: {
-      ...mergedOptions,
+      ...mergedOptions.options,
       colors: mergedOptions.colors,
       theme: mergedOptions.theme,
       labels: mergedOptions.options.labels,
@@ -58,30 +65,22 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
   mergedOptions = deepMerge(mergedOptions, userOptions);
 
   return (
-    <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "100%",
+        height: "300px",
+        overflow: "hidden",
+      }}
+    >
       <Chart
         options={mergedOptions.options}
         series={mergedOptions.series}
         type={chartType}
-        height={400}
+        height={"100%"}
       />
     </div>
   );
 };
 
 export default BaseCircularChart;
-
-function deepCopy(obj) {
-  if (!obj) return {};
-  return JSON.parse(JSON.stringify(obj));
-}
-
-function deepMerge(target, source) {
-  for (const key in source) {
-    if (source[key] instanceof Object && key in target) {
-      Object.assign(source[key], deepMerge(target[key], source[key]));
-    }
-  }
-  Object.assign(target || {}, source);
-  return target;
-}
