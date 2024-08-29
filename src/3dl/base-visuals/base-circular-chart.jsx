@@ -23,7 +23,10 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
       },
       dataLabels: {
         formatter: function (val, opts) {
-          return opts.w.globals.labels[opts.seriesIndex]; // Return the label instead of the percentage
+          const label = opts.w.globals.labels[opts.seriesIndex];
+          const percentage = val.toFixed(1) + "%"; // Format the percentage to 1 decimal place
+          return `${label}\n(${percentage})`; // Concatenate the label and percentage
+          // return label + "\n(" + percentage + ")";
         },
       },
       labels: data.map((item) => item.category || "Unknown"),
