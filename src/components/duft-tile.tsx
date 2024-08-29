@@ -85,7 +85,7 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
         <Modal.Header className="border-b border-gray-200 !p-6 dark:border-gray-700">
           <strong>{title}</strong>
         </Modal.Header>
-        <Modal.Body className="">
+        <Modal.Body className="max-h-[700px] overflow-y-auto">
           <div className="space-y-6">{children}</div>
         </Modal.Body>
         <Modal.Footer>
