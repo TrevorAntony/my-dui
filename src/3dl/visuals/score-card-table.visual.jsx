@@ -40,13 +40,13 @@ const ScoreCardTable = ({
                         let backgroundColor;
                         switch (color) {
                             case 'Bad':
-                                backgroundColor = '#FBE5DF'; // Red
+                                backgroundColor = '#EA3323'; // Red
                                 break;
                             case 'Good':
-                                backgroundColor = '#DBF0E7'; // Green
+                                backgroundColor = '#7DAB56'; // Green
                                 break;
                             case 'Average':
-                                backgroundColor = '#FDF3D9'; // Yellow
+                                backgroundColor = '#F5C242'; // Yellow
                                 break;
                             default:
                                 backgroundColor = '#FFFFFF'; // Default to white if no match
