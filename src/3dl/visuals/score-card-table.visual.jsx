@@ -17,57 +17,73 @@ const ScoreCardTable = ({
         return <div>No data available</div>;
     }
 
-    // Generate columns from data keys
-    const columns = Object.keys(data[0]).map((key) => {
-        if (key === 'score') {
-            return {
-                accessorKey: key,
-                header: 'Score',
-                size: 150,
-                mantineTableHeadCellProps: {
-                    align: 'right',
-                },
-                mantineTableBodyCellProps: {
-                    align: 'right',
-                },
-                Cell: ({ cell }) => {
-                    const score = cell.getValue() / 100; // Convert score to a percentage
-                    return (
-                        <Box
-                            sx={{
-                                backgroundColor:
-                                    score < 0.5
-                                        ? '#FBE5DF' // Red
-                                        : score >= 0.5 && score < 0.75
-                                            ? '#FDF3D9' // Yellow
-                                            : '#DBF0E7', // Green
-                                borderRadius: '4px',
-                                color: '#000',
-                                maxWidth: '9ch',
-                                padding: '4px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                textAlign: 'center',
-                            }}
-                        >
-                            {score?.toLocaleString?.('en-US', {
-                                style: 'percent',
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 0,
-                            })}
-                        </Box>
-                    );
-                },
-            };
-        } else {
-            return {
-                accessorKey: key,
-                header: key.charAt(0).toUpperCase() + key.slice(1),
-                size: 150,
-            };
-        }
-    });
+    // Generate columns, filtering out the 'color' column
+    const columns = Object.keys(data[0])
+        .filter((key) => key !== 'color') // Exclude the 'color' column
+        .map((key) => {
+            if (key === 'score') {
+                return {
+                    accessorKey: key,
+                    header: 'Score',
+                    size: 150,
+                    mantineTableHeadCellProps: {
+                        align: 'right',
+                    },
+                    mantineTableBodyCellProps: {
+                        align: 'right',
+                    },
+                    Cell: ({ row }) => {
+                        const score = row.original.score / 100; // Convert score to a percentage
+                        const color = row.original.color;
+
+                        // Set background color based on the color attribute
+                        let backgroundColor;
+                        switch (color) {
+                            case 'Bad':
+                                backgroundColor = '#FBE5DF'; // Red
+                                break;
+                            case 'Good':
+                                backgroundColor = '#DBF0E7'; // Green
+                                break;
+                            case 'Average':
+                                backgroundColor = '#FDF3D9'; // Yellow
+                                break;
+                            default:
+                                backgroundColor = '#FFFFFF'; // Default to white if no match
+                                break;
+                        }
+
+                        return (
+                            <Box
+                                sx={{
+                                    backgroundColor,
+                                    borderRadius: '4px',
+                                    color: '#000',
+                                    maxWidth: '9ch',
+                                    padding: '4px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                {score?.toLocaleString?.('en-US', {
+                                    style: 'percent',
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                })}
+                            </Box>
+                        );
+                    },
+                };
+            } else {
+                return {
+                    accessorKey: key,
+                    header: key.charAt(0).toUpperCase() + key.slice(1),
+                    size: 150,
+                };
+            }
+        });
 
     const content = (
         <div
