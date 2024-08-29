@@ -24,6 +24,7 @@ import {
   HeatmapChart,
   RadarChart,
   SmartDataTable,
+  ScoreCardTable,
   DataTable,
   PreviewPage,
   PivotTable,
@@ -152,6 +153,9 @@ const Dashboard3DL: React.FC = () => {
               ),
               SmartDataTable: (props: unknown) => (
                 <SmartDataTable {...props} container={CardComponent} />
+              ),
+              ScoreCardTable: (props: unknown) => (
+                <ScoreCardTable {...props} container={CardComponent} />
               ),
               PivotTable: (props: unknown) => (
                 <PivotTable {...props} container={CardComponent} />
