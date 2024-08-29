@@ -40,7 +40,7 @@ const SmartDataTable = ({
         data={data}
         enableGlobalFilter
         enablePagination={false}
-        enableRowSelection
+        enableRowSelection={false}
         initialState={{ pagination: { pageSize: 10 } }}
         {...props}
       />
