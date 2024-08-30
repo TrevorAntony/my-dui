@@ -1,15 +1,14 @@
 {
+  "name": "data-use-facility-tool",
+  "author": "UCSF, IGHS | Global Programs <communications@globalhealth.ucsf.edu>",
   "type": "module",
-  "name": "flowbite-react-admin-dashboard",
-  "version": "1.1.0",
-  "descrption": "flowbite-react admin dashboard",
-  "homepage": "https://github.com/themesberg/flowbite-react-admin-dashboard",
-  "bugs": "https://github.com/themesberg/flowbite-react-admin-dashboard/issues",
+  "version": "1.1.1",
+  "main": "electron/electron.cjs",
+  "description": "Platform for Facility Data Use",
   "license": "UNLICENSED",
-  "author": "Conner Davis <cdavis@scu.edu>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/themesberg/flowbite-react-admin-dashboard.git"
+    "url": "https://github.com/UCSF-IGHS/duft-ui.git"
   },
   "scripts": {
     "build": "yarn typecheck && vite build",
@@ -17,7 +16,13 @@
     "format": "prettier --check --ignore-path .gitignore --write .",
     "lint": "eslint --ignore-path .gitignore .",
     "preview": "vite preview --host",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "electron": "wait-on tcp:3031 && cross-env IS_DEV=true electron .",
+    "electron:pack": "electron-builder --dir",
+    "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
+    "electron:builder": "electron-builder",
+    "build:for:electron": "cross-env ELECTRON=true vite build",
+    "build-and-package": "node scripts/js/build_and_package.js"
   },
   "engines": {
     "node": ">= 16",
@@ -43,7 +48,22 @@
     "react-pivottable": "^0.11.0",
     "react-sortablejs": "^6.1.4",
     "sortablejs": "^1.15.0",
-    "svgmap": "^2.10.1"
+    "svgmap": "^2.10.1",
+    "electron": "^30.0.7",
+    "electron-log": "^5.1.5",
+    "extract-zip": "2.0.1",
+    "tar": "^7.4.3",
+    "adm-zip": "^0.5.15",
+    "util": "^0.12.5",
+    "util.promisify": "^1.1.2",
+    "vite": "^4.4.7",
+    "vite-plugin-components": "^0.13.3",
+    "express": "^4.18.2",
+    "path": "^0.12.7",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "ws":"^8.18.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.17",
@@ -70,7 +90,8 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.7",
-    "vitest": "^0.33.0"
+    "vitest": "^0.33.0",
+    "electron-builder": "^24.13.3"
   },
   "private": true,
   "config": {
@@ -121,5 +142,91 @@
         "version": "detect"
       }
     }
-  }
+  },
+  "build": {
+      "appId": "com.ucsf.ighs.ucgprograms",
+      "productName": "DUFT",
+      "compression": "maximum",
+      "directories": {
+        "buildResources": ".",
+        "output": "release"
+      },
+      "files": [
+        "dist/**/*",
+        "electron/electron.cjs",
+        "package.json",
+        "duft_icon.ico"
+      ],
+      "extraResources": [
+        {
+          "from": "duft_resources.zip",
+          "to": "duft_resources.zip"
+        }
+      ],
+      "mac": {
+        "identity": null,
+        "target": [
+          {
+            "target": "dmg"
+          }
+        ],
+        "icon": "./duft_icon.icns"
+      },
+      "win": {
+        "target": [
+          {
+            "target": "nsis",
+            "arch": [
+              "ia32"
+            ]
+          },
+          {
+            "target": "nsis",
+            "arch": [
+              "x64"
+            ]
+          },
+          {
+            "target": "msi",
+            "arch": [
+              "ia32"
+            ]
+          },
+          {
+            "target": "msi",
+            "arch": [
+              "x64"
+            ]
+          }
+        ],
+        "icon": "./duft_icon.ico"
+      },
+      "linux": {
+        "icon": "./duft_icon.png",
+        "category": "Science",
+        "target": [
+          "deb",
+          "rpm"
+        ],
+        "artifactName": "${productName}-${version}-${arch}.${ext}"
+      },
+      "nsis": {
+        "oneClick": false,
+        "perMachine": true,
+        "allowElevation": true,
+        "allowToChangeInstallationDirectory": true,
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true,
+        "artifactName": "${productName}-${version}-${arch}-setup.exe"
+      },
+      "msi": {
+        "oneClick": false,
+        "perMachine": true,
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true,
+        "shortcutName": "DUFT Platform",
+        "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
+        "artifactName": "${productName}-${version}-${arch}-setup.msi"
+      }
+    }
 }
