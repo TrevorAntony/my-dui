@@ -51,19 +51,29 @@ const SmartDataTable = ({
   };
 
   // Generate columns from data keys
-  const columns = Object.keys(data[0]).map((key) => ({
-    accessorKey: key,
-    header: key.charAt(0).toUpperCase() + key.slice(1),
-    // Custom cell rendering for each column
-    Cell: ({ cell }) => (
-      <button
-        className="text-blue-500 underline"
-        onClick={() => handleCellClick(key, cell.row.original)}
-      >
-        {cell.getValue()}
-      </button>
-    ),
-  }));
+  const columns = Object.keys(data[0]).map((key) => {
+    // Check if any child has a columnName prop matching the key
+    const hasMatchingChild = React.Children.toArray(children).some(
+      (child) => React.isValidElement(child) && child.props.columnName === key,
+    );
+
+    return {
+      accessorKey: key,
+      header: key.charAt(0).toUpperCase() + key.slice(1),
+      // Conditional rendering for each column cell
+      Cell: ({ cell }) =>
+        hasMatchingChild ? (
+          <button
+            className="text-blue-500 underline"
+            onClick={() => handleCellClick(key, cell.row.original)}
+          >
+            {cell.getValue()}
+          </button>
+        ) : (
+          <span>{cell.getValue()}</span>
+        ),
+    };
+  });
 
   // Content to be rendered inside the ChartComponent
   const content = (
@@ -119,7 +129,7 @@ const SmartDataTable = ({
           <Modal.Header>
             <strong>{selectedPatient.name || "Patient Details"}</strong>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="max-h-[700px] overflow-y-auto">
             <div className="space-y-6">
               {/* Render the matched child component at the bottom of the modal */}
               {renderedChild}
