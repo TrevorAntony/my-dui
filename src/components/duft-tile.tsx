@@ -72,6 +72,10 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
       ? "cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100 hover:shadow-lg"
       : "";
 
+  // Format firstValue with comma delimiter for thousands
+  const formattedFirstValue =
+    typeof firstValue === "number" ? firstValue.toLocaleString() : firstValue;
+
   return (
     <>
       <div
@@ -91,7 +95,7 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
         </div>
         <div style={valueContainerStyle}>
           <div style={valueStyle} className="text-black dark:text-white">
-            {firstValue}
+            {formattedFirstValue}
           </div>
           <div style={secondaryValueStyle}>{secondValue || ""}</div>
         </div>
