@@ -1,26 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import { MantineReactTable } from "mantine-react-table";
 import { useDataContext } from "../utilities/DataContainer";
 import { useLayout } from "../utilities/Dashboard";
+import { Modal, Button } from "flowbite-react";
 
 const SmartDataTable = ({
   container: ContainerComponent,
   header = "Smart Data Table",
   subHeader = header,
-  variant = "card", // Default to "card" variant
+  variant = "card",
+  children,
   ...props
 }) => {
   const data = useDataContext();
   const layout = useLayout();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [renderedChild, setRenderedChild] = useState(null);
+
   if (!data || !Array.isArray(data) || data.length === 0) {
     return <div>No data available</div>;
   }
+
+  // Handle clicking on any cell
+  const handleCellClick = (key, row) => {
+    setSelectedPatient(row);
+
+    // Check if any child has a columnName prop matching the key
+    const matchingChild = React.Children.toArray(children).find(
+      (child) => React.isValidElement(child) && child.props.columnName === key,
+    );
+
+    if (matchingChild) {
+      const clonedChild = React.cloneElement(matchingChild, {
+        config: row,
+      });
+      setRenderedChild(clonedChild);
+    } else {
+      setRenderedChild(null);
+    }
+
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedPatient(null);
+    setRenderedChild(null);
+  };
 
   // Generate columns from data keys
   const columns = Object.keys(data[0]).map((key) => ({
     accessorKey: key,
     header: key.charAt(0).toUpperCase() + key.slice(1),
+    // Custom cell rendering for each column
+    Cell: ({ cell }) => (
+      <button
+        className="text-blue-500 underline"
+        onClick={() => handleCellClick(key, cell.row.original)}
+      >
+        {cell.getValue()}
+      </button>
+    ),
   }));
 
   // Content to be rendered inside the ChartComponent
@@ -31,7 +73,7 @@ const SmartDataTable = ({
         overflow: "auto",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
-        width: layout === "single-layout" ? "100%" : "auto", // Full width if single-layout
+        width: layout === "single-layout" ? "100%" : "auto",
       }}
     >
       <MantineReactTable
@@ -40,7 +82,7 @@ const SmartDataTable = ({
         data={data}
         enableGlobalFilter
         enablePagination={false}
-        enableRowSelection={false}
+        enableRowSelection
         initialState={{ pagination: { pageSize: 10 } }}
         {...props}
       />
@@ -58,12 +100,39 @@ const SmartDataTable = ({
     );
 
   // Conditionally wrap the ChartComponent in ContainerComponent if provided
-  return ContainerComponent && layout !== "single-layout" ? (
-    <ContainerComponent header={header} subHeader={subHeader} variant={variant}>
-      {wrappedContent}
-    </ContainerComponent>
-  ) : (
-    wrappedContent
+  return (
+    <>
+      {ContainerComponent && layout !== "single-layout" ? (
+        <ContainerComponent
+          header={header}
+          subHeader={subHeader}
+          variant={variant}
+        >
+          {wrappedContent}
+        </ContainerComponent>
+      ) : (
+        wrappedContent
+      )}
+
+      {isModalOpen && selectedPatient && (
+        <Modal show={isModalOpen} onClose={handleCloseModal} size="3xl">
+          <Modal.Header>
+            <strong>{selectedPatient.name || "Patient Details"}</strong>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="space-y-6">
+              {/* Render the matched child component at the bottom of the modal */}
+              {renderedChild}
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button color="primary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+    </>
   );
 };
 
