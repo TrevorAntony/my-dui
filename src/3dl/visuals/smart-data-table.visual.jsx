@@ -16,7 +16,7 @@ const SmartDataTable = ({
   const layout = useLayout();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedRowData, setSelectedRowData] = useState(null);
   const [renderedChild, setRenderedChild] = useState(null);
 
   if (!data || !Array.isArray(data) || data.length === 0) {
@@ -25,7 +25,7 @@ const SmartDataTable = ({
 
   // Handle clicking on any cell
   const handleCellClick = (key, row) => {
-    setSelectedPatient(row);
+    setSelectedRowData(row);
 
     // Check if any child has a columnName prop matching the key
     const matchingChild = React.Children.toArray(children).find(
@@ -46,7 +46,7 @@ const SmartDataTable = ({
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedPatient(null);
+    setSelectedRowData(null);
     setRenderedChild(null);
   };
 
@@ -124,10 +124,10 @@ const SmartDataTable = ({
         wrappedContent
       )}
 
-      {isModalOpen && selectedPatient && (
+      {isModalOpen && selectedRowData && (
         <Modal show={isModalOpen} onClose={handleCloseModal} size="3xl">
           <Modal.Header>
-            <strong>{selectedPatient.name || "Patient Details"}</strong>
+            <strong>{selectedRowData.name || "More info"}</strong>
           </Modal.Header>
           <Modal.Body className="max-h-[700px] overflow-y-auto">
             <div className="space-y-6">
