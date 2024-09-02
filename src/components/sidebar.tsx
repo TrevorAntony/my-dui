@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import config from "../config";
 import classNames from "classnames";
-import { Dropdown, Sidebar, TextInput, Tooltip } from "flowbite-react";
+import { Modal, Button, Sidebar, TextInput, Tooltip } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import {
@@ -22,6 +22,7 @@ import { SidebarNavLink } from "./SidebarNavLink";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
+// import useFetchDteStatus from "../3dlcomponents/resources/useFetchDteStatus";
 
 const ExampleSidebar: FC = function () {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =
@@ -145,23 +146,126 @@ const ExampleSidebar: FC = function () {
   );
 };
 
+const channel = new BroadcastChannel("bottom-menu-channel");
+
 const BottomMenu: FC = function () {
+  const [data, setData] = useState<{ is_running?: boolean } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<string[]>([]);
+
+  // Establish an SSE connection to listen for events
+  useEffect(() => {
+    const eventSource = new EventSource("http://127.0.0.1:8000/sse/dte/");
+
+    eventSource.onmessage = (event) => {
+      let stringData = event.data;
+
+      stringData = stringData
+        .replace(/'/g, '"')
+        .replace(/None/g, "null")
+        .replace(/False/g, "false")
+        .replace(/True/g, "true");
+
+      const parsedData = JSON.parse(stringData);
+
+      console.log({ parsedData });
+
+      setData(parsedData);
+
+      // Automatically toggle modal based on the 'is_running' property
+      if (parsedData.is_running !== undefined) {
+        setIsModalOpen(parsedData.is_running);
+        setModalContent((prevContent) => {
+          // Reset content if the modal was closed and reopened
+          if (!prevContent.length || !isModalOpen) {
+            return [`Event #1: ${JSON.stringify(parsedData)}`];
+          }
+          return [
+            ...prevContent,
+            `Event #${prevContent.length + 1}: ${JSON.stringify(parsedData)}`,
+          ];
+        });
+
+        channel.postMessage({
+          type: "TOGGLE_MODAL",
+          isModalOpen: parsedData.is_running,
+        });
+      }
+
+      // Display 'data task completed' message when `is_running` turns to false
+      if (parsedData.is_running === false) {
+        setModalContent((prevContent) => [
+          ...prevContent,
+          "Data task completed",
+        ]);
+      }
+    };
+
+    eventSource.onerror = () => {
+      console.error("Error with SSE connection");
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [isModalOpen]);
+
+  // Listen for messages from other windows
+  useEffect(() => {
+    channel.onmessage = (event) => {
+      if (event.data.type === "TOGGLE_MODAL") {
+        setIsModalOpen(event.data.isModalOpen);
+        if (!event.data.isModalOpen) {
+          setModalContent([]); // Clear content when modal is closed
+        }
+      }
+    };
+  }, []);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setModalContent([]); // Clear content when modal is closed
+    channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
+  };
+
+  const divStyle = {
+    width: "10px",
+    height: "10px",
+    borderRadius: "50%",
+    backgroundColor: data && data.is_running ? "green" : "red",
+    cursor: "pointer", // Make the dot clickable
+  };
+
   return (
-    <div className="flex items-center justify-center gap-x-5">
-      <div>
+    <>
+      <div className="flex items-center justify-center gap-x-5">
         <Tooltip content="Data task indicator">
-          <div
-            style={{
-              width: "10px",
-              height: "10px",
-              backgroundColor: "red",
-              borderRadius: "50%",
-            }}
-          ></div>
+          <div style={divStyle}></div>
         </Tooltip>
       </div>
-    </div>
+
+      {isModalOpen && (
+        <Modal show={isModalOpen} onClose={handleCloseModal} size="2xl">
+          <div className="p-4 text-lg font-semibold">Running data task</div>{" "}
+          {/* Custom Header */}
+          <Modal.Body className="max-h-[700px] overflow-y-auto">
+            <ul className="space-y-4">
+              {modalContent.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </Modal.Body>
+          {!data?.is_running && (
+            <Modal.Footer>
+              <Button color="primary" onClick={handleCloseModal}>
+                Close
+              </Button>
+            </Modal.Footer>
+          )}
+        </Modal>
+      )}
+    </>
   );
 };
-
 export default ExampleSidebar;
