@@ -40,6 +40,7 @@ import {
   ClusteredBarChart,
   DashboardRow,
   DashboardHeader,
+  DetailsView,
 } from "../3dl";
 import {
   DuftGrid,
@@ -182,9 +183,7 @@ const Dashboard3DL: React.FC = () => {
               Row: DuftGridFullRow,
               TabHeader,
               Tile: DuftTile,
-              // DashBoardBody,
-              // DashboardRow: DuftRow,
-              // Grid: (props: unknown) => <DuftGrid {...props} />, //figure out what this Grid does and if/how we can adapt it to our implementation
+              DetailsView,
               //NB: ability to add design system through state update in dashboard component.
               //Also, how to pass themes to the visual through context.
               Grid: DuftGrid,
