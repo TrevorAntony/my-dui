@@ -21,44 +21,49 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
   };
 
   const content = (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
-      <textarea
-        ref={queryRef}
-        placeholder="Type your query here..."
+    <>
+      <div
         style={{
-          width: "50%",
-          height: "150px",
-          padding: "10px",
-          fontSize: "16px",
-          borderRadius: "4px",
-          border: "1px solid #ccc",
-          resize: "none",
-          marginBottom: "10px",
-        }}
-      />
-      <button
-        onClick={handleUpdateQuery}
-        style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          borderRadius: "4px",
-          backgroundColor: "#007BFF",
-          color: "#fff",
-          border: "none",
-          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          marginBottom: "20px",
         }}
       >
-        Update Query
-      </button>
+        <textarea
+          ref={queryRef}
+          placeholder="Type your query here..."
+          style={{
+            width: "75%",
+            height: "150px",
+            padding: "10px",
+            fontSize: "16px",
+            borderRadius: "4px",
+            border: "1px solid black",
+            resize: "none",
+            marginRight: "10px",
+            outline: "none",
+          }}
+          // onFocus={(e) => (e.target.style.borderColor = "#C42783")}
+          // onBlur={(e) => (e.target.style.borderColor = "#ccc")}
+        />
+        <button
+          onClick={handleUpdateQuery}
+          style={{
+            padding: "10px 20px",
+            fontSize: "16px",
+            borderRadius: "4px",
+            backgroundColor: "#C42783",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Update Query
+        </button>
+      </div>
       {query && children && React.cloneElement(children, { query })}
-    </div>
+    </>
   );
 
   return Container ? <Container>{content}</Container> : content;
