@@ -1,6 +1,6 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { useDataContext } from "../utilities/DataContainer";
+import { useDataContext } from "../utilities/DataSet";
 
 // Visual4 component using data from its DataContainer
 const Visual4 = ({ colors, chartType = "bar" }) => {

@@ -9,7 +9,7 @@ import {
   Dashboard,
   Filters,
   Filter,
-  DataContainer,
+  DataSet,
   Visual1,
   Visual3,
   Visual4,
@@ -83,7 +83,7 @@ const Dashboard3DL: React.FC = () => {
                   Filters,
                   Filter,
                   DataContainer: (props: unknown) => (
-                    <DataContainer {...props} useQuery={useDuftQuery} />
+                    <DataSet {...props} useQuery={useDuftQuery} />
                   ),
                   Visual1,
                   Visual3,
