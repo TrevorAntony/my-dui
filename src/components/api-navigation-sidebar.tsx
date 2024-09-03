@@ -40,6 +40,7 @@ const renderSidebarMenu = (config: any) => {
   const homeConfig = config.system?.home;
   const systemMenu = config.system?.menu || [];
   const userMenu = config.user?.menu || [];
+  const dataTaskMenu = config.system?.dataTasks || [];
 
   // Render Home link inside Sidebar.ItemGroup
   const homeLink = homeConfig ? (
@@ -54,6 +55,41 @@ const renderSidebarMenu = (config: any) => {
   ) : null;
 
   // Render the System group
+  const dataTaskGroup =
+    dataTaskMenu.length > 0 ? (
+      <SidebarGroup key="data-tasks-group" title="Data Tasks">
+        {dataTaskMenu.map((item: any, index: number) => {
+          const Icon = iconMap[item.icon] || HiChartPie; // Provide a fallback icon
+          if (item.dashboards && item.dashboards.length > 0) {
+            return (
+              <SidebarCollapse
+                key={index}
+                icon={HiOutlineFolder}
+                label={item.title}
+                paths={item.dashboards.map((d: any) => d.dashboard)}
+              >
+                {item.dashboards.map((nestedItem: any, nestedIndex: number) => (
+                  <SidebarNavLink
+                    key={nestedIndex}
+                    to={nestedItem.dashboard}
+                    icon={iconMap[nestedItem.icon] || HiChartPie} // Provide a fallback icon
+                  >
+                    {nestedItem.title}
+                  </SidebarNavLink>
+                ))}
+              </SidebarCollapse>
+            );
+          } else {
+            return (
+              <SidebarNavLink key={index} to={item.dashboard} icon={Icon}>
+                {item.title}
+              </SidebarNavLink>
+            );
+          }
+        })}
+      </SidebarGroup>
+    ) : null;
+
   const systemGroup =
     systemMenu.length > 0 ? (
       <SidebarGroup key="system-group" title="System">
@@ -130,6 +166,7 @@ const renderSidebarMenu = (config: any) => {
       {homeLink}
       {systemGroup}
       {userGroup}
+      {dataTaskGroup}
     </>
   );
 };

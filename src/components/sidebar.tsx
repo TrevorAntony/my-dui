@@ -234,6 +234,15 @@ const BottomMenu: FC = function () {
     channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
   };
 
+  const handleButtonClose = () => {
+    setIsModalOpen(false);
+    setModalContent([]); // Clear content when modal is closed
+    channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
+
+    // Reload the page and navigate to the root path
+    window.location.href = "/";
+  };
+
   const divStyle = {
     width: "10px",
     height: "10px",
@@ -263,7 +272,7 @@ const BottomMenu: FC = function () {
           {data?.output?.includes("Script completed") ||
             (!data?.is_running && (
               <Modal.Footer>
-                <Button color="primary" onClick={handleCloseModal}>
+                <Button color="primary" onClick={handleButtonClose}>
                   Close
                 </Button>
               </Modal.Footer>
