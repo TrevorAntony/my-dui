@@ -1,27 +1,26 @@
-import React, { useState } from 'react';
-import Dashboard from '../utilities/Dashboard';
-import Filters from '../filters/filters';
-import Filter from '../filters/filter';
-import DataContainer from '../utilities/DataContainer';
-import JSXParser from 'react-jsx-parser';
-import Visual1 from '../old-visuals/Visual1';
-import Visual3 from '../old-visuals/Visual3';
-import Visual4 from '../old-visuals/Visual4'; // Import the new Visual4 component
-import Visual5 from '../old-visuals/Visual5'; // Import the new Visual4 component
-import Section from '../ui-elements/Section';
-import PieChart from '../visuals/pie-chart.visual';
-import DonutChart from '../visuals/donut-chart.visual';
-import RadialBarChart from '../visuals/radial-bar-chart.visual';
-import PolarAreaChart from '../visuals/polar-area-chart.visual';
-import BarChart from '../visuals/bar-chart.visual';
-import LineChart from '../visuals/line-chart.visual';
-import HeatmapChart from '../visuals/heat-map-chart.visual';
-import RadarChart from '../visuals/radar-chart.visual';
-import SmartDataTable from '../visuals/smart-data-table.visual';
-import DataTable from '../tables/DataTable'; // Import the DataTable component
+import React, { useState } from "react";
+import Dashboard from "../utilities/Dashboard";
+import Filters from "../filters/filters";
+import Filter from "../filters/filter";
+import DataSet from "../utilities/DataSet";
+import JSXParser from "react-jsx-parser";
+import Visual1 from "../old-visuals/Visual1";
+import Visual3 from "../old-visuals/Visual3";
+import Visual5 from "../old-visuals/Visual5";
+import Section from "../ui-elements/Section";
+import PieChart from "../visuals/pie-chart.visual";
+import DonutChart from "../visuals/donut-chart.visual";
+import RadialBarChart from "../visuals/radial-bar-chart.visual";
+import PolarAreaChart from "../visuals/polar-area-chart.visual";
+import BarChart from "../visuals/bar-chart.visual";
+import LineChart from "../visuals/line-chart.visual";
+import HeatmapChart from "../visuals/heat-map-chart.visual";
+import RadarChart from "../visuals/radar-chart.visual";
+import SmartDataTable from "../visuals/smart-data-table.visual";
+import DataTable from "../tables/DataTable"; // Import the DataTable component
 
-import PivotTable from '../tables/PivotTable'; // Import the PivotTable component
-import JSONVisual from '../visuals/json-visual';
+import PivotTable from "../tables/PivotTable"; // Import the PivotTable component
+import JSONVisual from "../visuals/json-visual";
 
 const PreviewPage = () => {
   const [input3DL, setInput3DL] = useState(`
@@ -29,29 +28,29 @@ const PreviewPage = () => {
       <Filters>
         <Filter name="gender" values="Male,Female" />
         <Filter name="age" values_query="SELECT * FROM dim_age" />
-        <DataContainer staticData={['Apple', 'Banana', 'Cherry']}>
+        <DataSet staticData={['Apple', 'Banana', 'Cherry']}>
           <Visual1 />
           <Visual3 />
           <Filters>
             <Filter name="occupation" values_query="SELECT * FROM dim_occupation" />
-            <DataContainer query="SELECT * FROM dim_occupation_table">
+            <DataSet query="SELECT * FROM dim_occupation_table">
               <Visual3 />
-            </DataContainer>
+            </DataSet>
           </Filters>
-        </DataContainer>
+        </DataSet>
         <Section title="Tiles">
-          <DataContainer staticData={[1200]}>
+          <DataSet staticData={[1200]}>
             <Visual5 title="Total Users" backgroundColor="#e0f7fa" color="#00796b" />
-          </DataContainer>
-          <DataContainer staticData={[300]}>
+          </DataSet>
+          <DataSet staticData={[300]}>
             <Visual5 title="Active Sessions" backgroundColor="#f3e5f5" color="#6a1b9a" />
-          </DataContainer>
-          <DataContainer staticData={[12500]}>
+          </DataSet>
+          <DataSet staticData={[12500]}>
             <Visual5 title="Revenue" backgroundColor="#fff3e0" color="#ef6c00" />
-          </DataContainer>
+          </DataSet>
         </Section>
         <Section title="Charts">
-          <DataContainer
+          <DataSet
             staticData={[
               { category: 'Apples', value: 30 },
               { category: 'Bananas', value: 40 },
@@ -62,8 +61,8 @@ const PreviewPage = () => {
             <LineChart header="sample line chart"/>
             <HeatmapChart header="sample heat map chart"/>
             <RadarChart header="sample radar chart"/>
-          </DataContainer>
-          <DataContainer
+          </DataSet>
+          <DataSet
           staticData={[
             { category: 'Jan', value: 30 },
             { category: 'Feb', value: 40 },
@@ -77,10 +76,10 @@ const PreviewPage = () => {
             <DonutChart header="sample donut chart"/>
             <RadialBarChart header="sample radial bar chart"/>
             <PolarAreaChart header="sample polar area chart"/>
-          </DataContainer>
+          </DataSet>
         </Section>
         <Section title="Data Table">
-          <DataContainer
+          <DataSet
           staticData={[
               { category: 'Jan', value: 30 },
               { category: 'Feb', value: 40 },
@@ -91,7 +90,7 @@ const PreviewPage = () => {
             ]}
           >
             <SmartDataTable header="Table header"/>
-          </DataContainer>
+          </DataSet>
         </Section>
       </Filters>
     </Dashboard>
@@ -104,24 +103,24 @@ const PreviewPage = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: "20px" }}>
       <h1>3DL Dashboard Preview</h1>
       <textarea
         value={input3DL}
         onChange={(e) => setInput3DL(e.target.value)}
-        style={{ width: '100%', height: '200px', marginBottom: '20px' }}
+        style={{ width: "100%", height: "200px", marginBottom: "20px" }}
       />
-      <div style={{ marginBottom: '20px' }}>
+      <div style={{ marginBottom: "20px" }}>
         <button onClick={handlePreview}>Preview Dashboard</button>
       </div>
-      <div style={{ border: '1px solid #ccc', padding: '20px' }}>
+      <div style={{ border: "1px solid #ccc", padding: "20px" }}>
         <h2>Preview:</h2>
         <JSXParser
           components={{
             Dashboard,
             Filters,
             Filter,
-            DataContainer,
+            DataSet,
             Visual1,
             Visual3,
             Visual5,

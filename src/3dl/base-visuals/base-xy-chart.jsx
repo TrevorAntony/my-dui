@@ -1,7 +1,7 @@
 import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
-import { useDataContext } from "../utilities/DataContainer";
+import { useDataContext } from "../utilities/DataSet";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 
 const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {

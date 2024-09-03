@@ -8,7 +8,7 @@ import {
   Dashboard,
   Filters,
   Filter,
-  DataContainer,
+  DataSet,
   Visual1,
   Visual3,
   Visual4,
@@ -41,6 +41,7 @@ import {
   DashboardRow,
   DashboardHeader,
   DetailsView,
+  PreviewQuery,
 } from "../3dl";
 import {
   DuftGrid,
@@ -126,7 +127,7 @@ const Dashboard3DL: React.FC = () => {
               Visual5,
               Section,
               DataContainer: (props: unknown) => (
-                <DataContainer {...props} useQuery={useDuftQuery} />
+                <DataSet {...props} useQuery={useDuftQuery} />
               ),
               PieChart: (props: unknown) => (
                 <PieChart {...props} container={CardComponent} />
@@ -175,6 +176,9 @@ const Dashboard3DL: React.FC = () => {
               ),
               ClusteredBarChart: (props: unknown) => (
                 <ClusteredBarChart {...props} container={CardComponent} />
+              ),
+              PreviewQuery: (props: unknown) => (
+                <PreviewQuery {...props} container={CardComponent} />
               ),
               TabSet: DuftTabset,
               Tab: DuftTab,

@@ -6,7 +6,7 @@ const DataContext = createContext();
 export const useDataContext = () => useContext(DataContext);
 
 // DataContainer component that uses filters and renders visuals
-const DataContainer = ({ query = "", staticData, useQuery, children }) => {
+const DataSet = ({ query = "", staticData, useQuery, children }) => {
   const { state, dispatch } = useContext(DashboardContext);
   const [modifiedQuery, setModifiedQuery] = useState("");
   const [queryReady, setQueryReady] = useState(false);
@@ -80,4 +80,4 @@ const DataContainer = ({ query = "", staticData, useQuery, children }) => {
   );
 };
 
-export default DataContainer;
+export default DataSet;

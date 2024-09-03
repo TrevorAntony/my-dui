@@ -1,6 +1,6 @@
 // Visual1.js
 import React from "react";
-import { useDataContext } from "../utilities/DataContainer";
+import { useDataContext } from "../utilities/DataSet";
 
 const Visual1 = () => {
   const data = useDataContext();

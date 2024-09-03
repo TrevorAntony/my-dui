@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const useQuery = (query) => {
   const [data, setData] = useState([]);
@@ -13,24 +13,32 @@ const useQuery = (query) => {
         // Prepare the payload
         const payload = {
           query,
-          data_connection_id: 'ANA', // Hardcoded data connection ID
+          data_connection_id: "ANA", // Hardcoded data connection ID
         };
 
         // Make the API request
-        const response = await fetch('http://localhost:8000/api/v2/query-engine', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          "http://localhost:8000/api/v2/query-engine",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
           },
-          body: JSON.stringify(payload),
-        });
+        );
 
         const result = await response.json();
 
         if (!response.ok) {
-          throw new Error('Network response was not ok: ' + result.message + "\n" + "Original query: " + query);
+          throw new Error(
+            "Network response was not ok: " +
+            result.message +
+            "\n" +
+            "Original query: " +
+            query,
+          );
         }
-
 
         setData(result); // Assuming the data is an array of options
       } catch (error) {
