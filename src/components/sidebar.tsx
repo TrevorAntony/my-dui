@@ -36,7 +36,6 @@ const ExampleSidebar: FC = function () {
     setCurrentPage(newPage);
   }, [setCurrentPage]);
 
-  console.log("currentPage", currentPage);
   return (
     <div
       className={classNames("lg:!block", {
@@ -169,8 +168,6 @@ const BottomMenu: FC = function () {
         .replace(/True/g, "true");
 
       const parsedData = JSON.parse(stringData);
-
-      console.log({ parsedData });
 
       setData(parsedData);
 
