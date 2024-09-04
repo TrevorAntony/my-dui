@@ -12,7 +12,7 @@ const FreeQuery: React.FC = () => {
   const toggleModal = () => {
     setIsOpen(!isOpen);
     setError(null); // Reset error when closing the modal
-    window.location.href = "/";
+    window.location.href = "/dashboard/home";
   };
 
   const handleDataTask = async () => {

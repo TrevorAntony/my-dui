@@ -240,7 +240,7 @@ const BottomMenu: FC = function () {
     channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
 
     // Reload the page and navigate to the root path
-    window.location.href = "/";
+    window.location.href = "/dashboard/home";
   };
 
   const divStyle = {
