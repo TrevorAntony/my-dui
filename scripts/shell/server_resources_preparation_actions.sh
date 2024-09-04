@@ -142,13 +142,13 @@ create_and_install_conda_env() {
   # Install additional dependencies from requirements.txt
   local requirements_file="$config_dir/requirements.txt"
   if [ -f "$requirements_file" ]; then
-    write_color "Installing dependencies from requirements.txt..." Blue
+    write_color "Installing additional dependencies from requirements.txt..." Blue
     conda run -n "$env_name" pip install -r "$requirements_file"
 
     if [ $? -eq 0 ]; then
-      write_color "Dependencies installed successfully." Green
+      write_color "Additional Dependencies installed successfully." Green
     else
-      write_color "Failed to install dependencies." Red
+      write_color "Failed to install additional dependencies." Red
       exit 1
     fi
   else
