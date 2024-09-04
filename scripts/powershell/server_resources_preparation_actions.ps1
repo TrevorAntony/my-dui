@@ -111,7 +111,7 @@ function Extract-Workspace-Zip-For-Data-And-Env-File {
 function Create-And-Install-Conda-Env {
   param (
     [string]$Dir,
-    [string]$ConfigDir
+    [string]$ConfigDir,
     [string]$EnvName,
     [string]$PythonVersion
   )
