@@ -8,6 +8,7 @@ const ScoreCardTable = ({
   container: ContainerComponent,
   header = "Score Card Table",
   subHeader = header,
+  tableMaxHeight ='300px',
   ...props
 }) => {
   const data = useDataContext();
@@ -105,6 +106,7 @@ const ScoreCardTable = ({
         enableColumnFilterModes={true}
         enableColumnOrdering={true}
         enableFacetedValues={true}
+         mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }}
         {...props}
       />
     </div>

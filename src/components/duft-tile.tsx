@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDataContext } from "../3dl/utilities/DataSet";
-import { Modal, Button } from "flowbite-react";
 import { HiOutlineExternalLink } from "react-icons/hi";
+import DuftModal from "./duft-modal";
 
 interface DuftTileProps {
   title: string;
@@ -103,19 +103,16 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
           <HiOutlineExternalLink style={iconStyle} size={20} />
         )}
       </div>
-      <Modal show={isModalOpen} onClose={handleCloseModal} size="3xl">
-        <Modal.Header className="border-b border-gray-200 !p-6 dark:border-gray-700">
-          <strong>{title}</strong>
-        </Modal.Header>
-        <Modal.Body className="max-h-[700px] overflow-y-auto">
-          <div className="space-y-6">{children}</div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button color="primary" onClick={handleCloseModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DuftModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={title}
+        widthSize="large"
+        heightSize="large"
+        isCloseDefault={true}
+      >
+        {children}
+      </DuftModal>
     </>
   );
 };

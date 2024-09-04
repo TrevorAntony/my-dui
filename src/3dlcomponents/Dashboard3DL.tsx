@@ -104,6 +104,7 @@ const useThemeData = () => {
 };
 
 const Dashboard3DL: React.FC = () => {
+  //split logic in this component.
   const { id } = useParams<{ id?: string }>();
   const dashboardData = useDashboardData(id);
   const { themeData } = useThemeData();
