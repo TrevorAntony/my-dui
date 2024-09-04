@@ -110,7 +110,8 @@ function Extract-Workspace-Zip-For-Data-And-Env-File {
 # Function to create and activate a Conda environment
 function Create-And-Install-Conda-Env {
   param (
-    [string]$Dir,
+    [string]$ServerDir,
+    [string]$ConfigDir,
     [string]$EnvName,
     [string]$PythonVersion
   )
@@ -132,7 +133,7 @@ function Create-And-Install-Conda-Env {
   & conda activate "$EnvName"
 
   # Install dependencies from requirements.txt
-  $RequirementsFile = "$Dir\requirements.txt"
+  $RequirementsFile = "$ServerDir\requirements.txt"
   if (Test-Path $RequirementsFile) {
     Write-Color "Installing dependencies from requirements.txt..." Blue
     conda run -n "$EnvName" pip install -r $RequirementsFile
@@ -144,7 +145,23 @@ function Create-And-Install-Conda-Env {
       exit 1
     }
   } else {
-    Write-Color "No requirements.txt found in $Dir." Yellow
+    Write-Color "No requirements.txt found in $ServerDir." Yellow
+  }
+
+  # Install additional dependencies from requirements.txt
+  $RequirementsFile = "$ConfigDir\requirements.txt"
+  if (Test-Path $RequirementsFile) {
+    Write-Color "Installing additional dependencies from requirements.txt..." Blue
+    conda run -n "$EnvName" pip install -r $RequirementsFile
+
+    if ($?) {
+      Write-Color "Additional Dependencies installed successfully." Green
+    } else {
+      Write-Color "Failed to install additional dependencies." Red
+      exit 1
+    }
+  } else {
+    Write-Color "No requirements.txt found in $ConfigDir." Yellow
   }
 
   # Deactivate the Conda environment
@@ -254,7 +271,7 @@ Extract-Zip-Files -Zip "$ZIP_DIR\$REPO2_REPO-$REPO2_BRANCH.zip" -DestDir $DUFT_C
 Extract-Workspace-Zip-For-Data-And-Env-File -Zip "$ZIP_DIR\$REPO3_REPO-$REPO3_BRANCH.zip" -DataDir "data"
 
 # Create Conda environment and install packages
-Create-And-Install-Conda-Env -Dir $DUFT_SERVER_DIR -EnvName $ENV_NAME -PythonVersion $PYTHON_VERSION
+Create-And-Install-Conda-Env -ServerDir $DUFT_SERVER_DIR -ConfigDir $DUFT_CONFIG_DIR -EnvName $ENV_NAME -PythonVersion $PYTHON_VERSION
 
 # Pack Conda environment
 Pack-Conda-Env -Dir $DUFT_SERVER_DIR -EnvName $ENV_NAME
