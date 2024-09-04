@@ -104,8 +104,9 @@ extract_workspace_zip_for_data_and_env_file() {
 # Function to create and activate a Conda environment
 create_and_install_conda_env() {
   local dir=$1
-  local env_name=$2
-  local python_version=$3
+  local config_dir=$2
+  local env_name=$3
+  local python_version=$4
 
   write_color "Creating Conda environment '$env_name' with Python $python_version in $dir..." Blue
 
@@ -136,6 +137,22 @@ create_and_install_conda_env() {
     fi
   else
     write_color "No requirements.txt found in $dir." Yellow
+  fi
+
+  # Install additional dependencies from requirements.txt
+  local requirements_file="$config_dir/requirements.txt"
+  if [ -f "$requirements_file" ]; then
+    write_color "Installing additional dependencies from requirements.txt..." Blue
+    conda run -n "$env_name" pip install -r "$requirements_file"
+
+    if [ $? -eq 0 ]; then
+      write_color "Additional Dependencies installed successfully." Green
+    else
+      write_color "Failed to install additional dependencies." Red
+      exit 1
+    fi
+  else
+    write_color "No requirements.txt found in $config_dir." Yellow
   fi
 
   # Deactivate the Conda environment
@@ -226,7 +243,7 @@ extract_zip_files "$ZIP_DIR/$REPO2_REPO-$REPO2_BRANCH.zip" "$DUFT_CONFIG_DIR"
 extract_workspace_zip_for_data_and_env_file "$ZIP_DIR/$REPO3_REPO-$REPO3_BRANCH.zip" "data"
 
 # Create Conda environment and install packages
-create_and_install_conda_env "$DUFT_SERVER_DIR" "$ENV_NAME" "$PYTHON_VERSION"
+create_and_install_conda_env "$DUFT_SERVER_DIR" "$DUFT_CONFIG_DIR" "$ENV_NAME" "$PYTHON_VERSION"
 
 # Pack Conda environment
 pack_conda_env "$DUFT_SERVER_DIR" "$ENV_NAME"
