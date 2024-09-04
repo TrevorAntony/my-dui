@@ -18,10 +18,10 @@ const flowbiteTheme: CustomFlowbiteTheme = {
   },
   button: {
     color: {
-      gray: "text-gray-900 bg-white border border-gray-200 enabled:hover:bg-gray-100 enabled:hover:text-blue-700 :ring-blue-700 focus:text-blue-700 dark:bg-transparent dark:text-gray-400 dark:border-gray-600 dark:enabled:hover:text-white dark:enabled:hover:bg-gray-700 focus:ring-2",
+      gray: "text-gray-900 bg-white border border-gray-200 enabled:hover:bg-gray-100 enabled:hover:text-blue-700 focus:ring-blue-700 focus:text-blue-700 dark:bg-transparent dark:text-gray-400 dark:border-gray-600 dark:enabled:hover:text-white dark:enabled:hover:bg-gray-700 focus:ring-2",
       info: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800",
       primary:
-        "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800",
+        "text-white bg-highlight-600 hover:bg-highlight-700 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800",
     },
     inner: {
       base: "flex items-center transition-all duration-200",
@@ -45,7 +45,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
       inner: "relative rounded-lg bg-white shadow dark:bg-gray-800",
     },
     header: {
-      base: "flex items-start justify-between rounded-t px-5 pt-5",
+      base: "flex items-start justify-between rounded-t px-5 pt-5 text-highlight-900",
     },
   },
   navbar: {

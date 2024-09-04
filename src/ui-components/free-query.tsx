@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { Modal, Button } from "flowbite-react";
+import { useParams } from "react-router-dom";
+// import { Button } from "flowbite-react";
+import DuftModal from "../components/duft-modal"; // Ensure the path is correct
 
-const DataRefresh: React.FC = () => {
+const FreeQuery: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
+
+  // Get the data task ID from the URL parameters
+  const { id } = useParams<{ id: string }>();
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -11,7 +16,7 @@ const DataRefresh: React.FC = () => {
   const handleDataTask = async () => {
     const url = "http://127.0.0.1:8000/api/v2/run-data-task";
     const payload = {
-      data_task_id: "SAMPLE-NOTEBOOK",
+      data_task_id: id, // Use the ID from the URL params
       parameters: {
         additionalProp1: "string",
         additionalProp2: "string",
@@ -43,23 +48,16 @@ const DataRefresh: React.FC = () => {
   };
 
   return (
-    <div>
-      <Modal show={isOpen} onClose={toggleModal}>
-        <Modal.Header>Data Refresh</Modal.Header>
-        <Modal.Body>
-          <p>Do you want to refresh the data?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleDataTask} color="pink">
-            Yes, Refresh Data
-          </Button>
-          <Button onClick={toggleModal} color="gray">
-            Cancel
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+    <DuftModal
+      isOpen={isOpen}
+      onClose={toggleModal}
+      onExecute={handleDataTask}
+      title="Data Refresh"
+      executeButtonName="Run data task"
+    >
+      <p>Do you want to refresh the data?</p>
+    </DuftModal>
   );
 };
 
-export default DataRefresh;
+export default FreeQuery;

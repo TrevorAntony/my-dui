@@ -81,7 +81,11 @@ const renderSidebarMenu = (config: any) => {
             );
           } else {
             return (
-              <SidebarNavLink key={index} to={item.dashboard} icon={Icon}>
+              <SidebarNavLink
+                key={index}
+                to={`/data-task/${item.task}`}
+                icon={Icon}
+              >
                 {item.title}
               </SidebarNavLink>
             );

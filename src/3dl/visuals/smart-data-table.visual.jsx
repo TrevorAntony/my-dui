@@ -10,6 +10,7 @@ const SmartDataTable = ({
   subHeader = header,
   variant = "card",
   children,
+  tableMaxHeight = "500px", // New prop with a default value
   ...props
 }) => {
   const data = useDataContext();
@@ -23,11 +24,9 @@ const SmartDataTable = ({
     return <div>No data available</div>;
   }
 
-  // Handle clicking on any cell
   const handleCellClick = (key, row) => {
     setSelectedRowData(row);
 
-    // Check if any child has a columnName prop matching the key
     const matchingChild = React.Children.toArray(children).find(
       (child) => React.isValidElement(child) && child.props.columnName === key,
     );
@@ -50,9 +49,7 @@ const SmartDataTable = ({
     setRenderedChild(null);
   };
 
-  // Generate columns from data keys
   const columns = Object.keys(data[0]).map((key) => {
-    // Check if any child has a columnName prop matching the key
     const hasMatchingChild = React.Children.toArray(children).some(
       (child) => React.isValidElement(child) && child.props.columnName === key,
     );
@@ -60,7 +57,6 @@ const SmartDataTable = ({
     return {
       accessorKey: key,
       header: key.charAt(0).toUpperCase() + key.slice(1),
-      // Conditional rendering for each column cell
       Cell: ({ cell }) =>
         hasMatchingChild ? (
           <button
@@ -75,31 +71,20 @@ const SmartDataTable = ({
     };
   });
 
-  // Content to be rendered inside the ChartComponent
   const content = (
-    <div
-      style={{
-        height: "auto",
-        overflow: "auto",
-        scrollbarWidth: "none",
-        msOverflowStyle: "none",
-        width: layout === "single-layout" ? "100%" : "auto",
-      }}
-    >
-      <MantineReactTable
-        columns={columns}
-        enableStickyHeader
-        data={data}
-        enableGlobalFilter
-        enablePagination={false}
-        enableRowSelection
-        initialState={{ pagination: { pageSize: 10 } }}
-        {...props}
-      />
-    </div>
+    <MantineReactTable
+      columns={columns}
+      enableStickyHeader
+      data={data}
+      enableGlobalFilter
+      enablePagination={false}
+      enableRowSelection
+      initialState={{ pagination: { pageSize: 10 } }}
+      {...props}
+      mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }} // Use the prop here
+    />
   );
 
-  // Wrap the content based on the variant and layout
   const wrappedContent =
     layout === "single-layout" ? (
       <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
@@ -109,7 +94,6 @@ const SmartDataTable = ({
       content
     );
 
-  // Conditionally wrap the ChartComponent in ContainerComponent if provided
   return (
     <>
       {ContainerComponent && layout !== "single-layout" ? (
@@ -130,10 +114,7 @@ const SmartDataTable = ({
             <strong>{selectedRowData.name || "More info"}</strong>
           </Modal.Header>
           <Modal.Body className="max-h-[700px] overflow-y-auto">
-            <div className="space-y-6">
-              {/* Render the matched child component at the bottom of the modal */}
-              {renderedChild}
-            </div>
+            <div className="space-y-6">{renderedChild}</div>
           </Modal.Body>
           <Modal.Footer>
             <Button color="primary" onClick={handleCloseModal}>
