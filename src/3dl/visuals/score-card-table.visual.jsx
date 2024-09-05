@@ -101,6 +101,7 @@ const ScoreCardTable = ({
         columns={columns}
         enableStickyHeader
         enableTopToolbar={showToolbar}
+        enableBottomToolbar={showToolbar}
         data={data}
         enableGlobalFilter={false}
         enablePagination={false}
