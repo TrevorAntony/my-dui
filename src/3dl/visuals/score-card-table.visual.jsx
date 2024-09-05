@@ -1,6 +1,6 @@
 import React from "react";
-import { MantineReactTable } from 'mantine-react-table';
-import { Box } from '@mantine/core';
+import { MantineReactTable } from "mantine-react-table";
+import { Box } from "@mantine/core";
 import { useDataContext } from "../utilities/DataSet";
 import { useLayout } from "../utilities/Dashboard";
 
@@ -8,7 +8,8 @@ const ScoreCardTable = ({
   container: ContainerComponent,
   header = "Score Card Table",
   subHeader = header,
-  tableMaxHeight ='300px',
+  tableMaxHeight = "300px",
+  showToolbar,
   ...props
 }) => {
   const data = useDataContext();
@@ -20,18 +21,18 @@ const ScoreCardTable = ({
 
   // Generate columns, filtering out the 'color' column
   const columns = Object.keys(data[0])
-    .filter((key) => key !== 'color') // Exclude the 'color' column
+    .filter((key) => key !== "color") // Exclude the 'color' column
     .map((key) => {
-      if (key === 'score') {
+      if (key === "score") {
         return {
           accessorKey: key,
-          header: 'Score',
+          header: "Score",
           size: 150,
           mantineTableHeadCellProps: {
-            align: 'right',
+            align: "right",
           },
           mantineTableBodyCellProps: {
-            align: 'right',
+            align: "right",
           },
           Cell: ({ row }) => {
             const score = row.original.score / 100; // Convert score to a percentage
@@ -40,17 +41,17 @@ const ScoreCardTable = ({
             // Set background color based on the color attribute
             let backgroundColor;
             switch (color) {
-              case 'Bad':
-                backgroundColor = '#EA3323'; // Red
+              case "Bad":
+                backgroundColor = "#EA3323"; // Red
                 break;
-              case 'Good':
-                backgroundColor = '#7DAB56'; // Green
+              case "Good":
+                backgroundColor = "#7DAB56"; // Green
                 break;
-              case 'Average':
-                backgroundColor = '#F5C242'; // Yellow
+              case "Average":
+                backgroundColor = "#F5C242"; // Yellow
                 break;
               default:
-                backgroundColor = '#FFFFFF'; // Default to white if no match
+                backgroundColor = "#FFFFFF"; // Default to white if no match
                 break;
             }
 
@@ -58,18 +59,18 @@ const ScoreCardTable = ({
               <Box
                 sx={{
                   backgroundColor,
-                  borderRadius: '4px',
-                  color: '#000',
-                  maxWidth: '9ch',
-                  padding: '4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
+                  borderRadius: "4px",
+                  color: "#000",
+                  maxWidth: "9ch",
+                  padding: "4px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
                 }}
               >
-                {score?.toLocaleString?.('en-US', {
-                  style: 'percent',
+                {score?.toLocaleString?.("en-US", {
+                  style: "percent",
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0,
                 })}
@@ -93,12 +94,13 @@ const ScoreCardTable = ({
         overflow: "auto",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
-        width: layout === "single-layout" ? "100%" : "auto"
+        width: layout === "single-layout" ? "100%" : "auto",
       }}
     >
       <MantineReactTable
         columns={columns}
         enableStickyHeader
+        enableTopToolbar={showToolbar}
         data={data}
         enableGlobalFilter={false}
         enablePagination={false}
@@ -106,7 +108,7 @@ const ScoreCardTable = ({
         enableColumnFilterModes={true}
         enableColumnOrdering={true}
         enableFacetedValues={true}
-         mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }}
+        mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }}
         {...props}
       />
     </div>
