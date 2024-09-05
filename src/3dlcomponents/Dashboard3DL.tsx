@@ -47,17 +47,12 @@ import {
   DuftGrid,
   DuftGridFullRow,
   DuftGridHeader,
-  DuftRow,
 } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
 import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 import DuftTile from "../components/duft-tile";
 import DuftFilter from "../ui-components/filter-components";
 import DuftSingleView from "../ui-components/table-components";
-
-// const Dashboard3DLJSX = () => {
-//   return <Dashboard></Dashboard>;
-// };
 
 const useDashboardData = (id) => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -199,7 +194,7 @@ const Dashboard3DL: React.FC = () => {
             jsx={dashboardData}
           />
         ) : (
-          <p>Loading dashboard data...</p>
+          <p>Error on loading dashboard data</p>
         )
       ) : (
         <p>No ID provided</p>

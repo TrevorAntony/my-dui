@@ -11,6 +11,7 @@ const SmartDataTable = ({
   variant = "card",
   children,
   tableMaxHeight = "500px", // New prop with a default value
+  showToolbar,
   ...props
 }) => {
   const data = useDataContext();
@@ -74,6 +75,7 @@ const SmartDataTable = ({
   const content = (
     <MantineReactTable
       columns={columns}
+      enableTopToolbar={showToolbar}
       enableStickyHeader
       data={data}
       enableGlobalFilter
@@ -81,7 +83,7 @@ const SmartDataTable = ({
       enableRowSelection
       initialState={{ pagination: { pageSize: 10 } }}
       {...props}
-      mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }} // Use the prop here
+      mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }}
     />
   );
 

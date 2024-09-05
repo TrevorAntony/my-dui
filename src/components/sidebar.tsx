@@ -171,13 +171,8 @@ const BottomMenu: FC = function () {
 
       setData(parsedData);
 
-      // Open modal if `is_running` is true
       if (parsedData.is_running) {
         setIsModalOpen(true);
-        // setModalContent((prevContent) => [
-        //   ...prevContent,
-        //   `Event #${prevContent.length + 1}: ${JSON.stringify(parsedData)}`,
-        // ]);
 
         channel.postMessage({
           type: "TOGGLE_MODAL",
