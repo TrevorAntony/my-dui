@@ -76,6 +76,7 @@ const SmartDataTable = ({
     <MantineReactTable
       columns={columns}
       enableTopToolbar={showToolbar}
+      enableBottomToolbar={showToolbar}
       enableStickyHeader
       data={data}
       enableGlobalFilter
