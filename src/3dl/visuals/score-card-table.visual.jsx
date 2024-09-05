@@ -88,31 +88,21 @@ const ScoreCardTable = ({
     });
 
   const content = (
-    <div
-      style={{
-        height: "400px",
-        overflow: "auto",
-        scrollbarWidth: "none",
-        msOverflowStyle: "none",
-        width: layout === "single-layout" ? "100%" : "auto",
-      }}
-    >
-      <MantineReactTable
-        columns={columns}
-        enableStickyHeader
-        enableTopToolbar={showToolbar}
-        enableBottomToolbar={showToolbar}
-        data={data}
-        enableGlobalFilter={false}
-        enablePagination={false}
-        enableRowSelection={false}
-        enableColumnFilterModes={true}
-        enableColumnOrdering={true}
-        enableFacetedValues={true}
-        mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }}
-        {...props}
-      />
-    </div>
+    <MantineReactTable
+      columns={columns}
+      enableStickyHeader
+      enableTopToolbar={showToolbar}
+      enableBottomToolbar={showToolbar}
+      data={data}
+      enableGlobalFilter={false}
+      enablePagination={false}
+      enableRowSelection={false}
+      enableColumnFilterModes={true}
+      enableColumnOrdering={true}
+      enableFacetedValues={true}
+      mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }}
+      {...props}
+    />
   );
 
   return layout === "single-layout" ? (

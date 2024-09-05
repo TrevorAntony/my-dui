@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import DuftModal from "../components/duft-modal"; // Ensure the path is correct
+import config from "../config";
 
 const FreeQuery: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -16,14 +17,10 @@ const FreeQuery: React.FC = () => {
   };
 
   const handleDataTask = async () => {
-    const url = "http://127.0.0.1:8000/api/v2/run-data-task";
+    const url = `${config.apiBaseUrl}/run-data-task`;
     const payload = {
       data_task_id: id, // Use the ID from the URL params
-      parameters: {
-        additionalProp1: "string",
-        additionalProp2: "string",
-        additionalProp3: "string",
-      },
+      parameters: {},
     };
 
     try {
