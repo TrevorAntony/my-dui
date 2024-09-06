@@ -1,7 +1,9 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { useThemeContext } from "../utilities/Dashboard";
 import ApexTree from 'apextree';
+import { MantineReactTable } from "mantine-react-table";
 import fetchCascade from "../../helpers/cascade-helpers";
+import DuftModal from "../../components/duft-modal";
 
 // Default options for ApexTree
 const defaultOptions = {
@@ -42,6 +44,7 @@ const defaultOptions = {
         align-items: flex-start;
         height: 100%;
         padding-left: 5%;
+        cursor: pointer;
       "
       >
         <div style="font-size: 3.5em; line-height: 1.50; font-weight: 700">${formattedValue}</div>
@@ -55,39 +58,21 @@ const CascadeChart = ({
     container: Container,
     header,
     subHeader = "",
+    cascadeObject,
     ...props
 }) => {
     const theme = useThemeContext(); // Accessing the theme context
     const [cascadeData, setCascadeData] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [cascadeTitle, setCascadeTitle] = useState('');
+    const [modalCascadeHeadLabels, setModalCascadeHeadLabels] = useState([]);
+    const [modalCascadeData, setModalCascadeData] = useState([]);
 
-    const cascade = useMemo(() => ({
-        id: "1",
-        data: {
-            label: "Number of Total Clients",
-            query: "SELECT client_id , birth_date , current_age , gender , marital_status FROM dim_client LIMIT 100"
-        },
-        children: [
-            {
-                id: "11",
-                data: {
-                    label: "Number of Female Clients",
-                    query: "SELECT client_id , birth_date , current_age , gender , marital_status FROM dim_client where gender = 'Female' LIMIT 60"
-                },
-                options: {
-                    nodeBGColorHover: "#dc7c74",
-                    borderColorHover: "#dc7c74",
-                    nodeBGColor: "#ffe5df"
-                }
-            },
-            {
-                id: "2",
-                data: {
-                    label: "Number of Male Clients",
-                    query: "SELECT client_id , birth_date , current_age , gender , marital_status FROM dim_client where gender = 'Male' LIMIT 40"
-                }
-            }
-        ]
-    }), []);
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const cascade = useMemo(() => cascadeObject, [cascadeObject]);
 
     const fetchCascadeData = useCallback(async (dataStructure) => {
         async function processNode(node) {
@@ -158,6 +143,42 @@ const CascadeChart = ({
         const tree = new ApexTree(svgElement, defaultOptions);
         tree.render(cascadeData);
 
+        const toggleModal = (label, details, headLabels) => {
+            setModalCascadeData(details);
+            setCascadeTitle(label);
+            setModalCascadeHeadLabels(headLabels);
+            setIsModalOpen(!isModalOpen);
+        };
+
+        const transformHeadLabel = (arr) =>
+            arr.map((column) => ({
+                accessorKey: column,
+                header: column,
+                size: 150
+            }));
+
+        // Function to traverse nodes recursively
+        const traverseNodes = (node) => {
+            const { id, label, details } = node.data;
+
+            const headLabels = details.length > 0 ? Object.keys(details[0]) : [];
+
+            const transformedHeadLabels = transformHeadLabel(headLabels);
+
+            const nodeElement = document.getElementById(id);
+            if (nodeElement) {
+                nodeElement.addEventListener('click', () => {
+                    toggleModal(label, details, transformedHeadLabels);
+                });
+            }
+
+            if (node.children && node.children.length > 0) {
+                node.children.forEach(child => traverseNodes(child));
+            }
+        };
+
+        traverseNodes(cascadeData);
+
         return () => {
             if (tree && typeof tree.destroy === 'function') {
                 tree.destroy();
@@ -172,7 +193,30 @@ const CascadeChart = ({
     }
 
     const content = (
-        <div id="svg-tree" style={{ width: "100%", maxWidth: "100%", height: "auto", ...defaultOptions.canvasStyle }}></div>
+        <>
+            <div id="svg-tree" style={{ width: "100%", maxWidth: "100%", height: "auto", ...defaultOptions.canvasStyle }}></div>
+            <DuftModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                title={cascadeTitle}
+                widthSize="large"
+                heightSize="large"
+                isCloseDefault={true}
+            >
+                <MantineReactTable
+                    columns={modalCascadeHeadLabels}
+                    enableTopToolbar={false}
+                    enableBottomToolbar={false}
+                    enableStickyHeader
+                    data={modalCascadeData}
+                    enableGlobalFilter
+                    enablePagination={false}
+                    initialState={{ pagination: { pageSize: 10 } }}
+                    {...props}
+                    mantineTableContainerProps={{ sx: { maxHeight: "300px" } }}
+                />
+            </DuftModal>
+        </>
     );
 
     return Container ? (
