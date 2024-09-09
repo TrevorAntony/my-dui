@@ -42,7 +42,8 @@ const CardComponent: FC<CardComponentProps> = ({
           </div>
         </div>
       )}
-      <div>{children}</div>
+      {/* Ensure the children are centered */}
+      <div className="mt-4 grow">{children}</div>
       {footer && variant !== "plain" && (
         <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-2 dark:border-gray-700 sm:pt-4">
           {footer}
@@ -50,7 +51,7 @@ const CardComponent: FC<CardComponentProps> = ({
             <div className="shrink-0">
               <NavLink
                 to={moreInfo.link}
-                className="inline-flex items-center rounded-md p-1 text-xs font-medium uppercase text-primary-700 hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700 sm:text-sm"
+                className="inline-flex items-center rounded-md p-1 text-xs font-medium uppercase text-highlight-700 hover:bg-gray-100 dark:text-highlight-500 dark:hover:bg-gray-700 sm:text-sm"
               >
                 {moreInfo.text}
                 <svg
