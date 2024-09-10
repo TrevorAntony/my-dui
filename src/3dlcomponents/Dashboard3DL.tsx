@@ -23,6 +23,7 @@ import {
   AreaChart,
   HeatmapChart,
   RadarChart,
+  CascadeChart,
   SmartDataTable,
   ScoreCardTable,
   DataTable,
@@ -148,6 +149,9 @@ const Dashboard3DL: React.FC = () => {
               ),
               RadarChart: (props: unknown) => (
                 <RadarChart {...props} container={CardComponent} />
+              ),
+              CascadeChart: (props: unknown) => (
+                <CascadeChart {...props} container={CardComponent} />
               ),
               SmartDataTable: (props: unknown) => (
                 <SmartDataTable {...props} container={CardComponent} />

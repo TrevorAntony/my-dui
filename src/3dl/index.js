@@ -22,8 +22,9 @@ export { default as PercentStackedBarChart } from "./visuals/percent-stacked-bar
 export { default as ClusteredBarChart } from "./visuals/clustered-bar-chart.visual";
 export { default as HeatmapChart } from "./visuals/heat-map-chart.visual";
 export { default as RadarChart } from "./visuals/radar-chart.visual";
+export { default as CascadeChart } from "./visuals/cascade-chart.visual";
 export { default as SmartDataTable } from "./visuals/smart-data-table.visual";
-export { default as ScoreCardTable } from "./visuals/score-card-table.visual.jsx";
+export { default as ScoreCardTable } from "./visuals/score-card-table.visual";
 export { default as DataTable } from "./tables/DataTable";
 export { default as PreviewPage } from "./designers/PreviewPage";
 export { default as PivotTable } from "./tables/PivotTable";
