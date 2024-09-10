@@ -149,8 +149,8 @@ const channel = new BroadcastChannel("bottom-menu-channel");
 
 const BottomMenu: FC = function () {
   const [data, setData] = useState<{
-    is_running?: boolean;
-    output?: string;
+    isRunning?: boolean;
+    message?: string;
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<string[]>([]);
@@ -159,46 +159,26 @@ const BottomMenu: FC = function () {
     const eventSource = new EventSource("http://127.0.0.1:8000/sse/dte/");
 
     eventSource.onmessage = (event) => {
-      let stringData = event.data;
-
-      stringData = stringData
-        .replace(/'/g, '"')
-        .replace(/None/g, "null")
-        .replace(/False/g, "false")
-        .replace(/True/g, "true");
-
-      const parsedData = JSON.parse(stringData);
+      const parsedData = JSON.parse(event.data); // Assuming the data is in JSON format
 
       setData(parsedData);
 
-      if (parsedData.is_running) {
+      console.log("parsedData: ", parsedData);
+      // Open modal when isRunning is true
+      if (parsedData.isRunning) {
+        console.log("parsedData.isRunning:", parsedData.isRunning);
         setIsModalOpen(true);
 
+        // Post a message to other channels if needed
         channel.postMessage({
           type: "TOGGLE_MODAL",
           isModalOpen: true,
         });
       }
 
-      // Handle output property
-      if (parsedData.output !== null && parsedData.output !== undefined) {
-        setModalContent((prevContent) => [
-          ...prevContent,
-          `${parsedData.output}`,
-        ]);
-      }
-
-      // Display 'data task completed' message when `is_running` turns to false
-      if (parsedData.is_running === false) {
-        setModalContent((prevContent) => {
-          if (
-            !prevContent.includes("Data task completed") &&
-            prevContent.length
-          ) {
-            return [...prevContent, "Data task completed"];
-          }
-          return prevContent;
-        });
+      // Handle output property (append to modal content)
+      if (parsedData.message) {
+        setModalContent((prevContent) => [...prevContent, parsedData.message]);
       }
     };
 
@@ -213,6 +193,7 @@ const BottomMenu: FC = function () {
   }, []);
 
   useEffect(() => {
+    // Listen for messages from the postMessage channel
     channel.onmessage = (event) => {
       if (event.data.type === "TOGGLE_MODAL") {
         setIsModalOpen(event.data.isModalOpen);
@@ -242,9 +223,11 @@ const BottomMenu: FC = function () {
     width: "10px",
     height: "10px",
     borderRadius: "50%",
-    backgroundColor: data && data.is_running ? "green" : "red",
+    backgroundColor: data?.isRunning ? "green" : "red",
     cursor: "pointer",
   };
+
+  // console.log({ isModalOpen });
 
   return (
     <>
@@ -264,14 +247,13 @@ const BottomMenu: FC = function () {
               ))}
             </ul>
           </Modal.Body>
-          {data?.output?.includes("Script completed") ||
-            (!data?.is_running && (
-              <Modal.Footer>
-                <Button color="primary" onClick={handleButtonClose}>
-                  Close
-                </Button>
-              </Modal.Footer>
-            ))}
+          {data?.message?.includes("Script completed") || !data?.isRunning ? (
+            <Modal.Footer>
+              <Button color="primary" onClick={handleButtonClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          ) : null}
         </Modal>
       )}
     </>
