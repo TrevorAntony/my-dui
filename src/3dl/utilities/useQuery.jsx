@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import config from "../../config";
 
 const useQuery = (query) => {
   const [data, setData] = useState([]);
@@ -13,7 +14,7 @@ const useQuery = (query) => {
         // Prepare the payload
         const payload = {
           query,
-          data_connection_id: "ANA", // Hardcoded data connection ID
+          data_connection_id: config.dataConnection, // Hardcoded data connection ID
         };
 
         // Make the API request
@@ -25,7 +26,7 @@ const useQuery = (query) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
-          },
+          }
         );
 
         const result = await response.json();
@@ -33,10 +34,10 @@ const useQuery = (query) => {
         if (!response.ok) {
           throw new Error(
             "Network response was not ok: " +
-            result.message +
-            "\n" +
-            "Original query: " +
-            query,
+              result.message +
+              "\n" +
+              "Original query: " +
+              query
           );
         }
 
