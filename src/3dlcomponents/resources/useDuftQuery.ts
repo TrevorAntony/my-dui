@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import config from "../../config";
 
 // Define the types for the function
 interface DuftQueryResult<T> {
@@ -7,7 +8,10 @@ interface DuftQueryResult<T> {
   error: Error | null;
 }
 
-const useDuftQuery = <T>(query: string): DuftQueryResult<T> => {
+const useDuftQuery = <T>(
+  query: string,
+  dataConnection: string
+): DuftQueryResult<T> => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -20,7 +24,7 @@ const useDuftQuery = <T>(query: string): DuftQueryResult<T> => {
         // Prepare the payload
         const payload = {
           query,
-          data_connection_id: "ANA", // Hardcoded data connection ID
+          data_connection_id: dataConnection || config.dataConnection, // Hardcoded data connection ID
         };
 
         // Make the API request
@@ -60,7 +64,7 @@ const useDuftQuery = <T>(query: string): DuftQueryResult<T> => {
     } else {
       setLoading(false);
     }
-  }, [query]);
+  }, [query, dataConnection]);
 
   return { data, loading, error };
 };
