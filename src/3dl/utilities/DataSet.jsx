@@ -5,11 +5,18 @@ const DataContext = createContext();
 
 export const useDataContext = () => useContext(DataContext);
 
-const DataSet = ({ query = "", staticData, useQuery, children }) => {
+const DataSet = ({
+  query = "",
+  staticData,
+  useQuery,
+  dataConnection,
+  children,
+}) => {
   const { data, loading, error, state } = useDataSetLogic(
     query,
     staticData,
     useQuery,
+    dataConnection
   );
 
   if (loading) {
