@@ -163,10 +163,8 @@ const BottomMenu: FC = function () {
 
       setData(parsedData);
 
-      console.log("parsedData: ", parsedData);
       // Open modal when isRunning is true
       if (parsedData.isRunning) {
-        console.log("parsedData.isRunning:", parsedData.isRunning);
         setIsModalOpen(true);
 
         // Post a message to other channels if needed
@@ -226,8 +224,6 @@ const BottomMenu: FC = function () {
     backgroundColor: data?.isRunning ? "green" : "red",
     cursor: "pointer",
   };
-
-  // console.log({ isModalOpen });
 
   return (
     <>

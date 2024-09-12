@@ -31,9 +31,11 @@ const DuftModal: React.FC<DuftModalProps> = ({
         <Button color="primary" onClick={onClose}>
           Close
         </Button>
-        <Button color="pink" onClick={onExecute}>
-          {executeButtonName || "Run"}
-        </Button>
+        {executeButtonName && onExecute ? (
+          <Button color="pink" onClick={onExecute}>
+            {executeButtonName || "Run"}
+          </Button>
+        ) : null}
       </Modal.Footer>
     </Modal>
   );
