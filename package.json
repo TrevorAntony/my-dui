@@ -36,6 +36,7 @@
     "@mantine/hooks": "6.0.21",
     "@tabler/icons-react": "^3.12.0",
     "apexcharts": "^3.41.0",
+    "apextree": "1.1.0",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.12",
     "flowbite": "^1.8.0",
@@ -63,7 +64,7 @@
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
-    "ws":"^8.18.0"
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.17",
@@ -144,89 +145,89 @@
     }
   },
   "build": {
-      "appId": "com.ucsf.ighs.ucgprograms",
-      "productName": "DUFT",
-      "compression": "maximum",
-      "directories": {
-        "buildResources": ".",
-        "output": "release"
-      },
-      "files": [
-        "dist/**/*",
-        "electron/electron.cjs",
-        "package.json",
-        "duft_icon.ico"
-      ],
-      "extraResources": [
+    "appId": "com.ucsf.ighs.ucgprograms",
+    "productName": "DUFT",
+    "compression": "maximum",
+    "directories": {
+      "buildResources": ".",
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/electron.cjs",
+      "package.json",
+      "duft_icon.ico"
+    ],
+    "extraResources": [
+      {
+        "from": "duft_resources.zip",
+        "to": "duft_resources.zip"
+      }
+    ],
+    "mac": {
+      "identity": null,
+      "target": [
         {
-          "from": "duft_resources.zip",
-          "to": "duft_resources.zip"
+          "target": "dmg"
         }
       ],
-      "mac": {
-        "identity": null,
-        "target": [
-          {
-            "target": "dmg"
-          }
-        ],
-        "icon": "./duft_icon.icns"
-      },
-      "win": {
-        "target": [
-          {
-            "target": "nsis",
-            "arch": [
-              "ia32"
-            ]
-          },
-          {
-            "target": "nsis",
-            "arch": [
-              "x64"
-            ]
-          },
-          {
-            "target": "msi",
-            "arch": [
-              "ia32"
-            ]
-          },
-          {
-            "target": "msi",
-            "arch": [
-              "x64"
-            ]
-          }
-        ],
-        "icon": "./duft_icon.ico"
-      },
-      "linux": {
-        "icon": "./duft_icon.png",
-        "category": "Science",
-        "target": [
-          "deb",
-          "rpm"
-        ],
-        "artifactName": "${productName}-${version}-${arch}.${ext}"
-      },
-      "nsis": {
-        "oneClick": false,
-        "perMachine": true,
-        "allowElevation": true,
-        "allowToChangeInstallationDirectory": true,
-        "createDesktopShortcut": true,
-        "createStartMenuShortcut": true,
-        "artifactName": "${productName}-${version}-${arch}-setup.exe"
-      },
-      "msi": {
-        "oneClick": false,
-        "perMachine": true,
-        "createDesktopShortcut": true,
-        "createStartMenuShortcut": true,
-        "shortcutName": "DUFT Platform",
-        "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
-        "artifactName": "${productName}-${version}-${arch}-setup.msi"
-      }
+      "icon": "./duft_icon.icns"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "msi",
+          "arch": [
+            "ia32"
+          ]
+        },
+        {
+          "target": "msi",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "./duft_icon.ico"
+    },
+    "linux": {
+      "icon": "./duft_icon.png",
+      "category": "Science",
+      "target": [
+        "deb",
+        "rpm"
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "${productName}-${version}-${arch}-setup.exe"
+    },
+    "msi": {
+      "oneClick": false,
+      "perMachine": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DUFT Platform",
+      "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
+      "artifactName": "${productName}-${version}-${arch}-setup.msi"
     }
+  }
 }

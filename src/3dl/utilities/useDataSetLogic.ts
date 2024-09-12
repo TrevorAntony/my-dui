@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { DashboardContext } from "./Dashboard";
 
-const useDataSetLogic = (query, staticData, useQuery) => {
+const useDataSetLogic = (query, staticData, useQuery, dataConnection) => {
   const { state, dispatch } = useContext(DashboardContext);
   const [modifiedQuery, setModifiedQuery] = useState("");
   const [queryReady, setQueryReady] = useState(false);
@@ -10,7 +10,7 @@ const useDataSetLogic = (query, staticData, useQuery) => {
     data: fetchedData,
     loading,
     error,
-  } = useQuery(queryReady ? modifiedQuery : null);
+  } = useQuery(queryReady ? modifiedQuery : null, dataConnection);
 
   const data = staticData || fetchedData;
 
