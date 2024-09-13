@@ -36,14 +36,14 @@ const DataSet = ({
       setPaginatedData((paginatedData) => [...paginatedData, ...data]);
   }, [data]);
 
+  if (error) {
+    return <div>Error fetching data: {error.message}</div>;
+  }
+
   // this was disabled to allow aesthetic for the infinite scroll behaviour, should resolve
   // if (loading) {
   //   return <div>Loading data...</div>;
   // }
-
-  if (error) {
-    return <div>Error fetching data: {error.message}</div>;
-  }
 
   return (
     <DataContext.Provider

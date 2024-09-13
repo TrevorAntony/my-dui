@@ -108,7 +108,7 @@ const SmartDataTable = ({
       enablePagination={false}
       enableRowSelection
       // onGlobalFilterChange={(event) => console.log(event)}
-      initialState={{ pagination: { pageSize: 10 } }}
+      // initialState={{ pagination: { pageSize: 10 } }}
       {...props}
       mantineTableContainerProps={{
         // ref: tableContainerRef,
@@ -118,14 +118,14 @@ const SmartDataTable = ({
     />
   );
 
-  const wrappedContent =
-    layout === "single-layout" ? (
-      <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
-        {content}
-      </div>
-    ) : (
-      content
-    );
+  // const wrappedContent =
+  //   layout === "single-layout" ? (
+  //     <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+  //       {content}
+  //     </div>
+  //   ) : (
+  //     content
+  //   );
 
   return (
     <>
@@ -135,12 +135,13 @@ const SmartDataTable = ({
           subHeader={subHeader}
           variant={variant}
         >
-          {wrappedContent}
+          {content}
         </ContainerComponent>
       ) : (
-        wrappedContent
+        content
       )}
 
+      {/* TO-DO: refactor this smart data table to use a more generic modal component */}
       {isModalOpen && selectedRowData && (
         <Modal show={isModalOpen} onClose={handleCloseModal} size="3xl">
           <Modal.Header>
