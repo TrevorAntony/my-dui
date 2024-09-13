@@ -12,7 +12,7 @@ const PivotTable = ({
 }) => {
   const [pivotState, setPivotState] = useState({});
   const { state } = useDashboardContext();
-  const data = useDataContext();
+  const { data } = useDataContext();
 
   // Defensive check for data
   const hasValidData = data && Array.isArray(data) && data.length > 0;

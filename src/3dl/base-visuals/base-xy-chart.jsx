@@ -6,7 +6,7 @@ import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 
 const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
   const theme = useThemeContext();
-  const data = useDataContext();
+  const { data } = useDataContext();
 
   if (!data || !Array.isArray(data)) {
     return <div>No data available</div>;

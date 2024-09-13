@@ -2,7 +2,7 @@ import React from "react";
 import { useDataContext } from "../utilities/DataSet";
 
 const Tile = ({ label }) => {
-  const data = useDataContext();
+  const { data } = useDataContext();
 
   return (
     <div style={styles.tileContainer}>

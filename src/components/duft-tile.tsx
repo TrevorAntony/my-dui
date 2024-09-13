@@ -11,7 +11,7 @@ interface DuftTileProps {
 }
 
 const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
-  const data = useDataContext();
+  const { data } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isValidData =

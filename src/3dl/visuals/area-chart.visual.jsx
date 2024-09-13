@@ -1,21 +1,21 @@
-import React from 'react';
-import BaseXYChart from '../base-visuals/base-xy-chart';
+import React from "react";
+import BaseXYChart from "../base-visuals/base-xy-chart";
 
 const AreaChart = ({
-    container: Container,
-    header = 'Bar Chart',
-    subHeader = header,
-    ...props
+  container: Container,
+  header = "Bar Chart",
+  subHeader = header,
+  ...props
 }) => {
-    const content = <BaseXYChart {...props} chartType="area" />;
+  const content = <BaseXYChart {...props} chartType="area" />;
 
-    return Container ? (
-        <Container header={header} subHeader={subHeader}>
-            {content}
-        </Container>
-    ) : (
-        content
-    );
+  return Container ? (
+    <Container header={header} subHeader={subHeader}>
+      {content}
+    </Container>
+  ) : (
+    content
+  );
 };
 
 export default AreaChart;
