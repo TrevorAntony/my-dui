@@ -8,9 +8,12 @@ const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
   const theme = useThemeContext();
   const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data)) {
+  if (!data || !Array.isArray(data) || !data.length) {
     return <div>No data available</div>;
   }
+
+  if (!theme || !Object.keys(theme).length)
+    return <div>No theme available</div>;
 
   const isMultiSeries = typeof data[0] === "object" && !("value" in data[0]);
 

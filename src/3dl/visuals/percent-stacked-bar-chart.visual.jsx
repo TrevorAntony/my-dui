@@ -13,7 +13,7 @@ const PercentStackedBarChart = ({
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data)) {
+  if (!data || !Array.isArray(data) || !data.length) {
     return <div>No data available</div>;
   }
 
@@ -21,7 +21,7 @@ const PercentStackedBarChart = ({
   const categories = data.map((item) => item.category);
 
   // Extract series data
-  const seriesNames = Object.keys(data[0]).filter((key) => key !== "category");
+  const seriesNames = Object?.keys(data[0]).filter((key) => key !== "category");
   const series = seriesNames.map((name) => ({
     name,
     data: data.map((item) => item[name]),
