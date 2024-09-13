@@ -3,7 +3,7 @@ import React from "react";
 import { useDataContext } from "../utilities/DataSet";
 
 const Visual1 = () => {
-  const data = useDataContext();
+  const { data } = useDataContext();
 
   if (!data || !Array.isArray(data)) {
     return (

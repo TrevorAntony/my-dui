@@ -3,7 +3,7 @@ import React from "react";
 import { useDataContext } from "../utilities/DataSet";
 
 const Visual3 = () => {
-  const data = useDataContext();
+  const { data } = useDataContext();
 
   return (
     <div>

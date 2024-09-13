@@ -11,41 +11,41 @@ const PercentStackedBarChart = ({
   ...props
 }) => {
   const theme = useThemeContext(); // Accessing the theme context
-  const data = useDataContext();
+  const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data)) {
+  if (!data || !Array.isArray(data) || !data.length) {
     return <div>No data available</div>;
   }
 
   // Extract categories
-  const categories = data.map(item => item.category);
+  const categories = data.map((item) => item.category);
 
   // Extract series data
-  const seriesNames = Object.keys(data[0]).filter(key => key !== 'category');
-  const series = seriesNames.map(name => ({
+  const seriesNames = Object?.keys(data[0]).filter((key) => key !== "category");
+  const series = seriesNames.map((name) => ({
     name,
-    data: data.map(item => item[name])
+    data: data.map((item) => item[name]),
   }));
 
   const { apex: apexOptions } = theme.themes[0];
 
   const options = {
     chart: {
-      type: 'bar',
+      type: "bar",
       stacked: true,
-      stackType: '100%',  // Setting the stack type to 100%
+      stackType: "100%", // Setting the stack type to 100%
     },
     plotOptions: {
       bar: {
         horizontal: false,
-        borderRadius: 5
+        borderRadius: 5,
       },
     },
     colors: ["#00E396", "#FF4560", "#775DD0", "#FEB019"],
     stroke: {
       show: true,
       width: 1,
-      colors: ['#fff'],
+      colors: ["#fff"],
     },
     xaxis: {
       categories: categories,
@@ -69,7 +69,7 @@ const PercentStackedBarChart = ({
       opacity: 1,
     },
     legend: {
-      position: 'top'
+      position: "top",
     },
   };
 

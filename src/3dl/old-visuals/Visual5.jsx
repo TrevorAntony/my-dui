@@ -3,7 +3,7 @@ import { useDataContext } from "../utilities/DataSet";
 
 // Visual5 component implementing a basic data tile
 const Visual5 = ({ title, backgroundColor = "#f0f0f0", color = "#333" }) => {
-  const data = useDataContext();
+  const { data } = useDataContext();
 
   // Define the style for the data tile
   const tileStyle = {

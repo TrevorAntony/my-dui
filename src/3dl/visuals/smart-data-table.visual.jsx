@@ -1,4 +1,10 @@
-import React, { useState } from "react";
+import React, {
+  // useEffect,
+  useState,
+  // useRef,
+  useCallback,
+  useDeferredValue,
+} from "react";
 import { MantineReactTable } from "mantine-react-table";
 import { useDataContext } from "../utilities/DataSet";
 import { useLayout } from "../utilities/Dashboard";
@@ -10,18 +16,37 @@ const SmartDataTable = ({
   subHeader = header,
   variant = "card",
   children,
-  tableMaxHeight = "500px", // New prop with a default value
+  tableMaxHeight = "500px",
   showToolbar,
   ...props
 }) => {
-  const data = useDataContext();
+  const { data, updaterFunction } = useDataContext();
   const layout = useLayout();
+
+  // Defer the data update
+  const deferredData = useDeferredValue(data);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   const [renderedChild, setRenderedChild] = useState(null);
 
-  if (!data || !Array.isArray(data) || data.length === 0) {
+  const fetchMoreOnBottomReached = useCallback(
+    (containerRefElement) => {
+      if (containerRefElement) {
+        const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+        if (scrollHeight - scrollTop - clientHeight <= 1) {
+          updaterFunction();
+        }
+      }
+    },
+    [updaterFunction],
+  );
+
+  if (
+    !deferredData ||
+    !Array.isArray(deferredData) ||
+    deferredData.length === 0
+  ) {
     return <div>No data available</div>;
   }
 
@@ -50,7 +75,7 @@ const SmartDataTable = ({
     setRenderedChild(null);
   };
 
-  const columns = Object.keys(data[0]).map((key) => {
+  const columns = Object.keys(deferredData[0]).map((key) => {
     const hasMatchingChild = React.Children.toArray(children).some(
       (child) => React.isValidElement(child) && child.props.columnName === key,
     );
@@ -78,24 +103,29 @@ const SmartDataTable = ({
       enableTopToolbar={showToolbar}
       enableBottomToolbar={showToolbar}
       enableStickyHeader
-      data={data}
+      data={deferredData}
       enableGlobalFilter
       enablePagination={false}
       enableRowSelection
-      initialState={{ pagination: { pageSize: 10 } }}
+      // onGlobalFilterChange={(event) => console.log(event)}
+      // initialState={{ pagination: { pageSize: 10 } }}
       {...props}
-      mantineTableContainerProps={{ sx: { maxHeight: tableMaxHeight } }}
+      mantineTableContainerProps={{
+        // ref: tableContainerRef,
+        sx: { maxHeight: tableMaxHeight },
+        onScroll: (event) => fetchMoreOnBottomReached(event.target), //think about how to configure this based on the page size
+      }}
     />
   );
 
-  const wrappedContent =
-    layout === "single-layout" ? (
-      <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
-        {content}
-      </div>
-    ) : (
-      content
-    );
+  // const wrappedContent =
+  //   layout === "single-layout" ? (
+  //     <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+  //       {content}
+  //     </div>
+  //   ) : (
+  //     content
+  //   );
 
   return (
     <>
@@ -105,12 +135,13 @@ const SmartDataTable = ({
           subHeader={subHeader}
           variant={variant}
         >
-          {wrappedContent}
+          {content}
         </ContainerComponent>
       ) : (
-        wrappedContent
+        content
       )}
 
+      {/* TO-DO: refactor this smart data table to use a more generic modal component */}
       {isModalOpen && selectedRowData && (
         <Modal show={isModalOpen} onClose={handleCloseModal} size="3xl">
           <Modal.Header>

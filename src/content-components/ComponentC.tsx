@@ -161,14 +161,6 @@ const ComponentC: React.FC = () => {
           moreInfo={{ text: "Sales Report", link: "/b" }}
           footer={<div>Footer</div>}
         >
-          <SmartDataTable data={data} container={CardComponent} />
-        </CardComponent>
-        <CardComponent
-          header="A simple chart"
-          subHeader="Showing nothing you don't like Showing nothing you don't like Showing nothing you don't like"
-          moreInfo={{ text: "Sales Report", link: "/b" }}
-          footer={<div>Footer</div>}
-        >
           <div>
             This is Component C. This is Component C. This is Component C. This
             is Component C. This is Component C. This dkfekaf fljhs fjshg srg

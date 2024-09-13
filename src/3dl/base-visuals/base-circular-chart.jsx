@@ -6,7 +6,7 @@ import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 
 const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
   const theme = useThemeContext();
-  const data = useDataContext();
+  const { data } = useDataContext();
 
   if (!Array.isArray(data) || data.length === 0) {
     return <div>No data available to render the chart.</div>;
@@ -29,10 +29,10 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
         },
         background: {
           enabled: true,
-          borderColor: '#fff',
+          borderColor: "#fff",
         },
         dropShadow: {
-          enabled: true
+          enabled: true,
         },
         style: { colors: ["#626b77"] },
       },
