@@ -20,7 +20,7 @@ const SmartDataTable = ({
   showToolbar,
   ...props
 }) => {
-  const { data, updaterFunction } = useDataContext();
+  const { data, pageUpdater, handleSearchChange } = useDataContext();
   const layout = useLayout();
 
   // Defer the data update
@@ -35,11 +35,11 @@ const SmartDataTable = ({
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
         if (scrollHeight - scrollTop - clientHeight <= 1) {
-          updaterFunction();
+          pageUpdater();
         }
       }
     },
-    [updaterFunction],
+    [pageUpdater],
   );
 
   if (
@@ -107,7 +107,7 @@ const SmartDataTable = ({
       enableGlobalFilter
       enablePagination={false}
       enableRowSelection
-      // onGlobalFilterChange={(event) => console.log(event)}
+      onGlobalFilterChange={(event) => handleSearchChange(event)}
       // initialState={{ pagination: { pageSize: 10 } }}
       {...props}
       mantineTableContainerProps={{
