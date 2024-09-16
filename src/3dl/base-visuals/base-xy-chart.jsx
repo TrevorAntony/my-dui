@@ -89,8 +89,20 @@ const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
   mergerdOptions = deepMerge(mergerdOptions, userOptions);
 
   return (
-    <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
-      <Chart options={mergerdOptions} series={chartSeries} type={chartType} />
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "100%",
+        height: "300px",
+        overflow: "hidden",
+      }}
+    >
+      <Chart
+        options={mergerdOptions}
+        series={chartSeries}
+        type={chartType}
+        height={"100%"}
+      />
     </div>
   );
 };
