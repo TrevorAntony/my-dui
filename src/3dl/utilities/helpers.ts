@@ -14,7 +14,7 @@ export const buildSearchQuery = (query: string, searchText: string) => {
 
   return query.replace(
     "{searchTextCondition}",
-    sanitizedSearchText ? `AND year LIKE '%${sanitizedSearchText}%'` : ""
+    sanitizedSearchText ? `'%${sanitizedSearchText}%'` : "'%%'"
   );
 };
 
@@ -27,6 +27,11 @@ export const buildQuery = (
   let modifiedQuery = query;
   let paginationModification = false;
   let searchModification = false;
+
+  if (searchText && searchText.trim() !== "") {
+    offset = 0;
+  }
+
   if (
     pageSize > 0 &&
     query.includes("{pageSize}") &&
@@ -37,10 +42,10 @@ export const buildQuery = (
   }
 
   if (query.includes("{searchTextCondition}")) {
+    modifiedQuery = buildSearchQuery(modifiedQuery, searchText);
     if (searchText) {
       searchModification = true;
     }
-    modifiedQuery = buildSearchQuery(modifiedQuery, searchText);
   }
 
   return { modifiedQuery, paginationModification, searchModification };
@@ -69,7 +74,6 @@ export const useSearchText = () => {
   const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (newSearchText: SetStateAction<string>) => {
-    // console.log({ newSearchText });
     setSearchText(newSearchText);
   };
 
