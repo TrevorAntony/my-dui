@@ -43,6 +43,7 @@ import {
   DashboardHeader,
   DetailsView,
   PreviewQuery,
+  PaginatedSearchDataSet,
 } from "../3dl";
 import {
   DuftGrid,
@@ -125,6 +126,9 @@ const Dashboard3DL: React.FC = () => {
               Section,
               DataContainer: (props: unknown) => (
                 <DataSet {...props} useQuery={useDuftQuery} />
+              ),
+              PaginatedSearchDataSet: (props: unknown) => (
+                <PaginatedSearchDataSet {...props} useQuery={useDuftQuery} />
               ),
               PieChart: (props: unknown) => (
                 <PieChart {...props} container={CardComponent} />

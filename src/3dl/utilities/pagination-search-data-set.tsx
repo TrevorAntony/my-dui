@@ -1,12 +1,18 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { DataProvider } from "../context/DataContext"; // Import the DataProvider from shared context
 import useDataSetLogic from "./useDataSetLogic";
 import { useInfiniteScroll, useSearchText, buildQuery } from "./helpers";
 
-const DataContext = createContext();
+interface DataSetProps {
+  query?: string;
+  staticData?: any;
+  useQuery: any;
+  children?: React.ReactNode;
+  dataConnection?: string;
+  pageSize?: number;
+}
 
-export const useDataContext = () => useContext(DataContext);
-
-const DataSet = ({
+const PaginatedSearchDataSet: React.FC<DataSetProps> = ({
   query = "",
   staticData,
   useQuery,
@@ -14,55 +20,50 @@ const DataSet = ({
   dataConnection,
   pageSize = 15,
 }) => {
-  const [paginatedData, setPaginatedData] = useState([]);
+  const [paginatedData, setPaginatedData] = useState<any[]>([]);
 
   const { offset, nextPage } = useInfiniteScroll(pageSize);
-
   const { searchText, handleSearchChange } = useSearchText();
 
   const { modifiedQuery, searchModification } = buildQuery(
     query,
     pageSize,
     offset,
-    searchText,
+    searchText
   );
 
-  const { data, loading, error, state } = useDataSetLogic(
+  const { data, error, state } = useDataSetLogic(
     modifiedQuery,
     staticData,
     useQuery,
-    dataConnection,
+    dataConnection
   );
 
   useEffect(() => {
     if (Array.isArray(data)) {
       if (searchModification) {
-        setPaginatedData(data); //no empty checks cause the returned search could be empty
+        setPaginatedData(data); // Handle search results
       } else if (data?.length) {
-        setPaginatedData((prevData) => [...prevData, ...data]);
+        setPaginatedData((prevData) => [...prevData, ...data]); // Handle pagination
       }
     }
-  }, [data]);
+  }, [data, searchModification]);
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
   }
 
-  // this was disabled to allow aesthetic for the infinite scroll behaviour
-  // if (loading) {
-  //   return <div>Loading data...</div>;
-  // }
-
+  // Wrap children inside DataProvider to pass down data and other props via context
   return (
-    <DataContext.Provider
+    <DataProvider
       value={{ data: paginatedData, pageUpdater: nextPage, handleSearchChange }}
     >
       {state.debug && (
         <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
       )}
       {children}
-    </DataContext.Provider>
+    </DataProvider>
   );
 };
 
-export default DataSet;
+export default PaginatedSearchDataSet;
