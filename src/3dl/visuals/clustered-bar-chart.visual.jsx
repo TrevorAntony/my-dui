@@ -75,8 +75,20 @@ const ClusteredBarChart = ({
   let mergedOptions = deepMerge(options, copiedOptions);
 
   const content = (
-    <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
-      <Chart options={mergedOptions} series={series} type="bar" />
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "100%",
+        height: "300px",
+        overflow: "hidden",
+      }}
+    >
+      <Chart
+        options={mergedOptions}
+        series={series}
+        type="bar"
+        height={"100%"}
+      />
     </div>
   );
 

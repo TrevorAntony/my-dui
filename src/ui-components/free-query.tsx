@@ -34,7 +34,6 @@ const FreeQuery: React.FC = () => {
 
       if (response.status === 202) {
         const result = await response.json();
-        console.log("Data task result:", result);
 
         // Close the modal after the task is complete and status is 202
         setIsOpen(false);

@@ -13,7 +13,7 @@ const StackedBarChart = ({
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data)) {
+  if (!data || !Array.isArray(data) || data?.length || !data?.length) {
     return <div>No data available</div>;
   }
 
@@ -76,8 +76,20 @@ const StackedBarChart = ({
   let mergedOptions = deepMerge(options, copiedOptions);
 
   const content = (
-    <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
-      <Chart options={mergedOptions} series={series} type="bar" />
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "100%",
+        height: "300px",
+        overflow: "hidden",
+      }}
+    >
+      <Chart
+        options={mergedOptions}
+        series={series}
+        type="bar"
+        height={"100%"}
+      />
     </div>
   );
 

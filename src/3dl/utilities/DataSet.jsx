@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import useDataSetLogic from "./useDataSetLogic";
+import { useInfiniteScroll, useSearchText, buildQuery } from "./helpers";
 
 const DataContext = createContext();
 
@@ -13,72 +14,55 @@ const DataSet = ({
   dataConnection,
   pageSize = 15,
 }) => {
-  // Balancing the search and the pagination fetch logic
-  // On search, we can reset the index and offset, so that we are fetching fresh data that has been filtered
-
   const [paginatedData, setPaginatedData] = useState([]);
 
   const { offset, nextPage } = useInfiniteScroll(pageSize);
 
-  // Replace placeholders in the query with actual values
-  const paginatedQuery = buildPaginatedQuery(query, pageSize, offset);
+  const { searchText, handleSearchChange } = useSearchText();
 
-  // Pass the modified query to useDataSetLogic
+  const { modifiedQuery, searchModification } = buildQuery(
+    query,
+    pageSize,
+    offset,
+    searchText,
+  );
+
   const { data, loading, error, state } = useDataSetLogic(
-    paginatedQuery,
+    modifiedQuery,
     staticData,
     useQuery,
     dataConnection,
   );
 
   useEffect(() => {
-    if (Array.isArray(data) && data?.length)
-      setPaginatedData((paginatedData) => [...paginatedData, ...data]);
+    if (Array.isArray(data)) {
+      if (searchModification) {
+        setPaginatedData(data); //no empty checks cause the returned search could be empty
+      } else if (data?.length) {
+        setPaginatedData((prevData) => [...prevData, ...data]);
+      }
+    }
   }, [data]);
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
   }
 
-  // this was disabled to allow aesthetic for the infinite scroll behaviour, should resolve
+  // this was disabled to allow aesthetic for the infinite scroll behaviour
   // if (loading) {
   //   return <div>Loading data...</div>;
   // }
 
   return (
     <DataContext.Provider
-      value={{ data: paginatedData, updaterFunction: nextPage }}
+      value={{ data: paginatedData, pageUpdater: nextPage, handleSearchChange }}
     >
-      {/* Conditionally render Debug On if debug is true */}
       {state.debug && (
         <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
       )}
       {children}
     </DataContext.Provider>
   );
-};
-
-const buildPaginatedQuery = (query, pageSize, offset) => {
-  return query.replace("{pageSize}", pageSize).replace("{offset}", offset);
-};
-
-const useInfiniteScroll = (pageSize) => {
-  const [infiniteScrollConfig, setInfiniteScrollConfig] = useState({
-    pageIndex: 1,
-  });
-
-  // Calculate the offset based on the pageIndex and pageSize
-  const offset = (infiniteScrollConfig.pageIndex - 1) * pageSize;
-
-  // Function to update the page index
-  const nextPage = () => {
-    setInfiniteScrollConfig((prevConfig) => ({
-      ...prevConfig,
-      pageIndex: prevConfig?.pageIndex + 1,
-    }));
-  };
-
-  return { pageIndex: infiniteScrollConfig.pageIndex, offset, nextPage };
 };
 
 export default DataSet;
