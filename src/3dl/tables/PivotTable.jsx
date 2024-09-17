@@ -12,10 +12,14 @@ const PivotTable = ({
   pivotRows = [],
   pivotCols = []
 }) => {
+
+  const initialPivotRows = pivotRows;
+  const initialPivotCols = pivotCols;
+
   const [pivotState, setPivotState] = useState({
     data: [],
-    rows: pivotRows,
-    cols: pivotCols
+    rows: initialPivotRows,
+    cols: initialPivotCols
   });
 
   const { state } = useDashboardContext();
@@ -25,27 +29,33 @@ const PivotTable = ({
   const hasValidData = data && Array.isArray(data) && data.length > 0;
 
   useEffect(() => {
-    if (hasValidData && data.length > 0) {
+    if (hasValidData) {
       // Get the keys of the first object in data
       const keys = Object.keys(data[0]);
 
       // Use provided pivotRows or default to the first key
-      const activePivotRows = pivotRows.length > 0 ? pivotRows : [keys[0]];
+      const activePivotRows = initialPivotRows.length > 0 ? initialPivotRows : [keys[0]];
+      const activePivotCols = initialPivotCols.length > 0 ? initialPivotCols : keys.slice(1, 6);
 
-      // Use provided pivotCols or default to the next five keys starting from the second key
-      const activePivotCols = pivotCols.length > 0 ? pivotCols : keys.slice(1, 6);
-
-      // Update the state with pivotRows and pivotCols
-      setPivotState((prevState) => ({
-        ...prevState,
-        data: data,
-        rows: activePivotRows,
-        cols: activePivotCols
-      }));
+      // Only update the state if the new rows or cols differ from the current state
+      setPivotState((prevState) => {
+        if (
+          prevState.data !== data ||
+          JSON.stringify(prevState.rows) !== JSON.stringify(activePivotRows) ||
+          JSON.stringify(prevState.cols) !== JSON.stringify(activePivotCols)
+        ) {
+          return {
+            ...prevState,
+            data: data,
+            rows: activePivotRows,
+            cols: activePivotCols,
+          };
+        }
+        return prevState;
+      });
     }
-  }, [data, hasValidData, pivotRows, pivotCols]); // Ensure useEffect runs when data, pivotRows, or pivotCols change
+  }, [data, initialPivotRows, initialPivotCols]);
 
-  // Content to be rendered inside the ChartComponent
   const content = hasValidData ? (
     <div>
       {state.debug && (
