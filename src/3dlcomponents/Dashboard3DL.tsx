@@ -43,6 +43,7 @@ import {
   DashboardHeader,
   DetailsView,
   PreviewQuery,
+  SingleLayout,
 } from "../3dl";
 import {
   DuftGrid,
@@ -115,6 +116,7 @@ const Dashboard3DL: React.FC = () => {
                 <Dashboard {...props} theme={themeData} />
               ),
               //DashboardHeader: DuftGridHeader,
+              SingleLayout,
               Header: DuftGridHeader,
               Filters,
               Filter: DuftFilter,
