@@ -26,11 +26,7 @@ export const buildQuery = (
 ) => {
   let modifiedQuery = query;
   let paginationModification = false;
-  let searchModification = false;
-
-  if (searchText && searchText.trim() !== "") {
-    offset = 0;
-  }
+  // let searchModification = false;
 
   if (
     pageSize > 0 &&
@@ -44,11 +40,11 @@ export const buildQuery = (
   if (query.includes("{searchTextCondition}")) {
     modifiedQuery = buildSearchQuery(modifiedQuery, searchText);
     if (searchText) {
-      searchModification = true;
+      // searchModification = true;
     }
   }
 
-  return { modifiedQuery, paginationModification, searchModification };
+  return { modifiedQuery, paginationModification };
 };
 
 export const useInfiniteScroll = (pageSize: number) => {
@@ -56,10 +52,8 @@ export const useInfiniteScroll = (pageSize: number) => {
     pageIndex: 1,
   });
 
-  // Calculate the offset based on the pageIndex and pageSize
   const offset = (infiniteScrollConfig.pageIndex - 1) * pageSize;
 
-  // Function to update the page index
   const nextPage = () => {
     setInfiniteScrollConfig((prevConfig) => ({
       ...prevConfig,
@@ -67,14 +61,25 @@ export const useInfiniteScroll = (pageSize: number) => {
     }));
   };
 
-  return { pageIndex: infiniteScrollConfig.pageIndex, offset, nextPage };
+  const resetPage = () => {
+    setInfiniteScrollConfig({
+      pageIndex: 1,
+    });
+  };
+
+  return {
+    offset,
+    nextPage,
+    resetPage,
+  };
 };
 
-export const useSearchText = () => {
+export const useSearchText = (resetOffset: () => void) => {
   const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (newSearchText: SetStateAction<string>) => {
     setSearchText(newSearchText);
+    resetOffset();
   };
 
   return { searchText, handleSearchChange };

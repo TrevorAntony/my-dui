@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { DataProvider } from "../context/DataContext"; // Import the DataProvider from shared context
+import React, { useEffect, useRef, useState } from "react";
+import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
 import { useInfiniteScroll, useSearchText, buildQuery } from "./helpers";
 
@@ -21,16 +21,12 @@ const PaginatedSearchDataSet: React.FC<DataSetProps> = ({
   pageSize = 15,
 }) => {
   const [paginatedData, setPaginatedData] = useState<any[]>([]);
+  const previousSearchText = useRef<string>("");
 
-  const { offset, nextPage } = useInfiniteScroll(pageSize);
-  const { searchText, handleSearchChange } = useSearchText();
+  const { offset, nextPage, resetPage } = useInfiniteScroll(pageSize);
+  const { searchText, handleSearchChange } = useSearchText(resetPage);
 
-  const { modifiedQuery, searchModification } = buildQuery(
-    query,
-    pageSize,
-    offset,
-    searchText
-  );
+  const { modifiedQuery } = buildQuery(query, pageSize, offset, searchText);
 
   const { data, error, state } = useDataSetLogic(
     modifiedQuery,
@@ -41,19 +37,19 @@ const PaginatedSearchDataSet: React.FC<DataSetProps> = ({
 
   useEffect(() => {
     if (Array.isArray(data)) {
-      if (searchModification) {
-        setPaginatedData(data); // Handle search results
-      } else if (data?.length) {
-        setPaginatedData((prevData) => [...prevData, ...data]); // Handle pagination
+      if (searchText && previousSearchText.current !== searchText) {
+        setPaginatedData(data);
+        previousSearchText.current = searchText;
+      } else {
+        setPaginatedData((prevData) => [...prevData, ...data]);
       }
     }
-  }, [data, searchModification]);
+  }, [searchText, data]);
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
   }
 
-  // Wrap children inside DataProvider to pass down data and other props via context
   return (
     <DataProvider
       value={{ data: paginatedData, pageUpdater: nextPage, handleSearchChange }}
