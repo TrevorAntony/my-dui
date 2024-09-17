@@ -8,7 +8,7 @@ const DataTable = ({
   subHeader = "",
   variant = "card",
 }) => {
-  const data = useDataContext();
+  const { data } = useDataContext();
   const layout = useLayout();
 
   if (!data || !Array.isArray(data) || data.length === 0) {

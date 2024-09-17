@@ -12,7 +12,7 @@ const ScoreCardTable = ({
   showToolbar,
   ...props
 }) => {
-  const data = useDataContext();
+  const { data } = useDataContext();
   const layout = useLayout();
 
   if (!data || !Array.isArray(data) || data.length === 0) {

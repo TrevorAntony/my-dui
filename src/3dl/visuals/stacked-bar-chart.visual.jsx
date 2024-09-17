@@ -11,27 +11,27 @@ const StackedBarChart = ({
   ...props
 }) => {
   const theme = useThemeContext(); // Accessing the theme context
-  const data = useDataContext();
+  const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data)) {
+  if (!data || !Array.isArray(data) || data?.length || !data?.length) {
     return <div>No data available</div>;
   }
 
   // Extract categories
-  const categories = data.map(item => item.category);
+  const categories = data.map((item) => item.category);
 
   // Extract series data
-  const seriesNames = Object.keys(data[0]).filter(key => key !== 'category');
-  const series = seriesNames.map(name => ({
+  const seriesNames = Object.keys(data[0]).filter((key) => key !== "category");
+  const series = seriesNames.map((name) => ({
     name,
-    data: data.map(item => item[name])
+    data: data.map((item) => item[name]),
   }));
 
   const { apex: apexOptions } = theme.themes[0];
 
   const options = {
     chart: {
-      type: 'bar',
+      type: "bar",
       stacked: true,
     },
     plotOptions: {
@@ -44,7 +44,7 @@ const StackedBarChart = ({
     stroke: {
       show: true,
       width: 1,
-      colors: ['#fff'],
+      colors: ["#fff"],
     },
     xaxis: {
       categories: categories,
@@ -68,7 +68,7 @@ const StackedBarChart = ({
       opacity: 1,
     },
     legend: {
-      position: 'top',
+      position: "top",
     },
   };
 
@@ -76,8 +76,20 @@ const StackedBarChart = ({
   let mergedOptions = deepMerge(options, copiedOptions);
 
   const content = (
-    <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
-      <Chart options={mergedOptions} series={series} type="bar" />
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "100%",
+        height: "300px",
+        overflow: "hidden",
+      }}
+    >
+      <Chart
+        options={mergedOptions}
+        series={series}
+        type="bar"
+        height={"100%"}
+      />
     </div>
   );
 

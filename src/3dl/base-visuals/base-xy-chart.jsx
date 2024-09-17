@@ -6,11 +6,14 @@ import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 
 const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
   const theme = useThemeContext();
-  const data = useDataContext();
+  const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data)) {
+  if (!data || !Array.isArray(data) || !data.length) {
     return <div>No data available</div>;
   }
+
+  if (!theme || !Object.keys(theme).length)
+    return <div>No theme available</div>;
 
   const isMultiSeries = typeof data[0] === "object" && !("value" in data[0]);
 
@@ -86,8 +89,20 @@ const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
   mergerdOptions = deepMerge(mergerdOptions, userOptions);
 
   return (
-    <div style={{ width: "100%", maxWidth: "100%", height: "auto" }}>
-      <Chart options={mergerdOptions} series={chartSeries} type={chartType} />
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "100%",
+        height: "300px",
+        overflow: "hidden",
+      }}
+    >
+      <Chart
+        options={mergerdOptions}
+        series={chartSeries}
+        type={chartType}
+        height={"100%"}
+      />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { useDataContext } from "../utilities/DataSet";
 
 // Visual4 component using data from its DataContainer
 const Visual4 = ({ colors, chartType = "bar" }) => {
-  const data = useDataContext();
+  const { data } = useDataContext();
 
   // Check if data is provided and is an array
   if (!data || !Array.isArray(data)) {
