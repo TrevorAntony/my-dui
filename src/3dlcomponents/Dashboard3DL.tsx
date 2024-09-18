@@ -43,6 +43,7 @@ import {
   DashboardHeader,
   DetailsView,
   PreviewQuery,
+  SingleLayout,
   PaginatedSearchDataSet,
 } from "../3dl";
 import {
@@ -116,6 +117,7 @@ const Dashboard3DL: React.FC = () => {
                 <Dashboard {...props} theme={themeData} />
               ),
               //DashboardHeader: DuftGridHeader,
+              SingleLayout,
               Header: DuftGridHeader,
               Filters,
               Filter: DuftFilter,

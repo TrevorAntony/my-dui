@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useDeferredValue } from "react";
 import { MantineReactTable } from "mantine-react-table";
+import { useLayout } from "../ui-elements/single-layout";
 import { useDataContext } from "../context/DataContext";
-import { useLayout } from "../utilities/Dashboard";
 import { Modal, Button } from "flowbite-react";
 
 const SmartDataTable = ({
@@ -111,14 +111,15 @@ const SmartDataTable = ({
     />
   );
 
-  // const wrappedContent =
-  //   layout === "single-layout" ? (
-  //     <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
-  //       {content}
-  //     </div>
-  //   ) : (
-  //     content
-  //   );
+  const wrappedContent =
+    layout === "single-layout" ? (
+      <div className="mt-4">
+        {/* "block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800" */}
+        {content}
+      </div>
+    ) : (
+      content
+    );
 
   return (
     <>
@@ -128,10 +129,10 @@ const SmartDataTable = ({
           subHeader={subHeader}
           variant={variant}
         >
-          {content}
+          {wrappedContent}
         </ContainerComponent>
       ) : (
-        content
+        wrappedContent
       )}
 
       {/* TO-DO: refactor this smart data table to use a more generic modal component */}
