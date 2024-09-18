@@ -174,9 +174,18 @@ const BottomMenu: FC = function () {
         });
       }
 
-      // Handle output property (append to modal content)
-      if (parsedData.message) {
-        setModalContent((prevContent) => [...prevContent, parsedData.message]);
+      const { message, dataTask } = parsedData;
+
+      // Define a maximum length for messages
+      const maxLength = 150;
+
+      // Exclude any messages where dataTask is "scriptError" and ensure the message is not too long
+      const isValidMessage =
+        dataTask !== "scriptError" && message.length <= maxLength;
+
+      if (isValidMessage) {
+        console.log(parsedData);
+        setModalContent((prevContent) => [...prevContent, message]);
       }
     };
 
@@ -221,7 +230,7 @@ const BottomMenu: FC = function () {
     width: "10px",
     height: "10px",
     borderRadius: "50%",
-    backgroundColor: data?.isRunning ? "green" : "red",
+    backgroundColor: data?.isRunning ? "red" : "green",
     cursor: "pointer",
   };
 
@@ -235,7 +244,31 @@ const BottomMenu: FC = function () {
 
       {isModalOpen && (
         <Modal show={isModalOpen} onClose={handleCloseModal} size="2xl">
-          <div className="p-4 text-lg font-semibold">Running data task</div>
+          <div className="relative flex justify-between p-4 text-lg font-semibold">
+            <span>Running data task</span>
+            {/* Close button (X) in the top right corner */}
+            <button
+              type="button"
+              className="absolute right-0 top-0 m-4 text-gray-500 hover:text-gray-700"
+              onClick={handleCloseModal}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
           <Modal.Body className="max-h-[700px] overflow-y-auto">
             <ul className="space-y-4">
               {modalContent.map((item, index) => (
@@ -243,8 +276,10 @@ const BottomMenu: FC = function () {
               ))}
             </ul>
           </Modal.Body>
+
           {data?.message?.includes("Script completed") || !data?.isRunning ? (
-            <Modal.Footer>
+            <Modal.Footer className="flex justify-end">
+              {/* Close button at the bottom right */}
               <Button color="primary" onClick={handleButtonClose}>
                 Close
               </Button>
