@@ -1,17 +1,22 @@
-import type { ReactElement, ReactNode } from "react";
-import React, { useRef, useState } from "react";
+import React, { useState, useRef } from "react";
+import { useQueryContext } from "../context/QueryContext";
+import DataTable from "../tables/DataTable";
+import PivotTable from "../tables/PivotTable";
 
 interface PreviewQueryProps {
-  children?: ReactElement<{ query?: string }>;
-  container?: React.ComponentType<{ children: ReactNode }>;
+  children?: React.ReactElement<{ query?: string }>;
+  container?: React.ComponentType<{ children: React.ReactNode }>;
 }
 
 const PreviewQuery: React.FC<PreviewQueryProps> = ({
   children,
   container: Container,
 }) => {
+  const [viewMode, setViewMode] = useState<"dataTable" | "pivotTable">(
+    "dataTable"
+  );
   const queryRef = useRef<HTMLTextAreaElement>(null);
-  const [query, setQuery] = useState<string>("");
+  const { query, setQuery } = useQueryContext();
 
   const handleUpdateQuery = () => {
     const queryValue = queryRef.current?.value;
@@ -21,49 +26,104 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
   };
 
   const content = (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        width: "100%",
+        marginBottom: "20px",
+      }}
+    >
+      <textarea
+        ref={queryRef}
+        placeholder={query}
+        style={{
+          width: "100%",
+          height: "150px",
+          padding: "10px",
+          fontSize: "16px",
+          borderRadius: "4px",
+          border: "1px solid black",
+          resize: "none",
+          marginBottom: "10px",
+          outline: "none",
+        }}
+      />
+      <button
+        onClick={handleUpdateQuery}
+        style={{
+          alignSelf: "flex-end",
+          padding: "10px 20px",
+          fontSize: "16px",
+          borderRadius: "4px",
+          backgroundColor: "#C42783",
+          color: "#fff",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Update Query
+      </button>
+
       <div
         style={{
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-start",
+          marginTop: "20px",
           width: "100%",
-          marginBottom: "20px",
         }}
       >
-        <textarea
-          ref={queryRef}
-          placeholder="Type your query here..."
+        {/* Radio buttons on the left */}
+        <div
           style={{
-            width: "75%",
-            height: "150px",
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "4px",
-            border: "1px solid black",
-            resize: "none",
-            marginRight: "10px",
-            outline: "none",
-          }}
-          // onFocus={(e) => (e.target.style.borderColor = "#C42783")}
-          // onBlur={(e) => (e.target.style.borderColor = "#ccc")}
-        />
-        <button
-          onClick={handleUpdateQuery}
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            borderRadius: "4px",
-            backgroundColor: "#C42783",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
+            display: "flex",
+            flexDirection: "column",
+            marginRight: "20px",
+            gap: "10px",
           }}
         >
-          Update Query
-        </button>
+          <label>
+            <input
+              type="radio"
+              name="viewMode"
+              value="dataTable"
+              checked={viewMode === "dataTable"}
+              onChange={() => setViewMode("dataTable")}
+            />
+            Data Table
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="viewMode"
+              value="pivotTable"
+              checked={viewMode === "pivotTable"}
+              onChange={() => setViewMode("pivotTable")}
+            />
+            Pivot Table
+          </label>
+        </div>
+
+        {/* Content area */}
+        <div style={{ flex: 1, overflowX: "auto" }}>
+          {viewMode === "dataTable" ? (
+            <div
+              style={{
+                width: "100%",
+                overflowX: "auto",
+              }}
+            >
+              <DataTable />
+            </div>
+          ) : (
+            <PivotTable />
+          )}
+        </div>
       </div>
-      {query && children && React.cloneElement(children, { query })}
-    </>
+
+      {children}
+    </div>
   );
 
   return Container ? <Container>{content}</Container> : content;

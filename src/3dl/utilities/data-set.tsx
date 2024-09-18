@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import React from "react";
+import { useQueryContext } from "../context/QueryContext"; // Import the QueryContext
 import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
 
@@ -8,18 +8,21 @@ interface DataSetProps {
   staticData?: any;
   useQuery: boolean;
   dataConnection?: any;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const DataSet: React.FC<DataSetProps> = ({
-  query = "",
+  query: propQuery = "",
   staticData,
   useQuery,
   dataConnection,
   children,
 }) => {
+  const { query: contextQuery } = useQueryContext();
+  const queryToUse = contextQuery || propQuery;
+
   const { data, loading, error, state } = useDataSetLogic(
-    query,
+    queryToUse,
     staticData,
     useQuery,
     dataConnection
@@ -35,7 +38,6 @@ const DataSet: React.FC<DataSetProps> = ({
 
   return (
     <DataProvider value={{ data }}>
-      {/* Conditionally render Debug On if debug is true */}
       {state?.debug && (
         <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
       )}
