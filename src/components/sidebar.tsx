@@ -182,7 +182,10 @@ const BottomMenu: FC = function () {
 
       // Exclude any messages where dataTask is "scriptError" and ensure the message is not too long
       const isValidMessage =
-        dataTask !== "scriptError" && message.length <= maxLength;
+        dataTask !== "script_start" &&
+        dataTask !== "script_complete" &&
+        dataTask !== "scriptError" &&
+        message.length <= maxLength;
 
       if (isValidMessage) {
         setModalContent((prevContent) => [...prevContent, message]);
