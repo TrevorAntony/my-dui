@@ -1,6 +1,6 @@
 import React from "react";
 import { useDataContext } from "../context/DataContext";
-import { useLayout } from "../utilities/Dashboard";
+import { useLayout } from "../ui-elements/single-layout";
 
 const DataTable = ({
   container: ContainerComponent,
@@ -58,7 +58,8 @@ const DataTable = ({
 
   const wrappedContent =
     layout === "single-layout" ? (
-      <div className="block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex">
+      <div className="mt-4">
+        {/* "block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800" */}
         {content}
       </div>
     ) : (

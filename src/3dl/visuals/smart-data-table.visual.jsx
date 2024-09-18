@@ -1,9 +1,7 @@
 import React, { useState, useCallback, useDeferredValue } from "react";
 import { MantineReactTable } from "mantine-react-table";
-// import { useDataContext } from "../utilities/DataSet";
 import { useLayout } from "../ui-elements/single-layout";
 import { useDataContext } from "../context/DataContext";
-// import { useLayout } from "../utilities/Dashboard";
 import { Modal, Button } from "flowbite-react";
 
 const SmartDataTable = ({
