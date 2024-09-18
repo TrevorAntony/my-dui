@@ -13,7 +13,7 @@ const StackedBarChart = ({
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data) || data?.length || !data?.length) {
+  if (!data || !Array.isArray(data) || !data?.length) {
     return <div>No data available</div>;
   }
 
