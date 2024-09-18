@@ -22,6 +22,7 @@ import { SidebarNavLink } from "./SidebarNavLink";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
+import { HiX } from "react-icons/hi"; // Importing the HiX icon
 // import useFetchDteStatus from "../3dlcomponents/resources/useFetchDteStatus";
 
 const ExampleSidebar: FC = function () {
@@ -174,9 +175,20 @@ const BottomMenu: FC = function () {
         });
       }
 
-      // Handle output property (append to modal content)
-      if (parsedData.message) {
-        setModalContent((prevContent) => [...prevContent, parsedData.message]);
+      const { message, dataTask } = parsedData;
+
+      // Define a maximum length for messages
+      const maxLength = 150;
+
+      // Exclude any messages where dataTask is "scriptError" and ensure the message is not too long
+      const isValidMessage =
+        dataTask !== "script_start" &&
+        dataTask !== "script_complete" &&
+        dataTask !== "scriptError" &&
+        message.length <= maxLength;
+
+      if (isValidMessage) {
+        setModalContent((prevContent) => [...prevContent, message]);
       }
     };
 
@@ -221,7 +233,7 @@ const BottomMenu: FC = function () {
     width: "10px",
     height: "10px",
     borderRadius: "50%",
-    backgroundColor: data?.isRunning ? "green" : "red",
+    backgroundColor: data?.isRunning ? "red" : "green",
     cursor: "pointer",
   };
 
@@ -235,7 +247,17 @@ const BottomMenu: FC = function () {
 
       {isModalOpen && (
         <Modal show={isModalOpen} onClose={handleCloseModal} size="2xl">
-          <div className="p-4 text-lg font-semibold">Running data task</div>
+          <div className="relative flex justify-between p-4 text-lg font-semibold">
+            <span>Running data task</span>
+            <button
+              type="button"
+              className="absolute right-0 top-0 m-4 text-gray-500 hover:text-gray-700"
+              onClick={handleCloseModal}
+            >
+              <HiX className="h-6 w-6" />
+            </button>
+          </div>
+
           <Modal.Body className="max-h-[700px] overflow-y-auto">
             <ul className="space-y-4">
               {modalContent.map((item, index) => (
@@ -243,8 +265,10 @@ const BottomMenu: FC = function () {
               ))}
             </ul>
           </Modal.Body>
+
           {data?.message?.includes("Script completed") || !data?.isRunning ? (
-            <Modal.Footer>
+            <Modal.Footer className="flex justify-end">
+              {/* Close button at the bottom right */}
               <Button color="primary" onClick={handleButtonClose}>
                 Close
               </Button>
