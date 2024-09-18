@@ -22,6 +22,7 @@ import { SidebarNavLink } from "./SidebarNavLink";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
+import { HiX } from "react-icons/hi"; // Importing the HiX icon
 // import useFetchDteStatus from "../3dlcomponents/resources/useFetchDteStatus";
 
 const ExampleSidebar: FC = function () {
@@ -184,7 +185,6 @@ const BottomMenu: FC = function () {
         dataTask !== "scriptError" && message.length <= maxLength;
 
       if (isValidMessage) {
-        console.log(parsedData);
         setModalContent((prevContent) => [...prevContent, message]);
       }
     };
@@ -246,26 +246,12 @@ const BottomMenu: FC = function () {
         <Modal show={isModalOpen} onClose={handleCloseModal} size="2xl">
           <div className="relative flex justify-between p-4 text-lg font-semibold">
             <span>Running data task</span>
-            {/* Close button (X) in the top right corner */}
             <button
               type="button"
               className="absolute right-0 top-0 m-4 text-gray-500 hover:text-gray-700"
               onClick={handleCloseModal}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <HiX className="h-6 w-6" />
             </button>
           </div>
 
