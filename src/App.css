@@ -127,4 +127,13 @@ main {
     box-shadow: none !important;
 }
 
+/* override width for the pivot table */
+.pvtUi td.pvtOutput {
+    width: 100% !important;
+}
+
+table.pvtTable {
+    width: 100% !important;
+}
+
 
