@@ -26,7 +26,7 @@ const PaginatedSearchDataSet: React.FC<DataSetProps> = ({
   const { offset, nextPage, resetPage } = useInfiniteScroll(pageSize);
   const { searchText, handleSearchChange } = useSearchText(resetPage);
 
-  const { modifiedQuery, searchModification } = buildQuery(
+  const { modifiedQuery, searchModifier } = buildQuery(
     query,
     pageSize,
     offset,
@@ -40,84 +40,25 @@ const PaginatedSearchDataSet: React.FC<DataSetProps> = ({
     dataConnection
   );
 
-  if (searchText && modifiedQuery.includes(searchText))
-    console.log({ [searchText]: data });
-
-  // // Effect 1: Handles when search text is provided and is different from the previous search text
-  // useEffect(() => {
-  //   if (
-  //     searchText &&
-  //     previousSearchText.current !== searchText &&
-  //     Array.isArray(data)
-  //   ) {
-  //     console.log(
-  //       "search text is provided and is different from the previous search text"
-  //     );
-  //     setPaginatedData(data); // Reset paginated data to new data
-  //     previousSearchText.current = searchText;
-  //   }
-  // }, [searchText, data]);
-
-  // // Effect 2: Handles when search text is provided and is the same as the previous search text
-  // useEffect(() => {
-  //   if (
-  //     searchText &&
-  //     previousSearchText.current === searchText &&
-  //     Array.isArray(data)
-  //   ) {
-  //     console.log(
-  //       "search text is provided and is the same as the previous search text"
-  //     );
-  //     setPaginatedData((prevData) => [...prevData, ...data]); // Append new data to the existing paginated data
-  //   }
-  // }, [searchText, data]);
-
-  // // Effect 3: Handles when there is no search text but there is data
-  // useEffect(() => {
-  //   if (!searchText && Array.isArray(data)) {
-  //     console.log("no search text but there is data");
-  //     setPaginatedData((prevData) => [...prevData, ...data]); // Append new data to the existing paginated data
-  //   }
-  // }, [searchText, data]);
-
   useEffect(() => {
-    if (!Array.isArray(data)) return; // Early exit if data is not an array
+    if (!Array.isArray(data)) return;
 
-    if (searchModification) {
-      // If search text is provided and differs from the previous search text, reset paginated data
+    //checks whether the search string exists
+    if (searchModifier) {
       if (previousSearchText.current !== searchText) {
-        // console.log(
-        //   "search text is provided and differs from the previous search text"
-        // );
-        // console.log({ prevText: previousSearchText.current, searchText });
-        // console.log({ data });
-        // console.log({
-        //   searchTextIsInQuery: modifiedQuery.includes(searchText),
-        // });
-        setPaginatedData(data); // Reset paginated data to new data
-        previousSearchText.current = searchText; // Update previous search text
-      } else if (previousSearchText.current == searchText) {
-        setPaginatedData((prevData) => [...prevData, ...data]);
-      } else {
-        // If search text is the same as the previous one, append new data
-        // console.log(
-        //   "search text is the same as the previous one, append new data"
-        // );
-        // console.log({ prevText: previousSearchText.current, searchText });
-        // console.log({ data });
+        setPaginatedData(data);
+        previousSearchText.current = searchText;
+      }
+      // else if (previousSearchText.current == searchText) {
+      //   setPaginatedData((prevData) => [...prevData, ...data]);
+      // }
+      else {
         setPaginatedData(data);
       }
     } else {
-      // If there is no search text, append new data
-      // console.log("there is no search text, append new data");
-      // console.log({ data });
-
       setPaginatedData((prevData) => [...prevData, ...data]);
-      // setPaginatedData(data);
     }
-  }, [searchModification, data]);
-
-  // console.log({ data_going_to_table: paginatedData });
+  }, [searchModifier, data]);
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;

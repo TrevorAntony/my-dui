@@ -1,10 +1,4 @@
-import React, {
-  // useEffect,
-  useState,
-  // useRef,
-  useCallback,
-  useDeferredValue,
-} from "react";
+import React, { useState, useCallback, useDeferredValue } from "react";
 import { MantineReactTable } from "mantine-react-table";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
