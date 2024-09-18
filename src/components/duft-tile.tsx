@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDataContext } from "../3dl/utilities/DataSet";
+import { useDataContext } from "../3dl/context/DataContext";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import DuftModal from "./duft-modal";
 

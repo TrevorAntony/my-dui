@@ -1,7 +1,7 @@
 import React from "react";
 import { MantineReactTable } from "mantine-react-table";
 import { Box } from "@mantine/core";
-import { useDataContext } from "../utilities/DataSet";
+import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
 
 const ScoreCardTable = ({

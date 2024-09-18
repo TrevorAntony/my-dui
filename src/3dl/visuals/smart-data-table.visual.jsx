@@ -1,12 +1,6 @@
-import React, {
-  // useEffect,
-  useState,
-  // useRef,
-  useCallback,
-  useDeferredValue,
-} from "react";
+import React, { useState, useCallback, useDeferredValue } from "react";
 import { MantineReactTable } from "mantine-react-table";
-import { useDataContext } from "../utilities/DataSet";
+import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
 import { Modal, Button } from "flowbite-react";
 
@@ -107,8 +101,7 @@ const SmartDataTable = ({
       enableGlobalFilter
       enablePagination={false}
       enableRowSelection
-      onGlobalFilterChange={(event) => handleSearchChange(event)}
-      // initialState={{ pagination: { pageSize: 10 } }}
+      onGlobalFilterChange={(event) => handleSearchChange?.(event)}
       {...props}
       mantineTableContainerProps={{
         // ref: tableContainerRef,
