@@ -26,7 +26,7 @@ export const buildQuery = (
 ) => {
   let modifiedQuery = query;
   let paginationModification = false;
-  // let searchModification = false;
+  let searchModification = false;
 
   if (
     pageSize > 0 &&
@@ -40,11 +40,11 @@ export const buildQuery = (
   if (query.includes("{searchTextCondition}")) {
     modifiedQuery = buildSearchQuery(modifiedQuery, searchText);
     if (searchText) {
-      // searchModification = true;
+      searchModification = true;
     }
   }
 
-  return { modifiedQuery, paginationModification };
+  return { modifiedQuery, paginationModification, searchModification };
 };
 
 export const useInfiniteScroll = (pageSize: number) => {
