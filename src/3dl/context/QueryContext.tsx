@@ -9,7 +9,9 @@ interface QueryContextProps {
 const QueryContext = createContext<QueryContextProps | undefined>(undefined);
 
 const QueryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [query, setQuery] = useState<string>("");
+  const [query, setQuery] = useState<string>(
+    "SELECT * FROM dim_client LIMIT 10"
+  );
 
   return (
     <QueryContext.Provider value={{ query, setQuery }}>

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useQueryContext } from "../context/QueryContext";
-import DataTable from "../tables/DataTable"; // Import your DataTable component
-import PivotTable from "../tables/PivotTable"; // Import your PivotTable component
+import DataTable from "../tables/DataTable";
+import PivotTable from "../tables/PivotTable";
 
 interface PreviewQueryProps {
   children?: React.ReactElement<{ query?: string }>;
@@ -16,7 +16,7 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
     "dataTable"
   );
   const queryRef = useRef<HTMLTextAreaElement>(null);
-  const { setQuery } = useQueryContext();
+  const { query, setQuery } = useQueryContext();
 
   const handleUpdateQuery = () => {
     const queryValue = queryRef.current?.value;
@@ -37,7 +37,7 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
     >
       <textarea
         ref={queryRef}
-        placeholder="Type your query here..."
+        placeholder={query}
         style={{
           width: "100%",
           height: "150px",
@@ -80,7 +80,7 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
             display: "flex",
             flexDirection: "column",
             marginRight: "20px",
-            gap: "10px", // Adds spacing between the radio buttons
+            gap: "10px",
           }}
         >
           <label>
@@ -110,8 +110,8 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
           {viewMode === "dataTable" ? (
             <div
               style={{
-                width: "100%", // Ensure the table fits within the parent
-                overflowX: "auto", // Make it scrollable if it overflows
+                width: "100%",
+                overflowX: "auto",
               }}
             >
               <DataTable />
