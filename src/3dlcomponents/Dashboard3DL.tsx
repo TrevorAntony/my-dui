@@ -45,6 +45,7 @@ import {
   PreviewQuery,
   SingleLayout,
   PaginatedSearchDataSet,
+  QueryProvider,
 } from "../3dl";
 import {
   DuftGrid,
@@ -117,6 +118,7 @@ const Dashboard3DL: React.FC = () => {
                 <Dashboard {...props} theme={themeData} />
               ),
               //DashboardHeader: DuftGridHeader,
+              QueryProvider,
               SingleLayout,
               Header: DuftGridHeader,
               Filters,
