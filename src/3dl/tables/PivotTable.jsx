@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PivotTableUI from "react-pivottable/PivotTableUI";
 import "react-pivottable/pivottable.css";
 import { useDashboardContext } from "../utilities/Dashboard";
-import { useDataContext } from "../utilities/DataSet";
+import { useDataContext } from "../context/DataContext";
 
 const PivotTable = ({
   container: ContainerComponent,
