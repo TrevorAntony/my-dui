@@ -22,10 +22,7 @@ const QueryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
 export const useQueryContext = () => {
   const context = useContext(QueryContext);
-  if (!context) {
-    throw new Error("useQueryContext must be used within a QueryProvider");
-  }
-  return context;
+  return context || { query: "", setQuery: () => null };
 };
 
 export default QueryProvider;
