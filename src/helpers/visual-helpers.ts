@@ -12,3 +12,13 @@ export function deepMerge(target, source) {
   Object.assign(target || {}, source);
   return target;
 }
+
+export function transposeData(data) {
+  if (!data || data.length === 0) return [];
+
+  const headers = Object.keys(data[0]);
+  return headers.map((header) => ({
+    name: header,
+    values: data.map((item) => item[header]),
+  }));
+}
