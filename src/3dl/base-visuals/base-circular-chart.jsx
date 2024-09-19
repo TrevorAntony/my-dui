@@ -16,61 +16,47 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
 
   const chartData = {
     series: data.map((item) => item.value || 0),
-    options: {
-      chart: {
-        type: chartType,
-        id: "circular-chart",
+    chart: {
+      type: chartType,
+      id: "circular-chart",
+    },
+    dataLabels: {
+      formatter: function (val, opts) {
+        const label = opts.w.globals.labels[opts.seriesIndex];
+        const percentage = val.toFixed(1) + "%";
+        return `${label})`;
       },
-      dataLabels: {
-        formatter: function (val, opts) {
-          const label = opts.w.globals.labels[opts.seriesIndex];
-          const percentage = val.toFixed(1) + "%"; // Format the percentage to 1 decimal place
-          return `${label})`; // Concatenate the label and percentage
-        },
-        background: {
-          enabled: true,
-          borderColor: "#fff",
-        },
-        dropShadow: {
-          enabled: true,
-        },
-        style: { colors: ["#626b77"] },
+      background: {
+        enabled: true,
+        borderColor: "#fff",
       },
-      labels: data.map((item) => item.category || "Unknown"),
-      legend: {
-        position: "bottom",
+      dropShadow: {
+        enabled: true,
       },
-      responsive: [
-        {
-          breakpoint: 1000, // Adjust the breakpoint as necessary, similar to BaseXYChart
-          options: {
-            chart: {
-              width: "100%", // Set to 100% width below the breakpoint
-            },
-            legend: {
-              position: "bottom",
-              offsetX: 0,
-              offsetY: 0,
-            },
+      style: { colors: ["#626b77"] },
+    },
+    labels: data.map((item) => item.category || "Unknown"),
+    legend: {
+      position: "bottom",
+    },
+    responsive: [
+      {
+        breakpoint: 1000,
+        options: {
+          chart: {
+            width: "100%",
+          },
+          legend: {
+            position: "bottom",
+            offsetX: 0,
+            offsetY: 0,
           },
         },
-      ],
-    },
+      },
+    ],
   };
 
-  const copiedOptions = deepCopy(apexOptions);
-  let mergedOptions = deepMerge(chartData, copiedOptions);
-
-  // Preserve specific options and merge with userOptions
-  mergedOptions = {
-    ...mergedOptions,
-    options: {
-      ...mergedOptions.options,
-      colors: mergedOptions.colors,
-      theme: mergedOptions.theme,
-      labels: mergedOptions.options.labels,
-    },
-  };
+  let mergedOptions = deepMerge(deepCopy(chartData), deepCopy(apexOptions));
 
   mergedOptions = deepMerge(mergedOptions, userOptions);
 
@@ -84,7 +70,7 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
       }}
     >
       <Chart
-        options={mergedOptions.options}
+        options={mergedOptions}
         series={mergedOptions.series}
         type={chartType}
         height={"100%"}
