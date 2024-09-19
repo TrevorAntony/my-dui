@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { useDataContext } from "../3dl/context/DataContext";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import DuftModal from "./duft-modal";
+import { Modal } from "flowbite-react";
 
 interface DuftTileProps {
   title: string;
   backgroundColor?: string;
   color?: string;
   children?: React.ReactNode;
+  modalSize?: "small" | "medium" | "large";
 }
 
-const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
+const DuftTile: React.FC<DuftTileProps> = ({ title, children, modalSize }) => {
   const { data } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -107,8 +109,7 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={title}
-        widthSize="large"
-        heightSize="large"
+        modalSize={modalSize}
         isCloseDefault={true}
       >
         {children}
