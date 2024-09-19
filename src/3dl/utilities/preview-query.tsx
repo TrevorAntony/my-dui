@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { useQueryContext } from "../context/QueryContext";
+import { useDataContext } from "../context/DataContext";
 import DataTable from "../tables/DataTable";
 import PivotTable from "../tables/PivotTable";
 
@@ -16,7 +16,8 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
     "dataTable"
   );
   const queryRef = useRef<HTMLTextAreaElement>(null);
-  const { query, setQuery } = useQueryContext();
+
+  const { query, setQuery } = useDataContext();
 
   const handleUpdateQuery = () => {
     const queryValue = queryRef.current?.value;
