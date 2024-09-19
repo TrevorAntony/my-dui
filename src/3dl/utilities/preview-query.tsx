@@ -55,7 +55,7 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
         style={{
           alignSelf: "flex-end",
           padding: "10px 20px",
-          fontSize: "16px",
+          fontSize: "13px",
           borderRadius: "4px",
           backgroundColor: "#C42783",
           color: "#fff",
@@ -83,26 +83,18 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
             gap: "10px",
           }}
         >
-          <label>
-            <input
-              type="radio"
-              name="viewMode"
-              value="dataTable"
-              checked={viewMode === "dataTable"}
-              onChange={() => setViewMode("dataTable")}
-            />
-            Data Table
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="viewMode"
-              value="pivotTable"
-              checked={viewMode === "pivotTable"}
-              onChange={() => setViewMode("pivotTable")}
-            />
-            Pivot Table
-          </label>
+          <CustomRadioButton
+            label="Data Table"
+            value="dataTable"
+            isSelected={viewMode === "dataTable"}
+            onChange={() => setViewMode("dataTable")}
+          />
+          <CustomRadioButton
+            label="Pivot Table"
+            value="pivotTable"
+            isSelected={viewMode === "pivotTable"}
+            onChange={() => setViewMode("pivotTable")}
+          />
         </div>
 
         {/* Content area */}
@@ -130,3 +122,42 @@ const PreviewQuery: React.FC<PreviewQueryProps> = ({
 };
 
 export default PreviewQuery;
+
+interface CustomRadioButtonProps {
+  label: string;
+  value: string;
+  isSelected: boolean;
+  onChange: () => void;
+}
+
+const CustomRadioButton: React.FC<CustomRadioButtonProps> = ({
+  label,
+  value,
+  isSelected,
+  onChange,
+}) => {
+  return (
+    <label
+      style={{
+        display: "flex",
+        alignItems: "center",
+        cursor: "pointer",
+        color: "#333",
+      }}
+    >
+      <input
+        type="radio"
+        name="viewMode"
+        value={value}
+        checked={isSelected}
+        onChange={onChange}
+        className=" text-highlight-600 focus:ring-2 focus:ring-highlight-600"
+        style={{
+          marginRight: "10px",
+          accentColor: "#C42783",
+        }}
+      />
+      {label}
+    </label>
+  );
+};
