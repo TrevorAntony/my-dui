@@ -1,6 +1,6 @@
 import React from "react";
-import { useDataContext } from "../utilities/DataSet";
-import { useLayout } from "../utilities/Dashboard";
+import { useDataContext } from "../context/DataContext";
+import { useLayout } from "../ui-elements/single-layout";
 import { transposeData } from "../../helpers/visual-helpers";
 
 const SingleRowDataTable = ({
