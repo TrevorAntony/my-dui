@@ -18,7 +18,7 @@ export function transposeData(data) {
 
   const headers = Object.keys(data[0]);
   return headers.map((header) => ({
-    name: header,
-    values: data.map((item) => item[header]),
+    column: header,
+    value: data.map((item) => item[header]),
   }));
 }
