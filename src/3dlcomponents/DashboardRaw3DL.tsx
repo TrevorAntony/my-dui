@@ -83,7 +83,7 @@ const Dashboard3DL: React.FC = () => {
                   Dashboard,
                   Filters,
                   Filter,
-                  DataContainer: (props: unknown) => (
+                  DataSet: (props: unknown) => (
                     <DataSet {...props} useQuery={useDuftQuery} />
                   ),
                   Visual1,
