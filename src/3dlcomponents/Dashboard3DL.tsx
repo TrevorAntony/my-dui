@@ -128,7 +128,7 @@ const Dashboard3DL: React.FC = () => {
               Visual4,
               Visual5,
               Section,
-              DataContainer: (props: unknown) => (
+              DataSet: (props: unknown) => (
                 <DataSet {...props} useQuery={useDuftQuery} />
               ),
               PaginatedSearchDataSet: (props: unknown) => (
