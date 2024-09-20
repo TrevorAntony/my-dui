@@ -8,7 +8,7 @@ import {
   Dashboard,
   Filters,
   Filter,
-  DataSet,
+  Dataset,
   Visual1,
   Visual3,
   Visual4,
@@ -128,8 +128,8 @@ const Dashboard3DL: React.FC = () => {
               Visual4,
               Visual5,
               Section,
-              DataSet: (props: unknown) => (
-                <DataSet {...props} useQuery={useDuftQuery} />
+              Dataset: (props: unknown) => (
+                <Dataset {...props} useQuery={useDuftQuery} />
               ),
               PaginatedSearchDataSet: (props: unknown) => (
                 <PaginatedSearchDataSet {...props} useQuery={useDuftQuery} />
