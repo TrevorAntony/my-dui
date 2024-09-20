@@ -10,7 +10,7 @@ interface DataSetProps {
   children: React.ReactNode;
 }
 
-const DataSet: React.FC<DataSetProps> = ({
+const Dataset: React.FC<DataSetProps> = ({
   query: propQuery = "",
   staticData,
   useQuery,
@@ -44,4 +44,4 @@ const DataSet: React.FC<DataSetProps> = ({
   );
 };
 
-export default DataSet;
+export default Dataset;

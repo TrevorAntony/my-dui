@@ -3,7 +3,7 @@ export { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 export { default as Dashboard } from "./utilities/Dashboard";
 export { default as Filters } from "./filters/filters";
 export { default as Filter } from "./filters/filter";
-export { default as DataSet } from "./utilities/data-set";
+export { default as Dataset } from "./utilities/data-set";
 export { default as JSXParser } from "react-jsx-parser";
 export { default as Visual1 } from "./old-visuals/Visual1";
 export { default as Visual3 } from "./old-visuals/Visual3";
