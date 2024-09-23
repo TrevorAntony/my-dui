@@ -43,17 +43,12 @@ const PaginatedSearchDataSet: React.FC<DataSetProps> = ({
   useEffect(() => {
     if (!Array.isArray(data)) return;
 
-    //checks whether the search string exists
     if (searchModifier) {
       if (previousSearchText.current !== searchText) {
         setPaginatedData(data);
         previousSearchText.current = searchText;
-      }
-      // else if (previousSearchText.current == searchText) {
-      //   setPaginatedData((prevData) => [...prevData, ...data]);
-      // }
-      else {
-        setPaginatedData(data);
+      } else {
+        setPaginatedData((prevData) => [...prevData, ...data]);
       }
     } else {
       setPaginatedData((prevData) => [...prevData, ...data]);

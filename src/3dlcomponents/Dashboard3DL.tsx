@@ -8,7 +8,7 @@ import {
   Dashboard,
   Filters,
   Filter,
-  DataSet,
+  Dataset,
   Visual1,
   Visual3,
   Visual4,
@@ -27,6 +27,7 @@ import {
   SmartDataTable,
   ScoreCardTable,
   DataTable,
+  SingleRowDataTable,
   PreviewPage,
   PivotTable,
   JSONVisual,
@@ -128,8 +129,8 @@ const Dashboard3DL: React.FC = () => {
               Visual4,
               Visual5,
               Section,
-              DataContainer: (props: unknown) => (
-                <DataSet {...props} useQuery={useDuftQuery} />
+              Dataset: (props: unknown) => (
+                <Dataset {...props} useQuery={useDuftQuery} />
               ),
               PaginatedSearchDataSet: (props: unknown) => (
                 <PaginatedSearchDataSet {...props} useQuery={useDuftQuery} />
@@ -172,6 +173,9 @@ const Dashboard3DL: React.FC = () => {
               ),
               DataTable: (props: unknown) => (
                 <DataTable {...props} container={CardComponent} />
+              ),
+              SingleRowDataTable: (props: unknown) => (
+                <SingleRowDataTable {...props} container={CardComponent} />
               ),
               StackedBarChart: (props: unknown) => (
                 <StackedBarChart {...props} container={CardComponent} />

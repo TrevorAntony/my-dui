@@ -9,7 +9,7 @@ import {
   Dashboard,
   Filters,
   Filter,
-  DataSet,
+  Dataset,
   Visual1,
   Visual3,
   Visual4,
@@ -28,6 +28,7 @@ import {
   SmartDataTable,
   ScoreCardTable,
   DataTable,
+  SingleRowDataTable,
   PreviewPage,
   PivotTable,
   JSONVisual,
@@ -83,8 +84,8 @@ const Dashboard3DL: React.FC = () => {
                   Dashboard,
                   Filters,
                   Filter,
-                  DataContainer: (props: unknown) => (
-                    <DataSet {...props} useQuery={useDuftQuery} />
+                  Dataset: (props: unknown) => (
+                    <Dataset {...props} useQuery={useDuftQuery} />
                   ),
                   Visual1,
                   Visual3,
@@ -104,6 +105,7 @@ const Dashboard3DL: React.FC = () => {
                   SmartDataTable,
                   ScoreCardTable,
                   DataTable,
+                  SingleRowDataTable,
                   PreviewPage,
                   PivotTable,
                   JSONVisual,

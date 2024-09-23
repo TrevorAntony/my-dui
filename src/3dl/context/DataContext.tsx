@@ -1,10 +1,12 @@
-import type { ReactNode } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import React, { createContext, useContext } from "react";
 
 interface DataContextType {
   data: any[];
   pageUpdater?: () => void;
   handleSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setQuery: Dispatch<SetStateAction<string>>;
+  query: string;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
