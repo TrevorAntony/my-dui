@@ -4,6 +4,7 @@ import React, { createContext, useContext } from "react";
 interface DataContextType {
   data: any[];
   pageUpdater?: () => void;
+  resetPage?: () => void;
   handleSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setQuery: Dispatch<SetStateAction<string>>;
   query: string;

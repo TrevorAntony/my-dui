@@ -14,7 +14,7 @@ const SmartDataTable = ({
   showToolbar,
   ...props
 }) => {
-  const { data, pageUpdater, handleSearchChange } = useDataContext();
+  const { data, pageUpdater, handleSearchChange, resetPage } = useDataContext();
   const layout = useLayout();
 
   // Defer the data update
@@ -101,7 +101,9 @@ const SmartDataTable = ({
       enableGlobalFilter
       enablePagination={false}
       enableRowSelection
-      onGlobalFilterChange={(event) => handleSearchChange?.(event)}
+      onGlobalFilterChange={(event) => {
+        resetPage(), handleSearchChange?.(event);
+      }}
       {...props}
       mantineTableContainerProps={{
         // ref: tableContainerRef,
