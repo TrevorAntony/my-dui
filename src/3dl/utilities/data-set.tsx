@@ -72,9 +72,9 @@ const Dataset: React.FC<DataSetProps> = ({
     searchText
   );
 
-  if (loading) {
-    return <div>Loading data...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading data...</div>;
+  // }
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
@@ -88,6 +88,7 @@ const Dataset: React.FC<DataSetProps> = ({
         setQuery,
         resetPage,
         pageUpdater: updatePage,
+        loading,
       }}
     >
       {state?.debug && (

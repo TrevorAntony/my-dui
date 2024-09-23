@@ -14,7 +14,8 @@ const SmartDataTable = ({
   showToolbar,
   ...props
 }) => {
-  const { data, pageUpdater, handleSearchChange, resetPage } = useDataContext();
+  const { data, pageUpdater, handleSearchChange, resetPage, loading } =
+    useDataContext();
   const layout = useLayout();
 
   // Defer the data update
@@ -101,6 +102,7 @@ const SmartDataTable = ({
       enableGlobalFilter
       enablePagination={false}
       enableRowSelection
+      state={{ isLoading: !!loading }}
       onGlobalFilterChange={(event) => {
         resetPage(), handleSearchChange?.(event);
       }}

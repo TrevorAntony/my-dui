@@ -8,6 +8,7 @@ interface DataContextType {
   handleSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setQuery: Dispatch<SetStateAction<string>>;
   query: string;
+  loading?: boolean;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
