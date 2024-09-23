@@ -185,7 +185,7 @@ const BottomMenu: FC = function () {
         dataTask !== "script_start" &&
         dataTask !== "script_complete" &&
         dataTask !== "scriptError" &&
-        message.length <= maxLength;
+        message?.length <= maxLength;
 
       if (isValidMessage) {
         setModalContent((prevContent) => [...prevContent, message]);
@@ -252,7 +252,10 @@ const BottomMenu: FC = function () {
         title="Data Refresh"
         executeButtonName="Run data task"
         modalContent={modalContent}
-        isRunning={data?.isRunning}
+        hideFooter={data?.isRunning} // The footer is only hidden if explicitly required
+        isScriptCompleted={data?.message?.includes(
+          "Task completed successfully with return code 0"
+        )} // Check if script is completed
       />
     </>
   );

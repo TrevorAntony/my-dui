@@ -18,8 +18,8 @@ interface DuftModalProps {
   title?: string;
   children?: React.ReactNode;
   modalContent?: string | string[] | Record<string, any>; // Accept string, array, or object
-  isRunning?: boolean; // Flag to determine if the task is running
-  completionMessage?: string; // Message to determine if the script is completed
+  hideFooter?: boolean; // Flag to hide the footer when needed
+  isScriptCompleted?: boolean; // Whether the script is completed
   handleButtonClose?: () => void; // Optional function to handle close button
   modalSize?: "small" | "medium" | "large"; // Use custom modal size prop
 }
@@ -32,7 +32,8 @@ const DuftModal: React.FC<DuftModalProps> = ({
   title,
   children,
   modalContent,
-  isRunning,
+  hideFooter = false, // Default to false if no value is provided
+  isScriptCompleted = false, // Default to false if no value is provided
   handleButtonClose,
   modalSize = "small", // Default to small if no modalSize is provided
 }) => {
@@ -50,7 +51,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
         width: "100%",
         height: "auto",
         overflowY: "auto", // Enable scroll for overflowing content
-        overflowX: "auto",
+        overflowX: "auto", // Enable horizontal scrolling if necessary
       }}
     >
       {/* Header with dynamic title */}
@@ -84,15 +85,27 @@ const DuftModal: React.FC<DuftModalProps> = ({
       </Modal.Body>
 
       {/* Conditionally render the Footer based on task status */}
-      {!isRunning && (
+      {!hideFooter && (
         <Modal.Footer className="flex justify-end">
-          <Button color="primary" onClick={handleButtonClose || onClose}>
-            Close
-          </Button>
-          {executeButtonName && onExecute && (
-            <Button color="pink" onClick={onExecute}>
-              {executeButtonName || "Run"}
+          {/* Only show the Close button when the script is completed */}
+          {isScriptCompleted && (
+            <Button color="primary" onClick={handleButtonClose || onClose}>
+              Close
             </Button>
+          )}
+
+          {/* Show both Close and Execute buttons before the script starts */}
+          {!hideFooter && !isScriptCompleted && (
+            <>
+              <Button color="primary" onClick={handleButtonClose || onClose}>
+                Close
+              </Button>
+              {executeButtonName && onExecute && (
+                <Button color="pink" onClick={onExecute}>
+                  {executeButtonName || "Run"}
+                </Button>
+              )}
+            </>
           )}
         </Modal.Footer>
       )}
