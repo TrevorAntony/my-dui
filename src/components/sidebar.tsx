@@ -22,7 +22,6 @@ import { SidebarNavLink } from "./SidebarNavLink";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
-import { HiX } from "react-icons/hi"; // Importing the HiX icon
 import DuftModal from "./duft-modal";
 // import useFetchDteStatus from "../3dlcomponents/resources/useFetchDteStatus";
 

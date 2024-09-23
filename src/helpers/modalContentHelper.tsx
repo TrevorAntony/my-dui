@@ -2,20 +2,25 @@ import React from "react";
 
 /**
  * Helper function to render different types of modal content.
- * Handles string, array, and object content types.
+ * Handles string, number, array, and object content types.
  * Can be extended easily for new content types.
  */
 export const renderModalContent = (
-  modalContent: string | string[] | Record<string, any>
+  modalContent: string | number | string[] | number[] | Record<string, any>
 ): React.ReactNode => {
-  if (!modalContent) return null;
+  if (modalContent === undefined || modalContent === null) return null;
+
+  // Handle number content
+  if (typeof modalContent === "number") {
+    return <p>{modalContent}</p>;
+  }
 
   // Handle string content
   if (typeof modalContent === "string") {
     return <p>{modalContent}</p>;
   }
 
-  // Handle array content
+  // Handle array content (string[] or number[])
   if (Array.isArray(modalContent)) {
     return (
       <ul className="space-y-4">
@@ -27,7 +32,7 @@ export const renderModalContent = (
   }
 
   // Handle object content
-  if (typeof modalContent === "object" && modalContent !== null) {
+  if (typeof modalContent === "object") {
     return (
       <ul className="space-y-4">
         {Object.entries(modalContent).map(([key, value], index) => (
