@@ -47,6 +47,7 @@ import {
   SingleLayout,
   PaginatedSearchDataSet,
   QueryProvider,
+  Query,
 } from "../3dl";
 import {
   DuftGrid,
@@ -124,6 +125,7 @@ const Dashboard3DL: React.FC = () => {
               Header: DuftGridHeader,
               Filters,
               Filter: DuftFilter,
+              Query,
               Visual1,
               Visual3,
               Visual4,

@@ -45,3 +45,4 @@ export { default as PreviewQuery } from "./utilities/preview-query";
 export { default as SingleLayout } from "./ui-elements/single-layout";
 export { default as PaginatedSearchDataSet } from "./utilities/pagination-search-data-set";
 export { default as QueryProvider } from "./context/QueryContext";
+export { default as Query } from "./utilities/query-component";
