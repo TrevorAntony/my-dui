@@ -5,7 +5,7 @@ interface DataContextType {
   data: any[];
   pageUpdater?: () => void;
   resetPage?: () => void;
-  handleSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearchChange?: (newSearchText: string) => void;
   setQuery: Dispatch<SetStateAction<string>>;
   query: string;
   loading?: boolean;

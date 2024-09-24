@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
 
@@ -8,35 +8,20 @@ interface DataSetProps {
   useQuery: boolean;
   dataConnection?: string;
   filters?: Record<string, any>;
-  searchText?: string;
   searchColumns?: string;
   sortColumn?: string;
   pageSize?: number;
   children: React.ReactNode;
 }
 
-const usePaginatedData = (
-  data: Array<Record<string, any>>,
-  currentPage: number,
-  pageSize: number | undefined,
-  searchText: string | undefined
-) => {
-  const prevSearchTextRef = useRef<string | undefined>(searchText);
+const useSearch = (initialSearchText: string = "") => {
+  const [searchText, setSearchText] = useState<string>(initialSearchText);
 
-  return useMemo(() => {
-    const shouldResetPaginatedData = searchText !== prevSearchTextRef.current;
-    prevSearchTextRef.current = searchText;
+  const updateSearchText = useCallback((newSearchText: string) => {
+    setSearchText(newSearchText);
+  }, []);
 
-    if (shouldResetPaginatedData) {
-      return data;
-    } else if (currentPage && pageSize) {
-      const startIndex = (currentPage - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      return data?.slice(0, endIndex);
-    } else {
-      return data;
-    }
-  }, [data, currentPage, pageSize, searchText]);
+  return { searchText, updateSearchText };
 };
 
 const Dataset: React.FC<DataSetProps> = ({
@@ -44,7 +29,6 @@ const Dataset: React.FC<DataSetProps> = ({
   staticData,
   useQuery,
   filters = {},
-  searchText,
   searchColumns,
   sortColumn,
   pageSize,
@@ -52,6 +36,10 @@ const Dataset: React.FC<DataSetProps> = ({
 }) => {
   const [query, setQuery] = useState<string>(propQuery);
   const [currentPage, updatePage, resetPage] = useCurrentPage(1);
+  const [paginatedData, setPaginatedData] = useState<
+    Array<Record<string, any>>
+  >([]);
+  const { searchText, updateSearchText } = useSearch();
 
   const { data, loading, error, state } = useDataSetLogic({
     query,
@@ -65,16 +53,30 @@ const Dataset: React.FC<DataSetProps> = ({
     currentPage,
   });
 
-  const paginatedData = usePaginatedData(
-    data,
-    currentPage,
-    pageSize,
-    searchText
-  );
+  const prevSearchTextRef = useRef<string>(searchText);
 
-  // if (loading) {
-  //   return <div>Loading data...</div>;
-  // }
+  const updatePaginatedData = useCallback(() => {
+    const shouldResetPaginatedData = searchText !== prevSearchTextRef.current;
+    prevSearchTextRef.current = searchText;
+
+    if (shouldResetPaginatedData) {
+      setPaginatedData(data);
+    } else if (currentPage > 1 && pageSize) {
+      console.log({ data });
+      setPaginatedData((prevData) => [...(prevData || []), ...(data || [])]);
+    } else {
+      setPaginatedData(data);
+    }
+  }, [data, currentPage, pageSize, searchText]);
+
+  useMemo(() => {
+    updatePaginatedData();
+  }, [updatePaginatedData]);
+
+  const handleSearchChange = useCallback((newSearchText: string) => {
+    resetPage();
+    updateSearchText(newSearchText);
+  }, []);
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
@@ -89,6 +91,7 @@ const Dataset: React.FC<DataSetProps> = ({
         resetPage,
         pageUpdater: updatePage,
         loading,
+        handleSearchChange,
       }}
     >
       {state?.debug && (
@@ -104,13 +107,13 @@ type UseCurrentPageHook = [number, () => void, () => void];
 const useCurrentPage = (initialPage: number): UseCurrentPageHook => {
   const [currentPage, setCurrentPage] = useState<number>(initialPage);
 
-  const updatePage = (): void => {
+  const updatePage = useCallback((): void => {
     setCurrentPage((prevPage) => prevPage + 1);
-  };
+  }, []);
 
-  const resetPage = (): void => {
+  const resetPage = useCallback((): void => {
     setCurrentPage(1);
-  };
+  }, []);
 
   return [currentPage, updatePage, resetPage];
 };

@@ -14,8 +14,7 @@ const SmartDataTable = ({
   showToolbar,
   ...props
 }) => {
-  const { data, pageUpdater, handleSearchChange, resetPage, loading } =
-    useDataContext();
+  const { data, pageUpdater, handleSearchChange, loading } = useDataContext();
   const layout = useLayout();
 
   // Defer the data update
@@ -42,7 +41,9 @@ const SmartDataTable = ({
     !Array.isArray(deferredData) ||
     deferredData.length === 0
   ) {
-    return <div>No data available</div>;
+    return (
+      <MantineReactTable columns={[]} data={[]} state={{ isLoading: true }} />
+    );
   }
 
   const handleCellClick = (key, row) => {
@@ -104,13 +105,15 @@ const SmartDataTable = ({
       enableRowSelection
       state={{ isLoading: !!loading }}
       onGlobalFilterChange={(event) => {
-        resetPage(), handleSearchChange?.(event);
+        if (event !== undefined) {
+          handleSearchChange?.(event);
+        }
       }}
       {...props}
       mantineTableContainerProps={{
         // ref: tableContainerRef,
         sx: { maxHeight: tableMaxHeight },
-        onScroll: (event) => fetchMoreOnBottomReached(event.target), //think about how to configure this based on the page size
+        onScroll: (event) => fetchMoreOnBottomReached(event.target),
       }}
     />
   );
