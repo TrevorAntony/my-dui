@@ -1,14 +1,26 @@
-import type { ReactNode } from "react";
 import React from "react";
 import { Modal, Button } from "flowbite-react";
+import { HiX } from "react-icons/hi";
+import { renderModalContent } from "../helpers/modalContentHelper";
+
+const modalSizeMap = {
+  small: "3xl",
+  medium: "7xl",
+  large: "full",
+};
 
 interface DuftModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onExecute: () => void; // Function to be executed on the second button click
-  executeButtonName?: string; // Name for the execution button
+  onExecute?: () => void;
+  executeButtonName?: string;
   title?: string;
-  children: ReactNode;
+  children?: React.ReactNode;
+  modalContent?: string | string[] | Record<string, any>;
+  hideFooter?: boolean;
+  showExecuteButton?: boolean;
+  handleButtonClose?: () => void;
+  modalSize?: "small" | "medium" | "large";
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
@@ -18,25 +30,78 @@ const DuftModal: React.FC<DuftModalProps> = ({
   executeButtonName,
   title,
   children,
+  modalContent,
+  hideFooter = false,
+  showExecuteButton = false,
+  handleButtonClose,
+  modalSize = "small",
 }) => {
+  const resolvedModalSize =
+    modalSizeMap[modalSize as keyof typeof modalSizeMap];
+
   return (
-    <Modal show={isOpen} onClose={onClose} size="3xl">
-      <Modal.Header>
-        <strong>{title || "More info"}</strong>
-      </Modal.Header>
-      <Modal.Body className="max-h-[700px]">
-        <div className="space-y-6">{children}</div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button color="primary" onClick={onClose}>
-          Close
-        </Button>
-        {executeButtonName && onExecute ? (
-          <Button color="pink" onClick={onExecute}>
-            {executeButtonName || "Run"}
-          </Button>
+    <Modal
+      show={isOpen}
+      onClose={onClose}
+      size={resolvedModalSize}
+      className="relative"
+      style={{
+        width: "100%",
+        height: "auto",
+        overflowY: "auto",
+        overflowX: "auto",
+      }}
+    >
+      <div className="relative flex justify-between p-6 text-lg font-semibold">
+        <span>{title || "More info"}</span>
+
+        <button
+          type="button"
+          className="absolute right-0 top-0 m-3 p-4 text-gray-500 hover:text-gray-700"
+          onClick={onClose}
+          aria-label="Close modal"
+        >
+          <HiX className="h-6 w-6" />
+        </button>
+      </div>
+
+      <Modal.Body
+        className="space-y-6"
+        style={{
+          maxHeight: "calc(100vh - 150px)",
+          overflowY: "auto",
+          overflowX: "auto",
+        }}
+      >
+        {children ? (
+          <div>{children}</div>
+        ) : modalContent ? (
+          renderModalContent(modalContent)
         ) : null}
-      </Modal.Footer>
+      </Modal.Body>
+
+      {!hideFooter && (
+        <Modal.Footer className="flex justify-end">
+          {showExecuteButton && (
+            <Button color="primary" onClick={handleButtonClose || onClose}>
+              Close
+            </Button>
+          )}
+
+          {!hideFooter && !showExecuteButton && (
+            <>
+              <Button color="primary" onClick={handleButtonClose || onClose}>
+                Close
+              </Button>
+              {executeButtonName && onExecute && (
+                <Button color="pink" onClick={onExecute}>
+                  {executeButtonName || "Run"}
+                </Button>
+              )}
+            </>
+          )}
+        </Modal.Footer>
+      )}
     </Modal>
   );
 };
