@@ -1,7 +1,5 @@
-# Ensure Conda is available in the current session
-$env:CONDA_PREFIX = "$HOME\miniconda3"
-$env:CONDA_ROOT = "$env:CONDA_PREFIX"
-$env:PATH = "$env:CONDA_ROOT\Scripts;$env:PATH"
+# Add conda to environment's PATH
+$env:PATH = "$env:CONDA\Scripts;$env:PATH"
 
 # Function to write colored output
 function Write-Color {

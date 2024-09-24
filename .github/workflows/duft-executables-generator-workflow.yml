@@ -39,7 +39,6 @@ jobs:
         run: |
           sh scripts/shell/server_resources_preparation_actions.sh
         env:
-          CI_OS: ${{ runner.os }}
           GITHUB_ORG: "UCSF-IGHS"
           GITHUB_TOKEN: ${{ secrets.DUFT_CLONE_TOKEN }}
           REPO2_REPO: "duft-config"
@@ -47,7 +46,7 @@ jobs:
           REPO3_REPO: "duft-workspace-django"
           REPO3_BRANCH: "main"
 
-      - name: Install npm packages
+      - name: Install yarn packages
         working-directory: main
         run: yarn install --legacy-peer-deps
 
@@ -93,7 +92,7 @@ jobs:
           REPO3_REPO: "duft-workspace-django"
           REPO3_BRANCH: "main"
 
-      - name: Install npm packages
+      - name: Install yarn packages
         working-directory: main
         run: yarn install --legacy-peer-deps
 
@@ -132,7 +131,6 @@ jobs:
         run: |
           sh scripts/shell/server_resources_preparation_actions.sh
         env:
-          CI_OS: ${{ runner.os }}
           GITHUB_ORG: "UCSF-IGHS"
           GITHUB_TOKEN: ${{ secrets.DUFT_CLONE_TOKEN }}
           REPO2_REPO: "duft-config"
