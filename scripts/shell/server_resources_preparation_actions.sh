@@ -1,21 +1,7 @@
 #!/bin/bash
 
-# Ensure Conda is available in the current session
-case "$CI_OS" in
-  Linux)
-    export CONDA_PREFIX="/usr/share/miniconda3"
-    ;;
-  macOS)
-    export CONDA_PREFIX="/Users/runner/miniconda3"
-    ;;
-  *)
-    echo "Unsupported OS: $CI_OS"
-    exit 1
-    ;;
-esac
-
-export CONDA_ROOT="$CONDA_PREFIX"
-export PATH="$CONDA_ROOT/bin:$PATH"
+# Add conda to environment's PATH
+export PATH="$CONDA/bin:$PATH"
 
 # Function to write colored output
 write_color() {
@@ -121,7 +107,7 @@ create_and_install_conda_env() {
   fi
 
   # Activate the Conda environment
-  source activate "$env_name"
+  conda activate "$env_name"
 
   # Install dependencies from requirements.txt
   local requirements_file="$dir/requirements.txt"
