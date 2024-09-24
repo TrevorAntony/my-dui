@@ -177,11 +177,14 @@ const BottomMenu: FC = function () {
 
       const { message, dataTask } = parsedData;
 
+      console.log("parsedData received:", parsedData);
+
       // Define a maximum length for messages
       const maxLength = 150;
 
       // Exclude any messages where dataTask is "scriptError" and ensure the message is not too long
       const isValidMessage =
+        dataTask &&
         dataTask !== "script_start" &&
         dataTask !== "script_complete" &&
         dataTask !== "scriptError" &&
@@ -253,7 +256,7 @@ const BottomMenu: FC = function () {
         executeButtonName="Run data task"
         modalContent={modalContent}
         hideFooter={data?.isRunning} // The footer is only hidden if explicitly required
-        isScriptCompleted={data?.message?.includes(
+        hideExecuteButton={data?.message?.includes(
           "Task completed successfully with return code 0"
         )} // Check if script is completed
       />
