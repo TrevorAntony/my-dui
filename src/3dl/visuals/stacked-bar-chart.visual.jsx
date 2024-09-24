@@ -8,6 +8,7 @@ const StackedBarChart = ({
   container: Container,
   header,
   subHeader = "",
+  userOptions = {},
   ...props
 }) => {
   const theme = useThemeContext(); // Accessing the theme context
@@ -72,8 +73,8 @@ const StackedBarChart = ({
     },
   };
 
-  const copiedOptions = deepCopy(apexOptions);
-  let mergedOptions = deepMerge(options, copiedOptions);
+  let mergedOptions = deepMerge(deepCopy(options), deepCopy(apexOptions));
+  mergedOptions = deepMerge(mergedOptions, userOptions);
 
   const content = (
     <div
