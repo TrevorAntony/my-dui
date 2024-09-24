@@ -22,3 +22,9 @@ export function transposeData(data) {
     value: data.map((item) => item[header]),
   }));
 }
+
+export const processQuery = (query: string, config: { [key: string]: string }) => {
+    return query.replace(/\$\{(\w+)\}/g, (match, placeholder) => {
+      return config[placeholder] || match;
+    });
+  };
