@@ -2,6 +2,7 @@ import React from "react";
 import { useDataContext, DataProvider } from "../context/DataContext";
 import { useLayout } from "../ui-elements/single-layout";
 import DataTable from "./DataTable";
+import { transposeData } from "../../helpers/visual-helpers";
 
 const SingleRowDataTable = ({
   container: ContainerComponent,
@@ -16,8 +17,10 @@ const SingleRowDataTable = ({
     return <div>No data available</div>;
   }
 
+  const transposedData = transposeData(data);
+
   const content = (
-    <DataProvider value={{ data }}>
+    <DataProvider value={{ data: transposedData }}>
       <DataTable variant={variant} />
     </DataProvider>
   );

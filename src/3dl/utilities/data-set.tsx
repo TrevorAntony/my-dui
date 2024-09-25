@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
-import { processQuery, transposeData } from "../../helpers/visual-helpers";
+import { processQuery } from "../../helpers/visual-helpers";
 
 interface DataSetProps {
   query?: string;
@@ -22,28 +22,17 @@ const Dataset: React.FC<DataSetProps> = ({
   config,
   children,
 }) => {
-  const [query, setQuery] = useState<string>(propQuery);
-  const [processedData, setProcessedData] = useState<any[]>([]);
+  const finalQuery =
+    config && columnName ? processQuery(propQuery, config) : propQuery;
+  const [query, setQuery] = useState<string>(finalQuery);
 
+  // Use custom hook to fetch data
   const { data, loading, error, state } = useDataSetLogic(
     query,
     staticData,
     useQuery,
     dataConnection
   );
-
-  useEffect(() => {
-    if (columnName && config) {
-      const newQuery = processQuery(propQuery, config);
-      const transposedData = data ? transposeData(data) : [];
-
-      setQuery(newQuery);
-      setProcessedData(transposedData);
-    } else {
-      setQuery(propQuery);
-      setProcessedData(data || []);
-    }
-  }, [columnName, config, propQuery, data]);
 
   if (loading) {
     return <div>Loading data...</div>;
@@ -53,10 +42,8 @@ const Dataset: React.FC<DataSetProps> = ({
     return <div>Error fetching data: {error.message}</div>;
   }
 
-  const updatedData = processedData.length > 0 ? processedData : data || [];
-
   return (
-    <DataProvider value={{ data: updatedData, query, setQuery }}>
+    <DataProvider value={{ data, query, setQuery }}>
       {state?.debug && (
         <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
       )}
