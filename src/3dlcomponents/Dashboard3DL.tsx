@@ -121,7 +121,6 @@ const Dashboard3DL: React.FC = () => {
                 <Dashboard {...props} theme={themeData} />
               ),
               //DashboardHeader: DuftGridHeader,
-              InfiniteScrollTable,
               QueryProvider,
               SingleLayout,
               Header: DuftGridHeader,
@@ -177,6 +176,9 @@ const Dashboard3DL: React.FC = () => {
               ),
               DataTable: (props: unknown) => (
                 <DataTable {...props} container={CardComponent} />
+              ),
+              InfiniteScrollTable: (props: unknown) => (
+                <InfiniteScrollTable {...props} container={CardComponent} />
               ),
               SingleRowDataTable: (props: unknown) => (
                 <SingleRowDataTable {...props} container={CardComponent} />

@@ -1,28 +1,45 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useLayout } from "../ui-elements/single-layout";
+
 import { useDataContext } from "../context/DataContext";
 
 type SortOrder = "asc" | "desc" | null;
 
-const InfiniteScrollTable: React.FC = () => {
+interface InfiniteScrollTableProps {
+  container?: React.ElementType;
+  header?: string;
+  subHeader?: string;
+  variant?: "card" | "plain" | "no-card";
+}
+
+const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
+  container: ContainerComponent,
+  header,
+  subHeader = "",
+  variant = "card",
+}) => {
   const { data, loading, pageUpdater, searchText, handleSearchChange } =
     useDataContext();
 
+  const layout = useLayout();
   const tableRef = useRef<HTMLDivElement>(null);
 
   const headers = data?.length > 0 ? Object.keys(data[0]) : [];
+
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
     {}
   );
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>(null);
+  const [lastLoadedData, setLastLoadedData] = useState<any[]>([]);
 
   const handleScroll = () => {
     const table = tableRef.current;
     if (table) {
       const { scrollTop, scrollHeight, clientHeight } = table;
       if (scrollTop + clientHeight >= scrollHeight - 1 && !loading) {
-        pageUpdater();
+        pageUpdater?.();
       }
     }
   };
@@ -61,16 +78,17 @@ const InfiniteScrollTable: React.FC = () => {
     if (data?.length > 0) {
       const initialVisibility = headers.reduce(
         (acc, header) => {
-          acc[header] = true; // Set columns as visible by default
+          acc[header] = true;
           return acc;
         },
         {} as Record<string, boolean>
       );
       setVisibleColumns(initialVisibility);
+      setLastLoadedData(data);
     }
   }, [data]);
 
-  return (
+  const content = (
     <div className="relative">
       {/* Search input and column toggle */}
       <div className="mb-4 flex items-center justify-between space-x-4">
@@ -91,6 +109,7 @@ const InfiniteScrollTable: React.FC = () => {
           >
             Toggle Columns
           </button>
+
           {dropdownOpen && (
             <div
               className="absolute right-0 z-50 mt-2 w-48 rounded-md border border-gray-300 bg-white shadow-lg"
@@ -137,7 +156,6 @@ const InfiniteScrollTable: React.FC = () => {
                         {header.charAt(0).toUpperCase() + header.slice(1)}
                       </span>
                       <span>
-                        {/* Always show chevrons for sorting */}
                         {sortedColumn === header ? (
                           sortOrder === "asc" ? (
                             <svg
@@ -192,26 +210,48 @@ const InfiniteScrollTable: React.FC = () => {
                 ))}
             </tr>
           </thead>
+
           <tbody>
-            {sortedData?.map((row) => (
-              <tr key={row.id}>
-                {headers
-                  ?.filter((header) => visibleColumns[header])
-                  .map((header) => (
-                    <td
-                      key={header}
-                      className="border-b border-gray-200 px-4 py-2 text-center"
-                    >
-                      {row[header]}
-                    </td>
-                  ))}
-              </tr>
-            ))}
+            {(sortedData.length > 0 ? sortedData : lastLoadedData)?.map(
+              (row) => (
+                <tr key={row.id}>
+                  {headers
+                    ?.filter((header) => visibleColumns[header])
+                    .map((header) => (
+                      <td
+                        key={header}
+                        className="border-b border-gray-200 px-4 py-2 text-center"
+                      >
+                        {row[header]}
+                      </td>
+                    ))}
+                </tr>
+              )
+            )}
           </tbody>
         </table>
+
         {loading && <p className="py-4 text-center">Loading...</p>}
       </div>
     </div>
+  );
+
+  const wrappedContent =
+    layout === "single-layout" ? (
+      <div className="mt-4">
+        {/* "block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800" */}
+        {content}
+      </div>
+    ) : (
+      content
+    );
+
+  return ContainerComponent && layout !== "single-layout" ? (
+    <ContainerComponent header={header} subHeader={subHeader} variant={variant}>
+      {wrappedContent}
+    </ContainerComponent>
+  ) : (
+    wrappedContent
   );
 };
 
