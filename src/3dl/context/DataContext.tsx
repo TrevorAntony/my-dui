@@ -9,6 +9,7 @@ interface DataContextType {
   setQuery: Dispatch<SetStateAction<string>>;
   query: string;
   loading?: boolean;
+  searchText?: string;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);

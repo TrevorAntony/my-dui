@@ -42,7 +42,7 @@ const useDataSetLogic = ({
 
   const {
     data: fetchedData,
-    loading,
+    isLoading: loading,
     error,
   } = useQuery(queryReady ? requestData : null);
 
@@ -53,16 +53,15 @@ const useDataSetLogic = ({
       let tempQuery = query;
       const stateFilters = state.filters || {};
 
-      // Replace placeholders in the query with actual filter values
       const placeholders = query.match(/\$[a-zA-Z_]+/g) || [];
       placeholders.forEach((placeholder) => {
-        const filterKey = placeholder.substring(1); // Remove the $ symbol
+        const filterKey = placeholder.substring(1);
         const filterValue = filters[filterKey] || stateFilters[filterKey] || "";
         tempQuery = tempQuery.replace(placeholder, filterValue);
       });
 
       setModifiedQuery(tempQuery);
-      setQueryReady(true); // Allow query execution
+      setQueryReady(true);
     }
   }, [query, filters, state.filters]);
 

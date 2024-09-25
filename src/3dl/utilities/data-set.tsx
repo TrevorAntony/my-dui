@@ -14,12 +14,22 @@ interface DataSetProps {
   children: React.ReactNode;
 }
 
-const useSearch = (initialSearchText: string = "") => {
+const useSearch = (initialSearchText: string = "", delay: number = 500) => {
   const [searchText, setSearchText] = useState<string>(initialSearchText);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const updateSearchText = useCallback((newSearchText: string) => {
-    setSearchText(newSearchText);
-  }, []);
+  const updateSearchText = useCallback(
+    (newSearchText: string) => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      debounceTimeoutRef.current = setTimeout(() => {
+        setSearchText(newSearchText);
+      }, delay);
+    },
+    [delay]
+  );
 
   return { searchText, updateSearchText };
 };
@@ -62,7 +72,6 @@ const Dataset: React.FC<DataSetProps> = ({
     if (shouldResetPaginatedData) {
       setPaginatedData(data);
     } else if (currentPage > 1 && pageSize) {
-      console.log({ data });
       setPaginatedData((prevData) => [...(prevData || []), ...(data || [])]);
     } else {
       setPaginatedData(data);
@@ -73,10 +82,13 @@ const Dataset: React.FC<DataSetProps> = ({
     updatePaginatedData();
   }, [updatePaginatedData]);
 
-  const handleSearchChange = useCallback((newSearchText: string) => {
-    resetPage();
-    updateSearchText(newSearchText);
-  }, []);
+  const handleSearchChange = useCallback(
+    (newSearchText: string) => {
+      resetPage();
+      updateSearchText(newSearchText);
+    },
+    [resetPage, updateSearchText]
+  );
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
