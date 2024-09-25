@@ -48,6 +48,7 @@ import {
   PaginatedSearchDataSet,
   QueryProvider,
   Query,
+  InfiniteScrollTable,
 } from "../3dl";
 import {
   DuftGrid,
@@ -120,6 +121,7 @@ const Dashboard3DL: React.FC = () => {
                 <Dashboard {...props} theme={themeData} />
               ),
               //DashboardHeader: DuftGridHeader,
+              InfiniteScrollTable,
               QueryProvider,
               SingleLayout,
               Header: DuftGridHeader,
