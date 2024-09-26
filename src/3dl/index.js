@@ -26,7 +26,6 @@ export { default as CascadeChart } from "./visuals/cascade-chart.visual";
 export { default as SmartDataTable } from "./visuals/smart-data-table.visual";
 export { default as ScoreCardTable } from "./visuals/score-card-table.visual";
 export { default as DataTable } from "./tables/DataTable";
-export { default as SingleRowDataTable } from "./tables/SingleRowDataTable";
 export { default as PreviewPage } from "./designers/PreviewPage";
 export { default as PivotTable } from "./tables/PivotTable";
 export { default as JSONVisual } from "./visuals/json-visual";

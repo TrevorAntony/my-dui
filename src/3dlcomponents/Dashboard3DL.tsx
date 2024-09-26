@@ -27,7 +27,6 @@ import {
   SmartDataTable,
   ScoreCardTable,
   DataTable,
-  SingleRowDataTable,
   PreviewPage,
   PivotTable,
   JSONVisual,
@@ -175,9 +174,6 @@ const Dashboard3DL: React.FC = () => {
               ),
               DataTable: (props: unknown) => (
                 <DataTable {...props} container={CardComponent} />
-              ),
-              SingleRowDataTable: (props: unknown) => (
-                <SingleRowDataTable {...props} container={CardComponent} />
               ),
               StackedBarChart: (props: unknown) => (
                 <StackedBarChart {...props} container={CardComponent} />
