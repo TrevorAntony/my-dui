@@ -158,7 +158,8 @@
       "dist/**/*",
       "electron/electron.cjs",
       "package.json",
-      "duft_icon.ico"
+      "duft_icon.ico",
+      "duft_icon.icns"
     ],
     "extraResources": [
       {
@@ -170,10 +171,15 @@
       "identity": null,
       "target": [
         {
-          "target": "dmg"
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
-      "icon": "./duft_icon.icns"
+      "icon": "./duft_icon.icns",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "win": {
       "target": [
@@ -220,7 +226,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "artifactName": "${productName}-${version}-${arch}-setup.exe"
+      "artifactName": "${productName}-${version}-${arch}.exe"
     },
     "msi": {
       "oneClick": false,
@@ -229,7 +235,7 @@
       "createStartMenuShortcut": true,
       "shortcutName": "DUFT Platform",
       "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
-      "artifactName": "${productName}-${version}-${arch}-setup.msi"
+      "artifactName": "${productName}-${version}-${arch}.msi"
     }
   }
 }
