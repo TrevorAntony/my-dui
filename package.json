@@ -170,7 +170,11 @@
       "identity": null,
       "target": [
         {
-          "target": "dmg"
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "icon": "./duft_icon.icns"
