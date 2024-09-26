@@ -10,7 +10,7 @@ interface DataSetProps {
   dataConnection?: any;
   columnName?: string;
   config?: { [key: string]: string };
-  transposable?: boolean;
+  transpose?: string;
   children: React.ReactNode;
 }
 
@@ -21,12 +21,15 @@ const Dataset: React.FC<DataSetProps> = ({
   dataConnection,
   columnName,
   config,
-  transposable = false,
+  transpose = "false",
   children,
 }) => {
   const initialQuery =
     config && columnName ? processQuery(propQuery, config) : propQuery;
   const [query, setQuery] = useState<string>(initialQuery);
+
+  // Parse the string prop to a boolean
+  const shouldTranspose = transpose === "true";
 
   // Use custom hook to fetch data
   const { data, loading, error, state } = useDataSetLogic(
@@ -38,7 +41,7 @@ const Dataset: React.FC<DataSetProps> = ({
 
   let finalData = data;
 
-  if (data && transposable) {
+  if (data && shouldTranspose) {
     if (data.length === 1) {
       finalData = transposeData(data);
     } else {
