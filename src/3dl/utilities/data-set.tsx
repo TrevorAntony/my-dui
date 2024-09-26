@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
+import { processQuery } from "../../helpers/visual-helpers";
 
 interface DataSetProps {
   query?: string;
   staticData?: any;
   useQuery: boolean;
   dataConnection?: any;
+  columnName?: string;
+  config?: { [key: string]: string };
   children: React.ReactNode;
 }
 
@@ -15,10 +18,15 @@ const Dataset: React.FC<DataSetProps> = ({
   staticData,
   useQuery,
   dataConnection,
+  columnName,
+  config,
   children,
 }) => {
-  const [query, setQuery] = useState<string>(propQuery);
+  const initialQuery =
+    config && columnName ? processQuery(propQuery, config) : propQuery;
+  const [query, setQuery] = useState<string>(initialQuery);
 
+  // Use custom hook to fetch data
   const { data, loading, error, state } = useDataSetLogic(
     query,
     staticData,

@@ -1,8 +1,8 @@
 import React from "react";
 import { useDataContext, DataProvider } from "../context/DataContext";
 import { useLayout } from "../ui-elements/single-layout";
-import { transposeData } from "../../helpers/visual-helpers";
 import DataTable from "./DataTable";
+import { transposeData } from "../../helpers/visual-helpers";
 
 const SingleRowDataTable = ({
   container: ContainerComponent,
