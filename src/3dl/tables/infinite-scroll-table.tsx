@@ -204,7 +204,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                 .map((header) => (
                   <th
                     key={header}
-                    className="sticky top-0 cursor-pointer select-none bg-gray-100 px-4 py-2"
+                    className="sticky top-0 cursor-pointer select-none bg-gray-100 px-4 py-2  text-gray-500 hover:text-gray-900"
                     onClick={() => handleSort(header)}
                   >
                     <div className="flex items-center justify-between">

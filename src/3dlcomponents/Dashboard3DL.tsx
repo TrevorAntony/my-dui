@@ -184,9 +184,6 @@ const Dashboard3DL: React.FC = () => {
                   modal={DuftModal}
                 />
               ),
-              SingleRowDataTable: (props: unknown) => (
-                <SingleRowDataTable {...props} container={CardComponent} />
-              ),
               StackedBarChart: (props: unknown) => (
                 <StackedBarChart {...props} container={CardComponent} />
               ),

@@ -6,7 +6,7 @@ import { processQuery, transposeData } from "../../helpers/visual-helpers";
 interface DataSetProps {
   query?: string;
   staticData?: Array<Record<string, any>>;
-  useQuery: boolean;
+  useQuery: () => null;
   filters?: Record<string, any>;
   searchColumns?: string;
   sortColumn?: string;
