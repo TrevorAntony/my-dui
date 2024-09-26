@@ -177,7 +177,7 @@
           ]
         }
       ],
-      "icon": "./duft_icon.icns"
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "win": {
       "target": [
