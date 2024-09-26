@@ -224,7 +224,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "artifactName": "${productName}-${version}-${arch}-setup.exe"
+      "artifactName": "${productName}-${version}-${arch}.exe"
     },
     "msi": {
       "oneClick": false,
@@ -233,7 +233,7 @@
       "createStartMenuShortcut": true,
       "shortcutName": "DUFT Platform",
       "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
-      "artifactName": "${productName}-${version}-${arch}-setup.msi"
+      "artifactName": "${productName}-${version}-${arch}.msi"
     }
   }
 }
