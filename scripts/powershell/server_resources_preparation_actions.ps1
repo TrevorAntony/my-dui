@@ -108,22 +108,21 @@ function Extract-Workspace-Zip-For-Data-And-Env-File {
 # Function to create and activate a Conda environment
 function Create-And-Install-Conda-Env {
   param (
-    [string]$ServerDir,
+    [string]$ServerAppDir,
     [string]$ConfigDir,
     [string]$EnvName,
     [string]$PythonVersion
   )
 
-  Write-Color "Creating Conda environment '$EnvName' with Python $PythonVersion in $Dir..." Blue
+  Write-Color "Creating Conda environment '$EnvName' with Python $PythonVersion in $ServerAppDir..." Blue
 
   # Create Conda environment
   conda create --name "$EnvName" python=$PythonVersion -y
 
-
   if ($?) {
-    Write-Color "Conda environment created successfully in $Dir." Green
+    Write-Color "Conda environment created successfully in $ServerAppDir." Green
   } else {
-    Write-Color "Failed to create Conda environment in $Dir." Red
+    Write-Color "Failed to create Conda environment in $ServerAppDir." Red
     exit 1
   }
 
@@ -131,7 +130,7 @@ function Create-And-Install-Conda-Env {
   & conda activate "$EnvName"
 
   # Install dependencies from requirements.txt
-  $RequirementsFile = "$ServerDir\requirements.txt"
+  $RequirementsFile = "$ServerAppDir\requirements.txt"
   if (Test-Path $RequirementsFile) {
     Write-Color "Installing dependencies from requirements.txt..." Blue
     conda run -n "$EnvName" pip install -r $RequirementsFile
@@ -143,7 +142,7 @@ function Create-And-Install-Conda-Env {
       exit 1
     }
   } else {
-    Write-Color "No requirements.txt found in $ServerDir." Yellow
+    Write-Color "No requirements.txt found in $ServerAppDir." Yellow
   }
 
   # Install additional dependencies from requirements.txt
@@ -162,14 +161,12 @@ function Create-And-Install-Conda-Env {
     Write-Color "No requirements.txt found in $ConfigDir." Yellow
   }
 
-  # Deactivate the Conda environment
-  conda deactivate
 }
 
 # Function to pack the Conda environment
 function Pack-Conda-Env {
   param (
-    [string]$Dir,
+    [string]$ServerAppDir,
     [string]$EnvName
   )
 
@@ -193,7 +190,7 @@ function Pack-Conda-Env {
 
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
   Write-Color "Packing Conda environment '$EnvName' into portable-venv.tar.gz..." Blue
-  conda-pack -n "$EnvName" -o "$Dir\portable-venv.tar.gz"
+  conda-pack -n "$EnvName" -o "$ServerAppDir\portable-venv.tar.gz"
 
   if ($?) {
     Write-Color "Conda environment packed successfully." Green
@@ -269,10 +266,10 @@ Extract-Zip-Files -Zip "$ZIP_DIR\$REPO2_REPO-$REPO2_BRANCH.zip" -DestDir $DUFT_C
 Extract-Workspace-Zip-For-Data-And-Env-File -Zip "$ZIP_DIR\$REPO3_REPO-$REPO3_BRANCH.zip" -DataDir "data"
 
 # Create Conda environment and install packages
-Create-And-Install-Conda-Env -ServerDir $DUFT_SERVER_DIR -ConfigDir $DUFT_CONFIG_DIR -EnvName $ENV_NAME -PythonVersion $PYTHON_VERSION
+Create-And-Install-Conda-Env -$ServerAppDir $DUFT_SERVER_DIR -$ConfigDir $DUFT_CONFIG_DIR -EnvName $ENV_NAME -PythonVersion $PYTHON_VERSION
 
 # Pack Conda environment
-Pack-Conda-Env -Dir $DUFT_SERVER_DIR -EnvName $ENV_NAME
+Pack-Conda-Env -ServerAppDir $DUFT_SERVER_DIR -EnvName $ENV_NAME
 
 # Zip the duft_resources directory
 Compress-Archive -Path $ZIP_DIR -DestinationPath $ZIP_FILE -Force

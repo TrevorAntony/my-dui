@@ -27,7 +27,6 @@ import {
   SmartDataTable,
   ScoreCardTable,
   DataTable,
-  SingleRowDataTable,
   PreviewPage,
   PivotTable,
   JSONVisual,

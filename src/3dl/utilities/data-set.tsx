@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
 import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
-import { processQuery } from "../../helpers/visual-helpers";
+import { processQuery, transposeData } from "../../helpers/visual-helpers";
 
 interface DataSetProps {
   query?: string;
@@ -14,6 +14,7 @@ interface DataSetProps {
   dataConnection?: string;
   columnName?: string;
   config?: { [key: string]: string };
+  transpose?: string;
   children: React.ReactNode;
 }
 
@@ -54,9 +55,10 @@ const Dataset: React.FC<DataSetProps> = ({
   filters = {},
   searchColumns,
   pageSize,
-  children,
   columnName,
   config,
+  transpose = "false",
+  children,
 }) => {
   const initialQuery =
     config && columnName ? processQuery(propQuery, config) : propQuery;
@@ -68,6 +70,8 @@ const Dataset: React.FC<DataSetProps> = ({
   >([]);
   const { searchText, updateSearchText } = useSearch();
   const { sortText, updateSortText } = useSort();
+
+  const shouldTranspose = transpose === "true";
 
   const { data, loading, error, state } = useDataSetLogic({
     query,
@@ -116,6 +120,21 @@ const Dataset: React.FC<DataSetProps> = ({
     [resetPage, updateSortText]
   );
 
+  let finalData = paginatedData;
+
+  if (paginatedData && shouldTranspose) {
+    if (paginatedData.length === 1) {
+      finalData = transposeData(data);
+    } else {
+      console.error("Data cannot be transposed. More than one row found.");
+      finalData = [];
+    }
+  }
+
+  if (loading) {
+    return <div>Loading data...</div>;
+  }
+
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
   }
@@ -123,7 +142,7 @@ const Dataset: React.FC<DataSetProps> = ({
   return (
     <DataProvider
       value={{
-        data: paginatedData,
+        data: finalData,
         query,
         setQuery,
         resetPage,
