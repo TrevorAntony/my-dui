@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useLayout } from "../ui-elements/single-layout";
-
 import { useDataContext } from "../context/DataContext";
 
 type SortOrder = "asc" | "desc" | null;
@@ -10,6 +9,8 @@ interface InfiniteScrollTableProps {
   header?: string;
   subHeader?: string;
   variant?: "card" | "plain" | "no-card";
+  modal?: React.ElementType;
+  children?: React.ReactNode;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -17,6 +18,8 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   header,
   subHeader = "",
   variant = "card",
+  modal: ModalComponent,
+  children,
 }) => {
   const { data, loading, pageUpdater, searchText, handleSearchChange } =
     useDataContext();
@@ -33,6 +36,9 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>(null);
   const [lastLoadedData, setLastLoadedData] = useState<any[]>([]);
+  const [selectedRowData, setSelectedRowData] = useState<any>(null);
+  const [renderedChild, setRenderedChild] = useState<React.ReactNode>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleScroll = () => {
     const table = tableRef.current;
@@ -87,6 +93,26 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       setLastLoadedData(data);
     }
   }, [data]);
+
+  const handleCellClick = (key: string, row: any) => {
+    setSelectedRowData(row);
+
+    const matchingChild = React.Children.toArray(children).find(
+      (child) => React.isValidElement(child) && child.props.columnName === key
+    );
+
+    if (matchingChild) {
+      console.log("matched child");
+      const clonedChild = React.cloneElement(matchingChild, {
+        config: row,
+      });
+      setRenderedChild(clonedChild);
+    } else {
+      setRenderedChild(null);
+    }
+
+    setIsModalOpen(true);
+  };
 
   const content = (
     <div className="relative">
@@ -217,42 +243,74 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                 <tr key={row.id}>
                   {headers
                     ?.filter((header) => visibleColumns[header])
-                    .map((header) => (
-                      <td
-                        key={header}
-                        className="border-b border-gray-200 px-4 py-2 text-center"
-                      >
-                        {row[header]}
-                      </td>
-                    ))}
+                    .map((header) => {
+                      const hasMatchingChild = React.Children.toArray(
+                        children
+                      ).some(
+                        (child) =>
+                          React.isValidElement(child) &&
+                          child.props.columnName === header
+                      );
+                      return (
+                        <td
+                          key={`${row.id}-${header}`}
+                          className="border-b border-gray-300 px-4 py-2 text-center"
+                          onClick={
+                            hasMatchingChild
+                              ? () => handleCellClick(header, row)
+                              : undefined
+                          }
+                          style={
+                            hasMatchingChild
+                              ? { cursor: "pointer", color: "blue" }
+                              : {}
+                          }
+                        >
+                          {row[header]}
+                        </td>
+                      );
+                    })}
                 </tr>
               )
             )}
           </tbody>
         </table>
-
-        {loading && <p className="py-4 text-center">Loading...</p>}
       </div>
+
+      {/* Modal for rendering custom content */}
+      {isModalOpen && ModalComponent && (
+        <ModalComponent
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          modalSize="medium"
+          title={selectedRowData.name}
+        >
+          {renderedChild ? (
+            renderedChild
+          ) : (
+            <div>No custom content available for this row</div>
+          )}
+        </ModalComponent>
+      )}
     </div>
   );
 
   const wrappedContent =
     layout === "single-layout" ? (
-      <div className="mt-4">
-        {/* "block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800" */}
+      <div className="w-full">{content}</div>
+    ) : ContainerComponent ? (
+      <ContainerComponent
+        header={header}
+        subHeader={subHeader}
+        variant={variant}
+      >
         {content}
-      </div>
+      </ContainerComponent>
     ) : (
       content
     );
 
-  return ContainerComponent && layout !== "single-layout" ? (
-    <ContainerComponent header={header} subHeader={subHeader} variant={variant}>
-      {wrappedContent}
-    </ContainerComponent>
-  ) : (
-    wrappedContent
-  );
+  return wrappedContent;
 };
 
 export default InfiniteScrollTable;

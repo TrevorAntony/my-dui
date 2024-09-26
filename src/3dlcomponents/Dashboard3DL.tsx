@@ -60,6 +60,7 @@ import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 import DuftTile from "../components/duft-tile";
 import DuftFilter from "../ui-components/filter-components";
 import DuftSingleView from "../ui-components/table-components";
+import DuftModal from "../components/duft-modal";
 
 const useDashboardData = (id) => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -178,7 +179,11 @@ const Dashboard3DL: React.FC = () => {
                 <DataTable {...props} container={CardComponent} />
               ),
               InfiniteScrollTable: (props: unknown) => (
-                <InfiniteScrollTable {...props} container={CardComponent} />
+                <InfiniteScrollTable
+                  {...props}
+                  container={CardComponent}
+                  modal={DuftModal}
+                />
               ),
               SingleRowDataTable: (props: unknown) => (
                 <SingleRowDataTable {...props} container={CardComponent} />
