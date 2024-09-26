@@ -22,9 +22,9 @@ const Dataset: React.FC<DataSetProps> = ({
   config,
   children,
 }) => {
-  const finalQuery =
+  const initialQuery =
     config && columnName ? processQuery(propQuery, config) : propQuery;
-  const [query, setQuery] = useState<string>(finalQuery);
+  const [query, setQuery] = useState<string>(initialQuery);
 
   // Use custom hook to fetch data
   const { data, loading, error, state } = useDataSetLogic(
