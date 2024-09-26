@@ -1,16 +1,19 @@
 import React, { useState, useRef, useMemo, useCallback } from "react";
 import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
+import { processQuery } from "../../helpers/visual-helpers";
 
 interface DataSetProps {
   query?: string;
   staticData?: Array<Record<string, any>>;
   useQuery: boolean;
-  dataConnection?: string;
   filters?: Record<string, any>;
   searchColumns?: string;
   sortColumn?: string;
   pageSize?: number;
+  dataConnection?: string;
+  columnName?: string;
+  config?: { [key: string]: string };
   children: React.ReactNode;
 }
 
@@ -43,8 +46,13 @@ const Dataset: React.FC<DataSetProps> = ({
   sortColumn,
   pageSize,
   children,
+  columnName,
+  config,
 }) => {
-  const [query, setQuery] = useState<string>(propQuery);
+  const initialQuery =
+    config && columnName ? processQuery(propQuery, config) : propQuery;
+  const [query, setQuery] = useState<string>(initialQuery);
+
   const [currentPage, updatePage, resetPage] = useCurrentPage(1);
   const [paginatedData, setPaginatedData] = useState<
     Array<Record<string, any>>
