@@ -131,10 +131,6 @@ const Dataset: React.FC<DataSetProps> = ({
     }
   }
 
-  if (loading) {
-    return <div>Loading data...</div>;
-  }
-
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
   }

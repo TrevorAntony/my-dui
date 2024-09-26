@@ -48,8 +48,9 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   const [renderedChild, setRenderedChild] = useState<React.ReactNode>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [sortColumn, setSortColumn] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [sortState, setSortState] = useState<Record<string, "ASC" | "DESC">>(
+    {}
+  );
 
   const handleScroll = () => {
     const table = tableRef.current;
@@ -69,30 +70,21 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   };
 
   const handleSort = (column: string) => {
-    if (sortColumn === column) {
-      // If clicking the same column, toggle the sort direction
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      // If clicking a new column, set it as the sort column and default to ascending
-      setSortColumn(column);
-      setSortDirection("asc");
-    }
+    const currentSort = sortState[column] || "ASC";
+    const newSort = currentSort === "ASC" ? "DESC" : "ASC";
+    const sortKey = `${column} ${newSort}`;
 
-    // Call the external sort function
-    handleSortChange?.(column, sortDirection);
+    setSortState((prev) => ({
+      ...prev,
+      [column]: newSort,
+    }));
+
+    handleSortChange?.(sortKey);
   };
 
   const sortedData = useMemo(() => {
-    if (!sortColumn || !data) return data;
-
-    return [...data].sort((a, b) => {
-      if (a[sortColumn] < b[sortColumn])
-        return sortDirection === "asc" ? -1 : 1;
-      if (a[sortColumn] > b[sortColumn])
-        return sortDirection === "asc" ? 1 : -1;
-      return 0;
-    });
-  }, [data, sortColumn, sortDirection]);
+    return data;
+  }, [data]);
 
   // Ensure columns are visible by default when data is available
   useEffect(() => {
@@ -155,7 +147,6 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
             className="rounded border border-gray-300 bg-gray-100 p-2 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={() => setDropdownOpen((prev) => !prev)}
           >
-            {/* <FiColumns className="text-gray-500" /> */}
             <svg
               className="h-6 w-6 text-gray-500 dark:text-white"
               aria-hidden="true"
@@ -203,7 +194,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       <div
         ref={tableRef}
         onScroll={handleScroll}
-        className="h-96 overflow-y-auto rounded border border-gray-300"
+        className="h-96 overflow-y-auto rounded"
       >
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-gray-50">
@@ -213,7 +204,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                 .map((header) => (
                   <th
                     key={header}
-                    className="sticky top-0 cursor-pointer select-none border-b border-l border-gray-300 bg-gray-100 px-4 py-2"
+                    className="sticky top-0 cursor-pointer select-none bg-gray-100 px-4 py-2"
                     onClick={() => handleSort(header)}
                   >
                     <div className="flex items-center justify-between">
@@ -222,14 +213,10 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                           {header.charAt(0).toUpperCase() + header.slice(1)}
                         </span>
                         <span>
-                          {sortColumn === header ? (
-                            sortDirection === "asc" ? (
-                              <FiChevronUp className="h-4 w-4 text-gray-600" />
-                            ) : (
-                              <FiChevronDown className="h-4 w-4 text-gray-600" />
-                            )
+                          {sortState[header] === "ASC" ? (
+                            <FiChevronUp className="h-4 w-4 text-gray-600" />
                           ) : (
-                            <div className="h-4 w-4" /> // Placeholder to maintain layout
+                            <FiChevronDown className="h-4 w-4 text-gray-600" />
                           )}
                         </span>
                       </div>
@@ -255,17 +242,18 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                     return (
                       <td
                         key={`${row.id}-${header}`}
-                        className="border border-gray-300 px-4 py-2"
+                        className="border-b border-gray-300 p-4"
                         onClick={
                           hasMatchingChild
                             ? () => handleCellClick(header, row)
                             : undefined
                         }
-                        style={
-                          hasMatchingChild
-                            ? { cursor: "pointer", color: "blue" }
-                            : {}
-                        }
+                        style={{
+                          cursor: hasMatchingChild ? "pointer" : "default",
+                          textDecoration: hasMatchingChild
+                            ? "underline"
+                            : "none",
+                        }}
                       >
                         {row[header]}
                       </td>
@@ -275,43 +263,32 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
             ))}
           </tbody>
         </table>
-        {loading && <p className="py-4 text-center">Loading...</p>}
+        {loading && (
+          <div className="flex justify-center py-4">
+            <FiLoader className="animate-spin text-gray-500" />
+          </div>
+        )}
       </div>
 
-      {/* Modal for rendering custom content */}
+      {/* Modal rendering */}
       {isModalOpen && ModalComponent && (
         <ModalComponent
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          modalSize="medium"
-          title={selectedRowData.name}
         >
-          {renderedChild ? (
-            renderedChild
-          ) : (
-            <div>No custom content available for this row</div>
-          )}
+          {renderedChild ? renderedChild : selectedRowData}
         </ModalComponent>
       )}
     </div>
   );
 
-  const wrappedContent =
-    layout === "single-layout" ? (
-      <div className="w-full">{content}</div>
-    ) : ContainerComponent ? (
-      <ContainerComponent
-        header={header}
-        subHeader={subHeader}
-        variant={variant}
-      >
-        {content}
-      </ContainerComponent>
-    ) : (
-      content
-    );
-
-  return wrappedContent;
+  return ContainerComponent ? (
+    <ContainerComponent header={header} subHeader={subHeader} variant={variant}>
+      {content}
+    </ContainerComponent>
+  ) : (
+    content
+  );
 };
 
 export default InfiniteScrollTable;
