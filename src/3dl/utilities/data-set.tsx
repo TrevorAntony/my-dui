@@ -108,6 +108,14 @@ const Dataset: React.FC<DataSetProps> = ({
     [resetPage, updateSearchText]
   );
 
+  const handleSortChange = useCallback(
+    (newSortText: string) => {
+      resetPage();
+      updateSortText(newSortText);
+    },
+    [resetPage, updateSortText]
+  );
+
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
   }
@@ -122,7 +130,7 @@ const Dataset: React.FC<DataSetProps> = ({
         pageUpdater: updatePage,
         loading,
         handleSearchChange,
-        updateSortText,
+        handleSortChange,
       }}
     >
       {state?.debug && (

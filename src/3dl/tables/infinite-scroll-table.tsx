@@ -1,9 +1,13 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { useLayout } from "../ui-elements/single-layout";
 import { useDataContext } from "../context/DataContext";
-import { FiColumns, FiSearch, FiLoader } from "react-icons/fi";
-
-type SortOrder = "asc" | "desc" | null;
+import {
+  FiColumns,
+  FiSearch,
+  FiLoader,
+  FiChevronUp,
+  FiChevronDown,
+} from "react-icons/fi";
 
 interface InfiniteScrollTableProps {
   container?: React.ElementType;
@@ -28,7 +32,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     pageUpdater,
     searchText,
     handleSearchChange,
-    updateSortText,
+    handleSortChange,
   } = useDataContext();
 
   const layout = useLayout();
@@ -40,12 +44,12 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     {}
   );
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [sortedColumn, setSortedColumn] = useState<string | null>(null);
-  const [sortOrder, setSortOrder] = useState<SortOrder>(null);
-  const [lastLoadedData, setLastLoadedData] = useState<any[]>([]);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [renderedChild, setRenderedChild] = useState<React.ReactNode>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const handleScroll = () => {
     const table = tableRef.current;
@@ -64,27 +68,31 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     }));
   };
 
-  const sortData = (column: string) => {
-    if (sortedColumn === column) {
-      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+  const handleSort = (column: string) => {
+    if (sortColumn === column) {
+      // If clicking the same column, toggle the sort direction
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-      setSortedColumn(column);
-      setSortOrder("asc");
+      // If clicking a new column, set it as the sort column and default to ascending
+      setSortColumn(column);
+      setSortDirection("asc");
     }
+
+    // Call the external sort function
+    handleSortChange?.(column, sortDirection);
   };
 
-  const sortedData = [...(data || [])].sort((a, b) => {
-    if (!sortedColumn || !sortOrder) return 0;
+  const sortedData = useMemo(() => {
+    if (!sortColumn || !data) return data;
 
-    const valueA = a[sortedColumn];
-    const valueB = b[sortedColumn];
-
-    if (sortOrder === "asc") {
-      return valueA > valueB ? 1 : -1;
-    } else {
-      return valueA < valueB ? 1 : -1;
-    }
-  });
+    return [...data].sort((a, b) => {
+      if (a[sortColumn] < b[sortColumn])
+        return sortDirection === "asc" ? -1 : 1;
+      if (a[sortColumn] > b[sortColumn])
+        return sortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
+  }, [data, sortColumn, sortDirection]);
 
   // Ensure columns are visible by default when data is available
   useEffect(() => {
@@ -97,7 +105,6 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
         {} as Record<string, boolean>
       );
       setVisibleColumns(initialVisibility);
-      setLastLoadedData(data);
     }
   }, [data]);
 
@@ -148,7 +155,24 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
             className="rounded border border-gray-300 bg-gray-100 p-2 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={() => setDropdownOpen((prev) => !prev)}
           >
-            <FiColumns className="text-gray-500" />
+            {/* <FiColumns className="text-gray-500" /> */}
+            <svg
+              className="h-6 w-6 text-gray-500 dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M15 5v14M9 5v14M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"
+              />
+            </svg>
           </button>
 
           {dropdownOpen && (
@@ -190,64 +214,22 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                   <th
                     key={header}
                     className="sticky top-0 cursor-pointer select-none border-b border-l border-gray-300 bg-gray-100 px-4 py-2"
-                    onClick={() => sortData(header)}
+                    onClick={() => handleSort(header)}
                   >
                     <div className="flex items-center justify-between">
-                      {/* Column header text and sort button placed together */}
                       <div className="flex items-center space-x-2">
                         <span>
                           {header.charAt(0).toUpperCase() + header.slice(1)}
                         </span>
-
-                        {/* Column sort button right next to header text */}
                         <span>
-                          {sortedColumn === header ? (
-                            sortOrder === "asc" ? (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M5 15l7-7 7 7"
-                                />
-                              </svg>
+                          {sortColumn === header ? (
+                            sortDirection === "asc" ? (
+                              <FiChevronUp className="h-4 w-4 text-gray-600" />
                             ) : (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M19 9l-7 7-7-7"
-                                />
-                              </svg>
+                              <FiChevronDown className="h-4 w-4 text-gray-600" />
                             )
                           ) : (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 text-gray-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 15l7-7 7 7M19 9l-7 7-7-7"
-                              />
-                            </svg>
+                            <div className="h-4 w-4" /> // Placeholder to maintain layout
                           )}
                         </span>
                       </div>
@@ -258,43 +240,42 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
           </thead>
 
           <tbody>
-            {(sortedData.length > 0 ? sortedData : lastLoadedData)?.map(
-              (row) => (
-                <tr key={row.id}>
-                  {headers
-                    ?.filter((header) => visibleColumns[header])
-                    .map((header) => {
-                      const hasMatchingChild = React.Children.toArray(
-                        children
-                      ).some(
-                        (child) =>
-                          React.isValidElement(child) &&
-                          child.props.columnName === header
-                      );
-                      return (
-                        <td
-                          key={`${row.id}-${header}`}
-                          className="border border-gray-300 px-4 py-2" // Removed 'text-center' class and added 'border'
-                          onClick={
-                            hasMatchingChild
-                              ? () => handleCellClick(header, row)
-                              : undefined
-                          }
-                          style={
-                            hasMatchingChild
-                              ? { cursor: "pointer", color: "blue" }
-                              : {}
-                          }
-                        >
-                          {row[header]}
-                        </td>
-                      );
-                    })}
-                </tr>
-              )
-            )}
+            {sortedData?.map((row) => (
+              <tr key={row.id}>
+                {headers
+                  ?.filter((header) => visibleColumns[header])
+                  .map((header) => {
+                    const hasMatchingChild = React.Children.toArray(
+                      children
+                    ).some(
+                      (child) =>
+                        React.isValidElement(child) &&
+                        child.props.columnName === header
+                    );
+                    return (
+                      <td
+                        key={`${row.id}-${header}`}
+                        className="border border-gray-300 px-4 py-2"
+                        onClick={
+                          hasMatchingChild
+                            ? () => handleCellClick(header, row)
+                            : undefined
+                        }
+                        style={
+                          hasMatchingChild
+                            ? { cursor: "pointer", color: "blue" }
+                            : {}
+                        }
+                      >
+                        {row[header]}
+                      </td>
+                    );
+                  })}
+              </tr>
+            ))}
           </tbody>
         </table>
+        {loading && <p className="py-4 text-center">Loading...</p>}
       </div>
 
       {/* Modal for rendering custom content */}
