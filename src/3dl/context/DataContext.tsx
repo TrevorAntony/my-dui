@@ -6,6 +6,7 @@ interface DataContextType {
   pageUpdater?: () => void;
   resetPage?: () => void;
   handleSearchChange?: (newSearchText: string) => void;
+  updateSortText?: (newSearchText: string) => void;
   setQuery: Dispatch<SetStateAction<string>>;
   query: string;
   loading?: boolean;

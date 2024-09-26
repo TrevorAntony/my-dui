@@ -37,13 +37,22 @@ const useSearch = (initialSearchText: string = "", delay: number = 500) => {
   return { searchText, updateSearchText };
 };
 
+const useSort = (initialSortText: string = "") => {
+  const [sortText, setSortText] = useState<string>(initialSortText);
+
+  const updateSortText = useCallback((newSortText: string) => {
+    setSortText(newSortText);
+  }, []);
+
+  return { sortText, updateSortText };
+};
+
 const Dataset: React.FC<DataSetProps> = ({
   query: propQuery = "",
   staticData,
   useQuery,
   filters = {},
   searchColumns,
-  sortColumn,
   pageSize,
   children,
   columnName,
@@ -58,6 +67,7 @@ const Dataset: React.FC<DataSetProps> = ({
     Array<Record<string, any>>
   >([]);
   const { searchText, updateSearchText } = useSearch();
+  const { sortText, updateSortText } = useSort();
 
   const { data, loading, error, state } = useDataSetLogic({
     query,
@@ -66,7 +76,7 @@ const Dataset: React.FC<DataSetProps> = ({
     filters,
     searchText,
     searchColumns,
-    sortColumn,
+    sortColumn: sortText,
     pageSize,
     currentPage,
   });
@@ -112,6 +122,7 @@ const Dataset: React.FC<DataSetProps> = ({
         pageUpdater: updatePage,
         loading,
         handleSearchChange,
+        updateSortText,
       }}
     >
       {state?.debug && (

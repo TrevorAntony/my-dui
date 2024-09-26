@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useLayout } from "../ui-elements/single-layout";
 import { useDataContext } from "../context/DataContext";
+import { FiColumns, FiSearch, FiLoader } from "react-icons/fi";
 
 type SortOrder = "asc" | "desc" | null;
 
@@ -21,8 +22,14 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   modal: ModalComponent,
   children,
 }) => {
-  const { data, loading, pageUpdater, searchText, handleSearchChange } =
-    useDataContext();
+  const {
+    data,
+    loading,
+    pageUpdater,
+    searchText,
+    handleSearchChange,
+    updateSortText,
+  } = useDataContext();
 
   const layout = useLayout();
   const tableRef = useRef<HTMLDivElement>(null);
@@ -102,7 +109,6 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     );
 
     if (matchingChild) {
-      console.log("matched child");
       const clonedChild = React.cloneElement(matchingChild, {
         config: row,
       });
@@ -117,23 +123,32 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   const content = (
     <div className="relative">
       {/* Search input and column toggle */}
-      <div className="mb-4 flex items-center justify-between space-x-4">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchText}
-          onChange={(e) => handleSearchChange?.(e.target.value)}
-          className="flex-1 rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      <div className="mb-4 flex items-center justify-end space-x-4">
+        {/* Search input with icon and loading spinner */}
+        <div className="relative flex-1" style={{ maxWidth: "500px" }}>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={(e) => handleSearchChange?.(e.target.value)}
+            className="w-full rounded border border-gray-300 p-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div className="absolute inset-y-0 left-0 flex items-center pl-2">
+            {loading ? (
+              <FiLoader className="animate-spin text-gray-500" />
+            ) : (
+              <FiSearch className="text-gray-500" />
+            )}
+          </div>
+        </div>
 
-        {/* Column toggle dropdown */}
+        {/* Column toggle icon button */}
         <div className="relative">
           <button
-            className="h-full rounded border border-gray-300 bg-gray-100 px-4 py-2 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded border border-gray-300 bg-gray-100 p-2 shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={() => setDropdownOpen((prev) => !prev)}
-            style={{ height: "40px" }}
           >
-            Toggle Columns
+            <FiColumns className="text-gray-500" />
           </button>
 
           {dropdownOpen && (
@@ -174,34 +189,54 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                 .map((header) => (
                   <th
                     key={header}
-                    className="sticky top-0 cursor-pointer select-none border-b border-gray-300 bg-gray-100 px-4 py-2 text-center"
+                    className="sticky top-0 cursor-pointer select-none border-b border-l border-gray-300 bg-gray-100 px-4 py-2"
                     onClick={() => sortData(header)}
                   >
-                    <div className="flex items-center justify-center space-x-2">
-                      <span>
-                        {header.charAt(0).toUpperCase() + header.slice(1)}
-                      </span>
-                      <span>
-                        {sortedColumn === header ? (
-                          sortOrder === "asc" ? (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 15l7-7 7 7"
-                              />
-                            </svg>
+                    <div className="flex items-center justify-between">
+                      {/* Column header text and sort button placed together */}
+                      <div className="flex items-center space-x-2">
+                        <span>
+                          {header.charAt(0).toUpperCase() + header.slice(1)}
+                        </span>
+
+                        {/* Column sort button right next to header text */}
+                        <span>
+                          {sortedColumn === header ? (
+                            sortOrder === "asc" ? (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 15l7-7 7 7"
+                                />
+                              </svg>
+                            ) : (
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 9l-7 7-7-7"
+                                />
+                              </svg>
+                            )
                           ) : (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
+                              className="h-4 w-4 text-gray-400"
                               fill="none"
                               viewBox="0 0 24 24"
                               stroke="currentColor"
@@ -210,27 +245,12 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
+                                d="M5 15l7-7 7 7M19 9l-7 7-7-7"
                               />
                             </svg>
-                          )
-                        ) : (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 text-gray-400"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 15l7-7 7 7M19 9l-7 7-7-7"
-                            />
-                          </svg>
-                        )}
-                      </span>
+                          )}
+                        </span>
+                      </div>
                     </div>
                   </th>
                 ))}
@@ -254,7 +274,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
                       return (
                         <td
                           key={`${row.id}-${header}`}
-                          className="border-b border-gray-300 px-4 py-2 text-center"
+                          className="border border-gray-300 px-4 py-2" // Removed 'text-center' class and added 'border'
                           onClick={
                             hasMatchingChild
                               ? () => handleCellClick(header, row)
