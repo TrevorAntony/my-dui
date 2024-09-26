@@ -89,20 +89,19 @@ extract_workspace_zip_for_data_and_env_file() {
 
 # Function to create and activate a Conda environment
 create_and_install_conda_env() {
-  local dir=$1
-  local config_dir=$2
-  local env_name=$3
-  local python_version=$4
+  local server_app_dir=$1
+  local env_name=$2
+  local python_version=$3
 
-  write_color "Creating Conda environment '$env_name' with Python $python_version in $dir..." Blue
+  write_color "Creating Conda environment '$env_name' with Python $python_version in $server_app_dir..." Blue
 
   # Create Conda environment
   conda create --name "$env_name" python="$python_version" -y
 
   if [ $? -eq 0 ]; then
-    write_color "Conda environment created successfully in $dir." Green
+    write_color "Conda environment created successfully in $server_app_dir." Green
   else
-    write_color "Failed to create Conda environment in $dir." Red
+    write_color "Failed to create Conda environment in $server_app_dir." Red
     exit 1
   fi
 
@@ -110,10 +109,10 @@ create_and_install_conda_env() {
   conda activate "$env_name"
 
   # Install dependencies from requirements.txt
-  local requirements_file="$dir/requirements.txt"
+  local requirements_file="$server_app_dir/requirements.txt"
   if [ -f "$requirements_file" ]; then
     write_color "Installing dependencies from requirements.txt..." Blue
-    conda run -n "$env_name" pip install -r "$requirements_file"
+    pip install -r "$requirements_file"
 
     if [ $? -eq 0 ]; then
       write_color "Dependencies installed successfully." Green
@@ -122,32 +121,14 @@ create_and_install_conda_env() {
       exit 1
     fi
   else
-    write_color "No requirements.txt found in $dir." Yellow
+    write_color "No requirements.txt found in $server_app_dir." Yellow
   fi
 
-  # Install additional dependencies from requirements.txt
-  local requirements_file="$config_dir/requirements.txt"
-  if [ -f "$requirements_file" ]; then
-    write_color "Installing additional dependencies from requirements.txt..." Blue
-    conda run -n "$env_name" pip install -r "$requirements_file"
-
-    if [ $? -eq 0 ]; then
-      write_color "Additional Dependencies installed successfully." Green
-    else
-      write_color "Failed to install additional dependencies." Red
-      exit 1
-    fi
-  else
-    write_color "No requirements.txt found in $config_dir." Yellow
-  fi
-
-  # Deactivate the Conda environment
-  conda deactivate
 }
 
 # Function to pack the Conda environment
 pack_conda_env() {
-  local dir=$1
+  local server_app_dir=$1
   local env_name=$2
 
   # Check if conda-pack is installed, and install it if necessary
@@ -167,7 +148,7 @@ pack_conda_env() {
 
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
   write_color "Packing Conda environment '$env_name' into portable-venv.tar.gz..." Blue
-  conda-pack -n "$env_name" -o "$dir/portable-venv.tar.gz"
+  conda-pack -n "$env_name" -o "$server_app_dir/portable-venv.tar.gz"
 
   if [ $? -eq 0 ]; then
     write_color "Conda environment packed successfully." Green
@@ -229,7 +210,7 @@ extract_zip_files "$ZIP_DIR/$REPO2_REPO-$REPO2_BRANCH.zip" "$DUFT_CONFIG_DIR"
 extract_workspace_zip_for_data_and_env_file "$ZIP_DIR/$REPO3_REPO-$REPO3_BRANCH.zip" "data"
 
 # Create Conda environment and install packages
-create_and_install_conda_env "$DUFT_SERVER_DIR" "$DUFT_CONFIG_DIR" "$ENV_NAME" "$PYTHON_VERSION"
+create_and_install_conda_env "$DUFT_SERVER_DIR" "$ENV_NAME" "$PYTHON_VERSION"
 
 # Pack Conda environment
 pack_conda_env "$DUFT_SERVER_DIR" "$ENV_NAME"
