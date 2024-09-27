@@ -47,6 +47,7 @@ import {
   PaginatedSearchDataSet,
   QueryProvider,
   Query,
+  InfiniteScrollTable,
 } from "../3dl";
 import {
   DuftGrid,
@@ -58,6 +59,7 @@ import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 import DuftTile from "../components/duft-tile";
 import DuftFilter from "../ui-components/filter-components";
 import DuftSingleView from "../ui-components/table-components";
+import DuftModal from "../components/duft-modal";
 
 const useDashboardData = (id) => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -174,6 +176,13 @@ const Dashboard3DL: React.FC = () => {
               ),
               DataTable: (props: unknown) => (
                 <DataTable {...props} container={CardComponent} />
+              ),
+              InfiniteScrollTable: (props: unknown) => (
+                <InfiniteScrollTable
+                  {...props}
+                  container={CardComponent}
+                  modal={DuftModal}
+                />
               ),
               StackedBarChart: (props: unknown) => (
                 <StackedBarChart {...props} container={CardComponent} />

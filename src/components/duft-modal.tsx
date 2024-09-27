@@ -52,7 +52,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
         overflowX: "auto",
       }}
     >
-      <div className="relative flex justify-between p-6 text-lg font-semibold">
+      <div className="relative flex justify-between px-6 pt-6 text-lg font-semibold">
         <span>{title || "More info"}</span>
 
         <button

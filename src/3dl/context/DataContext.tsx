@@ -4,9 +4,13 @@ import React, { createContext, useContext } from "react";
 interface DataContextType {
   data: any[];
   pageUpdater?: () => void;
-  handleSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  resetPage?: () => void;
+  handleSearchChange?: (newSearchText: string) => void;
+  handleSortChange?: (newSearchText: string) => void;
   setQuery: Dispatch<SetStateAction<string>>;
   query: string;
+  loading?: boolean;
+  searchText?: string;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);

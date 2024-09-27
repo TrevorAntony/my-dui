@@ -177,8 +177,6 @@ const BottomMenu: FC = function () {
 
       const { message, dataTask } = parsedData;
 
-      console.log("parsedData received:", parsedData);
-
       // Define a maximum length for messages
       const maxLength = 150;
 

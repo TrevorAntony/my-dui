@@ -23,8 +23,7 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
     dataLabels: {
       formatter: function (val, opts) {
         const label = opts.w.globals.labels[opts.seriesIndex];
-        const percentage = val.toFixed(1) + "%";
-        return `${label})`;
+        return `${label}`;
       },
       background: {
         enabled: true,
@@ -60,6 +59,7 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
 
   mergedOptions = deepMerge(mergedOptions, userOptions);
 
+  console.log({ mergedOptions });
   return (
     <div
       style={{
