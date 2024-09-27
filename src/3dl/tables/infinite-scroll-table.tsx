@@ -1,13 +1,7 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import { useLayout } from "../ui-elements/single-layout";
 import { useDataContext } from "../context/DataContext";
-import {
-  FiColumns,
-  FiSearch,
-  FiLoader,
-  FiChevronUp,
-  FiChevronDown,
-} from "react-icons/fi";
+import { FiSearch, FiLoader, FiChevronUp, FiChevronDown } from "react-icons/fi";
 
 interface InfiniteScrollTableProps {
   container?: React.ElementType;

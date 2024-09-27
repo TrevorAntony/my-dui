@@ -23,8 +23,12 @@ export function transposeData(data) {
   }));
 }
 
-export const processQuery = (query: string, config: { [key: string]: string }) => {
-    return query.replace(/\$\{(\w+)\}/g, (match, placeholder) => {
-      return config[placeholder] || match;
-    });
-  };
+export const processQuery = (
+  query: string,
+  config: { [key: string]: string }
+) => {
+  const processedQuery = query.replace(/\{(\w+)\}/g, (match, placeholder) => {
+    return config[placeholder] || match;
+  });
+  return processedQuery;
+};
