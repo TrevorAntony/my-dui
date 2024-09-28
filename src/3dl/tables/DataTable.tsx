@@ -2,7 +2,20 @@ import React from "react";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../ui-elements/single-layout";
 
-const DataTable = ({
+// Define types for props and data
+interface DataTableProps {
+  container?: React.ComponentType<{
+    header: string;
+    subHeader?: string;
+    variant?: string;
+    children: React.ReactNode;
+  }>;
+  header: string;
+  subHeader?: string;
+  variant?: string;
+}
+
+const DataTable: React.FC<DataTableProps> = ({
   container: ContainerComponent,
   header,
   subHeader = "",
