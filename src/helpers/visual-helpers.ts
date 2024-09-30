@@ -27,8 +27,11 @@ export const processQuery = (
   query: string,
   config: { [key: string]: string }
 ) => {
-  const processedQuery = query.replace(/\{(\w+)\}/g, (match, placeholder) => {
-    return config[placeholder] || match;
-  });
+  const processedQuery = query.replace(
+    /\{([^{}]+)\}/g,
+    (match, placeholder) => {
+      return config[placeholder] || match;
+    }
+  );
   return processedQuery;
 };
