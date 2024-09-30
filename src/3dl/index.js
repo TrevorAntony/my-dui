@@ -46,3 +46,4 @@ export { default as PaginatedSearchDataSet } from "./utilities/pagination-search
 export { default as QueryProvider } from "./context/QueryContext";
 export { default as Query } from "./utilities/query-component";
 export { default as InfiniteScrollTable } from "./tables/infinite-scroll-table/infinite-scroll-table";
+export { default as ExportData } from "./utilities/export-data/export-data";

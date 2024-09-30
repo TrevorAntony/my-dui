@@ -48,6 +48,7 @@ import {
   QueryProvider,
   Query,
   InfiniteScrollTable,
+  ExportData,
 } from "../3dl";
 import {
   DuftGrid,
@@ -214,6 +215,7 @@ const Dashboard3DL: React.FC = () => {
               ChartComponent: CardComponent,
               SingleView: DuftSingleView,
               SingleViewHeader: DuftSingleView.Header,
+              ExportData,
             }}
             jsx={dashboardData}
           />
