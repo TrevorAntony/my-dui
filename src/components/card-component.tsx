@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from "react";
-import React from "react";
 import { NavLink } from "react-router-dom";
+import { ExportData } from "../3dl";
 
 type MoreInfoProps = {
   text: string;
@@ -13,8 +13,9 @@ type CardComponentProps = {
   children: ReactNode;
   footer?: ReactNode;
   moreInfo?: MoreInfoProps;
-  className?: string; // Optional className to override styles
-  variant?: "card" | "no-card" | "plain"; // New variant prop
+  className?: string;
+  variant?: "card" | "no-card" | "plain";
+  exportData?: string | boolean;
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -25,12 +26,16 @@ const CardComponent: FC<CardComponentProps> = ({
   moreInfo,
   className = "",
   variant = "card", // Default to "card"
+  exportData = "false", // Default to false
 }) => {
+  const shouldExportData = exportData === "true";
+
   const renderContent = () => (
     <>
       {variant !== "plain" && (
-        <div className="mb-3">
-          <div className="shrink-0">
+        <div className="mb-3 flex items-start justify-between">
+          {/* Header and subHeader */}
+          <div>
             <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
               {header}
             </h3>
@@ -40,6 +45,12 @@ const CardComponent: FC<CardComponentProps> = ({
               </span>
             )}
           </div>
+          {/* Conditionally render ExportData, aligned to the top */}
+          {shouldExportData && (
+            <div className="mt-1 self-start">
+              <ExportData />
+            </div>
+          )}
         </div>
       )}
       {/* Ensure the children are centered */}
