@@ -60,8 +60,9 @@ import DuftTile from "../components/duft-tile";
 import DuftFilter from "../ui-components/filter-components";
 import DuftSingleView from "../ui-components/table-components";
 import DuftModal from "../components/duft-modal";
+import type { ContainerComponentProps } from "../3dl/types/types";
 
-const useDashboardData = (id) => {
+const useDashboardData = (id: string) => {
   const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
@@ -179,9 +180,11 @@ const Dashboard3DL: React.FC = () => {
               ),
               InfiniteScrollTable: (props: unknown) => (
                 <InfiniteScrollTable
-                  {...props}
-                  container={CardComponent}
-                  modal={DuftModal}
+                  {...(props as Record<string, unknown>)}
+                  container={
+                    CardComponent as React.ComponentType<ContainerComponentProps>
+                  }
+                  modal={DuftModal as React.ComponentType<unknown>}
                 />
               ),
               StackedBarChart: (props: unknown) => (
@@ -207,8 +210,6 @@ const Dashboard3DL: React.FC = () => {
               TabHeader,
               Tile: DuftTile,
               DetailsView,
-              //NB: ability to add design system through state update in dashboard component.
-              //Also, how to pass themes to the visual through context.
               Grid: DuftGrid,
               ChartComponent: CardComponent,
               SingleView: DuftSingleView,
