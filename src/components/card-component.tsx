@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { ExportData } from "../3dl";
+import { Dataset, ExportData } from "../3dl";
+import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
 
 type MoreInfoProps = {
   text: string;
@@ -16,6 +17,7 @@ type CardComponentProps = {
   className?: string;
   variant?: "card" | "no-card" | "plain";
   exportData?: string | boolean;
+  query?: string;
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -25,8 +27,9 @@ const CardComponent: FC<CardComponentProps> = ({
   footer,
   moreInfo,
   className = "",
-  variant = "card", // Default to "card"
-  exportData = "false", // Default to false
+  variant = "card",
+  exportData = "false",
+  query,
 }) => {
   const shouldExportData = exportData === "true";
 
@@ -48,7 +51,13 @@ const CardComponent: FC<CardComponentProps> = ({
           {/* Conditionally render ExportData, aligned to the top */}
           {shouldExportData && (
             <div className="mt-1 self-start">
-              <ExportData />
+              {query ? (
+                <Dataset query={query} useQuery={useDuftQuery}>
+                  <ExportData />
+                </Dataset>
+              ) : (
+                <ExportData />
+              )}
             </div>
           )}
         </div>

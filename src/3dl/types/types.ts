@@ -3,4 +3,6 @@ export interface ContainerComponentProps {
   subHeader?: string;
   variant?: "card" | "default";
   children: React.ReactNode;
+  query?: string;
+  exportData?: string | boolean;
 }

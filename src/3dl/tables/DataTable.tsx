@@ -13,6 +13,7 @@ interface DataTableProps {
   header: string;
   subHeader?: string;
   variant?: string;
+  exportData?: boolean | string;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -20,6 +21,7 @@ const DataTable: React.FC<DataTableProps> = ({
   header,
   subHeader = "",
   variant = "card",
+  exportData,
 }) => {
   const { data } = useDataContext();
   const layout = useLayout();
@@ -80,7 +82,12 @@ const DataTable: React.FC<DataTableProps> = ({
     );
 
   return ContainerComponent && layout !== "single-layout" ? (
-    <ContainerComponent header={header} subHeader={subHeader} variant={variant}>
+    <ContainerComponent
+      header={header}
+      subHeader={subHeader}
+      variant={variant}
+      exportData={exportData}
+    >
       {wrappedContent}
     </ContainerComponent>
   ) : (
