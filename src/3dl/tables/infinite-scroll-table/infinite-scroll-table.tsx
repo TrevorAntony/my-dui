@@ -134,6 +134,7 @@ interface InfiniteScrollTableProps {
   variant?: "card" | "default";
   modal: React.ComponentType<unknown>;
   children?: React.ReactNode;
+  exportData?: boolean | string;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -143,6 +144,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   variant = "card",
   modal: ModalComponent,
   children,
+  exportData,
 }) => {
   const {
     data,
@@ -151,6 +153,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     searchText,
     handleSearchChange,
     handleSortChange,
+    query,
   } = useDataContext();
 
   const headers = data?.length > 0 ? Object.keys(data[0]) : [];
@@ -223,6 +226,8 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       header={header as string}
       subHeader={subHeader as string}
       variant={variant as "card" | "default"}
+      query={query}
+      exportData={exportData}
     >
       {content}
     </ContainerComponent>

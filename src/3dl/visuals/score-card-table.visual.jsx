@@ -10,6 +10,7 @@ const ScoreCardTable = ({
   subHeader = header,
   tableMaxHeight = "300px",
   showToolbar,
+  exportData,
   ...props
 }) => {
   const { data } = useDataContext();
@@ -108,7 +109,11 @@ const ScoreCardTable = ({
   return layout === "single-layout" ? (
     content
   ) : ContainerComponent ? (
-    <ContainerComponent header={header} subHeader={subHeader}>
+    <ContainerComponent
+      header={header}
+      subHeader={subHeader}
+      exportData={exportData}
+    >
       {content}
     </ContainerComponent>
   ) : (
