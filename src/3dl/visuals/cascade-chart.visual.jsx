@@ -59,7 +59,6 @@ const CascadeChart = ({
   header,
   subHeader = "",
   cascadeObject,
-  exportData,
   ...props
 }) => {
   const theme = useThemeContext(); // Accessing the theme context
@@ -233,7 +232,7 @@ const CascadeChart = ({
   );
 
   return Container ? (
-    <Container header={header} subHeader={subHeader} exportData={exportData}>
+    <Container header={header} subHeader={subHeader}>
       {content}
     </Container>
   ) : (
