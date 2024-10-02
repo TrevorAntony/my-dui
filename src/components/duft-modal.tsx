@@ -3,10 +3,18 @@ import { Modal, Button } from "flowbite-react";
 import { HiX } from "react-icons/hi";
 import { renderModalContent } from "../helpers/modalContentHelper";
 
-const modalSizeMap = {
-  small: "3xl",
+// Mapping modal width to Flowbite size classes
+const modalWidthMap = {
+  narrow: "3xl", // Smallest width
   medium: "7xl",
-  large: "full",
+  wide: "full",
+};
+
+// Mapping modal height to CSS height values
+const modalHeightMap = {
+  small: "30vh", // Small height (30% of viewport height)
+  medium: "60vh", // Medium height (60% of viewport height)
+  large: "80vh", // Large height (80% of viewport height)
 };
 
 interface DuftModalProps {
@@ -20,44 +28,57 @@ interface DuftModalProps {
   hideFooter?: boolean;
   showExecuteButton?: boolean;
   handleButtonClose?: () => void;
-  modalSize?: "small" | "medium" | "large";
+  modalWidth?: keyof typeof modalWidthMap;
+  modalHeight?: keyof typeof modalHeightMap;
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
   isOpen,
   onClose,
   onExecute,
-  executeButtonName,
-  title,
+  executeButtonName = "Run",
+  title = "More info",
   children,
   modalContent,
   hideFooter = false,
   showExecuteButton = false,
   handleButtonClose,
-  modalSize = "small",
+  modalWidth, // Allow undefined for default handling
+  modalHeight, // Allow undefined for default handling
 }) => {
-  const resolvedModalSize =
-    modalSizeMap[modalSize as keyof typeof modalSizeMap];
+  // Determine default width (narrow) and height (large) if not specified
+  const resolvedModalWidth = modalWidth
+    ? modalWidthMap[modalWidth]
+    : modalWidthMap.narrow;
+  const resolvedModalHeight = modalHeight
+    ? modalHeightMap[modalHeight]
+    : modalHeightMap.large;
+
+  // Smart modal style that adjusts based on content size with min and max constraints
+  const modalBodyStyle = {
+    minWidth: "20vw", // Minimum width to wrap small content
+    maxWidth: resolvedModalWidth === "full" ? "100%" : resolvedModalWidth, // Maximum width based on prop or default
+    minHeight: "20vh", // Minimum height to wrap small content
+    maxHeight: resolvedModalHeight, // Maximum height based on prop or default
+    width: "auto", // Allow auto width for wrapping small content
+    height: "auto", // Allow auto height for wrapping small content
+    overflowY: "auto", // Enable vertical scrolling if content overflows height
+    overflowX: "auto", // Enable horizontal scrolling if content overflows width
+  };
 
   return (
     <Modal
       show={isOpen}
       onClose={onClose}
-      size={resolvedModalSize}
+      size={resolvedModalWidth} // Default to smallest size unless specified
       className="relative"
-      style={{
-        width: "100%",
-        height: "auto",
-        overflowY: "auto",
-        overflowX: "auto",
-      }}
     >
-      <div className="relative flex justify-between p-6 text-lg font-semibold">
-        <span>{title || "More info"}</span>
-
+      {/* Modal Header */}
+      <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
+        <span>{title}</span>
         <button
           type="button"
-          className="absolute right-0 top-0 m-3 p-4 text-gray-500 hover:text-gray-700"
+          className="text-gray-500 hover:text-gray-700"
           onClick={onClose}
           aria-label="Close modal"
         >
@@ -65,39 +86,32 @@ const DuftModal: React.FC<DuftModalProps> = ({
         </button>
       </div>
 
-      <Modal.Body
-        className="space-y-6"
-        style={{
-          maxHeight: "calc(100vh - 150px)",
-          overflowY: "auto",
-          overflowX: "auto",
-        }}
-      >
-        {children ? (
-          <div>{children}</div>
-        ) : modalContent ? (
-          renderModalContent(modalContent)
-        ) : null}
+      {/* Modal Body with dynamic sizing */}
+      <Modal.Body className="p-6" style={modalBodyStyle}>
+        {children
+          ? children
+          : modalContent
+          ? renderModalContent(modalContent)
+          : null}
       </Modal.Body>
 
+      {/* Modal Footer */}
       {!hideFooter && (
-        <Modal.Footer className="flex justify-end">
-          {showExecuteButton && (
+        <Modal.Footer className="flex justify-end space-x-4 border-t px-6 py-4">
+          {showExecuteButton ? (
             <Button color="primary" onClick={handleButtonClose || onClose}>
               Close
             </Button>
-          )}
-
-          {!hideFooter && !showExecuteButton && (
+          ) : (
             <>
+              {onExecute && (
+                <Button color="pink" onClick={onExecute}>
+                  {executeButtonName}
+                </Button>
+              )}
               <Button color="primary" onClick={handleButtonClose || onClose}>
                 Close
               </Button>
-              {executeButtonName && onExecute && (
-                <Button color="pink" onClick={onExecute}>
-                  {executeButtonName || "Run"}
-                </Button>
-              )}
             </>
           )}
         </Modal.Footer>

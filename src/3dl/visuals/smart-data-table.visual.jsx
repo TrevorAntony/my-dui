@@ -3,6 +3,7 @@ import { MantineReactTable } from "mantine-react-table";
 import { useLayout } from "../ui-elements/single-layout";
 import { useDataContext } from "../context/DataContext";
 import { Modal, Button } from "flowbite-react";
+import DuftModal from "../../components/duft-modal";
 
 const SmartDataTable = ({
   container: ContainerComponent,
@@ -33,7 +34,7 @@ const SmartDataTable = ({
         }
       }
     },
-    [pageUpdater],
+    [pageUpdater]
   );
 
   if (
@@ -48,7 +49,7 @@ const SmartDataTable = ({
     setSelectedRowData(row);
 
     const matchingChild = React.Children.toArray(children).find(
-      (child) => React.isValidElement(child) && child.props.columnName === key,
+      (child) => React.isValidElement(child) && child.props.columnName === key
     );
 
     if (matchingChild) {
@@ -71,7 +72,7 @@ const SmartDataTable = ({
 
   const columns = Object.keys(deferredData[0]).map((key) => {
     const hasMatchingChild = React.Children.toArray(children).some(
-      (child) => React.isValidElement(child) && child.props.columnName === key,
+      (child) => React.isValidElement(child) && child.props.columnName === key
     );
 
     return {
@@ -134,23 +135,15 @@ const SmartDataTable = ({
       ) : (
         wrappedContent
       )}
-
-      {/* TO-DO: refactor this smart data table to use a more generic modal component */}
-      {isModalOpen && selectedRowData && (
-        <Modal show={isModalOpen} onClose={handleCloseModal} size="3xl">
-          <Modal.Header>
-            <strong>{selectedRowData.name || "More info"}</strong>
-          </Modal.Header>
-          <Modal.Body className="max-h-[700px] overflow-y-auto">
-            <div className="space-y-6">{renderedChild}</div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button color="primary" onClick={handleCloseModal}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+      <DuftModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={selectedRowData?.name || "More info"}
+        modalHeight="medium"
+        modalWidth="wide"
+      >
+        {renderedChild}
+      </DuftModal>
     </>
   );
 };

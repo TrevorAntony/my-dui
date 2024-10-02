@@ -256,7 +256,7 @@ const BottomMenu: FC = function () {
         executeButtonName="Run data task"
         modalContent={modalContent}
         hideFooter={data?.isRunning} // The footer is only hidden if explicitly required
-        hideExecuteButton={data?.message?.includes(
+        showExecuteButton={data?.message?.includes(
           "Task completed successfully with return code 0"
         )} // Check if script is completed
       />
