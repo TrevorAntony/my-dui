@@ -2,11 +2,26 @@ import React from "react";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../ui-elements/single-layout";
 
-const DataTable = ({
+// Define types for props and data
+interface DataTableProps {
+  container?: React.ComponentType<{
+    header: string;
+    subHeader?: string;
+    variant?: string;
+    children: React.ReactNode;
+  }>;
+  header: string;
+  subHeader?: string;
+  variant?: string;
+  exportData?: boolean | string;
+}
+
+const DataTable: React.FC<DataTableProps> = ({
   container: ContainerComponent,
   header,
   subHeader = "",
   variant = "card",
+  exportData,
 }) => {
   const { data } = useDataContext();
   const layout = useLayout();
@@ -67,7 +82,12 @@ const DataTable = ({
     );
 
   return ContainerComponent && layout !== "single-layout" ? (
-    <ContainerComponent header={header} subHeader={subHeader} variant={variant}>
+    <ContainerComponent
+      header={header}
+      subHeader={subHeader}
+      variant={variant}
+      exportData={exportData}
+    >
       {wrappedContent}
     </ContainerComponent>
   ) : (

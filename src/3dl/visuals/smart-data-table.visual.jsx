@@ -13,6 +13,7 @@ const SmartDataTable = ({
   children,
   tableMaxHeight = "500px",
   showToolbar,
+  exportData,
   ...props
 }) => {
   const { data, pageUpdater, handleSearchChange } = useDataContext();
@@ -129,6 +130,7 @@ const SmartDataTable = ({
           header={header}
           subHeader={subHeader}
           variant={variant}
+          exportData={exportData}
         >
           {wrappedContent}
         </ContainerComponent>

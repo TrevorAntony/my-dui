@@ -10,16 +10,16 @@ const PivotTable = ({
   subHeader = header,
   variant = "card", // Default to "card" variant
   pivotRows = [],
-  pivotCols = []
+  pivotCols = [],
+  exportData,
 }) => {
-
   const initialPivotRows = pivotRows;
   const initialPivotCols = pivotCols;
 
   const [pivotState, setPivotState] = useState({
     data: [],
     rows: initialPivotRows,
-    cols: initialPivotCols
+    cols: initialPivotCols,
   });
 
   const { state } = useDashboardContext();
@@ -34,8 +34,10 @@ const PivotTable = ({
       const keys = Object.keys(data[0]);
 
       // Use provided pivotRows or default to the first key
-      const activePivotRows = initialPivotRows.length > 0 ? initialPivotRows : [keys[0]];
-      const activePivotCols = initialPivotCols.length > 0 ? initialPivotCols : keys.slice(1, 6);
+      const activePivotRows =
+        initialPivotRows.length > 0 ? initialPivotRows : [keys[0]];
+      const activePivotCols =
+        initialPivotCols.length > 0 ? initialPivotCols : keys.slice(1, 6);
 
       // Only update the state if the new rows or cols differ from the current state
       setPivotState((prevState) => {
@@ -63,7 +65,7 @@ const PivotTable = ({
       )}
       <PivotTableUI
         {...pivotState}
-        onChange={newState => setPivotState(newState)}
+        onChange={(newState) => setPivotState(newState)}
       />
     </div>
   ) : (
@@ -84,7 +86,12 @@ const PivotTable = ({
 
   // Conditionally wrap the ChartComponent in Container if provided
   return ContainerComponent ? (
-    <ContainerComponent header={header} subHeader={subHeader} variant={variant}>
+    <ContainerComponent
+      header={header}
+      subHeader={subHeader}
+      variant={variant}
+      exportData={exportData}
+    >
       {wrappedContent}
     </ContainerComponent>
   ) : (

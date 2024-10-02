@@ -211,6 +211,8 @@ const CascadeChart = ({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={cascadeTitle}
+        widthSize="large"
+        heightSize="large"
         isCloseDefault={true}
       >
         <MantineReactTable

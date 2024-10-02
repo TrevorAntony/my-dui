@@ -73,9 +73,9 @@ const DuftModal: React.FC<DuftModalProps> = ({
       size={resolvedModalWidth} // Default to smallest size unless specified
       className="relative"
     >
-      {/* Modal Header */}
-      <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
-        <span>{title}</span>
+      <div className="relative flex justify-between px-6 pt-6 text-lg font-semibold">
+        <span>{title || "More info"}</span>
+
         <button
           type="button"
           className="text-gray-500 hover:text-gray-700"
