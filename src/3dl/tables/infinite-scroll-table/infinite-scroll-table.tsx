@@ -5,9 +5,9 @@ import ColumnToggle from "./table-components/ColumnToggle";
 import TableHeader from "./table-components/TableHeader";
 import TableBody from "./table-components/TableBody";
 import TableModal from "./table-components/TableModal";
-import { FiLoader } from "react-icons/fi";
 import type { ContainerComponentProps } from "../../types/types";
 import { useLayout } from "../../ui-elements/single-layout";
+import TableSkeleton from "../../../ui-components/table-skeleton";
 
 const TableContent: React.FC<{
   data: any[];
@@ -116,11 +116,7 @@ const TableContent: React.FC<{
             {children}
           </TableBody>
         </table>
-        {loading && (
-          <div className="flex justify-center py-4">
-            <FiLoader className="animate-spin text-gray-500" />
-          </div>
-        )}
+        {loading && <TableSkeleton />}
       </div>
 
       <TableModal

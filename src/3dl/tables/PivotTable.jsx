@@ -3,12 +3,13 @@ import PivotTableUI from "react-pivottable/PivotTableUI";
 import "react-pivottable/pivottable.css";
 import { useDashboardContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
+import TableSkeleton from "../../ui-components/table-skeleton";
 
 const PivotTable = ({
   container: ContainerComponent,
   header = "Pivot Table",
   subHeader = header,
-  variant = "card", // Default to "card" variant
+  variant = "card",
   pivotRows = [],
   pivotCols = [],
   exportData,
@@ -69,7 +70,7 @@ const PivotTable = ({
       />
     </div>
   ) : (
-    <div>No data available to display the pivot table.</div>
+    <TableSkeleton />
   );
 
   // Conditionally wrap the content based on the variant and layout

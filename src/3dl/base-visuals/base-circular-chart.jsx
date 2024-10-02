@@ -3,13 +3,14 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
   const theme = useThemeContext();
   const { data } = useDataContext();
 
   if (!Array.isArray(data) || data.length === 0) {
-    return <div>No data available to render the chart.</div>;
+    return <ChartSkeleton />;
   }
 
   const { apex: apexOptions } = theme.themes[0];

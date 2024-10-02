@@ -1,6 +1,7 @@
 import React from "react";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../ui-elements/single-layout";
+import TableSkeleton from "../../ui-components/table-skeleton";
 
 // Define types for props and data
 interface DataTableProps {
@@ -27,7 +28,7 @@ const DataTable: React.FC<DataTableProps> = ({
   const layout = useLayout();
 
   if (!data || !Array.isArray(data) || data.length === 0) {
-    return <div>No data available</div>;
+    return <TableSkeleton />;
   }
 
   const headers = Object.keys(data[0]);

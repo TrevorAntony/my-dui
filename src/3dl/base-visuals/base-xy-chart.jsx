@@ -3,13 +3,14 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
   const theme = useThemeContext();
   const { data } = useDataContext();
 
   if (!data || !Array.isArray(data) || !data.length) {
-    return <div>No data available</div>;
+    return <ChartSkeleton />;
   }
 
   if (!theme || !Object.keys(theme).length)

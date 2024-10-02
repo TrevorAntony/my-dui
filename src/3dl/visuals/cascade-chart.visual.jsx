@@ -4,6 +4,7 @@ import ApexTree from "apextree";
 import { MantineReactTable } from "mantine-react-table";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
+import CascadeSkeleton from "../../ui-components/cascade-skeleton";
 
 // Default options for ApexTree
 const defaultOptions = {
@@ -194,6 +195,9 @@ const CascadeChart = ({
 
   if (!cascadeData) {
     return <div>Loading data...</div>;
+  }
+  if (!cascadeData) {
+    return <CascadeSkeleton />;
   }
 
   const content = (

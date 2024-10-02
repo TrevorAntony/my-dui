@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDataContext } from "../3dl/context/DataContext";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import DuftModal from "./duft-modal";
+import TileSkeleton from "../ui-components/tile-skeleton";
 
 interface DuftTileProps {
   title: string;
@@ -22,7 +23,7 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children, modalSize }) => {
     typeof data[0] === "object";
 
   if (!isValidData) {
-    return <div>No valid data available</div>;
+    return <TileSkeleton />;
   }
 
   const [firstKey, secondKey] = Object.keys(data[0]);
