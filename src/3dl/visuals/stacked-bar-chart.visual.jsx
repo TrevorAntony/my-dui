@@ -3,6 +3,7 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme context
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const StackedBarChart = ({
   container: Container,
@@ -16,7 +17,7 @@ const StackedBarChart = ({
   const { data } = useDataContext();
 
   if (!data || !Array.isArray(data) || !data?.length) {
-    return <div>No data available</div>;
+    return <ChartSkeleton />;
   }
 
   // Extract categories
