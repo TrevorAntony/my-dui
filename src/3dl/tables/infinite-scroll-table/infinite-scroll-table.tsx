@@ -24,6 +24,7 @@ const TableContent: React.FC<{
   ModalComponent?: React.ElementType;
   pageUpdater?: () => void;
   layout?: string;
+  searchColumns?: string;
 }> = ({
   data,
   loading,
@@ -38,6 +39,7 @@ const TableContent: React.FC<{
   ModalComponent,
   pageUpdater,
   layout,
+  searchColumns,
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
@@ -79,11 +81,14 @@ const TableContent: React.FC<{
   return (
     <div className="relative">
       <div className="mb-4 flex items-center justify-end space-x-4">
-        <SearchBar
-          searchText={searchText}
-          handleSearchChange={handleSearchChange}
-          loading={loading}
-        />
+        {searchColumns && (
+          <SearchBar
+            searchText={searchText}
+            handleSearchChange={handleSearchChange}
+            loading={loading}
+            searchColumns={searchColumns}
+          />
+        )}
         <ColumnToggle
           headers={headers}
           visibleColumns={visibleColumns}
@@ -157,6 +162,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     handleSearchChange,
     handleSortChange,
     query,
+    searchColumns,
   } = useDataContext();
   const layout = useLayout();
   const headers = data?.length > 0 ? Object.keys(data[0]) : [];
@@ -217,6 +223,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       ModalComponent={ModalComponent}
       pageUpdater={pageUpdater}
       layout={layout}
+      searchColumns={searchColumns}
     >
       {children}
     </TableContent>
