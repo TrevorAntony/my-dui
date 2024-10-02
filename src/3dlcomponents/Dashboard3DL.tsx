@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import JSXParser from "react-jsx-parser";
 import { fetchDataWithoutStore } from "../api/api";
 import CardComponent from "../components/card-component";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "../ui-components/error-fallback";
 
 import {
   Dashboard,
@@ -122,7 +124,6 @@ const Dashboard3DL: React.FC = () => {
               Dashboard: (props: unknown) => (
                 <Dashboard {...props} theme={themeData} />
               ),
-              //DashboardHeader: DuftGridHeader,
               QueryProvider,
               SingleLayout,
               Header: DuftGridHeader,
@@ -141,43 +142,69 @@ const Dashboard3DL: React.FC = () => {
                 <PaginatedSearchDataSet {...props} useQuery={useDuftQuery} />
               ),
               PieChart: (props: unknown) => (
-                <PieChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <PieChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               DonutChart: (props: unknown) => (
-                <DonutChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <DonutChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               RadialBarChart: (props: unknown) => (
-                <RadialBarChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <RadialBarChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               PolarAreaChart: (props: unknown) => (
-                <PolarAreaChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <PolarAreaChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               BarChart: (props: unknown) => (
-                <BarChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <BarChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               LineChart: (props: unknown) => (
-                <LineChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <LineChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               HeatmapChart: (props: unknown) => (
-                <HeatmapChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <HeatmapChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               RadarChart: (props: unknown) => (
-                <RadarChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <RadarChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               CascadeChart: (props: unknown) => (
-                <CascadeChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <CascadeChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               SmartDataTable: (props: unknown) => (
-                <SmartDataTable {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <SmartDataTable {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               ScoreCardTable: (props: unknown) => (
-                <ScoreCardTable {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <ScoreCardTable {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               PivotTable: (props: unknown) => (
-                <PivotTable {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <PivotTable {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               DataTable: (props: unknown) => (
-                <DataTable {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <DataTable {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               InfiniteScrollTable: (props: unknown) => (
                 <InfiniteScrollTable
@@ -189,19 +216,32 @@ const Dashboard3DL: React.FC = () => {
                 />
               ),
               StackedBarChart: (props: unknown) => (
-                <StackedBarChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <StackedBarChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               AreaChart: (props: unknown) => (
-                <AreaChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <AreaChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               PercentStackedBarChart: (props: unknown) => (
-                <PercentStackedBarChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <PercentStackedBarChart
+                    {...props}
+                    container={CardComponent}
+                  />
+                </ErrorBoundary>
               ),
               ClusteredBarChart: (props: unknown) => (
-                <ClusteredBarChart {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <ClusteredBarChart {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               PreviewQuery: (props: unknown) => (
-                <PreviewQuery {...props} container={CardComponent} />
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <PreviewQuery {...props} container={CardComponent} />
+                </ErrorBoundary>
               ),
               TabSet: DuftTabset,
               Tab: DuftTab,

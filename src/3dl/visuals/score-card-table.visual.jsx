@@ -3,6 +3,7 @@ import { MantineReactTable } from "mantine-react-table";
 import { Box } from "@mantine/core";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
+import TableSkeleton from "../../ui-components/table-skeleton";
 
 const ScoreCardTable = ({
   container: ContainerComponent,
@@ -17,7 +18,7 @@ const ScoreCardTable = ({
   const layout = useLayout();
 
   if (!data || !Array.isArray(data) || data.length === 0) {
-    return <div>No data available</div>;
+    return <TableSkeleton />;
   }
 
   // Generate columns, filtering out the 'color' column

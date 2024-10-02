@@ -4,6 +4,8 @@ import { useLayout } from "../ui-elements/single-layout";
 import { useDataContext } from "../context/DataContext";
 import { Modal, Button } from "flowbite-react";
 import DuftModal from "../../components/duft-modal";
+import TableSkeleton from "../../ui-components/table-skeleton";
+
 
 const SmartDataTable = ({
   container: ContainerComponent,
@@ -43,7 +45,7 @@ const SmartDataTable = ({
     !Array.isArray(deferredData) ||
     deferredData.length === 0
   ) {
-    return <div>No data available</div>;
+    return <TableSkeleton />;
   }
 
   const handleCellClick = (key, row) => {
