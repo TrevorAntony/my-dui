@@ -34,37 +34,43 @@ const DataTable: React.FC<DataTableProps> = ({
 
   const content = (
     <table style={{ borderCollapse: "collapse", width: "100%" }}>
-      <thead>
+      <thead className="rounded-t-lg bg-gray-50">
         <tr>
-          {headers.map((header) => (
+          {headers.map((header, index) => (
             <th
               key={header}
-              style={{
-                border: "1px solid #ddd",
-                padding: "8px",
-                textAlign: "left",
-                backgroundColor: "#f2f2f2",
-              }}
+              className={`sticky top-0 cursor-pointer select-none bg-gray-100 px-4 py-2 text-left text-gray-500 hover:text-gray-900 ${
+                index === 0
+                  ? "rounded-tl-lg"
+                  : index === headers.length - 1
+                  ? "rounded-tr-lg"
+                  : ""
+              }`}
             >
-              {header.charAt(0).toUpperCase() + header.slice(1)}
+              <div className="flex items-center justify-start space-x-2">
+                <span>{header.charAt(0).toUpperCase() + header.slice(1)}</span>
+              </div>
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            {headers.map((header) => (
-              <td
-                key={header}
-                style={{
-                  border: "1px solid #ddd",
-                  padding: "8px",
-                }}
-              >
-                {item[header]}
-              </td>
-            ))}
+        {data?.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {headers.map((header) => {
+              return (
+                <td
+                  key={`${rowIndex}-${header}`}
+                  className="border-b border-gray-300 p-4"
+                  style={{
+                    cursor: "default",
+                    textDecoration: "none",
+                  }}
+                >
+                  {row[header]}
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>

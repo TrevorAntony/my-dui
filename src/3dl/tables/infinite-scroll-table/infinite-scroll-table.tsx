@@ -7,6 +7,7 @@ import TableBody from "./table-components/TableBody";
 import TableModal from "./table-components/TableModal";
 import { FiLoader } from "react-icons/fi";
 import type { ContainerComponentProps } from "../../types/types";
+import { useLayout } from "../../ui-elements/single-layout";
 
 const TableContent: React.FC<{
   data: any[];
@@ -22,6 +23,7 @@ const TableContent: React.FC<{
   children: React.ReactNode;
   ModalComponent?: React.ElementType;
   pageUpdater?: () => void;
+  layout?: string;
 }> = ({
   data,
   loading,
@@ -35,6 +37,7 @@ const TableContent: React.FC<{
   children,
   ModalComponent,
   pageUpdater,
+  layout,
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
@@ -91,7 +94,11 @@ const TableContent: React.FC<{
       <div
         ref={tableRef}
         onScroll={handleScroll}
-        className="h-96 overflow-y-auto rounded"
+        className={
+          layout === "single-layout"
+            ? "h-screen"
+            : "h-[600px] overflow-y-auto rounded"
+        }
       >
         <table className="min-w-full table-auto border-collapse">
           <TableHeader
@@ -155,7 +162,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     handleSortChange,
     query,
   } = useDataContext();
-
+  const layout = useLayout();
   const headers = data?.length > 0 ? Object.keys(data[0]) : [];
 
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
@@ -190,10 +197,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     const newSort = currentSort === "ASC" ? "DESC" : "ASC";
     const sortKey = `${column} ${newSort}`;
 
-    setSortState((prev) => ({
-      ...prev,
-      [column]: newSort,
-    }));
+    setSortState({ [column]: newSort });
 
     handleSortChange?.(sortKey);
   };
@@ -216,12 +220,23 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       handleCellClick={() => {}}
       ModalComponent={ModalComponent}
       pageUpdater={pageUpdater}
+      layout={layout}
     >
       {children}
     </TableContent>
   );
 
-  return ContainerComponent ? (
+  const wrappedContent =
+    layout === "single-layout" ? (
+      <div className="mt-4">
+        {/* "block w-full items-center justify-between border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800" */}
+        {content}
+      </div>
+    ) : (
+      content
+    );
+
+  return ContainerComponent && layout !== "single-layout" ? (
     <ContainerComponent
       header={header as string}
       subHeader={subHeader as string}
@@ -229,10 +244,10 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       query={query}
       exportData={exportData}
     >
-      {content}
+      {wrappedContent}
     </ContainerComponent>
   ) : (
-    content
+    wrappedContent
   );
 };
 
