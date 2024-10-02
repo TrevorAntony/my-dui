@@ -3,7 +3,7 @@ import { FallbackProps } from "react-error-boundary";
 import CardComponent from "../components/card-component";
 
 const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
-  console.log("Fallback Error: ", error.message);
+  console.error("Fallback Error: ", error.message);
 
   return (
     <CardComponent header="" subHeader="" variant="card">
