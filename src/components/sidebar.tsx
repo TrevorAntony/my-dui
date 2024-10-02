@@ -252,6 +252,7 @@ const BottomMenu: FC = function () {
         onExecute={handleButtonClose}
         title="Data Refresh"
         executeButtonName="Run data task"
+        fixedHeight="500px"
         modalContent={modalContent}
         hideFooter={data?.isRunning} // The footer is only hidden if explicitly required
         showExecuteButton={data?.message?.includes(

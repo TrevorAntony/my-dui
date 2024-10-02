@@ -30,6 +30,8 @@ interface DuftModalProps {
   handleButtonClose?: () => void;
   modalWidth?: keyof typeof modalWidthMap;
   modalHeight?: keyof typeof modalHeightMap;
+  fixedWidth?: string; // Optional fixed width (e.g., "500px", "50vw")
+  fixedHeight?: string; // Optional fixed height (e.g., "500px", "50vh")
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
@@ -45,6 +47,8 @@ const DuftModal: React.FC<DuftModalProps> = ({
   handleButtonClose,
   modalWidth, // Allow undefined for default handling
   modalHeight, // Allow undefined for default handling
+  fixedWidth, // Optional prop for fixed width
+  fixedHeight, // Optional prop for fixed height
 }) => {
   // Determine default width (narrow) and height (large) if not specified
   const resolvedModalWidth = modalWidth
@@ -54,14 +58,18 @@ const DuftModal: React.FC<DuftModalProps> = ({
     ? modalHeightMap[modalHeight]
     : modalHeightMap.large;
 
-  // Smart modal style that adjusts based on content size with min and max constraints
+  // Smart modal style that adjusts based on content size or uses fixed values if provided
   const modalBodyStyle = {
-    minWidth: "20vw", // Minimum width to wrap small content
-    maxWidth: resolvedModalWidth === "full" ? "100%" : resolvedModalWidth, // Maximum width based on prop or default
-    minHeight: "20vh", // Minimum height to wrap small content
-    maxHeight: resolvedModalHeight, // Maximum height based on prop or default
-    width: "auto", // Allow auto width for wrapping small content
-    height: "auto", // Allow auto height for wrapping small content
+    minWidth: fixedWidth ? fixedWidth : "20vw", // Use fixed width if provided, otherwise set a minimum width
+    maxWidth: fixedWidth
+      ? fixedWidth
+      : resolvedModalWidth === "full"
+      ? "100%"
+      : resolvedModalWidth, // Use fixed width if provided
+    minHeight: fixedHeight ? fixedHeight : "20vh", // Use fixed height if provided, otherwise set a minimum height
+    maxHeight: fixedHeight ? fixedHeight : resolvedModalHeight, // Use fixed height if provided
+    width: fixedWidth ? fixedWidth : "auto", // Use fixed width if provided
+    height: fixedHeight ? fixedHeight : "auto", // Use fixed height if provided
     overflowY: "auto", // Enable vertical scrolling if content overflows height
     overflowX: "auto", // Enable horizontal scrolling if content overflows width
   };
@@ -73,9 +81,9 @@ const DuftModal: React.FC<DuftModalProps> = ({
       size={resolvedModalWidth} // Default to smallest size unless specified
       className="relative"
     >
-      <div className="relative flex justify-between px-6 pt-6 text-lg font-semibold">
-        <span>{title || "More info"}</span>
-
+      {/* Modal Header */}
+      <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
+        <span>{title}</span>
         <button
           type="button"
           className="text-gray-500 hover:text-gray-700"
@@ -86,7 +94,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
         </button>
       </div>
 
-      {/* Modal Body with dynamic sizing */}
+      {/* Modal Body with dynamic or fixed sizing */}
       <Modal.Body className="p-6" style={modalBodyStyle}>
         {children
           ? children
@@ -110,7 +118,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
                 </Button>
               )}
               <Button color="primary" onClick={handleButtonClose || onClose}>
-                Close
+                {executeButtonName === "Run data task" ? "Cancel" : "Close"}
               </Button>
             </>
           )}
