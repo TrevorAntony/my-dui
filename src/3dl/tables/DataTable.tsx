@@ -87,7 +87,7 @@ const DataTable: React.FC<DataTableProps> = ({
       content
     );
 
-  return ContainerComponent && layout !== "single-layout" ? (
+  return ContainerComponent ? (
     <ContainerComponent
       header={header}
       subHeader={subHeader}

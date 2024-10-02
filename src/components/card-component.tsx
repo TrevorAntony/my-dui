@@ -2,6 +2,7 @@ import type { FC, ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { Dataset, ExportData } from "../3dl";
 import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
+import { useLayout } from "../3dl/ui-elements/single-layout";
 
 type MoreInfoProps = {
   text: string;
@@ -31,7 +32,9 @@ const CardComponent: FC<CardComponentProps> = ({
   exportData = "false",
   query,
 }) => {
+  const layout = useLayout();
   const shouldExportData = exportData === "true";
+  const isFullHeight = layout === "single-layout";
 
   const renderContent = () => (
     <>
@@ -98,12 +101,20 @@ const CardComponent: FC<CardComponentProps> = ({
 
   return variant === "card" ? (
     <div
-      className={`flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${className}`}
+      className={`flex flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${
+        isFullHeight ? "mt-4 h-full min-h-screen" : "h-auto"
+      } ${className}`}
     >
       {renderContent()}
     </div>
   ) : variant === "no-card" ? (
-    <div className={className}>{renderContent()}</div>
+    <div
+      className={`${
+        isFullHeight ? "mt-4 h-full min-h-screen" : ""
+      } ${className}`}
+    >
+      {renderContent()}
+    </div>
   ) : (
     <>{children}</>
   );
