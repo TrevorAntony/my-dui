@@ -1,5 +1,6 @@
 import React from "react";
 import { FiChevronUp, FiChevronDown } from "react-icons/fi";
+import { LuChevronsUpDown } from "react-icons/lu";
 
 interface TableHeaderProps {
   headers: string[];
@@ -26,7 +27,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
           >
             <div className="flex items-center justify-start space-x-2">
               <span>{header.charAt(0).toUpperCase() + header.slice(1)}</span>
-              {sortState[header] && (
+              {sortState[header] ? (
                 <span>
                   {sortState[header] === "ASC" ? (
                     <FiChevronUp className="h-4 w-4 text-gray-600" />
@@ -34,6 +35,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
                     <FiChevronDown className="h-4 w-4 text-gray-600" />
                   )}
                 </span>
+              ) : (
+                <LuChevronsUpDown />
               )}
             </div>
           </th>
