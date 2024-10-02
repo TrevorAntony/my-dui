@@ -146,6 +146,7 @@ const Dataset: React.FC<DataSetProps> = ({
         loading,
         handleSearchChange,
         handleSortChange,
+        searchColumns,
       }}
     >
       {state?.debug && (
