@@ -22,8 +22,8 @@ type CardComponentProps = {
 };
 
 const CardComponent: FC<CardComponentProps> = ({
-  header,
-  subHeader,
+  header = "",
+  subHeader = "",
   children,
   footer,
   moreInfo,
@@ -38,7 +38,7 @@ const CardComponent: FC<CardComponentProps> = ({
 
   const renderContent = () => (
     <>
-      {variant !== "plain" && (
+      {variant !== "plain" && (header || subHeader) && (
         <div className="mb-3 flex items-start justify-between">
           {/* Header and subHeader */}
           <div>
