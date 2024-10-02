@@ -1,4 +1,5 @@
 import React from 'react';
+import ChartSkeleton from '../../ui-components/chart-skeleton';
 
 // Helper function to recursively render JSON data
 const renderJson = (data) => {
@@ -31,7 +32,7 @@ const JSONVisual = ({ data }) => {
   return (
     <div style={{ whiteSpace: 'pre-wrap', padding: '10px', border: '1px solid #ccc', margin: '10px 0' }}>
       <h3>JSON Data</h3>
-      {data ? renderJson(data) : <div>No data available</div>}
+      {data ? renderJson(data) : <ChartSkeleton />}
     </div>
   );
 };
