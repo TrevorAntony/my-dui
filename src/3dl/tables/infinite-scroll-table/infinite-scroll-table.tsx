@@ -174,9 +174,10 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   const [sortState, setSortState] = useState<Record<string, "ASC" | "DESC">>(
     {}
   );
+  const initializedRef = useRef(false);
 
   useEffect(() => {
-    if (data?.length > 0) {
+    if (data?.length > 0 && !initializedRef.current) {
       const initialVisibility: Record<string, boolean> = {};
       const initialColumnsList = initialColumns
         ? initialColumns.split(",").map((col) => col.trim())
@@ -199,9 +200,13 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
         }
       });
 
-      setVisibleColumns(initialVisibility);
+      setVisibleColumns((prevVisibleColumns) => ({
+        ...initialVisibility,
+        ...prevVisibleColumns,
+      }));
+      initializedRef.current = true;
     }
-  }, [data, initialColumns]);
+  }, [data, initialColumns, headers]);
 
   const handleColumnToggle = (column: string) => {
     setVisibleColumns((prev) => ({
