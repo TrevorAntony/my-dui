@@ -107,9 +107,10 @@ const DuftModal: React.FC<DuftModalProps> = ({
       </Modal.Body>
 
       {/* Modal Footer */}
-      {!hideButtons && (
-        <Modal.Footer className="flex justify-end space-x-4 border-t px-6 py-4">
-          {showExecuteButton ? (
+
+      <Modal.Footer className="flex justify-end space-x-4 border-t px-6 py-4">
+        {!hideButtons ? (
+          showExecuteButton ? (
             <Button color="primary" onClick={handleButtonClose || onClose}>
               Close
             </Button>
@@ -124,9 +125,9 @@ const DuftModal: React.FC<DuftModalProps> = ({
                 {executeButtonName === "Run data task" ? "Cancel" : "Close"}
               </Button>
             </>
-          )}
-        </Modal.Footer>
-      )}
+          )
+        ) : null}
+      </Modal.Footer>
     </Modal>
   );
 };
