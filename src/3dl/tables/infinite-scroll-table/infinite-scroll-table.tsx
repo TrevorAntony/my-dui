@@ -101,7 +101,7 @@ const TableContent: React.FC<{
         onScroll={handleScroll}
         className={
           layout === "single-layout"
-            ? "h-screen"
+            ? "h-[calc(100vh-280px)] overflow-y-auto"
             : "h-[500px] overflow-y-auto rounded"
         }
       >
@@ -163,6 +163,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     handleSortChange,
     query,
     searchColumns,
+    initialColumns,
   } = useDataContext();
   const layout = useLayout();
   const headers = data?.length > 0 ? Object.keys(data[0]) : [];
@@ -173,19 +174,39 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   const [sortState, setSortState] = useState<Record<string, "ASC" | "DESC">>(
     {}
   );
+  const initializedRef = useRef(false);
 
   useEffect(() => {
-    if (data?.length > 0) {
-      const initialVisibility = headers.reduce(
-        (acc, header) => {
-          acc[header] = true;
-          return acc;
-        },
-        {} as Record<string, boolean>
-      );
-      setVisibleColumns(initialVisibility);
+    if (data?.length > 0 && !initializedRef.current) {
+      const initialVisibility: Record<string, boolean> = {};
+      const initialColumnsList = initialColumns
+        ? initialColumns.split(",").map((col) => col.trim())
+        : [];
+
+      headers.forEach((header) => {
+        if (initialColumnsList.length === 0) {
+          // If no initialColumns provided, show all columns
+          initialVisibility[header] = true;
+        } else {
+          initialVisibility[header] = initialColumnsList.includes(header);
+          if (
+            initialColumnsList.includes(header) &&
+            !headers.includes(header)
+          ) {
+            console.error(
+              `Column "${header}" specified in initialColumns does not exist in the table.`
+            );
+          }
+        }
+      });
+
+      setVisibleColumns((prevVisibleColumns) => ({
+        ...initialVisibility,
+        ...prevVisibleColumns,
+      }));
+      initializedRef.current = true;
     }
-  }, [data]);
+  }, [data, initialColumns, headers]);
 
   const handleColumnToggle = (column: string) => {
     setVisibleColumns((prev) => ({
