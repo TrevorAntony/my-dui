@@ -12,7 +12,7 @@ interface SingleLayoutProps {
 const SingleLayout: React.FC<SingleLayoutProps> = ({ children }) => {
   return (
     <LayoutContext.Provider value="single-layout">
-      <div style={{ width: "100%" }}>{children}</div>
+      <div style={{ width: "100%", padding: "0 1rem" }}>{children}</div>
     </LayoutContext.Provider>
   );
 };
