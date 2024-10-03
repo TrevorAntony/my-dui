@@ -102,7 +102,7 @@ const TableContent: React.FC<{
         className={
           layout === "single-layout"
             ? "h-screen"
-            : "max-h-[500px] overflow-y-auto rounded"
+            : "h-[500px] overflow-y-auto rounded"
         }
       >
         <table className="min-w-full table-auto border-collapse">
