@@ -15,7 +15,6 @@ interface DataSetProps {
   columnName?: string;
   config?: { [key: string]: string };
   transpose?: string;
-  initialColumns?: string;
   children: React.ReactNode;
 }
 
@@ -59,7 +58,6 @@ const Dataset: React.FC<DataSetProps> = ({
   columnName,
   config,
   transpose = "false",
-  initialColumns,
   children,
 }) => {
   const initialQuery =
@@ -149,7 +147,6 @@ const Dataset: React.FC<DataSetProps> = ({
         handleSearchChange,
         handleSortChange,
         searchColumns,
-        initialColumns,
       }}
     >
       {state?.debug && (
