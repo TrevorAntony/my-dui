@@ -25,13 +25,13 @@ interface DuftModalProps {
   title?: string;
   children?: React.ReactNode;
   modalContent?: string | string[] | Record<string, any>;
-  hideFooter?: boolean;
+  hideButtons?: boolean;
   showExecuteButton?: boolean;
   handleButtonClose?: () => void;
   modalWidth?: keyof typeof modalWidthMap;
   modalHeight?: keyof typeof modalHeightMap;
-  fixedWidth?: string; // Optional fixed width (e.g., "500px", "50vw")
-  fixedHeight?: string; // Optional fixed height (e.g., "500px", "50vh")
+  miniWidth?: string; // Optional fixed width (e.g., "500px", "50vw")
+  miniHeight?: string; // Optional fixed height (e.g., "500px", "50vh")
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
@@ -42,13 +42,13 @@ const DuftModal: React.FC<DuftModalProps> = ({
   title = "More info",
   children,
   modalContent,
-  hideFooter = false,
+  hideButtons = false,
   showExecuteButton = false,
   handleButtonClose,
   modalWidth, // Allow undefined for default handling
   modalHeight, // Allow undefined for default handling
-  fixedWidth, // Optional prop for fixed width
-  fixedHeight, // Optional prop for fixed height
+  miniWidth, // Optional prop for fixed width
+  miniHeight, // Optional prop for fixed height
 }) => {
   // Determine default width (narrow) and height (large) if not specified
   const resolvedModalWidth = modalWidth
@@ -60,16 +60,16 @@ const DuftModal: React.FC<DuftModalProps> = ({
 
   // Smart modal style that adjusts based on content size or uses fixed values if provided
   const modalBodyStyle = {
-    minWidth: fixedWidth ? fixedWidth : "20vw", // Use fixed width if provided, otherwise set a minimum width
-    maxWidth: fixedWidth
-      ? fixedWidth
+    minWidth: miniWidth ? miniWidth : "10vw", // Use fixed width if provided, otherwise set a minimum width
+    maxWidth: miniWidth
+      ? miniWidth
       : resolvedModalWidth === "full"
       ? "100%"
       : resolvedModalWidth, // Use fixed width if provided
-    minHeight: fixedHeight ? fixedHeight : "20vh", // Use fixed height if provided, otherwise set a minimum height
-    maxHeight: fixedHeight ? fixedHeight : resolvedModalHeight, // Use fixed height if provided
-    width: fixedWidth ? fixedWidth : "auto", // Use fixed width if provided
-    height: fixedHeight ? fixedHeight : "auto", // Use fixed height if provided
+    minHeight: miniHeight ? miniHeight : "10vh", // Use fixed height if provided, otherwise set a minimum height
+    maxHeight: miniHeight ? miniHeight : resolvedModalHeight, // Use fixed height if provided
+    width: miniWidth ? miniWidth : "auto", // Use fixed width if provided
+    height: miniHeight ? miniHeight : "auto", // Use fixed height if provided
     overflowY: "auto", // Enable vertical scrolling if content overflows height
     overflowX: "auto", // Enable horizontal scrolling if content overflows width
   };
@@ -84,14 +84,17 @@ const DuftModal: React.FC<DuftModalProps> = ({
       {/* Modal Header */}
       <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
         <span>{title}</span>
-        <button
-          type="button"
-          className="text-gray-500 hover:text-gray-700"
-          onClick={onClose}
-          aria-label="Close modal"
-        >
-          <HiX className="h-6 w-6" />
-        </button>
+        {/* Hide Close button when the task is running */}
+        {!hideButtons && (
+          <button
+            type="button"
+            className="text-gray-500 hover:text-gray-700"
+            onClick={onClose}
+            aria-label="Close modal"
+          >
+            <HiX className="h-6 w-6" />
+          </button>
+        )}
       </div>
 
       {/* Modal Body with dynamic or fixed sizing */}
@@ -104,7 +107,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
       </Modal.Body>
 
       {/* Modal Footer */}
-      {!hideFooter && (
+      {!hideButtons && (
         <Modal.Footer className="flex justify-end space-x-4 border-t px-6 py-4">
           {showExecuteButton ? (
             <Button color="primary" onClick={handleButtonClose || onClose}>

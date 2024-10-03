@@ -249,12 +249,11 @@ const BottomMenu: FC = function () {
       <DuftModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        onExecute={handleButtonClose}
         title="Data Refresh"
         executeButtonName="Run data task"
-        fixedHeight="500px"
+        miniHeight="500px"
         modalContent={modalContent}
-        hideFooter={data?.isRunning} // The footer is only hidden if explicitly required
+        hideButtons={data?.isRunning} // The footer is only hidden if explicitly required
         showExecuteButton={data?.message?.includes(
           "Task completed successfully with return code 0"
         )} // Check if script is completed
