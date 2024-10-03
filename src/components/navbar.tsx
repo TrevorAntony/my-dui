@@ -33,7 +33,6 @@ const ExampleNavbar: FC = function () {
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
 
-  console.log("Debug - config:", config);
   return (
     <Navbar fluid>
       <div className="w-full p-3 lg:px-5 lg:pl-3">
