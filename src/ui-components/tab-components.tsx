@@ -1,6 +1,6 @@
 import { Tabs } from "flowbite-react";
-import { FC, ReactNode } from "react";
-import { IconType } from "react-icons";
+import type { FC, ReactNode } from "react";
+import type { IconType } from "react-icons";
 
 interface DuftTabChildren {
   children: ReactNode;
@@ -8,9 +8,11 @@ interface DuftTabChildren {
 
 const DuftTabset: React.FC<DuftTabChildren> = ({ children }) => {
   return (
-    <Tabs.Group aria-label="Tabs with underline" style="underline">
-      {children}
-    </Tabs.Group>
+    <div className="w-full">
+      <Tabs.Group aria-label="Tabs with underline" style="underline">
+        {children}
+      </Tabs.Group>
+    </div>
   );
 };
 
@@ -28,9 +30,11 @@ const DuftTab: FC<DuftTabProps> = ({
   children,
 }) => {
   return (
-    <Tabs.Item active={active} title={title} icon={Icon}>
-      {children}
-    </Tabs.Item>
+    <div className="w-full">
+      <Tabs.Item active={active} title={title} icon={Icon}>
+        {children}
+      </Tabs.Item>
+    </div>
   );
 };
 
