@@ -1,5 +1,6 @@
-import { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import { Sidebar } from "flowbite-react"; // Adjust according to your imports
+import { useSidebarContext } from "../context/SidebarContext";
 
 type SidebarGroupProps = {
   title?: string;
@@ -7,10 +8,11 @@ type SidebarGroupProps = {
 };
 
 const SidebarGroup: FC<SidebarGroupProps> = ({ title, children }) => {
+  const { isOpenOnSmallScreens } = useSidebarContext();
   return (
     <Sidebar.ItemGroup>
-      {title && (
-        <div className="pl-3 pb-2 text-gray-400 uppercase text-[80%]">
+      {title && !isOpenOnSmallScreens && (
+        <div className="pb-2 pl-3 text-[80%] uppercase text-gray-400">
           {title}
         </div>
       )}

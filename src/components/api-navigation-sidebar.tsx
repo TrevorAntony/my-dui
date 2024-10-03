@@ -57,7 +57,7 @@ const renderSidebarMenu = (config: any) => {
   // Render the System group
   const dataTaskGroup =
     dataTaskMenu.length > 0 ? (
-      <SidebarGroup key="data-tasks-group" title="Data Tasks">
+      <SidebarGroup key="data-tasks-group" title="Actions">
         {dataTaskMenu.map((item: any, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie; // Provide a fallback icon
           if (item.dashboards && item.dashboards.length > 0) {
@@ -96,7 +96,7 @@ const renderSidebarMenu = (config: any) => {
 
   const systemGroup =
     systemMenu.length > 0 ? (
-      <SidebarGroup key="system-group" title="System">
+      <SidebarGroup key="system-group" title="dashboards">
         {systemMenu.map((item: any, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie; // Provide a fallback icon
           if (item.dashboards && item.dashboards.length > 0) {
