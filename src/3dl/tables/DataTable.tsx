@@ -11,7 +11,7 @@ interface DataTableProps {
     variant?: string;
     children: React.ReactNode;
   }>;
-  header: string;
+  header?: string;
   subHeader?: string;
   variant?: string;
   exportData?: boolean | string;
