@@ -53,10 +53,10 @@ const DuftModal: React.FC<DuftModalProps> = ({
   // Determine default width (narrow) and height (large) if not specified
   const resolvedModalWidth = modalWidth
     ? modalWidthMap[modalWidth]
-    : modalWidthMap.narrow;
+    : modalWidthMap.medium;
   const resolvedModalHeight = modalHeight
     ? modalHeightMap[modalHeight]
-    : modalHeightMap.large;
+    : modalHeightMap.small;
 
   // Smart modal style that adjusts based on content size or uses fixed values if provided
   const modalBodyStyle = {
@@ -68,8 +68,8 @@ const DuftModal: React.FC<DuftModalProps> = ({
       : resolvedModalWidth, // Use fixed width if provided
     minHeight: miniHeight ? miniHeight : "10vh", // Use fixed height if provided, otherwise set a minimum height
     maxHeight: miniHeight ? miniHeight : resolvedModalHeight, // Use fixed height if provided
-    width: miniWidth ? miniWidth : "auto", // Use fixed width if provided
-    height: miniHeight ? miniHeight : "auto", // Use fixed height if provided
+    width: resolvedModalWidth ? resolvedModalWidth : "auto", // Use fixed width if provided
+    height: resolvedModalHeight ? resolvedModalHeight : "auto", // Use fixed height if provided
     overflowY: "auto", // Enable vertical scrolling if content overflows height
     overflowX: "auto", // Enable horizontal scrolling if content overflows width
   };
