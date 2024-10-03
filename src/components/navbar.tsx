@@ -27,11 +27,13 @@ import {
 } from "react-icons/hi";
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
+import config from "../config";
 
 const ExampleNavbar: FC = function () {
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
 
+  console.log("Debug - config:", config);
   return (
     <Navbar fluid>
       <div className="w-full p-3 lg:px-5 lg:pl-3">
@@ -57,7 +59,7 @@ const ExampleNavbar: FC = function () {
                 className="mr-3 h-6 sm:h-8"
               />
               <span className="self-center whitespace-nowrap text-2xl font-semibold text-highlight-800 dark:text-highlight-200">
-                DUFT
+                {config.title}
               </span>
             </Navbar.Brand>
           </div>
