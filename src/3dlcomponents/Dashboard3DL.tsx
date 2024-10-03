@@ -64,6 +64,7 @@ import DuftFilter from "../ui-components/filter-components";
 import DuftSingleView from "../ui-components/table-components";
 import DuftModal from "../components/duft-modal";
 import type { ContainerComponentProps } from "../3dl/types/types";
+import SingleTableLayoutTester from "../content-components/SingleTableLayoutTester";
 
 const useDashboardData = (id: string) => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -256,6 +257,7 @@ const Dashboard3DL: React.FC = () => {
               SingleView: DuftSingleView,
               SingleViewHeader: DuftSingleView.Header,
               ExportData,
+              SingleTableLayoutTester,
             }}
             jsx={dashboardData}
           />
