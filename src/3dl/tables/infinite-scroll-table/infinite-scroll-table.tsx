@@ -143,6 +143,7 @@ interface InfiniteScrollTableProps {
   modal: React.ComponentType<unknown>;
   children?: React.ReactNode;
   exportData?: boolean | string;
+  initialColumns?: string;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -153,6 +154,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   modal: ModalComponent,
   children,
   exportData,
+  initialColumns,
 }) => {
   const {
     data,
@@ -163,7 +165,6 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     handleSortChange,
     query,
     searchColumns,
-    initialColumns,
   } = useDataContext();
   const layout = useLayout();
   const headers = data?.length > 0 ? Object.keys(data[0]) : [];

@@ -12,7 +12,6 @@ interface DataContextType {
   loading?: boolean;
   searchText?: string;
   searchColumns?: string;
-  initialColumns?: string;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
