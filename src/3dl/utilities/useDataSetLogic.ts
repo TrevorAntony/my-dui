@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { DashboardContext } from "./Dashboard";
 import config from "../../config";
 
@@ -12,7 +12,7 @@ interface UseDataSetLogicProps {
   sortColumn?: string;
   pageSize?: number;
   currentPage?: number;
-  debug?: boolean;
+  debug?: string | boolean;
 }
 
 const useDataSetLogic = ({
@@ -31,16 +31,27 @@ const useDataSetLogic = ({
   const [modifiedQuery, setModifiedQuery] = useState<string>(query);
   const [queryReady, setQueryReady] = useState<boolean>(false);
 
-  const requestData = {
-    query: modifiedQuery,
-    data_connection_id: config.dataConnection || "ANA",
-    ...(filters && Object.keys(filters).length > 0 && { filters }),
-    ...(searchText && { search_text: searchText }),
-    ...(searchColumns && { search_columns: searchColumns }),
-    ...(sortColumn && { sort_column: sortColumn }),
-    ...(pageSize && { page_size: pageSize }),
-    ...(currentPage && { current_page: currentPage }),
-  };
+  const requestData = useMemo(
+    () => ({
+      query: modifiedQuery,
+      data_connection_id: config.dataConnection || "ANA",
+      ...(filters && Object.keys(filters).length > 0 && { filters }),
+      ...(searchText && { search_text: searchText }),
+      ...(searchColumns && { search_columns: searchColumns }),
+      ...(sortColumn && { sort_column: sortColumn }),
+      ...(pageSize && { page_size: pageSize }),
+      ...(currentPage && { current_page: currentPage }),
+    }),
+    [
+      modifiedQuery,
+      filters,
+      searchText,
+      searchColumns,
+      sortColumn,
+      pageSize,
+      currentPage,
+    ]
+  );
 
   const {
     data: fetchedData,
@@ -78,7 +89,7 @@ const useDataSetLogic = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (debug) {
+      if (debug === true || debug === "true") {
         try {
           const response = await fetch(`${config.apiBaseUrl}/build-query`, {
             method: "POST",
