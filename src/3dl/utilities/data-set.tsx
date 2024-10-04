@@ -15,7 +15,7 @@ interface DataSetProps {
   columnName?: string;
   config?: { [key: string]: string };
   transpose?: string;
-  debug?: boolean;
+  debug?: string | boolean;
   children: React.ReactNode;
 }
 
