@@ -12,6 +12,7 @@ interface UseDataSetLogicProps {
   sortColumn?: string;
   pageSize?: number;
   currentPage?: number;
+  debug?: boolean;
 }
 
 const useDataSetLogic = ({
@@ -24,6 +25,7 @@ const useDataSetLogic = ({
   sortColumn,
   pageSize,
   currentPage,
+  debug = false,
 }: UseDataSetLogicProps) => {
   const { state, dispatch } = useContext(DashboardContext);
   const [modifiedQuery, setModifiedQuery] = useState<string>(query);
@@ -73,6 +75,43 @@ const useDataSetLogic = ({
       });
     }
   }, [staticData, fetchedData, loading, error, dispatch, query, queryReady]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (debug) {
+        try {
+          const response = await fetch(`${config.apiBaseUrl}/build-query`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestData),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log("Debug - /build-query response:", data);
+        } catch (error) {
+          console.error("Debug - Error fetching /build-query:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [
+    query,
+    filters,
+    searchText,
+    searchColumns,
+    sortColumn,
+    currentPage,
+    pageSize,
+    debug,
+    requestData,
+  ]);
 
   return { data, loading, error, state };
 };

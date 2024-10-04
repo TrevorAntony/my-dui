@@ -15,6 +15,7 @@ interface DataSetProps {
   columnName?: string;
   config?: { [key: string]: string };
   transpose?: string;
+  debug?: boolean;
   children: React.ReactNode;
 }
 
@@ -58,6 +59,7 @@ const Dataset: React.FC<DataSetProps> = ({
   columnName,
   config,
   transpose = "false",
+  debug = false,
   children,
 }) => {
   const initialQuery =
@@ -83,6 +85,7 @@ const Dataset: React.FC<DataSetProps> = ({
     sortColumn: sortText,
     pageSize,
     currentPage,
+    debug,
   });
 
   const prevSearchTextRef = useRef<string>(searchText);
