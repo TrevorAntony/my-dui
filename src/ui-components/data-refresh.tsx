@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import DuftModal from "../components/duft-modal"; // Ensure the path is correct
 import config from "../config";
 
-const FreeQuery: React.FC = () => {
+const DataRefresh: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null); // State to store error message
 
@@ -61,4 +61,4 @@ const FreeQuery: React.FC = () => {
   );
 };
 
-export default FreeQuery;
+export default DataRefresh;
