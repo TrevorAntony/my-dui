@@ -3,21 +3,23 @@ import { Modal, Button } from "flowbite-react";
 import { HiX } from "react-icons/hi";
 import { renderModalContent } from "../helpers/modalContentHelper";
 
-// Mapping modal width to Flowbite size classes
+// Updated Modal Width Map with a smaller size
 const modalWidthMap = {
-  narrow: "3xl", // Smallest width
+  mini: "sm",
+  narrow: "3xl",
   medium: "7xl",
   wide: "full",
 };
 
-// Mapping modal height to CSS height values
 const modalHeightMap = {
-  small: "30vh", // Small height (30% of viewport height)
-  medium: "60vh", // Medium height (60% of viewport height)
-  large: "80vh", // Large height (80% of viewport height)
+  tiny: "8vh", // Very small size
+  smaller: "15vh", // Smaller size
+  small: "30vh", // Small size
+  medium: "60vh", // Medium size
+  large: "80vh", // Large size
 };
 
-interface DuftModalProps {
+export interface DuftModalProps {
   isOpen: boolean;
   onClose: () => void;
   onExecute?: () => void;
@@ -29,8 +31,11 @@ interface DuftModalProps {
   handleButtonClose?: () => void;
   modalWidth?: keyof typeof modalWidthMap;
   modalHeight?: keyof typeof modalHeightMap;
-  miniWidth?: string; // Optional fixed width (e.g., "500px", "50vw")
-  miniHeight?: string; // Optional fixed height (e.g., "500px", "50vh")
+  miniWidth?: string;
+  miniHeight?: string;
+  modalBodyStyle?: React.CSSProperties;
+  size?: string;
+  disableButtons?: boolean; // New prop to disable/enable buttons
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
@@ -43,12 +48,15 @@ const DuftModal: React.FC<DuftModalProps> = ({
   modalContent,
   hideFooter = false,
   handleButtonClose,
-  modalWidth, // Allow undefined for default handling
-  modalHeight, // Allow undefined for default handling
-  miniWidth, // Optional prop for fixed width
-  miniHeight, // Optional prop for fixed height
+  modalWidth,
+  modalHeight,
+  miniWidth,
+  miniHeight,
+  modalBodyStyle,
+  size,
+  disableButtons = false,
 }) => {
-  // Determine default width (narrow) and height (large) if not specified
+  // Determine default width (medium) and height (small) if not specified
   const resolvedModalWidth = modalWidth
     ? modalWidthMap[modalWidth]
     : modalWidthMap.medium;
@@ -57,26 +65,27 @@ const DuftModal: React.FC<DuftModalProps> = ({
     : modalHeightMap.small;
 
   // Smart modal style that adjusts based on content size or uses fixed values if provided
-  const modalBodyStyle = {
-    minWidth: miniWidth ? miniWidth : "10vw", // Use fixed width if provided, otherwise set a minimum width
+  const finalModalBodyStyle = {
+    minWidth: miniWidth ? miniWidth : "10vw",
     maxWidth: miniWidth
       ? miniWidth
       : resolvedModalWidth === "full"
       ? "100%"
-      : resolvedModalWidth, // Use fixed width if provided
-    minHeight: miniHeight ? miniHeight : "10vh", // Use fixed height if provided, otherwise set a minimum height
-    maxHeight: miniHeight ? miniHeight : resolvedModalHeight, // Use fixed height if provided
-    width: resolvedModalWidth ? resolvedModalWidth : "auto", // Use fixed width if provided
-    height: resolvedModalHeight ? resolvedModalHeight : "auto", // Use fixed height if provided
-    overflowY: "auto", // Enable vertical scrolling if content overflows height
-    overflowX: "auto", // Enable horizontal scrolling if content overflows width
+      : resolvedModalWidth,
+    minHeight: miniHeight ? miniHeight : "10vh",
+    maxHeight: miniHeight ? miniHeight : resolvedModalHeight,
+    width: resolvedModalWidth ? resolvedModalWidth : "auto",
+    height: resolvedModalHeight ? resolvedModalHeight : "auto",
+    overflowY: "auto",
+    overflowX: "auto",
+    ...modalBodyStyle,
   };
 
   return (
     <Modal
       show={isOpen}
       onClose={onClose}
-      size={resolvedModalWidth} // Default to smallest size unless specified
+      size={size ? size : resolvedModalWidth} // Default to smallest size unless specified
       className="relative"
     >
       {/* Modal Header */}
@@ -94,7 +103,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
       </div>
 
       {/* Modal Body with dynamic or fixed sizing */}
-      <Modal.Body className="p-6" style={modalBodyStyle}>
+      <Modal.Body className="p-6" style={finalModalBodyStyle}>
         {children
           ? children
           : modalContent
@@ -102,18 +111,19 @@ const DuftModal: React.FC<DuftModalProps> = ({
           : null}
       </Modal.Body>
 
-      {!hideFooter && (
-        <Modal.Footer className="flex justify-end">
-          <Button color="primary" onClick={handleButtonClose || onClose}>
-            Close
-          </Button>
-          {executeButtonName && onExecute && (
-            <Button color="pink" onClick={onExecute}>
-              {executeButtonName || "Run"}
-            </Button>
-          )}
-        </Modal.Footer>
-      )}
+      <Modal.Footer className="flex justify-end">
+        <Button color="pink" onClick={onExecute} disabled={disableButtons}>
+          {executeButtonName || "Run"}
+        </Button>
+
+        <Button
+          color="primary"
+          onClick={handleButtonClose || onClose}
+          disabled={disableButtons}
+        >
+          Close
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

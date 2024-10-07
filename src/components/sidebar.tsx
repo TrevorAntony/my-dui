@@ -23,6 +23,7 @@ import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
 import DuftModal from "./duft-modal";
+import DataTaskModal from "./data-task-modal";
 // import useFetchDteStatus from "../3dlcomponents/resources/useFetchDteStatus";
 
 const ExampleSidebar: FC = function () {
@@ -246,17 +247,26 @@ const BottomMenu: FC = function () {
         </Tooltip>
       </div>
 
-      <DuftModal
+      {/* <DuftModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Data Refresh"
         executeButtonName="Run data task"
-        miniHeight="500px"
         modalContent={modalContent}
         hideButtons={data?.isRunning} // The footer is only hidden if explicitly required
         showExecuteButton={data?.message?.includes(
           "Task completed successfully with return code 0"
         )} // Check if script is completed
+      /> */}
+      <DataTaskModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="Data Refresh"
+        executeButtonName="Run data task"
+        modalContent={modalContent}
+        modalHeight="smaller"
+        sizeOverride="3xl" // Override the size directly
+        disableButtons={data?.isRunning}
       />
     </>
   );
