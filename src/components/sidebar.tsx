@@ -247,17 +247,6 @@ const BottomMenu: FC = function () {
         </Tooltip>
       </div>
 
-      {/* <DuftModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title="Data Refresh"
-        executeButtonName="Run data task"
-        modalContent={modalContent}
-        hideButtons={data?.isRunning} // The footer is only hidden if explicitly required
-        showExecuteButton={data?.message?.includes(
-          "Task completed successfully with return code 0"
-        )} // Check if script is completed
-      /> */}
       <DataTaskModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}

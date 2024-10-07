@@ -12,15 +12,16 @@ interface DataTaskModalProps extends DuftModalProps {
 const DataTaskModal: React.FC<DataTaskModalProps> = ({
   sizeOverride,
   maxHeightOverride,
+  closeButtonLabel, // Prop to allow customizing the Close button label
   ...props
 }) => {
   // Override the default modal width and height with smaller dimensions
   const defaultWidth = "mini";
-  const defaultHeight = "micro";
+  const defaultHeight = "tiny";
 
   return (
     <DuftModal
-      {...props} // Spread the remaining props (e.g., isOpen, onClose)
+      {...props}
       modalWidth={props.modalWidth || defaultWidth}
       modalHeight={props.modalHeight || defaultHeight}
       miniHeight={maxHeightOverride ? undefined : props.miniHeight}
@@ -29,6 +30,7 @@ const DataTaskModal: React.FC<DataTaskModalProps> = ({
         maxHeight: maxHeightOverride ? maxHeightOverride : undefined,
       }}
       size={sizeOverride || undefined}
+      closeButtonLabel={closeButtonLabel || "Close"}
     />
   );
 };
