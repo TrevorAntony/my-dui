@@ -13,6 +13,7 @@ const PivotTable = ({
   pivotRows = [],
   pivotCols = [],
   exportData,
+  detailsComponent,
 }) => {
   const initialPivotRows = pivotRows;
   const initialPivotCols = pivotCols;
@@ -92,6 +93,7 @@ const PivotTable = ({
       subHeader={subHeader}
       variant={variant}
       exportData={exportData}
+      detailsComponent={detailsComponent}
     >
       {wrappedContent}
     </ContainerComponent>

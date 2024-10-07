@@ -150,6 +150,7 @@ const Dataset: React.FC<DataSetProps> = ({
         handleSearchChange,
         handleSortChange,
         searchColumns,
+        pageSize,
       }}
     >
       {state?.debug && (

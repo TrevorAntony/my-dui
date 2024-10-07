@@ -5,4 +5,5 @@ export interface ContainerComponentProps {
   children: React.ReactNode;
   query?: string;
   exportData?: string | boolean;
+  detailsComponent?: string;
 }
