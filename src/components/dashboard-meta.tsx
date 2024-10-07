@@ -1,33 +1,29 @@
-import { DuftGridHeader } from "../ui-components/grid-components";
 import { useDataContext } from "../3dl/context/DataContext";
+import React from "react";
 
-const DashboardMeta = () => {
+interface DashboardMetaProps {
+  children: React.ReactNode;
+}
+
+const DashboardMeta: React.FC<DashboardMetaProps> = ({ children }) => {
   const { data } = useDataContext();
 
-  const renderTextWithPlaceholders = (text: string) => {
-    // Regular expression to find placeholders in the format %propertyName%
-    const placeholderRegex = /%(\w+)%/g;
-
-    // Replace each placeholder with the corresponding data value or a default value
-    return text.replace(placeholderRegex, (match, propertyName) => {
-      return data[propertyName] || "Data not available";
-    });
+  const replacePlaceholders = (child: React.ReactNode): React.ReactNode => {
+    if (typeof child === "object" && child !== null && "props" in child) {
+      if (typeof child.props.children === "string") {
+        if (Array.isArray(data) && data.length > 0) {
+          return child.props?.children.replace(
+            /%(\w+)%/g,
+            (match, key) => data[0][key] || match
+          );
+        }
+      }
+      return child;
+    }
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      {typeof data === "object" && data !== null && "header" in data && (
-        <DuftGridHeader>
-          {renderTextWithPlaceholders(data.header as string)}
-        </DuftGridHeader>
-      )}
-      {typeof data === "object" && data !== null && "subheader" in data && (
-        <span style={{ marginLeft: "10px" }}>
-          {"Last refresh date: "}
-          {renderTextWithPlaceholders(data.subheader as string)}
-        </span>
-      )}
-    </div>
+    <>{React.Children.map(children, (child) => replacePlaceholders(child))}</>
   );
 };
 

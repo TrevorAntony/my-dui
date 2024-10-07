@@ -65,6 +65,7 @@ import DuftSingleView from "../ui-components/table-components";
 import DuftModal from "../components/duft-modal";
 import type { ContainerComponentProps } from "../3dl/types/types";
 import SingleTableLayoutTester from "../content-components/SingleTableLayoutTester";
+import DashboardMeta from "../components/dashboard-meta";
 
 const useDashboardData = (id: string) => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -135,6 +136,7 @@ const Dashboard3DL: React.FC = () => {
               Visual3,
               Visual4,
               Visual5,
+              DashboardMeta,
               Section,
               Dataset: (props: unknown) => (
                 <Dataset {...props} useQuery={useDuftQuery} />

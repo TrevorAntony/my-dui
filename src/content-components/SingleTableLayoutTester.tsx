@@ -14,7 +14,7 @@ import {
 } from "../ui-components/grid-components";
 import { DuftTabset, DuftTab } from "../ui-components/tab-components";
 import CardComponent from "../components/card-component";
-import { FC } from "react";
+import type { FC } from "react";
 
 const SingleTableLayoutTester: React.FC = () => {
   return (
@@ -71,7 +71,7 @@ const TabBadge: FC<TabBadgeProps> = function ({ title, value }) {
     <div className="flex items-center space-x-2">
       <span>{title}</span>
       {value && (
-        <span className="inline-flex items-center rounded-full bg-highlight-800 px-2 py-1 text-xs font-medium text-white font-semibold">
+        <span className="inline-flex items-center rounded-full bg-highlight-800 px-2 py-1 text-xs font-medium font-semibold text-white">
           {value}
         </span>
       )}
