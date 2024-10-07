@@ -25,8 +25,7 @@ interface DuftModalProps {
   title?: string;
   children?: React.ReactNode;
   modalContent?: string | string[] | Record<string, any>;
-  hideButtons?: boolean;
-  showExecuteButton?: boolean;
+  hideFooter?: boolean;
   handleButtonClose?: () => void;
   modalWidth?: keyof typeof modalWidthMap;
   modalHeight?: keyof typeof modalHeightMap;
@@ -42,8 +41,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
   title = "More info",
   children,
   modalContent,
-  hideButtons = false,
-  showExecuteButton = false,
+  hideFooter = false,
   handleButtonClose,
   modalWidth, // Allow undefined for default handling
   modalHeight, // Allow undefined for default handling
@@ -85,16 +83,14 @@ const DuftModal: React.FC<DuftModalProps> = ({
       <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
         <span>{title}</span>
         {/* Hide Close button when the task is running */}
-        {!hideButtons && (
-          <button
-            type="button"
-            className="text-gray-500 hover:text-gray-700"
-            onClick={onClose}
-            aria-label="Close modal"
-          >
-            <HiX className="h-6 w-6" />
-          </button>
-        )}
+        <button
+          type="button"
+          className="text-gray-500 hover:text-gray-700"
+          onClick={onClose}
+          aria-label="Close modal"
+        >
+          <HiX className="h-6 w-6" />
+        </button>
       </div>
 
       {/* Modal Body with dynamic or fixed sizing */}
@@ -106,28 +102,18 @@ const DuftModal: React.FC<DuftModalProps> = ({
           : null}
       </Modal.Body>
 
-      {/* Modal Footer */}
-
-      <Modal.Footer className="flex justify-end space-x-4 border-t px-6 py-4">
-        {!hideButtons ? (
-          showExecuteButton ? (
-            <Button color="primary" onClick={handleButtonClose || onClose}>
-              Close
+      {!hideFooter && (
+        <Modal.Footer className="flex justify-end">
+          <Button color="primary" onClick={handleButtonClose || onClose}>
+            Close
+          </Button>
+          {executeButtonName && onExecute && (
+            <Button color="pink" onClick={onExecute}>
+              {executeButtonName || "Run"}
             </Button>
-          ) : (
-            <>
-              {onExecute && (
-                <Button color="pink" onClick={onExecute}>
-                  {executeButtonName}
-                </Button>
-              )}
-              <Button color="primary" onClick={handleButtonClose || onClose}>
-                {executeButtonName === "Run data task" ? "Cancel" : "Close"}
-              </Button>
-            </>
-          )
-        ) : null}
-      </Modal.Footer>
+          )}
+        </Modal.Footer>
+      )}
     </Modal>
   );
 };

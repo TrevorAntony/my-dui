@@ -12,6 +12,7 @@ const ScoreCardTable = ({
   tableMaxHeight = "300px",
   showToolbar,
   exportData,
+  detailsComponent,
   ...props
 }) => {
   const { data } = useDataContext();
@@ -114,6 +115,7 @@ const ScoreCardTable = ({
       header={header}
       subHeader={subHeader}
       exportData={exportData}
+      detailsComponent={detailsComponent}
     >
       {content}
     </ContainerComponent>

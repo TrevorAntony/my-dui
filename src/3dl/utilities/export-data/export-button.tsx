@@ -7,11 +7,11 @@ function ExportButton({ onClick }: ExportButtonProps) {
     <div className="h-[20px] w-[20px]">
       <button onClick={onClick}>
         <svg
-          className="h-[20px] w-[20px] text-gray-400 dark:text-white"
+          className="h-7 w-7 text-gray-400 dark:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="20"
+          height="20"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -20,7 +20,7 @@ function ExportButton({ onClick }: ExportButtonProps) {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            d="M19 10V4a1 1 0 0 0-1-1H9.914a1 1 0 0 0-.707.293L5.293 7.207A1 1 0 0 0 5 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2M10 3v4a1 1 0 0 1-1 1H5m5 6h9m0 0-2-2m2 2-2 2"
+            d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"
           />
         </svg>
       </button>

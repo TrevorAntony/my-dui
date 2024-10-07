@@ -6,12 +6,18 @@ const PieChart = ({
   header = "Pie Chart",
   subHeader = header,
   exportData,
+  detailsComponent,
   ...props
 }) => {
   const content = <BaseCircularChart {...props} chartType="pie" />;
 
   return Container ? (
-    <Container header={header} subHeader={subHeader} exportData={exportData}>
+    <Container
+      header={header}
+      subHeader={subHeader}
+      exportData={exportData}
+      detailsComponent={detailsComponent}
+    >
       {content}
     </Container>
   ) : (

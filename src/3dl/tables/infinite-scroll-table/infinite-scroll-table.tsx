@@ -25,6 +25,7 @@ const TableContent: React.FC<{
   pageUpdater?: () => void;
   layout?: string;
   searchColumns?: string;
+  pageSize?: string | number;
 }> = ({
   data,
   loading,
@@ -40,6 +41,7 @@ const TableContent: React.FC<{
   pageUpdater,
   layout,
   searchColumns,
+  pageSize,
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
@@ -48,7 +50,7 @@ const TableContent: React.FC<{
 
   const handleScroll = () => {
     const table = tableRef.current;
-    if (table) {
+    if (table && pageSize) {
       const { scrollTop, scrollHeight, clientHeight } = table;
       if (scrollTop + clientHeight >= scrollHeight - 1 && !loading) {
         pageUpdater?.();
@@ -143,6 +145,8 @@ interface InfiniteScrollTableProps {
   modal: React.ComponentType<unknown>;
   children?: React.ReactNode;
   exportData?: boolean | string;
+  initialColumns?: string;
+  detailsComponent?: string;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -153,6 +157,8 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   modal: ModalComponent,
   children,
   exportData,
+  initialColumns,
+  detailsComponent,
 }) => {
   const {
     data,
@@ -163,7 +169,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
     handleSortChange,
     query,
     searchColumns,
-    initialColumns,
+    pageSize,
   } = useDataContext();
   const layout = useLayout();
   const headers = data?.length > 0 ? Object.keys(data[0]) : [];
@@ -245,6 +251,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       pageUpdater={pageUpdater}
       layout={layout}
       searchColumns={searchColumns}
+      pageSize={pageSize}
     >
       {children}
     </TableContent>
@@ -267,6 +274,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       variant={variant as "card" | "default"}
       query={query}
       exportData={exportData}
+      detailsComponent={detailsComponent as string}
     >
       {wrappedContent}
     </ContainerComponent>

@@ -12,7 +12,7 @@ interface DataContextType {
   loading?: boolean;
   searchText?: string;
   searchColumns?: string;
-  initialColumns?: string;
+  pageSize?: string | number;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
