@@ -59,7 +59,7 @@ const Dataset: React.FC<DataSetProps> = ({
   columnName,
   config,
   transpose = "false",
-  debug = false,
+  debug,
   children,
 }) => {
   const initialQuery =
