@@ -7,6 +7,7 @@ import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
 import { useLayout } from "../3dl/ui-elements/single-layout";
 import { getDetailsComponent } from "./details-component-registry";
 import DuftModal from "./duft-modal";
+import { HiOutlineExternalLink } from "react-icons/hi";
 
 type MoreInfoProps = {
   text: string;
@@ -68,7 +69,7 @@ const CardComponent: FC<CardComponentProps> = ({
 
           <div className="flex items-center space-x-2">
             {shouldExportData && (
-              <div className="mt-1 self-start">
+              <div className="self-start">
                 {query ? (
                   <Dataset query={query} useQuery={useDuftQuery}>
                     <ExportData />
@@ -81,31 +82,17 @@ const CardComponent: FC<CardComponentProps> = ({
 
             {DetailsComponent && (
               <button
-                className="ml-2 p-2 text-sm text-highlight-700 hover:bg-gray-100 dark:text-highlight-500 dark:hover:bg-gray-700"
+                className="pl-2 pt-[1.85px] dark:text-highlight-500"
                 onClick={toggleModal}
                 title="Show Details"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
+                <HiOutlineExternalLink className=" text-gray-400" size={20} />
               </button>
             )}
           </div>
         </div>
       )}
 
-      {/* Ensure the children are centered */}
       <div className="mt-4 grow">{children}</div>
 
       {footer && variant !== "plain" && (
