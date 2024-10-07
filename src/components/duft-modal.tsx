@@ -18,7 +18,6 @@ interface DuftModalProps {
   children?: React.ReactNode;
   modalContent?: string | string[] | Record<string, any>;
   hideFooter?: boolean;
-  showExecuteButton?: boolean;
   handleButtonClose?: () => void;
   modalSize?: "small" | "medium" | "large";
 }
@@ -32,7 +31,6 @@ const DuftModal: React.FC<DuftModalProps> = ({
   children,
   modalContent,
   hideFooter = false,
-  showExecuteButton = false,
   handleButtonClose,
   modalSize = "small",
 }) => {
@@ -82,23 +80,13 @@ const DuftModal: React.FC<DuftModalProps> = ({
 
       {!hideFooter && (
         <Modal.Footer className="flex justify-end">
-          {showExecuteButton && (
-            <Button color="primary" onClick={handleButtonClose || onClose}>
-              Close
+          <Button color="primary" onClick={handleButtonClose || onClose}>
+            Close
+          </Button>
+          {executeButtonName && onExecute && (
+            <Button color="pink" onClick={onExecute}>
+              {executeButtonName || "Run"}
             </Button>
-          )}
-
-          {!hideFooter && !showExecuteButton && (
-            <>
-              <Button color="primary" onClick={handleButtonClose || onClose}>
-                Close
-              </Button>
-              {executeButtonName && onExecute && (
-                <Button color="pink" onClick={onExecute}>
-                  {executeButtonName || "Run"}
-                </Button>
-              )}
-            </>
           )}
         </Modal.Footer>
       )}

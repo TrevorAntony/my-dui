@@ -6,12 +6,18 @@ const LineChart = ({
   header = "Line Chart",
   subHeader = header,
   exportData,
+  detailsComponent,
   ...props
 }) => {
   const content = <BaseXYChart {...props} chartType="line" />;
 
   return Container ? (
-    <Container header={header} subHeader={subHeader} exportData={exportData}>
+    <Container
+      header={header}
+      subHeader={subHeader}
+      exportData={exportData}
+      detailsComponent={detailsComponent}
+    >
       {content}
     </Container>
   ) : (

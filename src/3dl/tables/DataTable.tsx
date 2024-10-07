@@ -15,6 +15,7 @@ interface DataTableProps {
   subHeader?: string;
   variant?: string;
   exportData?: boolean | string;
+  detailsComponent?: string;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -23,6 +24,7 @@ const DataTable: React.FC<DataTableProps> = ({
   subHeader = "",
   variant = "card",
   exportData,
+  detailsComponent,
 }) => {
   const { data } = useDataContext();
   const layout = useLayout();
@@ -94,6 +96,7 @@ const DataTable: React.FC<DataTableProps> = ({
       subHeader={subHeader}
       variant={variant}
       exportData={exportData}
+      detailsComponent={detailsComponent}
     >
       {wrappedContent}
     </ContainerComponent>
