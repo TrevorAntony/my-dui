@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import config from "../config";
-import DataTaskModal from "../components/data-task-modal";
+import DuftModal from "../components/duft-modal";
 
 const FreeQuery: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -47,20 +47,19 @@ const FreeQuery: React.FC = () => {
   };
 
   return (
-    <DataTaskModal
+    <DuftModal
       isOpen={isOpen}
       onClose={toggleModal}
       onExecute={handleDataTask}
       title="Data Refresh"
       executeButtonName="Run data task"
-      modalHeight="smaller"
-      sizeOverride="3xl"
+      modalWidth="narrow"
       closeButtonLabel="Cancel"
     >
       <p>Do you want to refresh the data?</p>
       {error && <p className="text-red-600">{error}</p>}{" "}
       {/* Conditionally render error */}
-    </DataTaskModal>
+    </DuftModal>
   );
 };
 

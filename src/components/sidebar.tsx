@@ -23,7 +23,7 @@ import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
 import DuftModal from "./duft-modal";
-import DataTaskModal from "./data-task-modal";
+import { renderModalContent } from "../helpers/modalContentHelper";
 // import useFetchDteStatus from "../3dlcomponents/resources/useFetchDteStatus";
 
 const ExampleSidebar: FC = function () {
@@ -239,6 +239,7 @@ const BottomMenu: FC = function () {
     cursor: "pointer",
   };
 
+  const content = renderModalContent(modalContent);
   return (
     <>
       <div className="flex items-center justify-center gap-x-5">
@@ -247,16 +248,16 @@ const BottomMenu: FC = function () {
         </Tooltip>
       </div>
 
-      <DataTaskModal
+      <DuftModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Data Refresh"
         executeButtonName="Run data task"
-        modalContent={modalContent}
-        modalHeight="smaller"
-        sizeOverride="3xl" // Override the size directly
         disableButtons={data?.isRunning}
-      />
+        modalWidth="narrow"
+      >
+        <div className="h-[150px] overflow-y-auto">{content}</div>
+      </DuftModal>
     </>
   );
 };

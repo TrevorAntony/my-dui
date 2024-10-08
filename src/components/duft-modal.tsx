@@ -30,12 +30,8 @@ export interface DuftModalProps {
   handleButtonClose?: () => void;
   modalWidth?: keyof typeof modalWidthMap;
   modalHeight?: keyof typeof modalHeightMap;
-  miniWidth?: string;
-  miniHeight?: string;
-  modalBodyStyle?: React.CSSProperties;
-  size?: string;
-  disableButtons?: boolean; // New prop to disable/enable buttons
-  closeButtonLabel?: string; // New prop for Close button label
+  disableButtons?: boolean;
+  closeButtonLabel?: string;
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
@@ -49,54 +45,41 @@ const DuftModal: React.FC<DuftModalProps> = ({
   handleButtonClose,
   modalWidth,
   modalHeight,
-  miniWidth,
-  miniHeight,
-  modalBodyStyle,
-  size,
-  disableButtons = false, // Default to false (buttons are enabled)
+  // miniWidth,
+  // miniHeight,
+  disableButtons = false,
   closeButtonLabel = "Close",
 }) => {
-  // Determine default width (medium) and height (small) if not specified
-  const resolvedModalWidth = modalWidth
-    ? modalWidthMap[modalWidth]
-    : modalWidthMap.medium;
+  // Determine resolved modal width and height based on the provided props or defaults
+  const resolvedModalWidth = modalWidth ? modalWidthMap[modalWidth] : "7xl";
   const resolvedModalHeight = modalHeight
     ? modalHeightMap[modalHeight]
-    : modalHeightMap.small;
+    : "auto";
 
-  // Smart modal style that adjusts based on content size or uses fixed values if provided
+  // Smart modal style: Set fixed dimension only when the corresponding prop is provided
   const finalModalBodyStyle = {
-    minWidth: miniWidth ? miniWidth : "10vw",
-    maxWidth: miniWidth
-      ? miniWidth
-      : resolvedModalWidth === "full"
-      ? "100%"
-      : resolvedModalWidth,
-    minHeight: miniHeight ? miniHeight : "10vh",
-    maxHeight: miniHeight ? miniHeight : resolvedModalHeight,
-    width: resolvedModalWidth ? resolvedModalWidth : "auto",
-    height: resolvedModalHeight ? resolvedModalHeight : "auto",
+    height: modalHeight ? resolvedModalHeight : "auto",
+    maxWidth: !modalWidth ? resolvedModalWidth : undefined,
     overflowY: "auto",
     overflowX: "auto",
-    ...modalBodyStyle,
   };
 
   return (
     <Modal
       show={isOpen}
       onClose={onClose}
-      size={size ? size : resolvedModalWidth} // Default to smallest size unless specified
+      size={resolvedModalWidth}
       className="relative"
     >
       {/* Modal Header */}
       <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
         <span>{title}</span>
-        {/* Hide Close button when the task is running */}
         <button
           type="button"
           className="text-gray-500 hover:text-gray-700"
           onClick={onClose}
           aria-label="Close modal"
+          disabled={disableButtons}
         >
           <HiX className="h-6 w-6" />
         </button>
