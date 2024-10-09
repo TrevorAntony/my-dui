@@ -50,7 +50,9 @@ const DuftModal: React.FC<DuftModalProps> = ({
 }) => {
   // Determine resolved modal width and height based on the provided props or defaults
   const resolvedModalWidth = modalWidth ? modalWidthMap[modalWidth] : "7xl";
-  const resolvedModalHeight = modalHeight ? modalHeightMap[modalHeight] : "8vh";
+  const resolvedModalHeight = modalHeight
+    ? modalHeightMap[modalHeight]
+    : "auto";
 
   // Smart modal style: Set fixed dimension only when the corresponding prop is provided
   const finalModalBodyStyle = {
