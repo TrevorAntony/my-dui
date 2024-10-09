@@ -1,11 +1,11 @@
 import { useDataContext } from "../3dl/context/DataContext";
 import React from "react";
 
-interface DashboardMetaProps {
+interface DataStringProps {
   children: React.ReactNode;
 }
 
-const DashboardMeta: React.FC<DashboardMetaProps> = ({ children }) => {
+const DataString: React.FC<DataStringProps> = ({ children }) => {
   const { data } = useDataContext();
 
   const replacePlaceholders = (child: React.ReactNode): React.ReactNode => {
@@ -27,4 +27,4 @@ const DashboardMeta: React.FC<DashboardMetaProps> = ({ children }) => {
   );
 };
 
-export default DashboardMeta;
+export default DataString;
