@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/no-custom-classname */
 import type { ReactNode } from "react";
 import React from "react";
 import { useLayout } from "../3dl/utilities/Dashboard";
@@ -8,7 +9,7 @@ interface RowProps {
 
 interface DuftGridProps {
   children: React.ReactNode;
-  [key: string]: any; // Accept additional props
+  [key: string]: any;
 }
 
 const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
@@ -37,7 +38,7 @@ export default DuftGrid;
 interface DuftGridFullRowProps {
   children: React.ReactNode;
   columns?: number;
-  largeColumns?: number;
+  largeColumns?: number | string;
 }
 
 const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
@@ -51,7 +52,6 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
 
   return (
     <div
-      // className={`md:grid-cols-${columns} xl:grid-cols-${largeScreenCols} grid w-full grid-cols-1 gap-4 sm:grid-cols-1`}
       className={
         layout === "single-layout"
           ? "mb-1 w-full"
@@ -60,7 +60,7 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
-          ? React.cloneElement(child, { ...props }) // Pass additional props to each child
+          ? React.cloneElement(child, { ...props })
           : child
       )}
     </div>
@@ -81,4 +81,15 @@ const DuftGridHeader: React.FC<RowProps> = ({ children, small }) => {
   return <Tag className={className}>{children}</Tag>;
 };
 
-export { DuftGrid, DuftGridFullRow, DuftGridHeader };
+const DuftSubheader: React.FC<RowProps> = ({ children }) => {
+  const className =
+    "mt-0 text-sm font-medium text-gray-800 dark:text-gray-300 md:mt-6";
+
+  return (
+    <div className="flex justify-start align-text-bottom md:justify-end">
+      <h5 className={className}>{children}</h5>
+    </div>
+  );
+};
+
+export { DuftGrid, DuftGridFullRow, DuftGridHeader, DuftSubheader };
