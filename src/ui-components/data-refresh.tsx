@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import DuftModal from "../components/duft-modal"; // Ensure the path is correct
 import config from "../config";
+import DuftModal from "../components/duft-modal";
 
 const DataRefresh: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -53,6 +53,8 @@ const DataRefresh: React.FC = () => {
       onExecute={handleDataTask}
       title="Data Refresh"
       executeButtonName="Run data task"
+      modalWidth="narrow"
+      closeButtonLabel="Cancel"
     >
       <p>Do you want to refresh the data?</p>
       {error && <p className="text-red-600">{error}</p>}{" "}

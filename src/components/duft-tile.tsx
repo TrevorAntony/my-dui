@@ -9,10 +9,16 @@ interface DuftTileProps {
   backgroundColor?: string;
   color?: string;
   children?: React.ReactNode;
-  modalSize?: "small" | "medium" | "large";
+  modalWidth?: "narrow" | "medium" | "wide"; // Width options
+  modalHeight?: "small" | "medium" | "large"; // Height options
 }
 
-const DuftTile: React.FC<DuftTileProps> = ({ title, children, modalSize }) => {
+const DuftTile: React.FC<DuftTileProps> = ({
+  title,
+  children,
+  modalWidth,
+  modalHeight, // Default to medium height
+}) => {
   const { data } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -109,8 +115,8 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children, modalSize }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={title}
-        modalSize={modalSize}
-        isCloseDefault={true}
+        modalWidth={modalWidth} // Pass width prop to modal
+        modalHeight={modalHeight} // Pass height prop to modal
       >
         {children}
       </DuftModal>

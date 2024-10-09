@@ -23,6 +23,7 @@ import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
 import DuftModal from "./duft-modal";
+import { renderModalContent } from "../helpers/modalContentHelper";
 // import useFetchDteStatus from "../3dlcomponents/resources/useFetchDteStatus";
 
 const ExampleSidebar: FC = function () {
@@ -238,6 +239,7 @@ const BottomMenu: FC = function () {
     cursor: "pointer",
   };
 
+  const content = renderModalContent(modalContent);
   return (
     <>
       <div className="flex items-center justify-center gap-x-5">
@@ -249,15 +251,13 @@ const BottomMenu: FC = function () {
       <DuftModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        onExecute={handleButtonClose}
         title="Data Refresh"
         executeButtonName="Run data task"
-        modalContent={modalContent}
-        hideFooter={data?.isRunning} // The footer is only hidden if explicitly required
-        hideExecuteButton={data?.message?.includes(
-          "Task completed successfully with return code 0"
-        )} // Check if script is completed
-      />
+        disableButtons={data?.isRunning}
+        modalWidth="narrow"
+      >
+        <div className="h-[150px] overflow-y-auto">{content}</div>
+      </DuftModal>
     </>
   );
 };
