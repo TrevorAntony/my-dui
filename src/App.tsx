@@ -13,7 +13,7 @@ import GridLayoutTester from "./content-components/GridLayoutTester";
 import TabLayoutTester from "./content-components/TabLayoutTester.js";
 import DashboardRaw3DL from "./3dlcomponents/DashboardRaw3DL.js";
 import SingleTableLayoutTester from "./content-components/SingleTableLayoutTester.js";
-import DataRefresh from "./ui-components/free-query.js";
+import DataRefresh from "./ui-components/data-refresh.js";
 
 // const ComponentAA: React.FC = () => <div>Component A</div>;
 // const ComponentBB: React.FC = () => <div>Component B</div>;

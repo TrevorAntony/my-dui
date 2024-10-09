@@ -56,6 +56,7 @@ import {
   DuftGrid,
   DuftGridFullRow,
   DuftGridHeader,
+  DuftSubheader,
 } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
 import { DuftTabset, DuftTab } from "../ui-components/tab-components";
@@ -65,6 +66,7 @@ import DuftSingleView from "../ui-components/table-components";
 import DuftModal from "../components/duft-modal";
 import type { ContainerComponentProps } from "../3dl/types/types";
 import SingleTableLayoutTester from "../content-components/SingleTableLayoutTester";
+import DataString from "../components/dashboard-meta";
 
 const useDashboardData = (id: string) => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -128,6 +130,7 @@ const Dashboard3DL: React.FC = () => {
               QueryProvider,
               SingleLayout,
               Header: DuftGridHeader,
+              Subheader: DuftSubheader,
               Filters,
               Filter: DuftFilter,
               Query,
@@ -135,6 +138,7 @@ const Dashboard3DL: React.FC = () => {
               Visual3,
               Visual4,
               Visual5,
+              DataString,
               Section,
               Dataset: (props: unknown) => (
                 <Dataset {...props} useQuery={useDuftQuery} />
