@@ -12,11 +12,11 @@ const modalWidthMap = {
 };
 
 const modalHeightMap = {
-  tiny: "8vh", // Very small size
-  smaller: "15vh", // Smaller size
-  small: "30vh", // Small size
-  medium: "60vh", // Medium size
-  large: "80vh", // Large size
+  tiny: "8vh",
+  smaller: "15vh",
+  small: "30vh",
+  medium: "60vh",
+  large: "80vh",
 };
 
 export interface DuftModalProps {
@@ -45,16 +45,12 @@ const DuftModal: React.FC<DuftModalProps> = ({
   handleButtonClose,
   modalWidth,
   modalHeight,
-  // miniWidth,
-  // miniHeight,
   disableButtons = false,
   closeButtonLabel = "Close",
 }) => {
   // Determine resolved modal width and height based on the provided props or defaults
   const resolvedModalWidth = modalWidth ? modalWidthMap[modalWidth] : "7xl";
-  const resolvedModalHeight = modalHeight
-    ? modalHeightMap[modalHeight]
-    : "auto";
+  const resolvedModalHeight = modalHeight ? modalHeightMap[modalHeight] : "8vh";
 
   // Smart modal style: Set fixed dimension only when the corresponding prop is provided
   const finalModalBodyStyle = {
