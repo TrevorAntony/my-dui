@@ -198,7 +198,7 @@ function Pack-Conda-Env {
 
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
   Write-Color "Packing Conda environment '$EnvName' into portable-venv.tar.gz..." Blue
-  & tar -czf "$ServerAppDir\portable-venv.tar.gz" -C "$ServerAppDir" "$EnvName"
+  & tar -czf "$ServerAppDir\portable-venv.tar.gz" --strip-components=1 -C "$ServerAppDir" "$EnvName"
   Remove-Item -Path "$ServerAppDir\$EnvName" -Recurse -Force
 
   if ($?) {
