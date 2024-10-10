@@ -94,7 +94,7 @@ const CascadeChart = ({
 
       if (node.children && node.children.length > 0) {
         const childResults = await Promise.allSettled(
-          node.children.map(processNode),
+          node.children.map(processNode)
         );
 
         result.children = childResults.map((childResult, index) => {
@@ -103,7 +103,7 @@ const CascadeChart = ({
           } else {
             console.error(
               `Error processing child node ${node.children[index].id}:`,
-              childResult.reason,
+              childResult.reason
             );
             return {
               id: node.children[index].id,
