@@ -30,7 +30,7 @@ const DataTaskHandler: React.FC = () => {
   };
 
   const handleDataTask = async () => {
-    const result = await executeDataTask({ id: id || "" });
+    const result = await executeDataTask(id || "");
     if (result.success) {
       setIsOpen(false);
     } else {

@@ -7,10 +7,6 @@ export type DataTask = {
   buttonName: string;
 };
 
-export type HandleDataTaskParams = {
-  id: string;
-};
-
 export type HandleDataTaskResponse = {
   success: boolean;
   error?: string;
