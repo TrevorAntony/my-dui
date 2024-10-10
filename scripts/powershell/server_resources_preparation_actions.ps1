@@ -117,7 +117,7 @@ function Create-And-Install-Conda-Env {
   Write-Color "Creating Conda environment '$EnvName' with Python $PythonVersion in $ServerAppDir..." Blue
 
   # Create Conda environment
-  conda create --name "$EnvName" python=$PythonVersion -y
+  conda create --prefix "$ServerAppDir\$EnvName" python=$PythonVersion -y
 
   if ($?) {
     Write-Color "Conda environment created successfully in $ServerAppDir." Green
@@ -126,39 +126,47 @@ function Create-And-Install-Conda-Env {
     exit 1
   }
 
-  # Activate the Conda environment
-  & conda activate "$EnvName"
+  # Merge requirements from both files
+  $mergedRequirementsFile = Join-Path $ServerAppDir "merged_requirements.txt"
+  New-Item -Path $mergedRequirementsFile -ItemType File -Force | Out-Null  # Create or clear the file
 
-  # Install dependencies from requirements.txt
-  $RequirementsFile = "$ServerAppDir\requirements.txt"
-  if (Test-Path $RequirementsFile) {
-    Write-Color "Installing dependencies from requirements.txt..." Blue
-    conda run -n "$EnvName" pip install -r $RequirementsFile
+  # Function to add requirements to the merged file
+  function Add-Requirements-To-Merged-File {
+    param (
+      [string]$RequirementsFile
+    )
 
-    if ($?) {
-      Write-Color "Dependencies installed successfully." Green
+    if (Test-Path $RequirementsFile) {
+      Get-Content $RequirementsFile | ForEach-Object {
+        $line = $_.Trim()
+        if (-not [string]::IsNullOrWhiteSpace($line)) {
+          Add-Content -Path $mergedRequirementsFile -Value $line
+        }
+      }
     } else {
-      Write-Color "Failed to install dependencies." Red
-      exit 1
+      Write-Color "No requirements.txt found in $(Split-Path $RequirementsFile -Parent)." "Yellow"
     }
-  } else {
-    Write-Color "No requirements.txt found in $ServerAppDir." Yellow
   }
 
-  # Install additional dependencies from requirements.txt
-  $RequirementsFile = "$ConfigDir\requirements.txt"
-  if (Test-Path $RequirementsFile) {
-    Write-Color "Installing additional dependencies from requirements.txt..." Blue
-    conda run -n "$EnvName" pip install -r $RequirementsFile
+  # Add requirements from both files
+  Add-Requirements-To-Merged-File (Join-Path $ServerAppDir "requirements.txt")
+  Add-Requirements-To-Merged-File (Join-Path $ConfigDir "requirements.txt")
 
-    if ($?) {
-      Write-Color "Additional Dependencies installed successfully." Green
+  # Install dependencies from the merged requirements file
+  if (Test-Path $mergedRequirementsFile) {
+    Write-Color "Installing dependencies from merged_requirements.txt..." "Blue"
+
+    # Install requirements
+    & "$ServerAppDir\$EnvName\python.exe" -m pip install -r $mergedRequirementsFile
+
+    if ($LASTEXITCODE -eq 0) {
+      Write-Color "Dependencies installed successfully." "Green"
     } else {
-      Write-Color "Failed to install additional dependencies." Red
+      Write-Color "Failed to install dependencies." "Red"
       exit 1
     }
   } else {
-    Write-Color "No requirements.txt found in $ConfigDir." Yellow
+    Write-Color "No dependencies to install." "Yellow"
   }
 
 }
@@ -190,7 +198,8 @@ function Pack-Conda-Env {
 
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
   Write-Color "Packing Conda environment '$EnvName' into portable-venv.tar.gz..." Blue
-  conda-pack -n "$EnvName" -o "$ServerAppDir\portable-venv.tar.gz"
+  & tar -czf "$ServerAppDir\portable-venv.tar.gz" -C "$ServerAppDir" "$EnvName"
+  Remove-Item -Path "$ServerAppDir\$EnvName" -Recurse -Force
 
   if ($?) {
     Write-Color "Conda environment packed successfully." Green
@@ -266,7 +275,7 @@ Extract-Zip-Files -Zip "$ZIP_DIR\$REPO2_REPO-$REPO2_BRANCH.zip" -DestDir $DUFT_C
 Extract-Workspace-Zip-For-Data-And-Env-File -Zip "$ZIP_DIR\$REPO3_REPO-$REPO3_BRANCH.zip" -DataDir "data"
 
 # Create Conda environment and install packages
-Create-And-Install-Conda-Env -$ServerAppDir $DUFT_SERVER_DIR -$ConfigDir $DUFT_CONFIG_DIR -EnvName $ENV_NAME -PythonVersion $PYTHON_VERSION
+Create-And-Install-Conda-Env -ServerAppDir $DUFT_SERVER_DIR -ConfigDir $DUFT_CONFIG_DIR -EnvName $ENV_NAME -PythonVersion $PYTHON_VERSION
 
 # Pack Conda environment
 Pack-Conda-Env -ServerAppDir $DUFT_SERVER_DIR -EnvName $ENV_NAME
