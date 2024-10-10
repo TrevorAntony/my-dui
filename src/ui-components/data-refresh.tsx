@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import DuftModal from "../components/duft-modal"; // Ensure the path is correct
 import config from "../config";
+import DuftModal from "../components/duft-modal";
 
-const FreeQuery: React.FC = () => {
+const DataRefresh: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null); // State to store error message
 
@@ -53,6 +53,8 @@ const FreeQuery: React.FC = () => {
       onExecute={handleDataTask}
       title="Data Refresh"
       executeButtonName="Run data task"
+      modalWidth="narrow"
+      closeButtonLabel="Cancel"
     >
       <p>Do you want to refresh the data?</p>
       {error && <p className="text-red-600">{error}</p>}{" "}
@@ -61,4 +63,4 @@ const FreeQuery: React.FC = () => {
   );
 };
 
-export default FreeQuery;
+export default DataRefresh;

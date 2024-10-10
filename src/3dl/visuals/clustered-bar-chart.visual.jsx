@@ -3,19 +3,22 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme context
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const ClusteredBarChart = ({
   container: Container,
   header,
   subHeader = "",
   userOptions = {},
+  exportData,
+  detailsComponent,
   ...props
 }) => {
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 
   if (!data || !Array.isArray(data)) {
-    return <div>No data available</div>;
+    return <ChartSkeleton />;
   }
 
   // Extract categories
@@ -94,7 +97,12 @@ const ClusteredBarChart = ({
   );
 
   return Container ? (
-    <Container header={header} subHeader={subHeader}>
+    <Container
+      header={header}
+      subHeader={subHeader}
+      exportData={exportData}
+      detailsComponent={detailsComponent}
+    >
       {content}
     </Container>
   ) : (

@@ -22,3 +22,16 @@ export function transposeData(data) {
     value: data.map((item) => item[header]),
   }));
 }
+
+export const processQuery = (
+  query: string,
+  config: { [key: string]: string }
+) => {
+  const processedQuery = query.replace(
+    /\{([^{}]+)\}/g,
+    (match, placeholder) => {
+      return config[placeholder] || match;
+    }
+  );
+  return processedQuery;
+};

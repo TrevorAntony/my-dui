@@ -1,6 +1,13 @@
+// CardComponent.tsx
 import type { FC, ReactNode } from "react";
-import React from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Dataset, ExportData } from "../3dl";
+import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
+import { useLayout } from "../3dl/ui-elements/single-layout";
+import { getDetailsComponent } from "./details-component-registry";
+import DuftModal from "./duft-modal";
+import { HiOutlineExternalLink } from "react-icons/hi";
 
 type MoreInfoProps = {
   text: string;
@@ -13,24 +20,43 @@ type CardComponentProps = {
   children: ReactNode;
   footer?: ReactNode;
   moreInfo?: MoreInfoProps;
-  className?: string; // Optional className to override styles
-  variant?: "card" | "no-card" | "plain"; // New variant prop
+  className?: string;
+  variant?: "card" | "no-card" | "plain";
+  exportData?: string | boolean;
+  query?: string;
+  detailsComponent?: string;
+  modalSize?: "small" | "medium" | "large";
 };
 
 const CardComponent: FC<CardComponentProps> = ({
-  header,
-  subHeader,
+  header = "",
+  subHeader = "",
   children,
   footer,
   moreInfo,
   className = "",
-  variant = "card", // Default to "card"
+  variant = "card",
+  exportData = "false",
+  query,
+  detailsComponent,
+  modalSize = "medium",
 }) => {
+  const layout = useLayout();
+  const shouldExportData = exportData === "true";
+  const isFullHeight = layout === "single-layout";
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const DetailsComponent = detailsComponent
+    ? getDetailsComponent(detailsComponent)
+    : undefined;
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
   const renderContent = () => (
     <>
-      {variant !== "plain" && (
-        <div className="mb-3">
-          <div className="shrink-0">
+      {variant !== "plain" && (header || subHeader) && (
+        <div className="mb-3 flex items-start justify-between">
+          <div>
             <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
               {header}
             </h3>
@@ -40,10 +66,35 @@ const CardComponent: FC<CardComponentProps> = ({
               </span>
             )}
           </div>
+
+          <div className="flex items-center space-x-2">
+            {shouldExportData && (
+              <div className="self-start">
+                {query ? (
+                  <Dataset query={query} useQuery={useDuftQuery}>
+                    <ExportData />
+                  </Dataset>
+                ) : (
+                  <ExportData />
+                )}
+              </div>
+            )}
+
+            {DetailsComponent && (
+              <button
+                className="pl-2 pt-[1.85px] dark:text-highlight-500"
+                onClick={toggleModal}
+                title="Show Details"
+              >
+                <HiOutlineExternalLink className=" text-gray-400" size={20} />
+              </button>
+            )}
+          </div>
         </div>
       )}
-      {/* Ensure the children are centered */}
+
       <div className="mt-4 grow">{children}</div>
+
       {footer && variant !== "plain" && (
         <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-2 dark:border-gray-700 sm:pt-4">
           {footer}
@@ -76,16 +127,39 @@ const CardComponent: FC<CardComponentProps> = ({
     </>
   );
 
-  return variant === "card" ? (
-    <div
-      className={`flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${className}`}
-    >
-      {renderContent()}
-    </div>
-  ) : variant === "no-card" ? (
-    <div className={className}>{renderContent()}</div>
-  ) : (
-    <>{children}</>
+  return (
+    <>
+      {variant === "card" ? (
+        <div
+          className={`flex flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${
+            isFullHeight ? "mt-4 h-full min-h-screen" : "h-auto"
+          } ${className}`}
+        >
+          {renderContent()}
+        </div>
+      ) : variant === "no-card" ? (
+        <div
+          className={`${
+            isFullHeight ? "mt-4 h-full min-h-screen" : ""
+          } ${className}`}
+        >
+          {renderContent()}
+        </div>
+      ) : (
+        <>{children}</>
+      )}
+
+      {DetailsComponent && (
+        <DuftModal
+          isOpen={isModalOpen}
+          onClose={toggleModal}
+          title={header}
+          modalSize={modalSize}
+        >
+          <DetailsComponent />
+        </DuftModal>
+      )}
+    </>
   );
 };
 

@@ -2,15 +2,23 @@ import React, { useState } from "react";
 import { useDataContext } from "../3dl/context/DataContext";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import DuftModal from "./duft-modal";
+import TileSkeleton from "../ui-components/tile-skeleton";
 
 interface DuftTileProps {
   title: string;
   backgroundColor?: string;
   color?: string;
   children?: React.ReactNode;
+  modalWidth?: "narrow" | "medium" | "wide"; // Width options
+  modalHeight?: "small" | "medium" | "large"; // Height options
 }
 
-const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
+const DuftTile: React.FC<DuftTileProps> = ({
+  title,
+  children,
+  modalWidth,
+  modalHeight, // Default to medium height
+}) => {
   const { data } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,7 +29,7 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
     typeof data[0] === "object";
 
   if (!isValidData) {
-    return <div>No valid data available</div>;
+    return <TileSkeleton />;
   }
 
   const [firstKey, secondKey] = Object.keys(data[0]);
@@ -107,9 +115,8 @@ const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={title}
-        widthSize="large"
-        heightSize="large"
-        isCloseDefault={true}
+        modalWidth={modalWidth} // Pass width prop to modal
+        modalHeight={modalHeight} // Pass height prop to modal
       >
         {children}
       </DuftModal>

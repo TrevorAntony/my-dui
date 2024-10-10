@@ -1,33 +1,137 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
+import { processQuery, transposeData } from "../../helpers/visual-helpers";
 
 interface DataSetProps {
   query?: string;
-  staticData?: any;
-  useQuery: boolean;
-  dataConnection?: any;
+  staticData?: Array<Record<string, any>>;
+  useQuery: () => null;
+  filters?: Record<string, any>;
+  searchColumns?: string;
+  sortColumn?: string;
+  pageSize?: number;
+  dataConnection?: string;
+  columnName?: string;
+  config?: { [key: string]: string };
+  transpose?: string;
+  debug?: string | boolean;
   children: React.ReactNode;
 }
+
+const useSearch = (initialSearchText: string = "", delay: number = 500) => {
+  const [searchText, setSearchText] = useState<string>(initialSearchText);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const updateSearchText = useCallback(
+    (newSearchText: string) => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      debounceTimeoutRef.current = setTimeout(() => {
+        setSearchText(newSearchText);
+      }, delay);
+    },
+    [delay]
+  );
+
+  return { searchText, updateSearchText };
+};
+
+const useSort = (initialSortText: string = "") => {
+  const [sortText, setSortText] = useState<string>(initialSortText);
+
+  const updateSortText = useCallback((newSortText: string) => {
+    setSortText(newSortText);
+  }, []);
+
+  return { sortText, updateSortText };
+};
 
 const Dataset: React.FC<DataSetProps> = ({
   query: propQuery = "",
   staticData,
   useQuery,
-  dataConnection,
+  filters = {},
+  searchColumns,
+  pageSize,
+  columnName,
+  config,
+  transpose = "false",
+  debug,
   children,
 }) => {
-  const [query, setQuery] = useState<string>(propQuery);
+  const initialQuery =
+    config && columnName ? processQuery(propQuery, config) : propQuery;
+  const [query, setQuery] = useState<string>(initialQuery);
 
-  const { data, loading, error, state } = useDataSetLogic(
+  const [currentPage, updatePage, resetPage] = useCurrentPage(1);
+  const [paginatedData, setPaginatedData] = useState<
+    Array<Record<string, any>>
+  >([]);
+  const { searchText, updateSearchText } = useSearch();
+  const { sortText, updateSortText } = useSort();
+
+  const shouldTranspose = transpose === "true";
+
+  const { data, loading, error, state } = useDataSetLogic({
     query,
     staticData,
     useQuery,
-    dataConnection
+    filters,
+    searchText,
+    searchColumns,
+    sortColumn: sortText,
+    pageSize,
+    currentPage,
+    debug,
+  });
+
+  const prevSearchTextRef = useRef<string>(searchText);
+
+  const updatePaginatedData = useCallback(() => {
+    const shouldResetPaginatedData = searchText !== prevSearchTextRef.current;
+    prevSearchTextRef.current = searchText;
+
+    if (shouldResetPaginatedData) {
+      setPaginatedData(data);
+    } else if (currentPage > 1 && pageSize) {
+      setPaginatedData((prevData) => [...(prevData || []), ...(data || [])]);
+    } else {
+      setPaginatedData(data);
+    }
+  }, [data, currentPage, pageSize, searchText]);
+
+  useMemo(() => {
+    updatePaginatedData();
+  }, [updatePaginatedData]);
+
+  const handleSearchChange = useCallback(
+    (newSearchText: string) => {
+      resetPage();
+      updateSearchText(newSearchText);
+    },
+    [resetPage, updateSearchText]
   );
 
-  if (loading) {
-    return <div>Loading data...</div>;
+  const handleSortChange = useCallback(
+    (newSortText: string) => {
+      resetPage();
+      updateSortText(newSortText);
+    },
+    [resetPage, updateSortText]
+  );
+
+  let finalData = paginatedData;
+
+  if (paginatedData && shouldTranspose) {
+    if (paginatedData.length === 1) {
+      finalData = transposeData(data);
+    } else {
+      console.error("Data cannot be transposed. More than one row found.");
+      finalData = [];
+    }
   }
 
   if (error) {
@@ -35,13 +139,42 @@ const Dataset: React.FC<DataSetProps> = ({
   }
 
   return (
-    <DataProvider value={{ data, query, setQuery }}>
+    <DataProvider
+      value={{
+        data: finalData,
+        query,
+        setQuery,
+        resetPage,
+        pageUpdater: updatePage,
+        loading,
+        handleSearchChange,
+        handleSortChange,
+        searchColumns,
+        pageSize,
+      }}
+    >
       {state?.debug && (
         <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
       )}
       {children}
     </DataProvider>
   );
+};
+
+type UseCurrentPageHook = [number, () => void, () => void];
+
+const useCurrentPage = (initialPage: number): UseCurrentPageHook => {
+  const [currentPage, setCurrentPage] = useState<number>(initialPage);
+
+  const updatePage = useCallback((): void => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  }, []);
+
+  const resetPage = useCallback((): void => {
+    setCurrentPage(1);
+  }, []);
+
+  return [currentPage, updatePage, resetPage];
 };
 
 export default Dataset;
