@@ -15,14 +15,14 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   sortState,
   handleSort,
 }) => (
-  <thead className="bg-gray-50">
+  <thead className="bg-gray-50 dark:bg-gray-900">
     <tr>
       {headers
         ?.filter((header) => visibleColumns[header])
         .map((header) => (
           <th
             key={header}
-            className="sticky top-0 cursor-pointer select-none bg-gray-100 px-4 py-2 text-left text-gray-500 hover:text-gray-900"
+            className="sticky top-0 cursor-pointer select-none bg-gray-100 px-4 py-2 text-left text-gray-500 hover:text-gray-900 dark:bg-gray-900 dark:text-gray-300"
             onClick={() => handleSort(header)}
           >
             <div className="flex items-center justify-start space-x-2">

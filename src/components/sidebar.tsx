@@ -50,17 +50,7 @@ const ExampleSidebar: FC = function () {
           className="bg-white"
         >
           <div className="flex h-full flex-col justify-between py-2">
-            <div className="FLUP 2">
-              <form className="pb-3 md:hidden">
-                <TextInput
-                  icon={HiSearch}
-                  type="search"
-                  placeholder="Search"
-                  required
-                  size={32}
-                />
-              </form>
-
+            <div className="flex flex-col">
               <Sidebar.Items>
                 <SystemSidebar />
                 {config.debugMode === "true" ? (
