@@ -5,21 +5,21 @@ import DuftModal from "../components/duft-modal";
 
 const DataRefresh: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null); // State to store error message
+  const [error, setError] = useState<string | null>(null);
 
   // Get the data task ID from the URL parameters
   const { id } = useParams<{ id: string }>();
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
-    setError(null); // Reset error when closing the modal
+    setError(null);
     window.location.href = "/dashboard/home";
   };
 
   const handleDataTask = async () => {
     const url = `${config.apiBaseUrl}/run-data-task`;
     const payload = {
-      data_task_id: id, // Use the ID from the URL params
+      data_task_id: id,
       parameters: {},
     };
 
@@ -33,9 +33,6 @@ const DataRefresh: React.FC = () => {
       });
 
       if (response.status === 202) {
-        const result = await response.json();
-
-        // Close the modal after the task is complete and status is 202
         setIsOpen(false);
       } else {
         throw new Error(`Unexpected status code: ${response.status}`);
@@ -58,7 +55,6 @@ const DataRefresh: React.FC = () => {
     >
       <p>Do you want to refresh the data?</p>
       {error && <p className="text-red-600">{error}</p>}{" "}
-      {/* Conditionally render error */}
     </DuftModal>
   );
 };
