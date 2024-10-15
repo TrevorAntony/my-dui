@@ -4,7 +4,7 @@ import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import { SidebarNavLink } from "./SidebarNavLink";
 import { Sidebar } from "flowbite-react";
-import { useSidebarConfig } from "../hooks/use-side-bar-config";
+import { useSidebarConfig } from "../hooks/useSideBarConfig";
 
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,

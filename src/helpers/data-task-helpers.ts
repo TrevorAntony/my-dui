@@ -1,9 +1,9 @@
 import config from "../config";
-import { HandleDataTaskResponse } from "../types/data-task";
+import { DataTaskResponse } from "../types/data-task";
 
 export const executeDataTask = async (
   id: string
-): Promise<HandleDataTaskResponse> => {
+): Promise<DataTaskResponse> => {
   const url = `${config.apiBaseUrl}/run-data-task`;
   const payload = {
     data_task_id: id,

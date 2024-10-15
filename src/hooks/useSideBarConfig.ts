@@ -1,23 +1,8 @@
 import { useState, useEffect } from "react";
-import { SidebarConfig } from "../types/side-bar-config";
 import { fetchDataWithoutStore } from "../api/api";
+import { defaultSidebarConfig } from "../helpers/constants";
 
 export const useSidebarConfig = () => {
-  const defaultSidebarConfig: SidebarConfig = {
-    system: {
-      home: {
-        title: "Home",
-        icon: "home-icon",
-        dashboard: "/",
-      },
-      menu: [],
-      dataTasks: [],
-    },
-    user: {
-      menu: [],
-    },
-  };
-
   const [sidebarConfig, setSidebarConfig] = useState(defaultSidebarConfig);
 
   useEffect(() => {

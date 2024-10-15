@@ -7,7 +7,7 @@ export type DataTask = {
   buttonName: string;
 };
 
-export type HandleDataTaskResponse = {
+export type DataTaskResponse = {
   success: boolean;
   error?: string;
 };

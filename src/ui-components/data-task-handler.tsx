@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DuftModal from "../components/duft-modal";
-import { useSidebarConfig } from "../hooks/use-side-bar-config";
+import { useSidebarConfig } from "../hooks/useSideBarConfig";
 import { DataTask } from "../types/data-task";
 import { executeDataTask } from "../helpers/data-task-helpers";
 
