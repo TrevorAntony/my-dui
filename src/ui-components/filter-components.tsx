@@ -2,7 +2,6 @@ import React from "react";
 import { Filter } from "../3dl";
 import { FilterProps } from "../3dl/filters/filter";
 
-// DuftFilter component that wraps the existing Filter component
 const DuftFilter: React.FC<FilterProps> = ({
   name,
   values,
