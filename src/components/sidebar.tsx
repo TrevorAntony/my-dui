@@ -1,30 +1,25 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import config from "../config";
 import classNames from "classnames";
-import { Modal, Button, Sidebar, TextInput, Tooltip } from "flowbite-react";
+import { Sidebar, Tooltip } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import {
-  HiAdjustments,
   HiChartPie,
   HiClipboard,
-  HiCog,
-  HiFolder,
   HiHashtag,
   HiOutlineFolder,
-  HiSearch,
 } from "react-icons/hi";
 
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
 
-import { SidebarNavLink } from "./SidebarNavLink";
+import { SidebarNavLink } from "./sidebar-nav-link";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./api-navigation-sidebar";
 import DuftModal from "./duft-modal";
 import { renderModalContent } from "../helpers/modalContentHelper";
-// import useFetchDteStatus from "../3dlcomponents/resources/useFetchDteStatus";
 
 const ExampleSidebar: FC = function () {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =
@@ -155,11 +150,9 @@ const BottomMenu: FC = function () {
 
       setData(parsedData);
 
-      // Open modal when isRunning is true
       if (parsedData.isRunning) {
         setIsModalOpen(true);
 
-        // Post a message to other channels if needed
         channel.postMessage({
           type: "TOGGLE_MODAL",
           isModalOpen: true,
@@ -168,10 +161,8 @@ const BottomMenu: FC = function () {
 
       const { message, dataTask } = parsedData;
 
-      // Define a maximum length for messages
       const maxLength = 150;
 
-      // Exclude any messages where dataTask is "scriptError" and ensure the message is not too long
       const isValidMessage =
         dataTask &&
         dataTask !== "script_start" &&
@@ -195,12 +186,11 @@ const BottomMenu: FC = function () {
   }, []);
 
   useEffect(() => {
-    // Listen for messages from the postMessage channel
     channel.onmessage = (event) => {
       if (event.data.type === "TOGGLE_MODAL") {
         setIsModalOpen(event.data.isModalOpen);
         if (!event.data.isModalOpen) {
-          setModalContent([]); // Clear content when modal is closed
+          setModalContent([]);
         }
       }
     };
@@ -208,16 +198,15 @@ const BottomMenu: FC = function () {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setModalContent([]); // Clear content when modal is closed
+    setModalContent([]);
     channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
   };
 
   const handleButtonClose = () => {
     setIsModalOpen(false);
-    setModalContent([]); // Clear content when modal is closed
+    setModalContent([]);
     channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
 
-    // Reload the page and navigate to the root path
     window.location.href = "/dashboard/home";
   };
 

@@ -25,7 +25,6 @@ type CardComponentProps = {
   exportData?: string | boolean;
   query?: string;
   detailsComponent?: string;
-  modalSize?: "small" | "medium" | "large";
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -39,7 +38,6 @@ const CardComponent: FC<CardComponentProps> = ({
   exportData = "false",
   query,
   detailsComponent,
-  modalSize = "medium",
 }) => {
   const layout = useLayout();
   const shouldExportData = exportData === "true";
@@ -150,12 +148,7 @@ const CardComponent: FC<CardComponentProps> = ({
       )}
 
       {DetailsComponent && (
-        <DuftModal
-          isOpen={isModalOpen}
-          onClose={toggleModal}
-          title={header}
-          modalSize={modalSize}
-        >
+        <DuftModal isOpen={isModalOpen} onClose={toggleModal} title={header}>
           <DetailsComponent />
         </DuftModal>
       )}

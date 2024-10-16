@@ -14,12 +14,13 @@ const DataString: React.FC<DataStringProps> = ({ children }) => {
         if (Array.isArray(data) && data.length > 0) {
           return child.props?.children.replace(
             /%(\w+)%/g,
-            (match, key) => data[0][key] || match
+            (match: any, key: any) => data[0][key] || match
           );
         }
       }
       return child;
     }
+    return child;
   };
 
   return (

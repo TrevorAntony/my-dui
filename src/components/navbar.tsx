@@ -1,13 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import type { FC } from "react";
-import {
-  Avatar,
-  DarkThemeToggle,
-  Dropdown,
-  Label,
-  Navbar,
-  TextInput,
-} from "flowbite-react";
+import { Avatar, DarkThemeToggle, Dropdown, Navbar } from "flowbite-react";
 import {
   HiArchive,
   HiBell,
@@ -18,7 +11,6 @@ import {
   HiLogout,
   HiMenuAlt1,
   HiOutlineTicket,
-  HiSearch,
   HiShoppingBag,
   HiUserCircle,
   HiUsers,
