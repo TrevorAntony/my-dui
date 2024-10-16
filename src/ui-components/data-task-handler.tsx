@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import DuftModal from "../components/duft-modal";
 import { useSidebarConfig } from "../hooks/useSideBarConfig";
 import { DataTask } from "../types/data-task";
@@ -11,7 +11,6 @@ const DataTaskHandler: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
 
   const activeDataTask = sidebarConfig.system.dataTasks.find(
     (taskItem: DataTask) => taskItem.task === id
@@ -26,7 +25,7 @@ const DataTaskHandler: React.FC = () => {
   const toggleModal = () => {
     setIsOpen(!isOpen);
     setError(null);
-    navigate("/dashboard/home");
+    window.location.href = "/dashboard/home";
   };
 
   const handleDataTask = async () => {
@@ -45,6 +44,7 @@ const DataTaskHandler: React.FC = () => {
       onExecute={handleDataTask}
       title={title}
       executeButtonName={buttonName}
+      modalWidth="narrow"
     >
       <p>{prompt}</p>
       {error && <p className="text-red-600">{error}</p>}{" "}
