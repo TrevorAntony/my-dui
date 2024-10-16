@@ -57,6 +57,14 @@ const defaultOptions = {
   },
 };
 
+// Define a type for the results
+type CascadeDataType = {
+  id: string;
+  options: any;
+  data: any;
+  children?: any;
+};
+
 const CascadeChart = ({
   container: Container,
   header,
@@ -74,7 +82,7 @@ const CascadeChart = ({
   detailsComponent: string;
 }) => {
   // const theme = useThemeContext(); // Accessing the theme context
-  const [cascadeData, setCascadeData] = useState(null);
+  const [cascadeData, setCascadeData] = useState<CascadeDataType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");
   const [modalCascadeHeadLabels, setModalCascadeHeadLabels] = useState([]);
@@ -91,17 +99,16 @@ const CascadeChart = ({
       async function processNode(node: Record<string, unknown>) {
         const { query } = node["data"] as { query: string };
         const queryResult = await fetchCascade(query);
-        const result: { id: string; options: any; data: any; children?: any } =
-          {
-            id: node["id"] as string,
-            options: node["options"] ? node["options"] : [],
-            data: {
-              id: node["id"],
-              label: (node["data"] as { label: string }).label,
-              details: queryResult,
-              value: queryResult.length,
-            },
-          };
+        const result: CascadeDataType = {
+          id: node["id"] as string,
+          options: node["options"] ? node["options"] : [],
+          data: {
+            id: node["id"],
+            label: (node["data"] as { label: string }).label,
+            details: queryResult,
+            value: queryResult.length,
+          },
+        };
 
         if (node["children"] && (node["children"] as unknown[]).length > 0) {
           const childResults = await Promise.allSettled(
@@ -113,18 +120,30 @@ const CascadeChart = ({
               return childResult.value;
             } else {
               console.error(
-                `Error processing child node ${node["children"][index].id}:`,
+                `Error processing child node ${(
+                  node["children"] as Record<string, unknown>[]
+                )[index]?.["id"]}:`,
                 (childResult as { reason: string }).reason, // Type assertion added
               );
               return {
-                id: node["children"][index].id,
+                id:
+                  (node["children"] as Record<string, unknown>[])[index]?.[
+                    "id"
+                  ] ?? null,
                 error: true,
                 message: "Failed to fetch data",
                 children: [],
                 options: [],
                 data: {
-                  id: node["children"][index].id,
-                  label: node["children"][index].data.label,
+                  id: (node["children"] as Record<string, unknown>[])[index]?.[
+                    "id"
+                  ],
+                  label: (
+                    node["children"] as Array<{ data: { label: string } }>
+                  )?.[index]?.data.label,
+                  // label: (
+                  //   node["children"] as Array<{ data: { label: string } }>
+                  // )?.[index]?.data.label,
                   details: null,
                   value: 0,
                 },
@@ -137,9 +156,9 @@ const CascadeChart = ({
       }
 
       try {
-        setCascadeData(null);
-        const results = await processNode(dataStructure);
-        setCascadeData(results);
+        // setCascadeData(null);
+        const results: CascadeDataType = await processNode(dataStructure);
+        setCascadeData(results); // Now using the defined type
       } catch (error) {
         console.error("Error fetching data", error);
       }
