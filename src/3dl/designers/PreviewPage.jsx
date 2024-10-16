@@ -17,10 +17,6 @@ import LineChart from "../visuals/line-chart.visual";
 import HeatmapChart from "../visuals/heat-map-chart.visual";
 import RadarChart from "../visuals/radar-chart.visual";
 import SmartDataTable from "../visuals/smart-data-table.visual";
-import DataTable from "../tables/DataTable"; // Import the DataTable component
-
-import PivotTable from "../tables/PivotTable"; // Import the PivotTable component
-import JSONVisual from "../visuals/json-visual";
 
 const PreviewPage = () => {
   const [input3DL, setInput3DL] = useState(`

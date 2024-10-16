@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import { useDataContext } from "../context/DataContext";
 
 type QueryProps = {
@@ -9,12 +9,16 @@ const Query: React.FC<QueryProps> = ({ children }) => {
   const { setQuery } = useDataContext();
 
   const queryString = extractStringValue(children);
-
   setQuery(queryString);
+
+  return <>{children}</>;
 };
 
 export default Query;
 
 const extractStringValue = (children: React.ReactNode) => {
-  return children?.props?.children?.trim() as string;
+  if (React.isValidElement(children)) {
+    return children.props.children?.trim() as string;
+  }
+  return "";
 };

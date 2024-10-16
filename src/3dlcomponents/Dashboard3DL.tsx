@@ -46,7 +46,6 @@ import {
   DetailsView,
   PreviewQuery,
   SingleLayout,
-  PaginatedSearchDataSet,
   QueryProvider,
   Query,
   InfiniteScrollTable,
@@ -143,9 +142,9 @@ const Dashboard3DL: React.FC = () => {
               Dataset: (props: unknown) => (
                 <Dataset {...props} useQuery={useDuftQuery} />
               ),
-              PaginatedSearchDataSet: (props: unknown) => (
-                <PaginatedSearchDataSet {...props} useQuery={useDuftQuery} />
-              ),
+              // PaginatedSearchDataSet: (props: unknown) => (
+              //   <PaginatedSearchDataSet {...props} useQuery={useDuftQuery} />
+              // ),
               PieChart: (props: unknown) => (
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <PieChart {...props} container={CardComponent} />

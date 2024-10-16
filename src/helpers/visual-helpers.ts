@@ -3,10 +3,10 @@ export function deepCopy<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
-export function deepMerge<
-  T extends Record<string, unknown>,
-  U extends Record<string, unknown>,
->(target: T, source: U): T & U {
+export function deepMerge<T extends Record<string, unknown>, U extends object>(
+  target: T,
+  source: U
+): T & U {
   for (const key in source) {
     if (
       source[key] instanceof Object &&

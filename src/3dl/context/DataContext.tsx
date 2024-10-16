@@ -2,6 +2,7 @@ import type { Dispatch, ReactNode, SetStateAction } from "react";
 import React, { createContext, useContext } from "react";
 
 interface DataContextType {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
   pageUpdater?: () => void;
   resetPage?: () => void;

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useDataContext } from "../context/DataContext";
 import DataTable from "../tables/DataTable";
 import PivotTable from "../tables/PivotTable";

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+//TO:DO replace the explicit anys with row types once added
 import React from "react";
 
 interface TableModalProps {

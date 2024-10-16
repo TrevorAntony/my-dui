@@ -1,11 +1,17 @@
-import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
+import type { ChartDataItem, ChartType, Options } from "../types/types";
 
-const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
+const BaseCircularChart = ({
+  chartType = "pie",
+  userOptions = {},
+}: {
+  chartType: ChartType;
+  userOptions?: object;
+}) => {
   const theme = useThemeContext();
   const { data } = useDataContext();
 
@@ -16,13 +22,13 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
   const { apex: apexOptions } = theme.themes[0];
 
   const chartData = {
-    series: data.map((item) => item.value || 0),
+    series: data.map((item: ChartDataItem) => item.value || 0),
     chart: {
       type: chartType,
       id: "circular-chart",
     },
     dataLabels: {
-      formatter: function (val, opts) {
+      formatter: function (val: number, opts: Options) {
         const label = opts.w.globals.labels[opts.seriesIndex];
         return `${label}`;
       },
@@ -35,7 +41,7 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
       },
       style: { colors: ["#626b77"] },
     },
-    labels: data.map((item) => item.category || "Unknown"),
+    labels: data.map((item: ChartDataItem) => item.category || "Unknown"),
     legend: {
       position: "bottom",
     },
@@ -58,7 +64,7 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
 
   let mergedOptions = deepMerge(deepCopy(chartData), deepCopy(apexOptions));
 
-  mergedOptions = deepMerge(mergedOptions, userOptions);
+  mergedOptions = deepMerge(mergedOptions, userOptions as object);
 
   return (
     <div
@@ -72,7 +78,7 @@ const BaseCircularChart = ({ chartType = "pie", userOptions = {} }) => {
       <Chart
         options={mergedOptions}
         series={mergedOptions.series}
-        type={chartType}
+        type={chartType as ChartType}
         height={"100%"}
       />
     </div>

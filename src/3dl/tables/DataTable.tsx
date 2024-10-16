@@ -10,6 +10,8 @@ interface DataTableProps {
     subHeader?: string;
     variant?: string;
     children: React.ReactNode;
+    exportData: string | boolean;
+    detailsComponent: string;
   }>;
   header?: string;
   subHeader?: string;
@@ -92,11 +94,11 @@ const DataTable: React.FC<DataTableProps> = ({
 
   return ContainerComponent ? (
     <ContainerComponent
-      header={header}
+      header={header as string}
       subHeader={subHeader}
       variant={variant}
-      exportData={exportData}
-      detailsComponent={detailsComponent}
+      exportData={exportData as string}
+      detailsComponent={detailsComponent as string}
     >
       {wrappedContent}
     </ContainerComponent>

@@ -1,11 +1,19 @@
-import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
+import type { ChartType } from "../types/types";
 
-const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
+const BaseXYChart = ({
+  chartType = "pie",
+  userOptions = {},
+  isHorizontal,
+}: {
+  chartType?: ChartType;
+  userOptions?: object;
+  isHorizontal?: boolean;
+}) => {
   const theme = useThemeContext();
   const { data } = useDataContext();
 
@@ -70,7 +78,7 @@ const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
     },
     tooltip: {
       y: {
-        formatter: (val) => `${val}`,
+        formatter: (val: unknown) => `${val}`,
       },
     },
     responsive: [
@@ -101,7 +109,7 @@ const BaseXYChart = ({ chartType = "bar", isHorizontal, userOptions = {} }) => {
       <Chart
         options={mergerdOptions}
         series={chartSeries}
-        type={chartType}
+        type={chartType as ChartType}
         height={"100%"}
       />
     </div>
