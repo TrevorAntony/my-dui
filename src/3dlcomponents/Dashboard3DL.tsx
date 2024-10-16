@@ -142,9 +142,6 @@ const Dashboard3DL: React.FC = () => {
               Dataset: (props: unknown) => (
                 <Dataset {...props} useQuery={useDuftQuery} />
               ),
-              // PaginatedSearchDataSet: (props: unknown) => (
-              //   <PaginatedSearchDataSet {...props} useQuery={useDuftQuery} />
-              // ),
               PieChart: (props: unknown) => (
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <PieChart {...props} container={CardComponent} />
@@ -224,9 +221,14 @@ const Dashboard3DL: React.FC = () => {
                   <StackedBarChart {...props} container={CardComponent} />
                 </ErrorBoundary>
               ),
-              AreaChart: (props: unknown) => (
+              AreaChart: (props: React.ComponentProps<typeof AreaChart>) => (
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <AreaChart {...props} container={CardComponent} />
+                  <AreaChart
+                    {...(props as React.ComponentProps<typeof AreaChart>)}
+                    container={
+                      CardComponent as React.ComponentType<ContainerComponentProps>
+                    }
+                  />
                 </ErrorBoundary>
               ),
               PercentStackedBarChart: (props: unknown) => (

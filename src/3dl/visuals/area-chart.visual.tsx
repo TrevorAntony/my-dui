@@ -1,5 +1,5 @@
-import React from "react";
 import BaseXYChart from "../base-visuals/base-xy-chart";
+import type { ContainerComponentProps } from "../types/types";
 
 const AreaChart = ({
   container: Container,
@@ -8,6 +8,12 @@ const AreaChart = ({
   exportData,
   detailsComponent,
   ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  exportData: string;
+  detailsComponent: string;
 }) => {
   const content = <BaseXYChart {...props} chartType="area" />;
 
