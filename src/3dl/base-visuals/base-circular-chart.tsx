@@ -19,7 +19,7 @@ const BaseCircularChart = ({
     return <ChartSkeleton />;
   }
 
-  const { apex: apexOptions } = theme.themes[0];
+  const { apex: apexOptions } = theme["themes"][0];
 
   const chartData = {
     series: data.map((item: ChartDataItem) => item.value || 0),
@@ -28,7 +28,7 @@ const BaseCircularChart = ({
       id: "circular-chart",
     },
     dataLabels: {
-      formatter: function (val: number, opts: Options) {
+      formatter: function (opts: Options) {
         const label = opts.w.globals.labels[opts.seriesIndex];
         return `${label}`;
       },

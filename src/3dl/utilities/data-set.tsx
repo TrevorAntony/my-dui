@@ -4,10 +4,16 @@ import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
 import { processQuery, transposeData } from "../../helpers/visual-helpers";
 
+interface DuftQueryResult<T> {
+  data: T | undefined;
+  isLoading: boolean;
+  error: Error | null;
+}
+
 interface DataSetProps {
   query?: string;
   staticData?: Array<Record<string, any>>;
-  useQuery: () => null;
+  useQuery: <T>(requestPayload: any) => DuftQueryResult<T>;
   filters?: Record<string, any>;
   searchColumns?: string;
   sortColumn?: string;

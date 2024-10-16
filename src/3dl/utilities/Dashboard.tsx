@@ -74,7 +74,7 @@ const dashboardReducer = (
 
 // Update the Dashboard component props interface
 interface DashboardProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   debug?: boolean;
   designSystem?: string;
   theme?: Record<string, unknown>;

@@ -17,7 +17,13 @@ const Filter: React.FC<FilterProps> = ({
   caption,
   className,
 }) => {
-  const { state, dispatch } = useDashboardContext();
+  const context = useDashboardContext();
+  if (!context) {
+    throw new Error(
+      "useDashboardContext must be used within a DashboardProvider",
+    );
+  }
+  const { state, dispatch } = context;
   const [selectedValue, setSelectedValue] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { data: options, loading, error } = useQuery(values_query);

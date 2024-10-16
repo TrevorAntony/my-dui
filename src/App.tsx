@@ -11,12 +11,8 @@ import APITestComponent from "./content-components/APITestComponent";
 import Dashboard3DL from "./3dlcomponents/Dashboard3DL.js";
 import GridLayoutTester from "./content-components/GridLayoutTester";
 import TabLayoutTester from "./content-components/TabLayoutTester.js";
-import DashboardRaw3DL from "./3dlcomponents/DashboardRaw3DL.js";
 import SingleTableLayoutTester from "./content-components/SingleTableLayoutTester.js";
 import DataRefresh from "./ui-components/data-refresh.js";
-
-// const ComponentAA: React.FC = () => <div>Component A</div>;
-// const ComponentBB: React.FC = () => <div>Component B</div>;
 
 const App: React.FC = () => {
   return (
@@ -24,7 +20,6 @@ const App: React.FC = () => {
       <Routes>
         <Route element={<FlowbiteWrapper />}>
           <Route path="/" element={<AppLayout />}>
-            <Route path="dashboard/raw/:id?" element={<DashboardRaw3DL />} />
             <Route path="dashboard/:id?" element={<Dashboard3DL />} />
             <Route path="a/:id?" element={<ComponentA />} />
             <Route path="b" element={<ComponentB />} />

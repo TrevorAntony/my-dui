@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useState, useEffect, useCallback } from "react";
-// import { useThemeContext } from "../utilities/Dashboard";
 import ApexTree from "apextree";
 import { MantineReactTable } from "mantine-react-table";
 import fetchCascade from "../../helpers/cascade-helpers";
@@ -8,7 +7,7 @@ import DuftModal from "../../components/duft-modal";
 import CascadeSkeleton from "../../ui-components/cascade-skeleton";
 import type { ContainerComponentProps } from "../types/types";
 
-// Default options for ApexTree
+// TO:DO move this to a constants file
 const defaultOptions = {
   contentKey: "data",
   width: "100%",
@@ -57,7 +56,6 @@ const defaultOptions = {
   },
 };
 
-// Define a type for the results
 type CascadeDataType = {
   id: string;
   options: any;
@@ -81,7 +79,6 @@ const CascadeChart = ({
   exportData: string;
   detailsComponent: string;
 }) => {
-  // const theme = useThemeContext(); // Accessing the theme context
   const [cascadeData, setCascadeData] = useState<CascadeDataType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");
@@ -123,7 +120,7 @@ const CascadeChart = ({
                 `Error processing child node ${(
                   node["children"] as Record<string, unknown>[]
                 )[index]?.["id"]}:`,
-                (childResult as { reason: string }).reason, // Type assertion added
+                (childResult as { reason: string }).reason,
               );
               return {
                 id:
@@ -141,9 +138,6 @@ const CascadeChart = ({
                   label: (
                     node["children"] as Array<{ data: { label: string } }>
                   )?.[index]?.data.label,
-                  // label: (
-                  //   node["children"] as Array<{ data: { label: string } }>
-                  // )?.[index]?.data.label,
                   details: null,
                   value: 0,
                 },
@@ -156,7 +150,7 @@ const CascadeChart = ({
       }
 
       try {
-        // setCascadeData(null);
+        setCascadeData(null);
         const results: CascadeDataType = await processNode(dataStructure);
         setCascadeData(results);
       } catch (error) {

@@ -47,7 +47,7 @@ const BaseXYChart = ({
     ];
   }
 
-  const { apex: apexOptions } = theme.themes[0];
+  const { apex: apexOptions } = theme["themes"][0];
 
   const chartOptions = {
     chart: {

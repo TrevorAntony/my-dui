@@ -9,14 +9,14 @@ interface DuftQueryResult<T> {
 }
 
 const fetchDuftData = async <T>(
-  requestData: Record<string, any>
+  requestPayload: Record<string, any>,
 ): Promise<T> => {
   const response = await fetch(`${config.apiBaseUrl}/run-query`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(requestData),
+    body: JSON.stringify(requestPayload),
   });
 
   if (!response.ok) {
@@ -27,11 +27,11 @@ const fetchDuftData = async <T>(
   return response.json();
 };
 
-const useDuftQuery = <T>(requestData: any): DuftQueryResult<T> => {
+const useDuftQuery = <T>(requestPayload: any): DuftQueryResult<T> => {
   const { data, error, isLoading } = useQuery({
-    queryKey: ["duftQuery", requestData],
-    queryFn: () => fetchDuftData<T>(requestData),
-    enabled: !!requestData?.query,
+    queryKey: ["duftQuery", requestPayload],
+    queryFn: () => fetchDuftData<T>(requestPayload),
+    enabled: !!requestPayload?.query,
     refetchOnWindowFocus: false,
   });
 

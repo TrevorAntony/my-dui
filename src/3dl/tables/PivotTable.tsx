@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import type { PivotTableUIProps } from "react-pivottable/PivotTableUI";
 import PivotTableUI from "react-pivottable/PivotTableUI";
 import "react-pivottable/pivottable.css";
-import { useDashboardContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import TableSkeleton from "../../ui-components/table-skeleton";
 
@@ -45,7 +44,6 @@ const PivotTable: FC<PivotTableProps> = ({
     cols: initialPivotCols,
   });
 
-  const { state } = useDashboardContext();
   const { data } = useDataContext();
 
   const hasValidData = data && Array.isArray(data) && data.length > 0;
@@ -69,21 +67,18 @@ const PivotTable: FC<PivotTableProps> = ({
           JSON.stringify(prevState.cols) !== JSON.stringify(activePivotCols)
         ) {
           return {
-            data: data, // Ensure 'data' is of type 'any[]' or the correct type
+            data: data,
             rows: validPivotRows,
             cols: activePivotCols,
           };
         }
-        return prevState; // Return previous state if no update is needed
+        return prevState;
       });
     }
   }, [data, initialPivotRows, initialPivotCols]);
 
   const content = hasValidData ? (
     <div>
-      {state.debug && (
-        <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
-      )}
       <PivotTableUI
         {...pivotState}
         onChange={(e: PivotTableUIProps) => setPivotState(e as PivotState)}
