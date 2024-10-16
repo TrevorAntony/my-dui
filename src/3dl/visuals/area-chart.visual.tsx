@@ -3,7 +3,7 @@ import type { ContainerComponentProps } from "../types/types";
 
 const AreaChart = ({
   container: Container,
-  header = "Bar Chart",
+  header = "Area Chart",
   subHeader = header,
   exportData,
   detailsComponent,

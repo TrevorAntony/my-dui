@@ -162,9 +162,14 @@ const Dashboard3DL: React.FC = () => {
                   <PolarAreaChart {...props} container={CardComponent} />
                 </ErrorBoundary>
               ),
-              BarChart: (props: unknown) => (
+              BarChart: (props: React.ComponentProps<typeof BarChart>) => (
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <BarChart {...props} container={CardComponent} />
+                  <BarChart
+                    {...(props as React.ComponentProps<typeof AreaChart>)}
+                    container={
+                      CardComponent as React.ComponentType<ContainerComponentProps>
+                    }
+                  />
                 </ErrorBoundary>
               ),
               LineChart: (props: unknown) => (
@@ -182,9 +187,16 @@ const Dashboard3DL: React.FC = () => {
                   <RadarChart {...props} container={CardComponent} />
                 </ErrorBoundary>
               ),
-              CascadeChart: (props: unknown) => (
+              CascadeChart: (
+                props: React.ComponentProps<typeof CascadeChart>,
+              ) => (
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <CascadeChart {...props} container={CardComponent} />
+                  <CascadeChart
+                    {...(props as React.ComponentProps<typeof CascadeChart>)}
+                    container={
+                      CardComponent as React.ComponentType<ContainerComponentProps>
+                    }
+                  />
                 </ErrorBoundary>
               ),
               SmartDataTable: (props: unknown) => (
