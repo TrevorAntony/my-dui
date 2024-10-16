@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { MantineReactTable } from "mantine-react-table";
 import { Box } from "@mantine/core";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
 import TableSkeleton from "../../ui-components/table-skeleton";
+import type { ContainerComponentProps } from "../types/types";
 
 const ScoreCardTable = ({
   container: ContainerComponent,
@@ -14,6 +16,15 @@ const ScoreCardTable = ({
   exportData,
   detailsComponent,
   ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  exportData: string;
+  detailsComponent: string;
+  userOptions?: Record<string, unknown>;
+  tableMaxHeight?: string;
+  showToolbar?: boolean | string;
 }) => {
   const { data } = useDataContext();
   const layout = useLayout();
@@ -22,9 +33,8 @@ const ScoreCardTable = ({
     return <TableSkeleton />;
   }
 
-  // Generate columns, filtering out the 'color' column
   const columns = Object.keys(data[0])
-    .filter((key) => key !== "color") // Exclude the 'color' column
+    .filter((key) => key !== "color")
     .map((key) => {
       if (key === "score") {
         return {
@@ -32,16 +42,15 @@ const ScoreCardTable = ({
           header: "Score",
           size: 150,
           mantineTableHeadCellProps: {
-            align: "right",
+            align: "right" as const,
           },
           mantineTableBodyCellProps: {
-            align: "right",
+            align: "right" as const,
           },
-          Cell: ({ row }) => {
-            const score = row.original.score / 100; // Convert score to a percentage
-            const color = row.original.color;
+          Cell: ({ row }: { row: Record<string, any> }) => {
+            const score = row["original"]?.score;
+            const color = row["original"]?.color;
 
-            // Set background color based on the color attribute
             let backgroundColor;
             switch (color) {
               case "Bad":
@@ -86,6 +95,8 @@ const ScoreCardTable = ({
           accessorKey: key,
           header: key.charAt(0).toUpperCase() + key.slice(1),
           size: 150,
+          mantineTableHeadCellProps: { align: "center" as const },
+          mantineTableBodyCellProps: { align: "center" as const },
         };
       }
     });
@@ -94,8 +105,8 @@ const ScoreCardTable = ({
     <MantineReactTable
       columns={columns}
       enableStickyHeader
-      enableTopToolbar={showToolbar}
-      enableBottomToolbar={showToolbar}
+      enableTopToolbar={Boolean(showToolbar)}
+      enableBottomToolbar={Boolean(showToolbar)}
       data={data}
       enableGlobalFilter={false}
       enablePagination={false}

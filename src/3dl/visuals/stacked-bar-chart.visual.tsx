@@ -4,20 +4,27 @@ import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
 import ChartSkeleton from "../../ui-components/chart-skeleton";
+import type { ContainerComponentProps } from "../types/types";
 
-const PercentStackedBarChart = ({
+const StackedBarChart = ({
   container: Container,
   header,
   subHeader = "",
   userOptions = {},
   exportData,
   detailsComponent,
-  ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  exportData: string;
+  detailsComponent: string;
+  userOptions?: Record<string, unknown>;
 }) => {
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data) || !data.length) {
+  if (!data || !Array.isArray(data) || !data?.length) {
     return <ChartSkeleton />;
   }
 
@@ -25,19 +32,18 @@ const PercentStackedBarChart = ({
   const categories = data.map((item) => item.category);
 
   // Extract series data
-  const seriesNames = Object?.keys(data[0]).filter((key) => key !== "category");
+  const seriesNames = Object.keys(data[0]).filter((key) => key !== "category");
   const series = seriesNames.map((name) => ({
     name,
     data: data.map((item) => item[name]),
   }));
 
-  const { apex: apexOptions } = theme.themes[0];
+  const { apex: apexOptions } = theme["themes"][0];
 
   const options = {
     chart: {
       type: "bar",
       stacked: true,
-      stackType: "100%", // Setting the stack type to 100%
     },
     plotOptions: {
       bar: {
@@ -112,4 +118,4 @@ const PercentStackedBarChart = ({
   );
 };
 
-export default PercentStackedBarChart;
+export default StackedBarChart;

@@ -1,23 +1,30 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme context
+import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
-import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
+import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
+import type { ContainerComponentProps } from "../types/types";
 
-const StackedBarChart = ({
+const ClusteredBarChart = ({
   container: Container,
   header,
   subHeader = "",
   userOptions = {},
   exportData,
   detailsComponent,
-  ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  exportData: string;
+  detailsComponent: string;
+  userOptions?: Record<string, unknown>;
 }) => {
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data) || !data?.length) {
+  if (!data || !Array.isArray(data)) {
     return <ChartSkeleton />;
   }
 
@@ -31,12 +38,11 @@ const StackedBarChart = ({
     data: data.map((item) => item[name]),
   }));
 
-  const { apex: apexOptions } = theme.themes[0];
+  const { apex: apexOptions } = theme["themes"][0];
 
   const options = {
     chart: {
       type: "bar",
-      stacked: true,
     },
     plotOptions: {
       bar: {
@@ -111,4 +117,4 @@ const StackedBarChart = ({
   );
 };
 
-export default StackedBarChart;
+export default ClusteredBarChart;

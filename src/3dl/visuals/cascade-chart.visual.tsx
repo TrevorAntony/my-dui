@@ -158,7 +158,7 @@ const CascadeChart = ({
       try {
         // setCascadeData(null);
         const results: CascadeDataType = await processNode(dataStructure);
-        setCascadeData(results); // Now using the defined type
+        setCascadeData(results);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -168,7 +168,7 @@ const CascadeChart = ({
 
   useEffect(() => {
     fetchCascadeData(cascade);
-  }, [cascade, fetchCascadeData]); // Only run when `cascade` changes
+  }, [cascade, fetchCascadeData]);
 
   useEffect(() => {
     if (!cascadeData) return;
@@ -249,10 +249,8 @@ const CascadeChart = ({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={cascadeTitle}
-        widthSize="large"
-        heightSize="large"
-        isCloseDefault={true}
       >
+        {/* TO:DO replace this table with the InfiniteScrollTable */}
         <MantineReactTable
           columns={modalCascadeHeadLabels}
           enableTopToolbar={false}
@@ -261,7 +259,7 @@ const CascadeChart = ({
           data={modalCascadeData}
           enableGlobalFilter
           enablePagination={false}
-          initialState={{ pagination: { pageSize: 10 } }}
+          initialState={{ pagination: { pageSize: 10, pageIndex: 0 } }}
           {...props}
           mantineTableContainerProps={{ sx: { maxHeight: "300px" } }}
         />

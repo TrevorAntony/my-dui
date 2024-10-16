@@ -26,7 +26,6 @@ import {
   HeatmapChart,
   RadarChart,
   CascadeChart,
-  SmartDataTable,
   ScoreCardTable,
   DataTable,
   PreviewPage,
@@ -199,11 +198,11 @@ const Dashboard3DL: React.FC = () => {
                   />
                 </ErrorBoundary>
               ),
-              SmartDataTable: (props: unknown) => (
-                <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <SmartDataTable {...props} container={CardComponent} />
-                </ErrorBoundary>
-              ),
+              // SmartDataTable: (props: unknown) => (
+              //   <ErrorBoundary FallbackComponent={ErrorFallback}>
+              //     <SmartDataTable {...props} container={CardComponent} />
+              //   </ErrorBoundary>
+              // ),
               ScoreCardTable: (props: unknown) => (
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <ScoreCardTable {...props} container={CardComponent} />

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Reducer } from "react";
 import React, { useReducer, createContext, useContext } from "react";
 
 interface DashboardState {
@@ -6,7 +7,7 @@ interface DashboardState {
   data: Record<string, any>;
   debug: boolean;
   designSystem: string;
-  theme?: string;
+  theme?: Record<string, unknown>;
   layout: string;
 }
 
@@ -25,7 +26,12 @@ const DashboardContext = createContext<
   | { state: DashboardState; dispatch: React.Dispatch<DashboardAction> }
   | undefined
 >(undefined);
-const ThemeContext = createContext("");
+
+interface Theme {
+  [key: string]: any;
+}
+
+const ThemeContext = createContext<Theme>({});
 const LayoutContext = createContext("");
 
 const dashboardReducer = (
@@ -71,7 +77,7 @@ interface DashboardProps {
   children: React.ReactNode;
   debug?: boolean;
   designSystem?: string;
-  theme?: string;
+  theme?: Record<string, unknown>;
   layout?: string;
 }
 
@@ -82,9 +88,11 @@ const Dashboard = ({
   theme,
   layout = "grid",
 }: DashboardProps) => {
-  const [state, dispatch] = useReducer(dashboardReducer, {
-    filters: {},
-    data: {},
+  const [state, dispatch] = useReducer<
+    Reducer<DashboardState, DashboardAction>
+  >(dashboardReducer, {
+    filters: {} as Record<string, unknown>,
+    data: {} as Record<string, unknown>,
     debug,
     designSystem,
     theme,
@@ -94,7 +102,7 @@ const Dashboard = ({
   return (
     <DashboardContext.Provider value={{ state, dispatch }}>
       <LayoutContext.Provider value={layout}>
-        <ThemeContext.Provider value={theme as string}>
+        <ThemeContext.Provider value={theme || {}}>
           {children}
         </ThemeContext.Provider>
       </LayoutContext.Provider>
@@ -138,7 +146,7 @@ export {
   setDebugMode,
   setDesignSystem,
   setTheme,
-  setFilter, // Export setFilter
+  setFilter,
   useDashboardContext,
   useThemeContext,
   useLayout,
