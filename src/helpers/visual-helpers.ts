@@ -1,22 +1,40 @@
-export function deepCopy(obj) {
-  if (!obj) return {};
+export function deepCopy<T>(obj: T): T {
+  if (!obj) return {} as T;
   return JSON.parse(JSON.stringify(obj));
 }
 
-export function deepMerge(target, source) {
+export function deepMerge<
+  T extends Record<string, unknown>,
+  U extends Record<string, unknown>,
+>(target: T, source: U): T & U {
   for (const key in source) {
-    if (source[key] instanceof Object && key in target) {
-      Object.assign(source[key], deepMerge(target[key], source[key]));
+    if (
+      source[key] instanceof Object &&
+      key in target &&
+      target[key] instanceof Object
+    ) {
+      Object.assign(
+        source[key],
+        deepMerge(
+          target[key] as Record<string, unknown>,
+          source[key] as Record<string, unknown>
+        )
+      );
     }
   }
   Object.assign(target || {}, source);
-  return target;
+  return target as T & U;
+}
+export interface DataItem {
+  [key: string]: unknown;
 }
 
-export function transposeData(data) {
+export function transposeData(
+  data: DataItem[]
+): { column: string; value: unknown[] }[] {
   if (!data || data.length === 0) return [];
 
-  const headers = Object.keys(data[0]);
+  const headers = Object.keys(data[0] as DataItem);
   return headers.map((header) => ({
     column: header,
     value: data.map((item) => item[header]),
@@ -25,13 +43,9 @@ export function transposeData(data) {
 
 export const processQuery = (
   query: string,
-  config: { [key: string]: string }
-) => {
-  const processedQuery = query.replace(
-    /\{([^{}]+)\}/g,
-    (match, placeholder) => {
-      return config[placeholder] || match;
-    }
-  );
-  return processedQuery;
+  config: Record<string, string>
+): string => {
+  return query.replace(/\{([^{}]+)\}/g, (match, placeholder) => {
+    return config[placeholder] || match;
+  });
 };
