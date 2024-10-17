@@ -25,10 +25,20 @@ const TableBody: React.FC<TableBodyProps> = ({
               (child) =>
                 React.isValidElement(child) && child.props.columnName === header
             );
+
+            const formatDate = (value: string) => {
+              return new Date(value).toLocaleString();
+            };
+
+            const cellValue =
+              row.isDate && row.isDate[header]
+                ? formatDate(row[header])
+                : row[header];
+
             return (
               <td
                 key={`${row.id}-${header}`}
-                className="border-b border-gray-300 p-4"
+                className="border-b border-gray-300 p-4 dark:text-white"
                 onClick={
                   hasMatchingChild
                     ? () => handleCellClick(header, row)
@@ -39,7 +49,7 @@ const TableBody: React.FC<TableBodyProps> = ({
                   textDecoration: hasMatchingChild ? "underline" : "none",
                 }}
               >
-                {row[header]}
+                {cellValue}
               </td>
             );
           })}
