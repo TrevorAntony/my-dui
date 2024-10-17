@@ -8,15 +8,12 @@ import SamplePage from "./pages";
 import FlowbiteWrapper from "./components/flowbite-wrapper";
 import ComponentD from "./content-components/ComponentD";
 import APITestComponent from "./content-components/APITestComponent";
-import Dashboard3DL from "./3dlcomponents/Dashboard3DL.js";
+import Dashboard3DL from "./3dlcomponents/Dashboard3DL";
 import GridLayoutTester from "./content-components/GridLayoutTester";
-import TabLayoutTester from "./content-components/TabLayoutTester.js";
-import DashboardRaw3DL from "./3dlcomponents/DashboardRaw3DL.js";
-import SingleTableLayoutTester from "./content-components/SingleTableLayoutTester.js";
-import DataRefresh from "./ui-components/data-refresh.js";
-
-// const ComponentAA: React.FC = () => <div>Component A</div>;
-// const ComponentBB: React.FC = () => <div>Component B</div>;
+import TabLayoutTester from "./content-components/TabLayoutTester";
+import DashboardRaw3DL from "./3dlcomponents/DashboardRaw3DL";
+import SingleTableLayoutTester from "./content-components/SingleTableLayoutTester";
+import DataTaskHandler from "./ui-components/data-task-handler";
 
 const App: React.FC = () => {
   return (
@@ -34,7 +31,7 @@ const App: React.FC = () => {
             <Route path="grid" element={<GridLayoutTester />} />
             <Route path="tab" element={<TabLayoutTester />} />
             <Route path="table" element={<SingleTableLayoutTester />} />
-            <Route path="data-task/:id" element={<DataRefresh />} />
+            <Route path="data-task/:id" element={<DataTaskHandler />} />
           </Route>
           <Route path="s" element={<SamplePage />} />
         </Route>
