@@ -1,16 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import config from "../../config";
 
-// Define the types for the function
 interface DuftQueryResult<T> {
   data: T | undefined;
   isLoading: boolean;
   error: Error | null;
 }
 
-const fetchDuftData = async <T>(
-  requestPayload: Record<string, any>,
-): Promise<T> => {
+type RequestData = {
+  query: string;
+  data_connection_id: string;
+  filters?: Record<string, unknown>;
+  search_text?: string;
+  search_columns?: string[];
+  sort_column?: string;
+  page_size?: number;
+  current_page?: number;
+};
+
+const fetchDuftData = async <T>(requestPayload: RequestData): Promise<T> => {
   const response = await fetch(`${config.apiBaseUrl}/run-query`, {
     method: "POST",
     headers: {
@@ -27,7 +35,7 @@ const fetchDuftData = async <T>(
   return response.json();
 };
 
-const useDuftQuery = <T>(requestPayload: any): DuftQueryResult<T> => {
+const useDuftQuery = <T>(requestPayload: RequestData): DuftQueryResult<T> => {
   const { data, error, isLoading } = useQuery({
     queryKey: ["duftQuery", requestPayload],
     queryFn: () => fetchDuftData<T>(requestPayload),
