@@ -4,20 +4,18 @@ import config from "../../config";
 const useQuery = (query) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        // Prepare the payload
         const payload = {
           query,
-          data_connection_id: config.dataConnection, // Hardcoded data connection ID
+          data_connection_id: config.dataConnection,
         };
 
-        // Make the API request
         const response = await fetch(
           "http://localhost:8000/api/v2/query-engine",
           {
@@ -26,7 +24,7 @@ const useQuery = (query) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
-          }
+          },
         );
 
         const result = await response.json();
@@ -37,13 +35,13 @@ const useQuery = (query) => {
               result.message +
               "\n" +
               "Original query: " +
-              query
+              query,
           );
         }
 
-        setData(result); // Assuming the data is an array of options
+        setData(result);
       } catch (error) {
-        setError(error);
+        setError(error as Error);
       } finally {
         setLoading(false);
       }
