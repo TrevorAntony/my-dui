@@ -97,7 +97,7 @@ create_and_install_conda_env() {
   write_color "Creating Conda environment '$env_name' with Python $python_version in $server_app_dir..." Blue
 
   # Create Conda environment
-  conda create --name "$env_name" python="$python_version" -y
+  conda create --prefix "$server_app_dir/$env_name" python="$python_version" -y
 
   if [ $? -eq 0 ]; then
     write_color "Conda environment created successfully in $server_app_dir." Green
@@ -106,30 +106,33 @@ create_and_install_conda_env() {
     exit 1
   fi
 
-  # Activate the Conda environment
-  conda activate "$env_name"
+  # Create file for merged requirements from both files
+  merged_requirements_file="$server_app_dir/merged_requirements.txt"
+  : > "$merged_requirements_file"  # Create or clear the file
 
-  # Install dependencies from requirements.txt
-  local requirements_file="$server_app_dir/requirements.txt"
-  if [ -f "$requirements_file" ]; then
-    write_color "Installing dependencies from requirements.txt..." Blue
-    pip install -r "$requirements_file"
-
-    if [ $? -eq 0 ]; then
-      write_color "Dependencies installed successfully." Green
+  # Function to add requirements to the merged file
+  add_requirements_to_merged_file() {
+    local requirements_file="$1"
+    if [ -f "$requirements_file" ]; then
+      while IFS= read -r line || [ -n "$line" ]; do
+        line=$(echo "$line" | xargs)
+        if [ -n "$line" ]; then
+          echo "$line" >> "$merged_requirements_file"
+        fi
+      done < "$requirements_file"
     else
-      write_color "Failed to install dependencies." Red
-      exit 1
+      write_color "No requirements.txt found in $(dirname "$requirements_file")." Yellow
     fi
-  else
-    write_color "No requirements.txt found in $server_app_dir." Yellow
-  fi
+  }
 
-  # Install additional dependencies from requirements.txt
-  local requirements_file="$config_dir/requirements.txt"
-  if [ -f "$requirements_file" ]; then
-    write_color "Installing additional dependencies from requirements.txt..." Blue
-    pip install -r "$requirements_file"
+  # Add requirements from both files
+  add_requirements_to_merged_file "$server_app_dir/requirements.txt"
+  add_requirements_to_merged_file "$config_dir/requirements.txt"
+
+  # Install dependencies from the merged requirements file
+  if [ -f "$merged_requirements_file" ]; then
+    write_color "Installing dependencies from merged_requirements.txt..." "Blue"
+    "$server_app_dir/$env_name/bin/python" -m pip install -r "$merged_requirements_file"
 
     if [ $? -eq 0 ]; then
       write_color "Additional Dependencies installed successfully." Green
@@ -165,7 +168,8 @@ pack_conda_env() {
 
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
   write_color "Packing Conda environment '$env_name' into portable-venv.tar.gz..." Blue
-  conda-pack -n "$env_name" -o "$server_app_dir/portable-venv.tar.gz"
+  tar -czf "${server_app_dir}/portable-venv.tar.gz" --strip-components=1 -C "$server_app_dir" "$env_name"
+  rm -rf "${server_app_dir:?}/${env_name}"
 
   if [ $? -eq 0 ]; then
     write_color "Conda environment packed successfully." Green
