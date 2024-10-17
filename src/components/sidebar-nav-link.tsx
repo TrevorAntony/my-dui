@@ -4,7 +4,7 @@ import { Sidebar } from "flowbite-react";
 
 type SidebarNavLinkProps = {
   to: string;
-  icon?: React.ComponentType<any>;
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   children: React.ReactNode;
 };
 
