@@ -135,13 +135,13 @@ create_and_install_conda_env() {
     "$server_app_dir/$env_name/bin/python" -m pip install -r "$merged_requirements_file"
 
     if [ $? -eq 0 ]; then
-      write_color "Additional Dependencies installed successfully." Green
+      write_color "Dependencies installed successfully." Green
     else
-      write_color "Failed to install additional dependencies." Red
+      write_color "Failed to install dependencies." Red
       exit 1
     fi
   else
-    write_color "No requirements.txt found in $config_dir." Yellow
+    write_color "No dependencies to install." Yellow
   fi
 
 }
