@@ -16,17 +16,16 @@ const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
   const layout = useLayout();
   return (
     <div
-      // className="mb-6 grid grid-cols-1 gap-y-4 px-4 dark:border-gray-700 dark:bg-gray-900 xl:gap-4"
       className={`mb-6 ${
         layout === "single-layout"
-          ? "flex flex-col gap-y-4" // Vertically align rows in single-layout
+          ? "flex flex-col gap-y-4"
           : "grid grid-cols-1 gap-y-4 px-4 xl:gap-4"
       } dark:border-gray-700 dark:bg-gray-900`}
-      {...props} // Pass additional props to the grid container
+      {...props}
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
-          ? React.cloneElement(child, { ...props }) // Pass additional props to each child
+          ? React.cloneElement(child, { ...props })
           : child
       )}
     </div>

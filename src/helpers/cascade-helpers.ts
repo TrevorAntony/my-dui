@@ -1,7 +1,9 @@
+import config from "../config";
+
 async function fetchCascade(query) {
   const payload = {
     query,
-    data_connection_id: "ANA",
+    data_connection_id: config.dataConnection,
   };
   try {
     const response = await fetch("http://localhost:8000/api/v2/query-engine", {
@@ -23,7 +25,7 @@ async function fetchCascade(query) {
     }
     return result;
   } catch (error) {
-    throw new Error("Error fetching data: " + error.message);
+    throw new Error("Error fetching data: " + (error as Error).message);
   }
 }
 

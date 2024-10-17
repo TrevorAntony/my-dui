@@ -1,39 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-  HiHome,
-  HiChartPie,
-  HiHashtag,
-  HiFolder,
-  HiOutlineFolder,
-} from "react-icons/hi";
+import React from "react";
+import { HiHome, HiChartPie, HiHashtag, HiOutlineFolder } from "react-icons/hi";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import { SidebarNavLink } from "./SidebarNavLink";
-import { fetchDataWithoutStore } from "../api/api";
 import { Sidebar } from "flowbite-react";
+import { useSidebarConfig } from "../hooks/useSideBarConfig";
 
-// Mapping of icon names to actual SVG components
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,
   "dashboard-icon": HiChartPie,
   "dashboards-icon": HiChartPie,
   "hashtag-icon": HiHashtag,
-  // Add more mappings as needed
-};
-
-// Default configuration as a fallback
-const defaultSidebarConfig = {
-  system: {
-    home: {
-      title: "Home",
-      icon: "home-icon",
-      dashboard: "/",
-    },
-    menu: [],
-  },
-  user: {
-    menu: [],
-  },
 };
 
 const renderSidebarMenu = (config: any) => {
@@ -42,24 +19,22 @@ const renderSidebarMenu = (config: any) => {
   const userMenu = config.user?.menu || [];
   const dataTaskMenu = config.system?.dataTasks || [];
 
-  // Render Home link inside Sidebar.ItemGroup
   const homeLink = homeConfig ? (
     <Sidebar.ItemGroup key="home-group">
       <SidebarNavLink
         to={homeConfig.dashboard}
-        icon={iconMap[homeConfig.icon] || HiHome} // Provide a fallback icon
+        icon={iconMap[homeConfig.icon] || HiHome}
       >
         {homeConfig.title}
       </SidebarNavLink>
     </Sidebar.ItemGroup>
   ) : null;
 
-  // Render the System group
   const dataTaskGroup =
     dataTaskMenu.length > 0 ? (
       <SidebarGroup key="data-tasks-group" title="Actions">
         {dataTaskMenu.map((item: any, index: number) => {
-          const Icon = iconMap[item.icon] || HiChartPie; // Provide a fallback icon
+          const Icon = iconMap[item.icon] || HiChartPie;
           if (item.dashboards && item.dashboards.length > 0) {
             return (
               <SidebarCollapse
@@ -72,7 +47,7 @@ const renderSidebarMenu = (config: any) => {
                   <SidebarNavLink
                     key={nestedIndex}
                     to={nestedItem.dashboard}
-                    icon={iconMap[nestedItem.icon] || HiChartPie} // Provide a fallback icon
+                    icon={iconMap[nestedItem.icon] || HiChartPie}
                   >
                     {nestedItem.title}
                   </SidebarNavLink>
@@ -98,7 +73,7 @@ const renderSidebarMenu = (config: any) => {
     systemMenu.length > 0 ? (
       <SidebarGroup key="system-group" title="dashboards">
         {systemMenu.map((item: any, index: number) => {
-          const Icon = iconMap[item.icon] || HiChartPie; // Provide a fallback icon
+          const Icon = iconMap[item.icon] || HiChartPie;
           if (item.dashboards && item.dashboards.length > 0) {
             return (
               <SidebarCollapse
@@ -111,7 +86,7 @@ const renderSidebarMenu = (config: any) => {
                   <SidebarNavLink
                     key={nestedIndex}
                     to={nestedItem.dashboard}
-                    icon={iconMap[nestedItem.icon] || HiChartPie} // Provide a fallback icon
+                    icon={iconMap[nestedItem.icon] || HiChartPie}
                   >
                     {nestedItem.title}
                   </SidebarNavLink>
@@ -129,12 +104,11 @@ const renderSidebarMenu = (config: any) => {
       </SidebarGroup>
     ) : null;
 
-  // Render the User group
   const userGroup =
     userMenu.length > 0 ? (
       <SidebarGroup key="user-group" title="User">
         {userMenu.map((item: any, index: number) => {
-          const Icon = iconMap[item.icon] || HiChartPie; // Provide a fallback icon
+          const Icon = iconMap[item.icon] || HiChartPie;
           if (item.dashboards && item.dashboards.length > 0) {
             return (
               <SidebarCollapse
@@ -147,7 +121,7 @@ const renderSidebarMenu = (config: any) => {
                   <SidebarNavLink
                     key={nestedIndex}
                     to={nestedItem.dashboard}
-                    icon={iconMap[nestedItem.icon] || HiChartPie} // Provide a fallback icon
+                    icon={iconMap[nestedItem.icon] || HiChartPie}
                   >
                     {nestedItem.title}
                   </SidebarNavLink>
@@ -176,61 +150,9 @@ const renderSidebarMenu = (config: any) => {
 };
 
 const SystemSidebar = () => {
-  const [sidebarConfig, setSidebarConfig] = useState(defaultSidebarConfig);
-
-  useEffect(() => {
-    const loadSidebarConfig = async () => {
-      try {
-        const config = await fetchDataWithoutStore("/navigation");
-        setSidebarConfig(config || defaultSidebarConfig);
-      } catch (error) {
-        console.error("Failed to load sidebar config", error);
-        setSidebarConfig(defaultSidebarConfig);
-      }
-    };
-
-    loadSidebarConfig();
-  }, []);
+  const { sidebarConfig } = useSidebarConfig();
 
   return <>{renderSidebarMenu(sidebarConfig)}</>;
 };
 
 export default SystemSidebar;
-
-/* 
-Example JSX structure generated by this code based on the updated JSON:
-
-<Sidebar.ItemGroup>
-  <SidebarNavLink to="/" icon={HiHome}>
-    Home
-  </SidebarNavLink>
-</Sidebar.ItemGroup>
-
-<SidebarGroup title="System">
-  <SidebarNavLink to="/dashboard" icon={HiChartPie}>
-    {API} DB 1
-  </SidebarNavLink>
-  <SidebarCollapse icon={HiChartPie} label="{API} More" paths={["/a", "/b", "/c", "/d", "/api"]}>
-    <SidebarNavLink to="/a" icon={HiChartPie}>
-      Sub Dashboard 1
-    </SidebarNavLink>
-    <SidebarNavLink to="/b" icon={HiChartPie}>
-      Sub Dashboard 2
-    </SidebarNavLink>
-    <SidebarNavLink to="/c" icon={HiChartPie}>
-      Sub Dashboard 3
-    </SidebarNavLink>
-    <SidebarNavLink to="/d" icon={HiChartPie}>
-      Sub Dashboard 4
-    </SidebarNavLink>
-    <SidebarNavLink to="/api" icon={HiHashtag}>
-      APIs
-    </SidebarNavLink>
-  </SidebarCollapse>
-</SidebarGroup>
-
-<SidebarGroup title="User">
-  <!-- Currently empty, but ready for future user-specific items -->
-</SidebarGroup>
-
-*/
