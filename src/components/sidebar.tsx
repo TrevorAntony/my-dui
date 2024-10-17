@@ -22,9 +22,8 @@ import DuftModal from "./duft-modal";
 import { renderModalContent } from "../helpers/modalContentHelper";
 
 const ExampleSidebar: FC = function () {
-  const {
-    isOpenOnSmallScreens: isSidebarOpenOnSmallScreens,
-  } = useSidebarContext();
+  const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =
+    useSidebarContext();
 
   const [currentPage, setCurrentPage] = useState("");
 
@@ -211,6 +210,7 @@ const BottomMenu: FC = function () {
     setIsModalOpen(false);
     setModalContent([]);
     channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
+    window.location.href = "/dashboard/home";
   };
 
   const divStyle = {
