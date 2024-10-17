@@ -5,14 +5,7 @@ import TableSkeleton from "../../ui-components/table-skeleton";
 
 // Define types for props and data
 interface DataTableProps {
-  container?: React.ComponentType<{
-    header: string;
-    subHeader?: string;
-    variant?: string;
-    children: React.ReactNode;
-    exportData: string | boolean;
-    detailsComponent: string;
-  }>;
+  container?: React.ElementType;
   header?: string;
   subHeader?: string;
   variant?: string;
