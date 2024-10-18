@@ -11,7 +11,7 @@ const Query: React.FC<QueryProps> = ({ children }) => {
   const queryString = extractStringValue(children);
   setQuery(queryString);
 
-  return <>{children}</>;
+  return <></>;
 };
 
 export default Query;

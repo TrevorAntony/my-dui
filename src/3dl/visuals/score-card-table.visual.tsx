@@ -48,7 +48,7 @@ const ScoreCardTable = ({
             align: "right" as const,
           },
           Cell: ({ row }: { row: Record<string, any> }) => {
-            const score = row["original"]?.score;
+            const score = row["original"]?.score / 100;
             const color = row["original"]?.color;
 
             let backgroundColor;
@@ -95,8 +95,8 @@ const ScoreCardTable = ({
           accessorKey: key,
           header: key.charAt(0).toUpperCase() + key.slice(1),
           size: 150,
-          mantineTableHeadCellProps: { align: "center" as const },
-          mantineTableBodyCellProps: { align: "center" as const },
+          mantineTableHeadCellProps: { align: "right" as const },
+          mantineTableBodyCellProps: { align: "right" as const },
         };
       }
     });
