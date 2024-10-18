@@ -3,7 +3,7 @@ import config from "../config";
 
 export const fetchDataAndStore = async (
   endpoint: string,
-  setData: (data: any) => void
+  setData: (data: unknown) => void,
 ): Promise<void> => {
   try {
     const response = await fetch(`${config.apiBaseUrl}${endpoint}`);
@@ -14,7 +14,9 @@ export const fetchDataAndStore = async (
   }
 };
 
-export const fetchDataWithoutStore = async (endpoint: string): Promise<any> => {
+export const fetchDataWithoutStore = async (
+  endpoint: string,
+): Promise<unknown> => {
   try {
     const response = await fetch(`${config.apiBaseUrl}${endpoint}`);
     return await response.json();

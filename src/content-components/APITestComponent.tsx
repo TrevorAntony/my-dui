@@ -13,6 +13,8 @@ const APITestComponent: React.FC = () => {
 
   const handleFetchWithoutStore = async () => {
     const data = await fetchDataWithoutStore("/other-endpoint");
+
+    return data;
   };
 
   return (

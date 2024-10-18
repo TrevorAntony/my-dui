@@ -1,5 +1,4 @@
-import React, { FC } from "react";
-import CardComponent from "../components/card-component";
+import type { FC } from "react";
 
 export const ComponentD: FC = function () {
   return (
@@ -34,7 +33,7 @@ export const ComponentD: FC = function () {
         <div>Content Content</div>
         <div className="shrink-0">
           <a
-            href="#"
+            href="/"
             className="inline-flex items-center rounded-lg p-2 text-xs font-medium uppercase text-primary-700 hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700 sm:text-sm"
           >
             Sales Report

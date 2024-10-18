@@ -59,14 +59,14 @@ import SingleTableLayoutTester from "../content-components/SingleTableLayoutTest
 import DataString from "../components/dashboard-meta";
 
 const useDashboardData = (id: string) => {
-  const [dashboardData, setDashboardData] = useState(null);
+  const [dashboardData, setDashboardData] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
       fetchDataWithoutStore(`/3dldashboard/${id}`)
         .then((data) => {
           // Remove unnecessary whitespace and empty fragments
-          const cleanedJSX = data
+          const cleanedJSX = (data as string)
             .replace(/>\s+</g, "><") // Remove whitespace between tags
             .replace(/<>\s*<\/>/g, ""); // Remove empty fragments
 
@@ -88,7 +88,7 @@ const useThemeData = () => {
     const fetchTheme = async () => {
       try {
         const data = await fetchDataWithoutStore("/theme");
-        setThemeData(data);
+        setThemeData(data as object);
       } catch (err) {
         setError(err as Error);
       } finally {
