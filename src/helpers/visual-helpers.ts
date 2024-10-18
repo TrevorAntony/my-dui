@@ -5,7 +5,7 @@ export function deepCopy<T>(obj: T): T {
 
 export function deepMerge<T extends Record<string, unknown>, U extends object>(
   target: T,
-  source: U
+  source: U,
 ): T & U {
   for (const key in source) {
     if (
@@ -17,8 +17,8 @@ export function deepMerge<T extends Record<string, unknown>, U extends object>(
         source[key],
         deepMerge(
           target[key] as Record<string, unknown>,
-          source[key] as Record<string, unknown>
-        )
+          source[key] as Record<string, unknown>,
+        ),
       );
     }
   }
@@ -30,7 +30,7 @@ export interface DataItem {
 }
 
 export function transposeData(
-  data: DataItem[]
+  data: DataItem[] | undefined | null,
 ): { column: string; value: unknown[] }[] {
   if (!data || data.length === 0) return [];
 
@@ -43,7 +43,7 @@ export function transposeData(
 
 export const processQuery = (
   query: string,
-  config: Record<string, string>
+  config: Record<string, string>,
 ): string => {
   return query.replace(/\{([^{}]+)\}/g, (match, placeholder) => {
     return config[placeholder] || match;
