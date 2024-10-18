@@ -39,7 +39,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({ labels, series }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow">
+    <div className="rounded-lg bg-white p-4 shadow">
       <Chart options={options} series={series} type="pie" width="100%" />
     </div>
   );
