@@ -6,7 +6,7 @@ import React from "react";
  * Can be extended easily for new content types.
  */
 export const renderModalContent = (
-  modalContent: string | number | string[] | number[] | Record<string, any>
+  modalContent: string | number | string[] | number[] | Record<string, unknown>,
 ): React.ReactNode => {
   if (modalContent === undefined || modalContent === null) return null;
 

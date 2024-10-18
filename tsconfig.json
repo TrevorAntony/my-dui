@@ -23,6 +23,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "module": "esnext",
     "strict": true,
     "target": "ESNext",
     "types": ["vite/client"]

@@ -1,4 +1,4 @@
-import { SidebarConfig } from "../types/side-bar-config";
+import type { SidebarConfig } from "../types/side-bar-config";
 
 export const defaultSidebarConfig: SidebarConfig = {
   system: {

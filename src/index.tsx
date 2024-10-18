@@ -24,5 +24,5 @@ root.render(
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </AppStateProvider>
-  </StrictMode>
+  </StrictMode>,
 );
