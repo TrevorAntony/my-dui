@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { HiHome, HiChartPie, HiHashtag, HiOutlineFolder } from "react-icons/hi";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import { SidebarNavLink } from "./sidebar-nav-link";
-import { fetchDataWithoutStore } from "../api/api";
 import { Sidebar } from "flowbite-react";
+import { useSidebarConfig } from "../hooks/useSideBarConfig";
 
-// Mapping of icon names to actual SVG components
+import type { MenuItem, DataTaskItem, NavigationConfig } from "./types";
+
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,
   "dashboard-icon": HiChartPie,
@@ -14,69 +15,12 @@ const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "hashtag-icon": HiHashtag,
 };
 
-// Default configuration as a fallback
-const defaultSidebarConfig: NavigationConfig = {
-  system: {
-    home: {
-      title: "Home",
-      icon: "home-icon",
-      dashboard: "/",
-    },
-    menu: [],
-    dataTasks: [],
-  },
-  user: {
-    menu: [],
-  },
-};
-
-// Type Definitions
-interface DashboardItem {
-  title: string;
-  icon: string;
-  dashboard: string;
-}
-
-interface DashboardGroupItem {
-  title: string;
-  icon: string;
-  dashboards: DashboardItem[];
-  dashboard: string;
-}
-
-type MenuItem = DashboardItem | DashboardGroupItem;
-
-interface DataTaskItem {
-  title: string;
-  icon: string;
-  task: string;
-  dashboard: string;
-}
-
-interface SystemConfig {
-  home?: DashboardItem;
-  menu?: MenuItem[];
-  dataTasks?: DataTaskItem[];
-}
-
-interface UserConfig {
-  home?: DashboardItem;
-  menu?: MenuItem[];
-  dataTasks?: DataTaskItem[];
-}
-
-interface NavigationConfig {
-  system?: SystemConfig;
-  user?: UserConfig;
-}
-
 const renderSidebarMenu = (config: NavigationConfig) => {
   const homeConfig = config.system?.home;
   const systemMenu = config.system?.menu || [];
   const userMenu = config.user?.menu || [];
   const dataTaskMenu = config.system?.dataTasks || [];
 
-  // Render Home link inside Sidebar.ItemGroup
   const homeLink = homeConfig ? (
     <Sidebar.ItemGroup key="home-group">
       <SidebarNavLink
@@ -88,7 +32,6 @@ const renderSidebarMenu = (config: NavigationConfig) => {
     </Sidebar.ItemGroup>
   ) : null;
 
-  // Render the Data Task group
   const dataTaskGroup =
     dataTaskMenu.length > 0 ? (
       <SidebarGroup key="data-tasks-group" title="Actions">
@@ -107,14 +50,12 @@ const renderSidebarMenu = (config: NavigationConfig) => {
       </SidebarGroup>
     ) : null;
 
-  // Render the System group
   const systemGroup =
     systemMenu.length > 0 ? (
       <SidebarGroup key="system-group" title="dashboards">
         {systemMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
           if ("dashboards" in item && Array.isArray(item.dashboards)) {
-            // item is DashboardGroupItem
             return (
               <SidebarCollapse
                 key={index}
@@ -134,7 +75,6 @@ const renderSidebarMenu = (config: NavigationConfig) => {
               </SidebarCollapse>
             );
           } else {
-            // item is DashboardItem
             return (
               <SidebarNavLink key={index} to={item.dashboard} icon={Icon}>
                 {item.title}
@@ -145,7 +85,6 @@ const renderSidebarMenu = (config: NavigationConfig) => {
       </SidebarGroup>
     ) : null;
 
-  // Render the User group
   const userGroup =
     userMenu.length > 0 ? (
       <SidebarGroup key="user-group" title="User">
@@ -192,24 +131,7 @@ const renderSidebarMenu = (config: NavigationConfig) => {
 };
 
 const SystemSidebar = () => {
-  const [sidebarConfig, setSidebarConfig] =
-    useState<NavigationConfig>(defaultSidebarConfig);
-
-  useEffect(() => {
-    const loadSidebarConfig = async () => {
-      try {
-        const config: NavigationConfig = await fetchDataWithoutStore(
-          "/navigation"
-        );
-        setSidebarConfig(config || defaultSidebarConfig);
-      } catch (error) {
-        console.error("Failed to load sidebar config", error);
-        setSidebarConfig(defaultSidebarConfig);
-      }
-    };
-
-    loadSidebarConfig();
-  }, []);
+  const { sidebarConfig } = useSidebarConfig();
 
   return <>{renderSidebarMenu(sidebarConfig)}</>;
 };

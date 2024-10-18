@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import config from "../config";
 import classNames from "classnames";
-import { Sidebar, Tooltip } from "flowbite-react";
+import { Sidebar, TextInput, Tooltip } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import {
@@ -13,11 +13,10 @@ import {
 
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
-
-import { SidebarNavLink } from "./sidebar-nav-link";
+import { SidebarNavLink } from "./SidebarNavLink";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
-import SystemSidebar from "./api-navigation-sidebar";
+import SystemSidebar from "./navigation-sidebar";
 import DuftModal from "./duft-modal";
 import { renderModalContent } from "../helpers/modalContentHelper";
 
@@ -146,7 +145,7 @@ const BottomMenu: FC = function () {
     const eventSource = new EventSource("http://127.0.0.1:8000/sse/dte/");
 
     eventSource.onmessage = (event) => {
-      const parsedData = JSON.parse(event.data); // Assuming the data is in JSON format
+      const parsedData = JSON.parse(event.data);
 
       setData(parsedData);
 
@@ -200,13 +199,6 @@ const BottomMenu: FC = function () {
     setIsModalOpen(false);
     setModalContent([]);
     channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
-  };
-
-  const handleButtonClose = () => {
-    setIsModalOpen(false);
-    setModalContent([]);
-    channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
-
     window.location.href = "/dashboard/home";
   };
 
