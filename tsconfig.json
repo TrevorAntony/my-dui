@@ -3,6 +3,7 @@
   "display": "Default",
   "compilerOptions": {
     "allowJs": true,
+    "noImplicitAny": false,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
@@ -22,6 +23,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "module": "esnext",
     "strict": true,
     "target": "ESNext",
     "types": ["vite/client"]

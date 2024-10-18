@@ -20,12 +20,12 @@ async function fetchCascade(query) {
           result.message +
           "\n" +
           "Original query: " +
-          query
+          query,
       );
     }
     return result;
   } catch (error) {
-    throw new Error("Error fetching data: " + error.message);
+    throw new Error("Error fetching data: " + (error as Error).message);
   }
 }
 

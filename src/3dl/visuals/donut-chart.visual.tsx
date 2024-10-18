@@ -1,5 +1,6 @@
 import React from "react";
 import BaseCircularChart from "../base-visuals/base-circular-chart";
+import type { ContainerComponentProps } from "../types/types";
 
 const DonutChart = ({
   container: Container,
@@ -8,11 +9,15 @@ const DonutChart = ({
   exportData,
   detailsComponent,
   ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  exportData: string;
+  detailsComponent: string;
 }) => {
-  // Content to be rendered
   const content = <BaseCircularChart {...props} chartType="donut" />;
 
-  // Conditionally wrap the content in a Container if provided
   return Container ? (
     <Container
       header={header}

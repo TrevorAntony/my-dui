@@ -5,12 +5,7 @@ import TableSkeleton from "../../ui-components/table-skeleton";
 
 // Define types for props and data
 interface DataTableProps {
-  container?: React.ComponentType<{
-    header: string;
-    subHeader?: string;
-    variant?: string;
-    children: React.ReactNode;
-  }>;
+  container?: React.ElementType;
   header?: string;
   subHeader?: string;
   variant?: string;
@@ -92,11 +87,11 @@ const DataTable: React.FC<DataTableProps> = ({
 
   return ContainerComponent ? (
     <ContainerComponent
-      header={header}
+      header={header as string}
       subHeader={subHeader}
       variant={variant}
-      exportData={exportData}
-      detailsComponent={detailsComponent}
+      exportData={exportData as string}
+      detailsComponent={detailsComponent as string}
     >
       {wrappedContent}
     </ContainerComponent>

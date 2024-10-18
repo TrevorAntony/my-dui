@@ -1,11 +1,25 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TO:DO add data interface for this file
+import type { FC } from "react";
+import { useState, useEffect } from "react";
+import type { PivotTableUIProps } from "react-pivottable/PivotTableUI";
 import PivotTableUI from "react-pivottable/PivotTableUI";
 import "react-pivottable/pivottable.css";
-import { useDashboardContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import TableSkeleton from "../../ui-components/table-skeleton";
 
-const PivotTable = ({
+interface PivotTableProps {
+  container?: React.ElementType;
+  header?: string;
+  subHeader?: string;
+  variant?: "card" | "plain";
+  pivotRows?: string[];
+  pivotCols?: string[];
+  exportData?: string;
+  detailsComponent?: React.ReactNode;
+}
+
+const PivotTable: FC<PivotTableProps> = ({
   container: ContainerComponent,
   header = "Pivot Table",
   subHeader = header,
@@ -18,40 +32,43 @@ const PivotTable = ({
   const initialPivotRows = pivotRows;
   const initialPivotCols = pivotCols;
 
-  const [pivotState, setPivotState] = useState({
+  type PivotState = {
+    data: any[];
+    rows: string[];
+    cols: string[];
+  };
+
+  const [pivotState, setPivotState] = useState<PivotState>({
     data: [],
     rows: initialPivotRows,
     cols: initialPivotCols,
   });
 
-  const { state } = useDashboardContext();
   const { data } = useDataContext();
 
-  // Defensive check for data
   const hasValidData = data && Array.isArray(data) && data.length > 0;
 
   useEffect(() => {
     if (hasValidData) {
-      // Get the keys of the first object in data
       const keys = Object.keys(data[0]);
 
-      // Use provided pivotRows or default to the first key
       const activePivotRows =
         initialPivotRows.length > 0 ? initialPivotRows : [keys[0]];
+
+      const validPivotRows = activePivotRows.filter(Boolean) as string[];
+
       const activePivotCols =
         initialPivotCols.length > 0 ? initialPivotCols : keys.slice(1, 6);
 
-      // Only update the state if the new rows or cols differ from the current state
-      setPivotState((prevState) => {
+      setPivotState((prevState: PivotState) => {
         if (
           prevState.data !== data ||
-          JSON.stringify(prevState.rows) !== JSON.stringify(activePivotRows) ||
+          JSON.stringify(prevState.rows) !== JSON.stringify(validPivotRows) ||
           JSON.stringify(prevState.cols) !== JSON.stringify(activePivotCols)
         ) {
           return {
-            ...prevState,
             data: data,
-            rows: activePivotRows,
+            rows: validPivotRows,
             cols: activePivotCols,
           };
         }
@@ -62,19 +79,15 @@ const PivotTable = ({
 
   const content = hasValidData ? (
     <div>
-      {state.debug && (
-        <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
-      )}
       <PivotTableUI
         {...pivotState}
-        onChange={(newState) => setPivotState(newState)}
+        onChange={(e: PivotTableUIProps) => setPivotState(e as PivotState)}
       />
     </div>
   ) : (
     <TableSkeleton />
   );
 
-  // Conditionally wrap the content based on the variant and layout
   const wrappedContent =
     variant === "plain" ? (
       content
@@ -86,7 +99,6 @@ const PivotTable = ({
       </div>
     );
 
-  // Conditionally wrap the ChartComponent in Container if provided
   return ContainerComponent ? (
     <ContainerComponent
       header={header}

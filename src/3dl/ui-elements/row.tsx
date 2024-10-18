@@ -1,13 +1,20 @@
 import React from "react";
 
-const Row = ({ children, data, style = {}, ...props }) => {
+interface RowProps {
+  children: React.ReactNode;
+  data?: unknown;
+  style?: React.CSSProperties;
+  [key: string]: unknown;
+}
+
+const Row: React.FC<RowProps> = ({ children, style = {}, ...props }) => {
   const childrenCount = React.Children.count(children);
 
   const rowStyle = {
     display: "grid",
     gridTemplateColumns: `repeat(${childrenCount}, 1fr)`,
-    gap: "1.5rem", // Increase the gap for better spacing
-    padding: "1rem", // Add padding to the entire row for better alignment
+    gap: "1.5rem",
+    padding: "1rem",
     ...style,
   };
 

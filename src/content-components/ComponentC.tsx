@@ -3,7 +3,6 @@ import CardComponent from "../components/card-component";
 import CardRow from "../components/card-row";
 import PieChartComponent from "./PieChartComponent";
 import { DuftGrid } from "../ui-components/grid-components";
-import SmartDataTable from "../3dl/visuals/smart-data-table.visual";
 
 const ComponentC: React.FC = () => {
   const labels = ["Apple", "Mango", "Orange", "Banana"];

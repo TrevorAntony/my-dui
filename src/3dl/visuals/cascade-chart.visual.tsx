@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useState, useEffect, useCallback } from "react";
-import { useThemeContext } from "../utilities/Dashboard";
 import ApexTree from "apextree";
 import { MantineReactTable } from "mantine-react-table";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
 import CascadeSkeleton from "../../ui-components/cascade-skeleton";
+import type { ContainerComponentProps } from "../types/types";
 
-// Default options for ApexTree
+// TO:DO move this to a constants file
 const defaultOptions = {
   contentKey: "data",
   width: "100%",
@@ -29,7 +30,7 @@ const defaultOptions = {
   canvasStyle: {
     background: "white",
   },
-  nodeTemplate: (node) => {
+  nodeTemplate: (node: Record<string, unknown>) => {
     const { label, value } = node;
     const formattedValue = Number(value).toLocaleString();
     if (!value || !label) {
@@ -38,7 +39,7 @@ const defaultOptions = {
 
     return `
       <div 
-      id=${node.id}
+      id=${node["id"]}
         style="
         display: flex;
         flex-direction: column;
@@ -49,10 +50,17 @@ const defaultOptions = {
       "
       >
         <div style="font-size: 3.5em; line-height: 1.50; font-weight: 700">${formattedValue}</div>
-        <div style="font-size: 1.8em;">${node.label}</div>
+        <div style="font-size: 1.8em;">${node["label"]}</div>
       </div>
     `;
   },
+};
+
+type CascadeDataType = {
+  id: string;
+  options: any;
+  data: any;
+  children?: any;
 };
 
 const CascadeChart = ({
@@ -63,9 +71,15 @@ const CascadeChart = ({
   exportData,
   detailsComponent,
   ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  cascadeObject: Record<string, unknown>;
+  exportData: string;
+  detailsComponent: string;
 }) => {
-  const theme = useThemeContext(); // Accessing the theme context
-  const [cascadeData, setCascadeData] = useState(null);
+  const [cascadeData, setCascadeData] = useState<CascadeDataType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");
   const [modalCascadeHeadLabels, setModalCascadeHeadLabels] = useState([]);
@@ -77,66 +91,78 @@ const CascadeChart = ({
 
   const cascade = useMemo(() => cascadeObject, [cascadeObject]);
 
-  const fetchCascadeData = useCallback(async (dataStructure) => {
-    async function processNode(node) {
-      const { query } = node.data;
-      const queryResult = await fetchCascade(query);
-      const result = {
-        id: node.id,
-        options: node.options ? node.options : [],
-        data: {
-          id: node.id,
-          label: node.data.label,
-          details: queryResult,
-          value: queryResult.length,
-        },
-      };
+  const fetchCascadeData = useCallback(
+    async (dataStructure: Record<string, unknown>) => {
+      async function processNode(node: Record<string, unknown>) {
+        const { query } = node["data"] as { query: string };
+        const queryResult = await fetchCascade(query);
+        const result: CascadeDataType = {
+          id: node["id"] as string,
+          options: node["options"] ? node["options"] : [],
+          data: {
+            id: node["id"],
+            label: (node["data"] as { label: string }).label,
+            details: queryResult,
+            value: queryResult.length,
+          },
+        };
 
-      if (node.children && node.children.length > 0) {
-        const childResults = await Promise.allSettled(
-          node.children.map(processNode)
-        );
+        if (node["children"] && (node["children"] as unknown[]).length > 0) {
+          const childResults = await Promise.allSettled(
+            (node["children"] as Record<string, unknown>[]).map(processNode),
+          );
 
-        result.children = childResults.map((childResult, index) => {
-          if (childResult.status === "fulfilled") {
-            return childResult.value;
-          } else {
-            console.error(
-              `Error processing child node ${node.children[index].id}:`,
-              childResult.reason
-            );
-            return {
-              id: node.children[index].id,
-              error: true,
-              message: "Failed to fetch data",
-              children: [],
-              options: [],
-              data: {
-                id: node.children[index].id,
-                label: node.children[index].data.label,
-                details: null,
-                value: 0,
-              },
-            };
-          }
-        });
+          result.children = childResults.map((childResult, index) => {
+            if (childResult.status === "fulfilled") {
+              return childResult.value;
+            } else {
+              console.error(
+                `Error processing child node ${(
+                  node["children"] as Record<string, unknown>[]
+                )[index]?.["id"]}:`,
+                (childResult as { reason: string }).reason,
+              );
+              return {
+                id:
+                  (node["children"] as Record<string, unknown>[])[index]?.[
+                    "id"
+                  ] ?? null,
+                error: true,
+                message: "Failed to fetch data",
+                children: [],
+                options: [],
+                data: {
+                  id: (node["children"] as Record<string, unknown>[])[index]?.[
+                    "id"
+                  ],
+                  label: (
+                    node["children"] as Array<{ data: { label: string } }>
+                  )?.[index]?.data.label,
+                  details: null,
+                  value: 0,
+                },
+              };
+            }
+          });
+        }
+
+        return result;
       }
 
-      return result;
-    }
-
-    try {
-      setCascadeData(null);
-      const results = await processNode(dataStructure);
-      setCascadeData(results);
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-  }, []);
+      try {
+        setCascadeData(null);
+        const results: CascadeDataType = await processNode(dataStructure);
+        setCascadeData(results);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     fetchCascadeData(cascade);
-  }, [cascade, fetchCascadeData]); // Only run when `cascade` changes
+  }, [cascade, fetchCascadeData]);
 
   useEffect(() => {
     if (!cascadeData) return;
@@ -217,10 +243,8 @@ const CascadeChart = ({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={cascadeTitle}
-        widthSize="large"
-        heightSize="large"
-        isCloseDefault={true}
       >
+        {/* TO:DO replace this table with the InfiniteScrollTable */}
         <MantineReactTable
           columns={modalCascadeHeadLabels}
           enableTopToolbar={false}
@@ -229,7 +253,7 @@ const CascadeChart = ({
           data={modalCascadeData}
           enableGlobalFilter
           enablePagination={false}
-          initialState={{ pagination: { pageSize: 10 } }}
+          initialState={{ pagination: { pageSize: 10, pageIndex: 0 } }}
           {...props}
           mantineTableContainerProps={{ sx: { maxHeight: "300px" } }}
         />

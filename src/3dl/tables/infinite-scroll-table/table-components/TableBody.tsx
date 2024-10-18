@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+//TO:DO replace the explicit anys with table data types once added
 import React from "react";
 
 interface TableBodyProps {
@@ -23,7 +25,8 @@ const TableBody: React.FC<TableBodyProps> = ({
           .map((header) => {
             const hasMatchingChild = React.Children.toArray(children).some(
               (child) =>
-                React.isValidElement(child) && child.props.columnName === header
+                React.isValidElement(child) &&
+                child.props.columnName === header,
             );
 
             const formatDate = (value: string) => {

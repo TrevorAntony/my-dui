@@ -5,7 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 const CascadeSkeleton: React.FC = () => {
   return (
     <div className="flex items-center justify-center">
-      <div className="flex flex-col items-center mr-10">
+      <div className="mr-10 flex flex-col items-center">
         <Skeleton height={40} width={100} />
       </div>
 
@@ -14,7 +14,7 @@ const CascadeSkeleton: React.FC = () => {
         <Skeleton height={30} width={80} />
       </div>
 
-      <div className="flex flex-col items-center ml-10">
+      <div className="ml-10 flex flex-col items-center">
         <Skeleton height={40} width={100} />
       </div>
     </div>

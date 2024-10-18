@@ -1,14 +1,14 @@
 // AppStateContext.tsx
 import React, { createContext, useContext, useReducer } from "react";
-import { AppState, AppStateContextProps } from "./api/types";
+import type { AppState, AppStateContextProps } from "./api/types";
 
 const AppStateContext = createContext<AppStateContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 const appStateReducer = (
   state: AppState,
-  action: { type: string; payload: any }
+  action: { type: string; payload: unknown },
 ): AppState => {
   switch (action.type) {
     case "SET_DATA":
@@ -23,7 +23,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [state, dispatch] = useReducer(appStateReducer, { data: null });
 
-  const setData = (data: any) => {
+  const setData = (data: unknown) => {
     dispatch({ type: "SET_DATA", payload: data });
   };
 

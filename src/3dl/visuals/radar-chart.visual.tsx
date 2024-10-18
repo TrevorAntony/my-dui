@@ -1,15 +1,23 @@
 import React from "react";
 import BaseXYChart from "../base-visuals/base-xy-chart";
+import type { ContainerComponentProps } from "../types/types";
 
-const AreaChart = ({
+const RadarChart = ({
   container: Container,
-  header = "Bar Chart",
+  header = "Radar Chart",
   subHeader = header,
   exportData,
   detailsComponent,
   ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  exportData: string;
+  detailsComponent: string;
+  userOptions?: Record<string, unknown>;
 }) => {
-  const content = <BaseXYChart {...props} chartType="area" />;
+  const content = <BaseXYChart {...props} chartType="radar" />;
 
   return Container ? (
     <Container
@@ -25,4 +33,4 @@ const AreaChart = ({
   );
 };
 
-export default AreaChart;
+export default RadarChart;

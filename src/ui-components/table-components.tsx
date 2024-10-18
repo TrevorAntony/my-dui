@@ -3,24 +3,29 @@ import React from "react";
 
 interface DuftSingleViewProps {
   children: React.ReactNode;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface DuftSingleViewComponent extends React.FC<DuftSingleViewProps> {
   Header: React.FC<{ children: ReactNode }>;
 }
 
-const DuftSingleView: DuftSingleViewComponent = ({ children, ...props }) => {
+const DuftSingleView: DuftSingleViewComponent = ({
+  children,
+  ...props
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <div
-      className="block items-center justify-between border-b bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex border-t border-gray-200"
+      className="block items-center justify-between border-y border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 sm:flex"
       {...props}
     >
       <div className="mb-1 w-full">
         {React.Children.map(children, (child) =>
           React.isValidElement(child)
             ? React.cloneElement(child, { ...props })
-            : child
+            : child,
         )}
       </div>
     </div>
