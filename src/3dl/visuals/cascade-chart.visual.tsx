@@ -165,12 +165,12 @@ const CascadeChart = ({
   }, [cascade, fetchCascadeData]);
 
   useEffect(() => {
-    if (!cascadeData) return;
+    if (!cascadeData) return null;
 
     const svgElement = document.getElementById("svg-tree");
     if (!svgElement) {
       console.error("Element with id 'svg-tree' not found");
-      return;
+      return null;
     }
 
     const tree = new ApexTree(svgElement, defaultOptions);
