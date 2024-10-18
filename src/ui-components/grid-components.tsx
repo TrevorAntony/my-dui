@@ -9,7 +9,7 @@ interface RowProps {
 
 interface DuftGridProps {
   children: React.ReactNode;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
@@ -26,7 +26,7 @@ const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
           ? React.cloneElement(child, { ...props })
-          : child
+          : child,
       )}
     </div>
   );
@@ -60,7 +60,7 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
           ? React.cloneElement(child, { ...props })
-          : child
+          : child,
       )}
     </div>
   );
