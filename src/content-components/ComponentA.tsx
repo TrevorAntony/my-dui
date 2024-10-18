@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { DuftGrid } from "../ui-components/grid-components";
 
 type ComponentAParams = {
-  id?: string; // Make the id optional
+  id?: string;
 };
 
 const ComponentA: React.FC = () => {
