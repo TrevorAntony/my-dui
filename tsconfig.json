@@ -24,8 +24,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "module": "esnext",
-    "strict": true,
-    "target": "ESNext",
+    "target": "es2020",
     "types": ["vite/client"]
   },
   "exclude": ["node_modules"],

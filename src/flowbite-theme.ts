@@ -79,10 +79,10 @@ const flowbiteTheme: CustomFlowbiteTheme = {
         },
       },
     },
-    icon: {
-      base: "h-6 w-6 flex-shrink-0 text-highlight-500 transition duration-75 group-hover:text-highlight-600 dark:text-highlight-400 dark:group-hover:text-white",
-      active: "text-highlight-200 dark:text-gray-100",
-    },
+    // icon: {
+    //   base: "h-6 w-6 flex-shrink-0 text-highlight-500 transition duration-75 group-hover:text-highlight-600 dark:text-highlight-400 dark:group-hover:text-white",
+    //   active: "text-highlight-200 dark:text-gray-100",
+    // },
   },
   textarea: {
     base: "block w-full text-sm p-4 rounded-lg border disabled:cursor-not-allowed disabled:opacity-50",
