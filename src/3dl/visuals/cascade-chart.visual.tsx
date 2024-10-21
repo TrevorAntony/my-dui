@@ -72,12 +72,12 @@ const CascadeChart = ({
   detailsComponent,
   ...props
 }: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
+  container?: React.ComponentType<ContainerComponentProps>;
+  header?: string;
+  subHeader?: string;
   cascadeObject: Record<string, unknown>;
-  exportData: string;
-  detailsComponent: string;
+  exportData?: string;
+  detailsComponent?: string;
 }) => {
   const [cascadeData, setCascadeData] = useState<CascadeDataType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

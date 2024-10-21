@@ -10,11 +10,11 @@ const RadarChart = ({
   detailsComponent,
   ...props
 }: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
-  exportData: string;
-  detailsComponent: string;
+  container?: React.ComponentType<ContainerComponentProps>;
+  header?: string;
+  subHeader?: string;
+  exportData?: string;
+  detailsComponent?: string;
   userOptions?: Record<string, unknown>;
 }) => {
   const content = <BaseXYChart {...props} chartType="radar" />;

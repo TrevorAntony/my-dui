@@ -10,11 +10,11 @@ const RadialBarChart = ({
   detailsComponent,
   ...props
 }: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
-  exportData: string;
-  detailsComponent: string;
+  container?: React.ComponentType<ContainerComponentProps>;
+  header?: string;
+  subHeader?: string;
+  exportData?: string;
+  detailsComponent?: string;
   userOptions?: Record<string, unknown>;
 }) => {
   // Content to be rendered

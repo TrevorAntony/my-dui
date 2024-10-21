@@ -14,11 +14,11 @@ const PercentStackedBarChart = ({
   exportData,
   detailsComponent,
 }: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
-  exportData: string;
-  detailsComponent: string;
+  container?: React.ComponentType<ContainerComponentProps>;
+  header?: string;
+  subHeader?: string;
+  exportData?: string;
+  detailsComponent?: string;
   userOptions?: Record<string, unknown>;
 }) => {
   const theme = useThemeContext(); // Accessing the theme context

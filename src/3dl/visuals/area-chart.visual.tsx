@@ -9,11 +9,11 @@ const AreaChart = ({
   detailsComponent,
   ...props
 }: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
-  exportData: string;
-  detailsComponent: string;
+  container?: React.ComponentType<ContainerComponentProps>;
+  header?: string;
+  subHeader?: string;
+  exportData?: string;
+  detailsComponent?: string;
 }) => {
   const content = <BaseXYChart {...props} chartType="area" />;
 
