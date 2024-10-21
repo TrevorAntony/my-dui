@@ -20,7 +20,7 @@ import {
 } from "../3dl";
 
 // Define a type for the registry that maps keys to specific component types
-interface DetailsComponentRegistry {
+export interface DetailsComponentRegistry {
   "bar-chart": typeof BarChart;
   "line-chart": typeof LineChart;
   "area-chart": typeof AreaChart;
@@ -34,7 +34,6 @@ interface DetailsComponentRegistry {
   "radar-chart": typeof RadarChart;
   "radial-bar-chart": typeof RadialBarChart;
   "score-card": typeof ScoreCardTable;
-  "smart-data-table": typeof SmartDataTable;
   "stacked-bar-chart": typeof StackedBarChart;
   tile: typeof Tile;
   "pivot-table": typeof PivotTable;
@@ -65,7 +64,7 @@ const detailsComponentRegistry: DetailsComponentRegistry = {
 };
 
 export const getDetailsComponent = <K extends keyof DetailsComponentRegistry>(
-  key: K
+  key: K,
 ): DetailsComponentRegistry[K] => {
   return detailsComponentRegistry[key];
 };

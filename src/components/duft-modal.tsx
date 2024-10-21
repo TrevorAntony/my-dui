@@ -19,6 +19,12 @@ const modalHeightMap = {
   large: "80vh",
 };
 
+// Define a type for the modal content
+type ModalContent =
+  | string
+  | string[]
+  | { [key: string]: string | number | boolean };
+
 export interface DuftModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -26,7 +32,7 @@ export interface DuftModalProps {
   executeButtonName?: string;
   title?: string;
   children?: React.ReactNode;
-  modalContent?: string | string[] | Record<string, any>;
+  modalContent?: ModalContent;
   handleButtonClose?: () => void;
   modalWidth?: keyof typeof modalWidthMap;
   modalHeight?: keyof typeof modalHeightMap;
@@ -84,7 +90,10 @@ const DuftModal: React.FC<DuftModalProps> = ({
       </div>
 
       {/* Modal Body with dynamic or fixed sizing */}
-      <Modal.Body className="p-6" style={finalModalBodyStyle}>
+      <Modal.Body
+        className="p-6"
+        style={finalModalBodyStyle as React.CSSProperties}
+      >
         {children
           ? children
           : modalContent

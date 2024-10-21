@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import { Dataset, ExportData } from "../3dl";
 import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
 import { useLayout } from "../3dl/ui-elements/single-layout";
+import type { DetailsComponentRegistry } from "./details-component-registry";
 import { getDetailsComponent } from "./details-component-registry";
 import DuftModal from "./duft-modal";
 import { HiOutlineExternalLink } from "react-icons/hi";
@@ -44,8 +45,10 @@ const CardComponent: FC<CardComponentProps> = ({
   const isFullHeight = layout === "single-layout";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const detailsComponentKey =
+    detailsComponent as keyof DetailsComponentRegistry;
   const DetailsComponent = detailsComponent
-    ? getDetailsComponent(detailsComponent)
+    ? getDetailsComponent(detailsComponentKey)
     : undefined;
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);

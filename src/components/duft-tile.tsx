@@ -89,8 +89,13 @@ const DuftTile: React.FC<DuftTileProps> = ({
       <div
         role="button"
         tabIndex={0}
-        className={`relative flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${tileClasses}`}
         onClick={handleClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleClick();
+          }
+        }}
+        className={`relative flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${tileClasses}`}
         style={{
           cursor: React.Children.count(children) > 0 ? "pointer" : "default",
         }}
