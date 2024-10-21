@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import React from "react";
+import { NavLink, Outlet } from "react-router-dom";
 
 const NavbarSidebarLayout: React.FC = () => {
   return (
@@ -9,25 +9,25 @@ const NavbarSidebarLayout: React.FC = () => {
         <aside>
           <ul>
             <li>
-              <NavLink 
-                to="/a" 
-                className={({ isActive }) => (isActive ? 'active-link' : '')}
+              <NavLink
+                to="/a"
+                className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 Link A
               </NavLink>
             </li>
             <li>
-              <NavLink 
-                to="/b" 
-                className={({ isActive }) => (isActive ? 'active-link' : '')}
+              <NavLink
+                to="/b"
+                className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 Link B
               </NavLink>
             </li>
             <li>
-              <NavLink 
-                to="/c" 
-                className={({ isActive }) => (isActive ? 'active-link' : '')}
+              <NavLink
+                to="/c"
+                className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 Link C
               </NavLink>
@@ -35,9 +35,7 @@ const NavbarSidebarLayout: React.FC = () => {
           </ul>
         </aside>
         <main>
-        <h1 className="text-3xl font-bold underline">
-            Hello world!
-          </h1>
+          <h1 className="text-3xl font-bold underline">Hello world!</h1>
           <Outlet /> {/* Routed content will be injected here */}
         </main>
       </div>

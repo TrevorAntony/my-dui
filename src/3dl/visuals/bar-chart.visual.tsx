@@ -1,15 +1,22 @@
 import React from "react";
 import BaseXYChart from "../base-visuals/base-xy-chart";
+import type { ContainerComponentProps } from "../types/types";
 
-const HeatmapChart = ({
+const BarChart = ({
   container: Container,
-  header = "Heat-map Chart",
+  header = "Bar Chart",
   subHeader = header,
   exportData,
   detailsComponent,
   ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  exportData: string;
+  detailsComponent: string;
 }) => {
-  const content = <BaseXYChart {...props} chartType="heatmap" />;
+  const content = <BaseXYChart {...props} chartType="bar" />;
 
   return Container ? (
     <Container
@@ -25,4 +32,4 @@ const HeatmapChart = ({
   );
 };
 
-export default HeatmapChart;
+export default BarChart;

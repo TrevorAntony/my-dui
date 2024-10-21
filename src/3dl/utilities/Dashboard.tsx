@@ -1,19 +1,43 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Reducer } from "react";
 import React, { useReducer, createContext, useContext } from "react";
 
-// Define actions
+interface DashboardState {
+  filters: Record<string, any>;
+  data: Record<string, any>;
+  debug: boolean;
+  designSystem: string;
+  theme?: Record<string, unknown>;
+  layout: string;
+}
+
+interface DashboardAction {
+  type: string;
+  payload: any;
+}
+
 const SET_FILTER = "SET_FILTER";
 const SET_DATA = "SET_DATA";
 const SET_DEBUG = "SET_DEBUG";
 const SET_DESIGN_SYSTEM = "SET_DESIGN_SYSTEM";
-const SET_THEME = "SET_THEME"; // Action for setting theme
+const SET_THEME = "SET_THEME";
 
-// Create a context for dashboard state
-const DashboardContext = createContext();
-const ThemeContext = createContext(); // Theme context
-const LayoutContext = createContext();
+const DashboardContext = createContext<
+  | { state: DashboardState; dispatch: React.Dispatch<DashboardAction> }
+  | undefined
+>(undefined);
 
-// Reducer function to handle state updates
-const dashboardReducer = (state, action) => {
+interface Theme {
+  [key: string]: any;
+}
+
+const ThemeContext = createContext<Theme>({});
+const LayoutContext = createContext("");
+
+const dashboardReducer = (
+  state: DashboardState,
+  action: DashboardAction,
+): DashboardState => {
   switch (action.type) {
     case SET_FILTER:
       return {
@@ -48,49 +72,65 @@ const dashboardReducer = (state, action) => {
   }
 };
 
-// Dashboard component for managing state
+// Update the Dashboard component props interface
+interface DashboardProps {
+  children?: React.ReactNode;
+  debug?: boolean;
+  designSystem?: string;
+  theme?: Record<string, unknown>;
+  layout?: string;
+}
+
 const Dashboard = ({
   children,
   debug = false,
   designSystem = "plain",
   theme,
   layout = "grid",
-}) => {
-  const [state, dispatch] = useReducer(dashboardReducer, {
-    filters: {}, // Initialize filters state
-    data: {},
+}: DashboardProps) => {
+  const [state, dispatch] = useReducer<
+    Reducer<DashboardState, DashboardAction>
+  >(dashboardReducer, {
+    filters: {} as Record<string, unknown>,
+    data: {} as Record<string, unknown>,
     debug,
     designSystem,
-    theme, // Initialize theme state
+    theme,
     layout,
   });
 
   return (
     <DashboardContext.Provider value={{ state, dispatch }}>
       <LayoutContext.Provider value={layout}>
-        <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
+        <ThemeContext.Provider value={theme || {}}>
+          {children}
+        </ThemeContext.Provider>
       </LayoutContext.Provider>
     </DashboardContext.Provider>
   );
 };
 
-// Utility function to set a filter
-const setFilter = (dispatch, name, value) => {
+// Create a type for dispatch and its payload
+type DashboardDispatch = (action: DashboardAction) => void;
+
+// Update the utility functions to use the new type
+const setFilter = (
+  dispatch: DashboardDispatch,
+  name: string,
+  value: string,
+) => {
   dispatch({ type: SET_FILTER, payload: { name, value } });
 };
 
-// Utility function to set debug mode
-const setDebugMode = (dispatch, value) => {
+const setDebugMode = (dispatch: DashboardDispatch, value: any) => {
   dispatch({ type: SET_DEBUG, payload: value });
 };
 
-// Utility function to set design system
-const setDesignSystem = (dispatch, value) => {
+const setDesignSystem = (dispatch: DashboardDispatch, value: any) => {
   dispatch({ type: SET_DESIGN_SYSTEM, payload: value });
 };
 
-// Utility function to set theme
-const setTheme = (dispatch, value) => {
+const setTheme = (dispatch: DashboardDispatch, value: any) => {
   dispatch({ type: SET_THEME, payload: value });
 };
 
@@ -106,7 +146,7 @@ export {
   setDebugMode,
   setDesignSystem,
   setTheme,
-  setFilter, // Export setFilter
+  setFilter,
   useDashboardContext,
   useThemeContext,
   useLayout,

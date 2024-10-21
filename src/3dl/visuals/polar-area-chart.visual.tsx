@@ -1,18 +1,24 @@
 import React from "react";
 import BaseCircularChart from "../base-visuals/base-circular-chart";
+import type { ContainerComponentProps } from "../types/types";
 
-const RadialBarChart = ({
+const PolarAreaChart = ({
   container: Container,
-  header = "Radial Bar Chart",
+  header = "Polar Area Chart",
   subHeader = header,
   exportData,
   detailsComponent,
   ...props
+}: {
+  container: React.ComponentType<ContainerComponentProps>;
+  header: string;
+  subHeader: string;
+  exportData: string;
+  detailsComponent: string;
+  userOptions?: Record<string, unknown>;
 }) => {
-  // Content to be rendered
-  const content = <BaseCircularChart {...props} chartType="radialBar" />;
+  const content = <BaseCircularChart {...props} chartType="polarArea" />;
 
-  // Conditionally wrap the content in a Container if provided
   return Container ? (
     <Container
       header={header}
@@ -27,4 +33,4 @@ const RadialBarChart = ({
   );
 };
 
-export default RadialBarChart;
+export default PolarAreaChart;

@@ -11,7 +11,6 @@ import APITestComponent from "./content-components/APITestComponent";
 import Dashboard3DL from "./3dlcomponents/Dashboard3DL";
 import GridLayoutTester from "./content-components/GridLayoutTester";
 import TabLayoutTester from "./content-components/TabLayoutTester";
-import DashboardRaw3DL from "./3dlcomponents/DashboardRaw3DL";
 import SingleTableLayoutTester from "./content-components/SingleTableLayoutTester";
 import DataTaskHandler from "./ui-components/data-task-handler";
 
@@ -21,7 +20,6 @@ const App: React.FC = () => {
       <Routes>
         <Route element={<FlowbiteWrapper />}>
           <Route path="/" element={<AppLayout />}>
-            <Route path="dashboard/raw/:id?" element={<DashboardRaw3DL />} />
             <Route path="dashboard/:id?" element={<Dashboard3DL />} />
             <Route path="a/:id?" element={<ComponentA />} />
             <Route path="b" element={<ComponentB />} />

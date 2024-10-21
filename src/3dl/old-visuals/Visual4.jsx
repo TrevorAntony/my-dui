@@ -1,6 +1,7 @@
 import React from "react";
 import Chart from "react-apexcharts";
 import { useDataContext } from "../context/DataContext";
+import PropTypes from "prop-types"; // Add this import
 
 // Visual4 component using data from its DataContainer
 const Visual4 = ({ colors, chartType = "bar" }) => {
@@ -55,6 +56,12 @@ const Visual4 = ({ colors, chartType = "bar" }) => {
       />
     </div>
   );
+};
+
+// Add prop types validation
+Visual4.propTypes = {
+  colors: PropTypes.array.isRequired, // Assuming colors is an array
+  chartType: PropTypes.string, // Validate chartType
 };
 
 export default Visual4;

@@ -1,12 +1,5 @@
-import { Checkbox, Table, Tabs } from "flowbite-react";
-import {
-  HiUserCircle,
-  HiAdjustments,
-  HiClipboardList,
-  HiOutlineFolder,
-  HiChartBar,
-} from "react-icons/hi";
-import { MdDashboard } from "react-icons/md";
+import { Checkbox, Table } from "flowbite-react";
+import { HiOutlineFolder, HiChartBar } from "react-icons/hi";
 import {
   DuftGrid,
   DuftGridFullRow,
@@ -71,7 +64,7 @@ const TabBadge: FC<TabBadgeProps> = function ({ title, value }) {
     <div className="flex items-center space-x-2">
       <span>{title}</span>
       {value && (
-        <span className="inline-flex items-center rounded-full bg-highlight-800 px-2 py-1 text-xs font-medium font-semibold text-white">
+        <span className="inline-flex items-center rounded-full bg-highlight-800 px-2 py-1 text-xs font-medium text-white">
           {value}
         </span>
       )}

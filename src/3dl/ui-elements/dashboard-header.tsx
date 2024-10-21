@@ -1,6 +1,4 @@
-import React from "react";
-
-const DashboardHeader = ({ title }) => {
+const DashboardHeader = ({ title }: { title: string }) => {
   return (
     <div
       style={{

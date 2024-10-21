@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useContext, useMemo } from "react";
 import { DashboardContext } from "./Dashboard";
 import config from "../../config";
@@ -27,7 +28,10 @@ const useDataSetLogic = ({
   currentPage,
   debug = false,
 }: UseDataSetLogicProps) => {
-  const { state, dispatch } = useContext(DashboardContext);
+  const { state, dispatch } = useContext(DashboardContext) || {
+    state: {},
+    dispatch: () => {},
+  };
   const [modifiedQuery, setModifiedQuery] = useState<string>(query);
   const [queryReady, setQueryReady] = useState<boolean>(false);
 
@@ -50,7 +54,7 @@ const useDataSetLogic = ({
       sortColumn,
       pageSize,
       currentPage,
-    ]
+    ],
   );
 
   const {

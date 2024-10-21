@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import DuftModal from "../components/duft-modal";
 import { useSidebarConfig } from "../hooks/useSideBarConfig";
-import { DataTask } from "../types/data-task";
+import type { DataTask } from "../types/data-task";
 import { executeDataTask } from "../helpers/data-task-helpers";
 
 const DataTaskHandler: React.FC = () => {
@@ -13,7 +13,7 @@ const DataTaskHandler: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const activeDataTask = sidebarConfig.system.dataTasks.find(
-    (taskItem: DataTask) => taskItem.task === id
+    (taskItem: DataTask) => taskItem.task === id,
   ) as DataTask | undefined;
 
   const {
