@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import ApexTree from "apextree";
 import { MantineReactTable } from "mantine-react-table";
@@ -6,62 +6,8 @@ import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
 import CascadeSkeleton from "../../ui-components/cascade-skeleton";
 import type { ContainerComponentProps } from "../types/types";
-
-// TO:DO move this to a constants file
-const defaultOptions = {
-  contentKey: "data",
-  width: "100%",
-  height: "100%",
-  nodeWidth: 900,
-  nodeHeight: 300,
-  childrenSpacing: 200,
-  siblingSpacing: 100,
-  fontSize: "20px",
-  fontWeight: 300,
-  fontColor: "black",
-  borderWidth: 2,
-  borderColorHover: "#b0decb",
-  nodeBGColorHover: "#b0decb",
-  nodeBGColor: "#eff8f4",
-  highlightOnHover: true,
-  enableExpandCollapse: false,
-  direction: "left",
-  enableToolbar: false,
-  canvasStyle: {
-    background: "white",
-  },
-  nodeTemplate: (node: Record<string, unknown>) => {
-    const { label, value } = node;
-    const formattedValue = Number(value).toLocaleString();
-    if (!value || !label) {
-      return "";
-    }
-
-    return `
-      <div 
-      id=${node["id"]}
-        style="
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        height: 100%;
-        padding-left: 5%;
-        cursor: pointer;
-      "
-      >
-        <div style="font-size: 3.5em; line-height: 1.50; font-weight: 700">${formattedValue}</div>
-        <div style="font-size: 1.8em;">${node["label"]}</div>
-      </div>
-    `;
-  },
-};
-
-type CascadeDataType = {
-  id: string;
-  options: any;
-  data: any;
-  children?: any;
-};
+import { cascadeDefaultOptions } from "../../helpers/constants";
+import { Cascade } from "../../types/cascade";
 
 const CascadeChart = ({
   container: Container,
@@ -79,7 +25,7 @@ const CascadeChart = ({
   exportData: string;
   detailsComponent: string;
 }) => {
-  const [cascadeData, setCascadeData] = useState<CascadeDataType | null>(null);
+  const [cascadeData, setCascadeData] = useState<Cascade | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");
   const [modalCascadeHeadLabels, setModalCascadeHeadLabels] = useState([]);
@@ -96,7 +42,7 @@ const CascadeChart = ({
       async function processNode(node: Record<string, unknown>) {
         const { query } = node["data"] as { query: string };
         const queryResult = await fetchCascade(query);
-        const result: CascadeDataType = {
+        const result: Cascade = {
           id: node["id"] as string,
           options: node["options"] ? node["options"] : [],
           data: {
@@ -109,7 +55,7 @@ const CascadeChart = ({
 
         if (node["children"] && (node["children"] as unknown[]).length > 0) {
           const childResults = await Promise.allSettled(
-            (node["children"] as Record<string, unknown>[]).map(processNode),
+            (node["children"] as Record<string, unknown>[]).map(processNode)
           );
 
           result.children = childResults.map((childResult, index) => {
@@ -120,7 +66,7 @@ const CascadeChart = ({
                 `Error processing child node ${(
                   node["children"] as Record<string, unknown>[]
                 )[index]?.["id"]}:`,
-                (childResult as { reason: string }).reason,
+                (childResult as { reason: string }).reason
               );
               return {
                 id:
@@ -151,13 +97,13 @@ const CascadeChart = ({
 
       try {
         setCascadeData(null);
-        const results: CascadeDataType = await processNode(dataStructure);
+        const results: Cascade = await processNode(dataStructure);
         setCascadeData(results);
       } catch (error) {
         console.error("Error fetching data", error);
       }
     },
-    [],
+    []
   );
 
   useEffect(() => {
@@ -165,40 +111,40 @@ const CascadeChart = ({
   }, [cascade, fetchCascadeData]);
 
   useEffect(() => {
-    if (!cascadeData) return null;
+    if (!cascadeData) {
+      return undefined;
+    }
 
     const svgElement = document.getElementById("svg-tree");
     if (!svgElement) {
       console.error("Element with id 'svg-tree' not found");
-      return null;
+      return undefined;
     }
 
-    const tree = new ApexTree(svgElement, defaultOptions);
+    const tree: any = new ApexTree(svgElement, cascadeDefaultOptions);
     tree.render(cascadeData);
 
-    const toggleModal = (label, details, headLabels) => {
+    const toggleModal = (label: string, details: any[], headLabels: any[]) => {
       setModalCascadeData(details);
       setCascadeTitle(label);
       setModalCascadeHeadLabels(headLabels);
       setIsModalOpen(!isModalOpen);
     };
 
-    const transformHeadLabel = (arr) =>
+    const transformHeadLabel = (arr: string[]) =>
       arr.map((column) => ({
         accessorKey: column,
         header: column,
         size: 150,
       }));
 
-    // Function to traverse nodes recursively
-    const traverseNodes = (node) => {
+    const traverseNodes = (node: any) => {
       const { id, label, details } = node.data;
-
       const headLabels = details.length > 0 ? Object.keys(details[0]) : [];
 
       const transformedHeadLabels = transformHeadLabel(headLabels);
-
       const nodeElement = document.getElementById(id);
+
       if (nodeElement) {
         nodeElement.addEventListener("click", () => {
           toggleModal(label, details, transformedHeadLabels);
@@ -206,7 +152,7 @@ const CascadeChart = ({
       }
 
       if (node.children && node.children.length > 0) {
-        node.children.forEach((child) => traverseNodes(child));
+        node.children.forEach((child: any) => traverseNodes(child));
       }
     };
 
@@ -222,9 +168,6 @@ const CascadeChart = ({
   }, [cascadeData]);
 
   if (!cascadeData) {
-    return <div>Loading data...</div>;
-  }
-  if (!cascadeData) {
     return <CascadeSkeleton />;
   }
 
@@ -236,7 +179,7 @@ const CascadeChart = ({
           width: "100%",
           maxWidth: "100%",
           height: "auto",
-          ...defaultOptions.canvasStyle,
+          ...cascadeDefaultOptions.canvasStyle,
         }}
       ></div>
       <DuftModal
@@ -244,7 +187,6 @@ const CascadeChart = ({
         onClose={handleCloseModal}
         title={cascadeTitle}
       >
-        {/* TO:DO replace this table with the InfiniteScrollTable */}
         <MantineReactTable
           columns={modalCascadeHeadLabels}
           enableTopToolbar={false}
