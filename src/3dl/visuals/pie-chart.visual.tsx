@@ -1,4 +1,3 @@
-import React from "react";
 import BaseCircularChart from "../base-visuals/base-circular-chart";
 import type { VisualProps } from "../../types/visual-props";
 

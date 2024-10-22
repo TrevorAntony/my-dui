@@ -65,14 +65,14 @@ const DuftTile: React.FC<DuftTileProps> = ({
   const secondaryValueStyle: React.CSSProperties = {
     fontSize: "22px",
     fontWeight: "bold",
-    color: "#A9A9A9", // Lighter gray color for secondary value
+    color: "#A9A9A9",
   };
 
   const iconStyle: React.CSSProperties = {
     position: "absolute",
     top: "8px",
     right: "8px",
-    color: "#A9A9A9", // Adjust the icon color as needed
+    color: "#A9A9A9",
   };
 
   const tileClasses =
@@ -80,7 +80,6 @@ const DuftTile: React.FC<DuftTileProps> = ({
       ? "cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100 hover:shadow-lg"
       : "";
 
-  // Format firstValue with comma delimiter for thousands
   const formattedFirstValue =
     typeof firstValue === "number" ? firstValue.toLocaleString() : firstValue;
 

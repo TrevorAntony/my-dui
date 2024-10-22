@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import type { FC } from "react";
 import { DarkThemeToggle, Navbar } from "flowbite-react";
 import { HiMenuAlt1, HiX } from "react-icons/hi";

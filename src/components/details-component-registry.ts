@@ -19,7 +19,6 @@ import {
   InfiniteScrollTable,
 } from "../3dl";
 
-// Define a type for the registry that maps keys to specific component types
 export interface DetailsComponentRegistry {
   "bar-chart": typeof BarChart;
   "line-chart": typeof LineChart;
@@ -41,7 +40,6 @@ export interface DetailsComponentRegistry {
   "infinite-scroll-table": typeof InfiniteScrollTable;
 }
 
-// Create the registry with the defined type
 const detailsComponentRegistry: DetailsComponentRegistry = {
   "bar-chart": BarChart,
   "line-chart": LineChart,

@@ -1,4 +1,3 @@
-import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme context
 import { useDataContext } from "../context/DataContext";

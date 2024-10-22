@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+
 import { MantineReactTable } from "mantine-react-table";
 import { Box } from "@mantine/core";
 import { useDataContext } from "../context/DataContext";

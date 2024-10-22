@@ -1,4 +1,3 @@
-import React from "react";
 import BaseXYChart from "../base-visuals/base-xy-chart";
 import type { VisualProps } from "../../types/visual-props";
 
