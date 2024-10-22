@@ -55,7 +55,11 @@ const renderSidebarMenu = (config: NavigationConfig) => {
       <SidebarGroup key="system-group" title="dashboards">
         {systemMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          if ("dashboards" in item && Array.isArray(item.dashboards)) {
+          if (
+            "dashboards" in item &&
+            Array.isArray(item.dashboards) &&
+            item.dashboards?.length
+          ) {
             return (
               <SidebarCollapse
                 key={index}
@@ -90,7 +94,11 @@ const renderSidebarMenu = (config: NavigationConfig) => {
       <SidebarGroup key="user-group" title="User">
         {userMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          if ("dashboards" in item && Array.isArray(item.dashboards)) {
+          if (
+            "dashboards" in item &&
+            Array.isArray(item.dashboards) &&
+            item.dashboards?.length
+          ) {
             return (
               <SidebarCollapse
                 key={index}

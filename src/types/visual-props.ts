@@ -1,0 +1,12 @@
+import type { ContainerComponentProps } from "../3dl/types/types";
+export interface VisualProps {
+  container?: React.ComponentType<ContainerComponentProps>;
+  header?: string;
+  subHeader?: string;
+  exportData?: string;
+  detailsComponent?: string;
+  userOptions?: Record<string, unknown>;
+  tableMaxHeight?: string;
+  showToolbar?: boolean | string;
+  cascadeObject?: Record<string, unknown>;
+}

@@ -1,7 +1,5 @@
-import React from "react";
 import BaseXYChart from "../base-visuals/base-xy-chart";
-import type { ContainerComponentProps } from "../types/types";
-
+import type { VisualProps } from "../../types/visual-props";
 const BarChart = ({
   container: Container,
   header = "Bar Chart",
@@ -9,13 +7,7 @@ const BarChart = ({
   exportData,
   detailsComponent,
   ...props
-}: {
-  container?: React.ComponentType<ContainerComponentProps>;
-  header?: string;
-  subHeader?: string;
-  exportData?: string;
-  detailsComponent?: string;
-}) => {
+}: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="bar" />;
 
   return Container ? (

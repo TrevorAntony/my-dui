@@ -4,7 +4,7 @@ import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
 import ChartSkeleton from "../../ui-components/chart-skeleton";
-import type { ContainerComponentProps } from "../types/types";
+import type { VisualProps } from "../../types/visual-props";
 
 const PercentStackedBarChart = ({
   container: Container,
@@ -13,14 +13,7 @@ const PercentStackedBarChart = ({
   userOptions = {},
   exportData,
   detailsComponent,
-}: {
-  container?: React.ComponentType<ContainerComponentProps>;
-  header?: string;
-  subHeader?: string;
-  exportData?: string;
-  detailsComponent?: string;
-  userOptions?: Record<string, unknown>;
-}) => {
+}: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 

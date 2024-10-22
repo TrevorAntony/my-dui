@@ -1,6 +1,6 @@
 import React from "react";
 import BaseCircularChart from "../base-visuals/base-circular-chart";
-import type { ContainerComponentProps } from "../types/types";
+import type { VisualProps } from "../../types/visual-props";
 
 const RadialBarChart = ({
   container: Container,
@@ -9,14 +9,7 @@ const RadialBarChart = ({
   exportData,
   detailsComponent,
   ...props
-}: {
-  container?: React.ComponentType<ContainerComponentProps>;
-  header?: string;
-  subHeader?: string;
-  exportData?: string;
-  detailsComponent?: string;
-  userOptions?: Record<string, unknown>;
-}) => {
+}: VisualProps) => {
   // Content to be rendered
   const content = <BaseCircularChart {...props} chartType="radialBar" />;
 

@@ -5,7 +5,7 @@ import { Box } from "@mantine/core";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
 import TableSkeleton from "../../ui-components/table-skeleton";
-import type { ContainerComponentProps } from "../types/types";
+import type { VisualProps } from "../../types/visual-props";
 
 const ScoreCardTable = ({
   container: ContainerComponent,
@@ -16,16 +16,7 @@ const ScoreCardTable = ({
   exportData,
   detailsComponent,
   ...props
-}: {
-  container?: React.ComponentType<ContainerComponentProps>;
-  header?: string;
-  subHeader?: string;
-  exportData?: string;
-  detailsComponent?: string;
-  userOptions?: Record<string, unknown>;
-  tableMaxHeight?: string;
-  showToolbar?: boolean | string;
-}) => {
+}: VisualProps) => {
   const { data } = useDataContext();
   const layout = useLayout();
 
