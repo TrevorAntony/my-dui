@@ -37,15 +37,40 @@ const renderSidebarMenu = (config: NavigationConfig) => {
       <SidebarGroup key="data-tasks-group" title="Actions">
         {dataTaskMenu.map((item: DataTaskItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          return (
-            <SidebarNavLink
-              key={index}
-              to={`/data-task/${item.task}`}
-              icon={Icon}
-            >
-              {item.title}
-            </SidebarNavLink>
-          );
+          if (
+            "tasks" in item &&
+            Array.isArray(item.tasks) &&
+            item.tasks?.length
+          ) {
+            return (
+              <SidebarCollapse
+                key={index}
+                icon={HiOutlineFolder}
+                label={item.title}
+                paths={item.tasks.map((t) => t.task)}
+              >
+                {item.tasks.map((nestedItem, nestedIndex) => (
+                  <SidebarNavLink
+                    key={nestedIndex}
+                    to={`/data-task/${nestedItem.task}`}
+                    icon={iconMap[nestedItem.icon] || HiChartPie}
+                  >
+                    {nestedItem.title}
+                  </SidebarNavLink>
+                ))}
+              </SidebarCollapse>
+            );
+          } else {
+            return (
+              <SidebarNavLink
+                key={index}
+                to={`/data-task/${item.task}`}
+                icon={Icon}
+              >
+                {item.title}
+              </SidebarNavLink>
+            );
+          }
         })}
       </SidebarGroup>
     ) : null;

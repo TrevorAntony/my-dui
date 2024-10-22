@@ -9,4 +9,6 @@ export interface VisualProps {
   tableMaxHeight?: string;
   showToolbar?: boolean | string;
   cascadeObject?: Record<string, unknown>;
+  modalWidth?: "narrow" | "medium" | "wide";
+  modalHeight?: "tiny" | "smaller" | "small" | "medium" | "large";
 }
