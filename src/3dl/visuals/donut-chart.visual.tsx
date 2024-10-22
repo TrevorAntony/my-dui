@@ -1,6 +1,5 @@
-import React from "react";
 import BaseCircularChart from "../base-visuals/base-circular-chart";
-import type { ContainerComponentProps } from "../types/types";
+import type { VisualProps } from "../../types/visual-props";
 
 const DonutChart = ({
   container: Container,
@@ -9,13 +8,7 @@ const DonutChart = ({
   exportData,
   detailsComponent,
   ...props
-}: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
-  exportData: string;
-  detailsComponent: string;
-}) => {
+}: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="donut" />;
 
   return Container ? (

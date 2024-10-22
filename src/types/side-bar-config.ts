@@ -1,4 +1,5 @@
 import type { DataTask } from "./data-task";
+import type { MenuItem } from "../components/types";
 
 export type SidebarConfig = {
   system: {
@@ -7,10 +8,10 @@ export type SidebarConfig = {
       icon: string;
       dashboard: string;
     };
-    menu: string[];
+    menu: MenuItem[];
     dataTasks: DataTask[];
   };
   user: {
-    menu: string[];
+    menu: MenuItem[];
   };
 };

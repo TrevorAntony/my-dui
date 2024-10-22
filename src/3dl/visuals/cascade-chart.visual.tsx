@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import ApexTree from "apextree";
 import { MantineReactTable } from "mantine-react-table";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
 import CascadeSkeleton from "../../ui-components/cascade-skeleton";
-import type { ContainerComponentProps } from "../types/types";
+import type { VisualProps } from "../../types/visual-props";
 
 // TO:DO move this to a constants file
 const defaultOptions = {
@@ -71,14 +71,7 @@ const CascadeChart = ({
   exportData,
   detailsComponent,
   ...props
-}: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
-  cascadeObject: Record<string, unknown>;
-  exportData: string;
-  detailsComponent: string;
-}) => {
+}: VisualProps) => {
   const [cascadeData, setCascadeData] = useState<CascadeDataType | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");

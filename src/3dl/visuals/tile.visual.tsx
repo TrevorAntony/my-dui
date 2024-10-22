@@ -1,6 +1,6 @@
 import { useDataContext } from "../context/DataContext";
 
-const Tile = ({ label }: { label: string }) => {
+const Tile = ({ label }: { label?: string }) => {
   const { data } = useDataContext();
 
   return (

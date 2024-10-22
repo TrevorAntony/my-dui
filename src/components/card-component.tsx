@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 import { Dataset, ExportData } from "../3dl";
 import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
 import { useLayout } from "../3dl/ui-elements/single-layout";
+import type { DetailsComponentRegistry } from "./details-component-registry";
 import { getDetailsComponent } from "./details-component-registry";
 import DuftModal from "./duft-modal";
 import { HiOutlineExternalLink } from "react-icons/hi";
@@ -25,7 +26,6 @@ type CardComponentProps = {
   exportData?: string | boolean;
   query?: string;
   detailsComponent?: string;
-  modalSize?: "small" | "medium" | "large";
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -39,15 +39,16 @@ const CardComponent: FC<CardComponentProps> = ({
   exportData = "false",
   query,
   detailsComponent,
-  modalSize = "medium",
 }) => {
   const layout = useLayout();
   const shouldExportData = exportData === "true";
   const isFullHeight = layout === "single-layout";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const detailsComponentKey =
+    detailsComponent as keyof DetailsComponentRegistry;
   const DetailsComponent = detailsComponent
-    ? getDetailsComponent(detailsComponent)
+    ? getDetailsComponent(detailsComponentKey)
     : undefined;
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
@@ -150,12 +151,7 @@ const CardComponent: FC<CardComponentProps> = ({
       )}
 
       {DetailsComponent && (
-        <DuftModal
-          isOpen={isModalOpen}
-          onClose={toggleModal}
-          title={header}
-          modalSize={modalSize}
-        >
+        <DuftModal isOpen={isModalOpen} onClose={toggleModal} title={header}>
           <DetailsComponent />
         </DuftModal>
       )}

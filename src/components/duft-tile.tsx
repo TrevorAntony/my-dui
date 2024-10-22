@@ -9,15 +9,15 @@ interface DuftTileProps {
   backgroundColor?: string;
   color?: string;
   children?: React.ReactNode;
-  modalWidth?: "narrow" | "medium" | "wide"; // Width options
-  modalHeight?: "small" | "medium" | "large"; // Height options
+  modalWidth?: "narrow" | "medium" | "wide";
+  modalHeight?: "small" | "medium" | "large";
 }
 
 const DuftTile: React.FC<DuftTileProps> = ({
   title,
   children,
   modalWidth,
-  modalHeight, // Default to medium height
+  modalHeight,
 }) => {
   const { data } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,14 +65,14 @@ const DuftTile: React.FC<DuftTileProps> = ({
   const secondaryValueStyle: React.CSSProperties = {
     fontSize: "22px",
     fontWeight: "bold",
-    color: "#A9A9A9", // Lighter gray color for secondary value
+    color: "#A9A9A9",
   };
 
   const iconStyle: React.CSSProperties = {
     position: "absolute",
     top: "8px",
     right: "8px",
-    color: "#A9A9A9", // Adjust the icon color as needed
+    color: "#A9A9A9",
   };
 
   const tileClasses =
@@ -80,7 +80,6 @@ const DuftTile: React.FC<DuftTileProps> = ({
       ? "cursor-pointer transition duration-300 ease-in-out hover:bg-gray-100 hover:shadow-lg"
       : "";
 
-  // Format firstValue with comma delimiter for thousands
   const formattedFirstValue =
     typeof firstValue === "number" ? firstValue.toLocaleString() : firstValue;
 
@@ -89,8 +88,13 @@ const DuftTile: React.FC<DuftTileProps> = ({
       <div
         role="button"
         tabIndex={0}
-        className={`relative flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${tileClasses}`}
         onClick={handleClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleClick();
+          }
+        }}
+        className={`relative flex h-auto flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${tileClasses}`}
         style={{
           cursor: React.Children.count(children) > 0 ? "pointer" : "default",
         }}
@@ -115,8 +119,8 @@ const DuftTile: React.FC<DuftTileProps> = ({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={title}
-        modalWidth={modalWidth} // Pass width prop to modal
-        modalHeight={modalHeight} // Pass height prop to modal
+        modalWidth={modalWidth}
+        modalHeight={modalHeight}
       >
         {children}
       </DuftModal>

@@ -24,7 +24,7 @@ export const renderModalContent = (
   if (Array.isArray(modalContent)) {
     return (
       <ul className="space-y-4">
-        {modalContent.map((item, index) => (
+        {modalContent.map((item: string | number, index: number) => (
           <li key={index}>{item}</li>
         ))}
       </ul>

@@ -1,10 +1,9 @@
-import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
-import type { ContainerComponentProps } from "../types/types";
+import type { VisualProps } from "../../types/visual-props";
 
 const ClusteredBarChart = ({
   container: Container,
@@ -13,14 +12,7 @@ const ClusteredBarChart = ({
   userOptions = {},
   exportData,
   detailsComponent,
-}: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
-  exportData: string;
-  detailsComponent: string;
-  userOptions?: Record<string, unknown>;
-}) => {
+}: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 
