@@ -1,13 +1,13 @@
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import ApexTree from "apextree";
-import { MantineReactTable } from "mantine-react-table";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
 import CascadeSkeleton from "../../ui-components/cascade-skeleton";
 import type { ContainerComponentProps } from "../types/types";
 import { cascadeDefaultOptions } from "../../helpers/constants";
 import { Cascade } from "../../types/cascade";
+import { DataProvider } from "../context/DataContext";
+import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
 
 const CascadeChart = ({
   container: Container,
@@ -16,7 +16,6 @@ const CascadeChart = ({
   cascadeObject,
   exportData,
   detailsComponent,
-  ...props
 }: {
   container: React.ComponentType<ContainerComponentProps>;
   header: string;
@@ -124,35 +123,31 @@ const CascadeChart = ({
     const tree: any = new ApexTree(svgElement, cascadeDefaultOptions);
     tree.render(cascadeData);
 
-    const toggleModal = (label: string, details: any[], headLabels: any[]) => {
+    const toggleModal = (
+      label: string,
+      details: any[],
+      headLabels: string[]
+    ) => {
       setModalCascadeData(details);
       setCascadeTitle(label);
       setModalCascadeHeadLabels(headLabels);
       setIsModalOpen(!isModalOpen);
     };
 
-    const transformHeadLabel = (arr: string[]) =>
-      arr.map((column) => ({
-        accessorKey: column,
-        header: column,
-        size: 150,
-      }));
-
-    const traverseNodes = (node: any) => {
+    const traverseNodes = (node: Cascade) => {
       const { id, label, details } = node.data;
       const headLabels = details.length > 0 ? Object.keys(details[0]) : [];
 
-      const transformedHeadLabels = transformHeadLabel(headLabels);
       const nodeElement = document.getElementById(id);
 
       if (nodeElement) {
         nodeElement.addEventListener("click", () => {
-          toggleModal(label, details, transformedHeadLabels);
+          toggleModal(label, details, headLabels);
         });
       }
 
       if (node.children && node.children.length > 0) {
-        node.children.forEach((child: any) => traverseNodes(child));
+        node.children.forEach((child: Cascade) => traverseNodes(child));
       }
     };
 
@@ -187,18 +182,14 @@ const CascadeChart = ({
         onClose={handleCloseModal}
         title={cascadeTitle}
       >
-        <MantineReactTable
-          columns={modalCascadeHeadLabels}
-          enableTopToolbar={false}
-          enableBottomToolbar={false}
-          enableStickyHeader
-          data={modalCascadeData}
-          enableGlobalFilter
-          enablePagination={false}
-          initialState={{ pagination: { pageSize: 10, pageIndex: 0 } }}
-          {...props}
-          mantineTableContainerProps={{ sx: { maxHeight: "300px" } }}
-        />
+        <DataProvider value={{ data: modalCascadeData }}>
+          <InfiniteScrollTable
+            header={header}
+            subHeader={cascadeTitle}
+            initialColumns={modalCascadeHeadLabels.join(",")}
+            exportData={false}
+          />
+        </DataProvider>
       </DuftModal>
     </>
   );
