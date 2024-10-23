@@ -69,11 +69,10 @@ const DuftModal: React.FC<DuftModalProps> = ({
     overflowX: "auto",
   };
 
-  // Handle "Enter" key to trigger the default button
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (event.key === "Enter") {
-        event.preventDefault(); // Prevent form submission or other default actions
+        event.preventDefault();
         if (defaultButton === "execute" && executeButtonRef.current) {
           executeButtonRef.current.click();
         } else if (defaultButton === "close" && closeButtonRef.current) {
@@ -90,7 +89,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
       onClose={onClose}
       size={resolvedModalWidth}
       className="relative"
-      onKeyDown={handleKeyDown} // Attach handler here
+      onKeyDown={handleKeyDown}
       aria-modal="true"
       role="dialog"
       aria-labelledby="modal-title"
