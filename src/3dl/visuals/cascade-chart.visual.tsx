@@ -125,7 +125,7 @@ const CascadeChart = ({
 
     const toggleModal = (
       label: string,
-      details: Record<string, any>[],
+      details: Record<string, unknown>[],
       headLabels: string[],
     ) => {
       setModalCascadeData(details);
