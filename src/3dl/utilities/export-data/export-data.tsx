@@ -36,6 +36,9 @@ function ExportData() {
           onExecute={handleModalConfirm}
           title="Confirm Export"
           executeButtonName="Export"
+          modalWidth="narrow"
+          defaultButton="execute"
+          closeButtonLabel="Cancel"
         >
           Are you sure you want to export the data?
         </DuftModal>
