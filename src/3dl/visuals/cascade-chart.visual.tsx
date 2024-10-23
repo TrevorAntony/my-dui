@@ -5,7 +5,7 @@ import DuftModal from "../../components/duft-modal";
 import CascadeSkeleton from "../../ui-components/cascade-skeleton";
 import type { ContainerComponentProps } from "../types/types";
 import { cascadeDefaultOptions } from "../../helpers/constants";
-import { Cascade } from "../../types/cascade";
+import type { Cascade } from "../../types/cascade";
 import { DataProvider } from "../context/DataContext";
 import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
 
@@ -54,7 +54,7 @@ const CascadeChart = ({
 
         if (node["children"] && (node["children"] as unknown[]).length > 0) {
           const childResults = await Promise.allSettled(
-            (node["children"] as Record<string, unknown>[]).map(processNode)
+            (node["children"] as Record<string, unknown>[]).map(processNode),
           );
 
           result.children = childResults.map((childResult, index) => {
@@ -65,7 +65,7 @@ const CascadeChart = ({
                 `Error processing child node ${(
                   node["children"] as Record<string, unknown>[]
                 )[index]?.["id"]}:`,
-                (childResult as { reason: string }).reason
+                (childResult as { reason: string }).reason,
               );
               return {
                 id:
@@ -102,7 +102,7 @@ const CascadeChart = ({
         console.error("Error fetching data", error);
       }
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -120,13 +120,13 @@ const CascadeChart = ({
       return undefined;
     }
 
-    const tree: any = new ApexTree(svgElement, cascadeDefaultOptions);
+    const tree = new ApexTree(svgElement, cascadeDefaultOptions);
     tree.render(cascadeData);
 
     const toggleModal = (
       label: string,
-      details: any[],
-      headLabels: string[]
+      details: Record<string, any>[],
+      headLabels: string[],
     ) => {
       setModalCascadeData(details);
       setCascadeTitle(label);
@@ -160,7 +160,7 @@ const CascadeChart = ({
         svgElement.innerHTML = "";
       }
     };
-  }, [cascadeData]);
+  }, [cascadeData, isModalOpen]);
 
   if (!cascadeData) {
     return <CascadeSkeleton />;

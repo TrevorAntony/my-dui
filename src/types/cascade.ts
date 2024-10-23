@@ -1,6 +1,6 @@
 export type Cascade = {
   id: string;
-  options: any;
+  options?: any;
   data: any;
   children?: any;
 };
