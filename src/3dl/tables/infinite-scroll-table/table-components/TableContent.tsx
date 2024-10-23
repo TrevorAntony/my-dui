@@ -6,6 +6,9 @@ import SearchBar from "./SearchBar";
 import TableBody from "./TableBody";
 import TableHeader from "./TableHeader";
 import TableModal from "./TableModal";
+import ExportData from "../../../utilities/export-data/export-data";
+import Dataset from "../../../utilities/data-set";
+import useDuftQuery from "../../../../3dlcomponents/resources/useDuftQuery";
 
 const TableContent = ({
   data,
@@ -23,6 +26,8 @@ const TableContent = ({
   layout,
   searchColumns,
   pageSize,
+  exportData = "false",
+  query,
 }: {
   data: any[];
   loading: boolean;
@@ -40,11 +45,15 @@ const TableContent = ({
   layout?: string;
   searchColumns?: string;
   pageSize?: string | number;
+  exportData?: string | boolean;
+  query?: string;
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [renderedChild, setRenderedChild] = useState<React.ReactNode>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const shouldExportData = exportData === "true";
 
   const handleScroll = () => {
     const table = tableRef.current;
@@ -94,6 +103,17 @@ const TableContent = ({
           visibleColumns={visibleColumns}
           handleColumnToggle={handleColumnToggle}
         />
+        {shouldExportData && (
+          <div className={`self-start pr-1 pt-1.5`}>
+            {query ? (
+              <Dataset query={query} useQuery={useDuftQuery}>
+                <ExportData />
+              </Dataset>
+            ) : (
+              <ExportData />
+            )}
+          </div>
+        )}
       </div>
 
       <div

@@ -12,7 +12,7 @@ interface PivotTableProps {
   container?: React.ElementType;
   header?: string;
   subHeader?: string;
-  variant?: "card" | "plain";
+  variant?: "card" | "no-card" | "plain";
   pivotRows?: string[];
   pivotCols?: string[];
   exportData?: string;

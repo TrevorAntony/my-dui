@@ -1,4 +1,3 @@
-// CardComponent.tsx
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -69,7 +68,7 @@ const CardComponent: FC<CardComponentProps> = ({
           </div>
 
           <div className="flex items-center space-x-2">
-            {shouldExportData && (
+            {shouldExportData && layout !== "single-layout" && (
               <div className="self-start">
                 {query ? (
                   <Dataset query={query} useQuery={useDuftQuery}>
@@ -152,7 +151,16 @@ const CardComponent: FC<CardComponentProps> = ({
 
       {DetailsComponent && (
         <DuftModal isOpen={isModalOpen} onClose={toggleModal} title={header}>
-          <DetailsComponent />
+          <DetailsComponent
+            container={
+              detailsComponent === "infinite-scroll-table"
+                ? CardComponent
+                : null
+            }
+            variant={
+              detailsComponent === "infinite-scroll-table" ? "plain" : variant
+            }
+          />
         </DuftModal>
       )}
     </>

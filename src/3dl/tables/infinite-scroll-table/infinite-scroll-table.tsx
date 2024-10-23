@@ -9,7 +9,7 @@ interface InfiniteScrollTableProps {
   container: React.ComponentType<ContainerComponentProps>;
   header?: string;
   subHeader?: string;
-  variant?: "card" | "default";
+  variant?: "card" | "no-card" | "plain";
   modal: React.ComponentType<unknown>;
   children?: React.ReactNode;
   exportData?: boolean | string;
@@ -124,6 +124,8 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       layout={layout}
       searchColumns={searchColumns}
       pageSize={pageSize}
+      query={query}
+      exportData={exportData}
     >
       {children}
     </TableContent>
@@ -136,19 +138,16 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       content
     );
 
-  return ContainerComponent && layout !== "single-layout" ? (
+  return (
     <ContainerComponent
       header={header as string}
       subHeader={subHeader as string}
-      variant={variant as "card" | "default"}
+      variant={layout === "single-layout" ? "plain" : variant}
       query={query}
-      exportData={exportData}
       detailsComponent={detailsComponent as string}
     >
       {wrappedContent}
     </ContainerComponent>
-  ) : (
-    wrappedContent
   );
 };
 
