@@ -2,9 +2,11 @@ import React from "react";
 import { HiHome, HiChartPie, HiHashtag, HiOutlineFolder } from "react-icons/hi";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
-import { SidebarNavLink } from "./SidebarNavLink";
+import { SidebarNavLink } from "./sidebar-nav-link";
 import { Sidebar } from "flowbite-react";
 import { useSidebarConfig } from "../hooks/useSideBarConfig";
+
+import type { MenuItem, DataTaskItem, NavigationConfig } from "./types";
 
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,
@@ -13,7 +15,7 @@ const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "hashtag-icon": HiHashtag,
 };
 
-const renderSidebarMenu = (config: any) => {
+const renderSidebarMenu = (config: NavigationConfig) => {
   const homeConfig = config.system?.home;
   const systemMenu = config.system?.menu || [];
   const userMenu = config.user?.menu || [];
@@ -33,20 +35,24 @@ const renderSidebarMenu = (config: any) => {
   const dataTaskGroup =
     dataTaskMenu.length > 0 ? (
       <SidebarGroup key="data-tasks-group" title="Actions">
-        {dataTaskMenu.map((item: any, index: number) => {
+        {dataTaskMenu.map((item: DataTaskItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          if (item.dashboards && item.dashboards.length > 0) {
+          if (
+            "tasks" in item &&
+            Array.isArray(item.tasks) &&
+            item.tasks?.length
+          ) {
             return (
               <SidebarCollapse
                 key={index}
                 icon={HiOutlineFolder}
                 label={item.title}
-                paths={item.dashboards.map((d: any) => d.dashboard)}
+                paths={item.tasks.map((t) => t.task)}
               >
-                {item.dashboards.map((nestedItem: any, nestedIndex: number) => (
+                {item.tasks.map((nestedItem, nestedIndex) => (
                   <SidebarNavLink
                     key={nestedIndex}
-                    to={nestedItem.dashboard}
+                    to={`/data-task/${nestedItem.task}`}
                     icon={iconMap[nestedItem.icon] || HiChartPie}
                   >
                     {nestedItem.title}
@@ -72,17 +78,21 @@ const renderSidebarMenu = (config: any) => {
   const systemGroup =
     systemMenu.length > 0 ? (
       <SidebarGroup key="system-group" title="dashboards">
-        {systemMenu.map((item: any, index: number) => {
+        {systemMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          if (item.dashboards && item.dashboards.length > 0) {
+          if (
+            "dashboards" in item &&
+            Array.isArray(item.dashboards) &&
+            item.dashboards?.length
+          ) {
             return (
               <SidebarCollapse
                 key={index}
                 icon={HiOutlineFolder}
                 label={item.title}
-                paths={item.dashboards.map((d: any) => d.dashboard)}
+                paths={item.dashboards.map((d) => d.dashboard)}
               >
-                {item.dashboards.map((nestedItem: any, nestedIndex: number) => (
+                {item.dashboards.map((nestedItem, nestedIndex) => (
                   <SidebarNavLink
                     key={nestedIndex}
                     to={nestedItem.dashboard}
@@ -107,17 +117,21 @@ const renderSidebarMenu = (config: any) => {
   const userGroup =
     userMenu.length > 0 ? (
       <SidebarGroup key="user-group" title="User">
-        {userMenu.map((item: any, index: number) => {
+        {userMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          if (item.dashboards && item.dashboards.length > 0) {
+          if (
+            "dashboards" in item &&
+            Array.isArray(item.dashboards) &&
+            item.dashboards?.length
+          ) {
             return (
               <SidebarCollapse
                 key={index}
                 icon={Icon}
                 label={item.title}
-                paths={item.dashboards.map((d: any) => d.dashboard)}
+                paths={item.dashboards.map((d) => d.dashboard)}
               >
-                {item.dashboards.map((nestedItem: any, nestedIndex: number) => (
+                {item.dashboards.map((nestedItem, nestedIndex) => (
                   <SidebarNavLink
                     key={nestedIndex}
                     to={nestedItem.dashboard}

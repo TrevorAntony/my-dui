@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import config from "../config";
 import classNames from "classnames";
-import { Sidebar, TextInput, Tooltip } from "flowbite-react";
+import { Sidebar, Tooltip } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import {
@@ -9,12 +9,11 @@ import {
   HiClipboard,
   HiHashtag,
   HiOutlineFolder,
-  HiSearch,
 } from "react-icons/hi";
 
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
-import { SidebarNavLink } from "./SidebarNavLink";
+import { SidebarNavLink } from "./sidebar-nav-link";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./navigation-sidebar";

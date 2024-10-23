@@ -3,10 +3,9 @@
 import "react-jsx-parser";
 
 declare module "react-jsx-parser" {
-  // Extend the JSXParserProps interface
   interface JSXParserProps {
     components?: {
-      [key: string]: React.ExoticComponent<{ any }>;
+      [key: string]: React.ComponentType<{ any }>;
     };
   }
 }

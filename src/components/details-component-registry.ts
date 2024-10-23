@@ -19,7 +19,28 @@ import {
   InfiniteScrollTable,
 } from "../3dl";
 
-const detailsComponentRegistry: Record<string, React.FC<any>> = {
+export interface DetailsComponentRegistry {
+  "bar-chart": typeof BarChart;
+  "line-chart": typeof LineChart;
+  "area-chart": typeof AreaChart;
+  "cascade-chart": typeof CascadeChart;
+  "clustered-bar-chart": typeof ClusteredBarChart;
+  "donut-chart": typeof DonutChart;
+  "heat-map": typeof HeatmapChart;
+  "percentage-stacked-chart": typeof PercentStackedBarChart;
+  "pie-chart": typeof PieChart;
+  "polar-area-chart": typeof PolarAreaChart;
+  "radar-chart": typeof RadarChart;
+  "radial-bar-chart": typeof RadialBarChart;
+  "score-card": typeof ScoreCardTable;
+  "stacked-bar-chart": typeof StackedBarChart;
+  tile: typeof Tile;
+  "pivot-table": typeof PivotTable;
+  "data-table": typeof DataTable;
+  "infinite-scroll-table": typeof InfiniteScrollTable;
+}
+
+const detailsComponentRegistry: DetailsComponentRegistry = {
   "bar-chart": BarChart,
   "line-chart": LineChart,
   "area-chart": AreaChart,
@@ -40,6 +61,8 @@ const detailsComponentRegistry: Record<string, React.FC<any>> = {
   "infinite-scroll-table": InfiniteScrollTable,
 };
 
-export const getDetailsComponent = (key: string): React.FC<any> | undefined => {
+export const getDetailsComponent = <K extends keyof DetailsComponentRegistry>(
+  key: K,
+): DetailsComponentRegistry[K] => {
   return detailsComponentRegistry[key];
 };
