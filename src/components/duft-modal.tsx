@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Modal, Button } from "flowbite-react";
 import { HiX } from "react-icons/hi";
 import { renderModalContent } from "../helpers/modalContentHelper";
 
-// Updated Modal Width Map with a smaller size
 const modalWidthMap = {
   mini: "sm",
   narrow: "3xl",
@@ -19,7 +18,6 @@ const modalHeightMap = {
   large: "80vh",
 };
 
-// Define a type for the modal content
 type ModalContent =
   | string
   | string[]
@@ -38,6 +36,7 @@ export interface DuftModalProps {
   modalHeight?: keyof typeof modalHeightMap;
   disableButtons?: boolean;
   closeButtonLabel?: string;
+  defaultButton?: "execute" | "close";
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
@@ -53,7 +52,11 @@ const DuftModal: React.FC<DuftModalProps> = ({
   modalHeight,
   disableButtons = false,
   closeButtonLabel = "Close",
+  defaultButton = "close",
 }) => {
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const executeButtonRef = useRef<HTMLButtonElement | null>(null);
+
   const resolvedModalWidth = modalWidth ? modalWidthMap[modalWidth] : "7xl";
   const resolvedModalHeight = modalHeight
     ? modalHeightMap[modalHeight]
@@ -72,10 +75,13 @@ const DuftModal: React.FC<DuftModalProps> = ({
       onClose={onClose}
       size={resolvedModalWidth}
       className="relative"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="modal-title"
     >
       {/* Modal Header */}
       <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
-        <span>{title}</span>
+        <span id="modal-title">{title}</span>
         <button
           type="button"
           className="text-gray-500 hover:text-gray-700"
@@ -87,7 +93,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
         </button>
       </div>
 
-      {/* Modal Body with dynamic or fixed sizing */}
+      {/* Modal Body */}
       <Modal.Body
         className="p-6"
         style={finalModalBodyStyle as React.CSSProperties}
@@ -101,15 +107,21 @@ const DuftModal: React.FC<DuftModalProps> = ({
 
       <Modal.Footer className="flex justify-end">
         {executeButtonName && onExecute && (
-          <Button color="pink" onClick={onExecute} disabled={disableButtons}>
+          <Button
+            color={defaultButton === "execute" ? "primary" : "pink"}
+            onClick={onExecute}
+            disabled={disableButtons}
+            ref={executeButtonRef}
+          >
             {executeButtonName || "Run"}
           </Button>
         )}
 
         <Button
-          color="primary"
+          color={defaultButton === "close" ? "primary" : "pink"}
           onClick={handleButtonClose || onClose}
           disabled={disableButtons}
+          ref={closeButtonRef}
         >
           {closeButtonLabel}
         </Button>
