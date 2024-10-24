@@ -5,6 +5,12 @@ import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 import type { ChartType } from "../types/types";
 
+type DataItem = {
+  category?: string;
+  value?: number;
+  [key: string]: unknown;
+};
+
 const BaseXYChart = ({
   chartType = "pie",
   userOptions = {},
@@ -29,15 +35,15 @@ const BaseXYChart = ({
   let categories, chartSeries;
 
   if (isMultiSeries) {
-    categories = data.map((item) => item.category || "Unknown");
+    categories = (data as DataItem[]).map((item) => item.category || "Unknown");
     const seriesKeys = Object.keys(data[0]).filter((key) => key !== "category");
     chartSeries = seriesKeys.map((key) => ({
       name: key,
       data: data.map((item) => item[key] || 0),
     }));
   } else {
-    categories = data.map((item) => item.category || "Unknown");
-    const seriesData = data.map((item) => item.value || 0);
+    categories = (data as DataItem[]).map((item) => item.category || "Unknown");
+    const seriesData = (data as DataItem[]).map((item) => item.value || 0);
 
     chartSeries = [
       {

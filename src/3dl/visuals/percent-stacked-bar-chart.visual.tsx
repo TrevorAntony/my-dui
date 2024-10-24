@@ -5,6 +5,12 @@ import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 import type { VisualProps } from "../../types/visual-props";
 
+type DataItem = {
+  category?: string;
+  value?: number;
+  [key: string]: unknown;
+};
+
 const PercentStackedBarChart = ({
   container: Container,
   header,
@@ -21,7 +27,7 @@ const PercentStackedBarChart = ({
   }
 
   // Extract categories
-  const categories = data.map((item) => item.category);
+  const categories = (data as DataItem[]).map((item) => item.category);
 
   // Extract series data
   const seriesNames = Object?.keys(data[0]).filter((key) => key !== "category");

@@ -9,7 +9,7 @@ function ExportData() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleExport = () => {
-    const csv = jsonToCSV(data);
+    const csv = jsonToCSV(data as object[]);
     downloadCSV(csv, "export.csv");
   };
 
