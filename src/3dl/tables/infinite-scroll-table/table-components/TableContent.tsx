@@ -60,7 +60,7 @@ const TableContent = ({
     setSelectedRowData(row);
 
     const matchingChild = React.Children.toArray(children).find(
-      (child) => React.isValidElement(child) && child.props.columnName === key,
+      (child) => React.isValidElement(child) && child.props.columnName === key
     );
 
     if (matchingChild) {
@@ -68,7 +68,7 @@ const TableContent = ({
         matchingChild as React.ReactElement,
         {
           config: row,
-        },
+        }
       );
       setRenderedChild(clonedChild);
     } else {

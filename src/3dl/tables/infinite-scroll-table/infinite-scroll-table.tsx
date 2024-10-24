@@ -6,11 +6,11 @@ import { useLayout } from "../../ui-elements/single-layout";
 import TableContent from "./table-components/TableContent";
 
 interface InfiniteScrollTableProps {
-  container: React.ComponentType<ContainerComponentProps>;
+  container?: React.ComponentType<ContainerComponentProps>;
   header?: string;
   subHeader?: string;
   variant?: "card" | "default";
-  modal: React.ComponentType<unknown>;
+  modal?: React.ComponentType<unknown>;
   children?: React.ReactNode;
   exportData?: boolean | string;
   initialColumns?: string;
@@ -47,10 +47,10 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   }, [data]);
 
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
-    {},
+    {}
   );
   const [sortState, setSortState] = useState<Record<string, "ASC" | "DESC">>(
-    {},
+    {}
   );
   const initializedRef = useRef(false);
 
@@ -72,7 +72,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
             !headers.includes(header)
           ) {
             console.error(
-              `Column "${header}" specified in initialColumns does not exist in the table.`,
+              `Column "${header}" specified in initialColumns does not exist in the table.`
             );
           }
         }
