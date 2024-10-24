@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef } from "react";
 import { Modal, Button } from "flowbite-react";
 import { HiX } from "react-icons/hi";
 import { renderModalContent } from "../helpers/modalContentHelper";
@@ -69,27 +69,12 @@ const DuftModal: React.FC<DuftModalProps> = ({
     overflowX: "auto",
   };
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        if (defaultButton === "execute" && executeButtonRef.current) {
-          executeButtonRef.current.click();
-        } else if (defaultButton === "close" && closeButtonRef.current) {
-          closeButtonRef.current.click();
-        }
-      }
-    },
-    [defaultButton],
-  );
-
   return (
     <Modal
       show={isOpen}
       onClose={onClose}
       size={resolvedModalWidth}
       className="relative"
-      onKeyDown={handleKeyDown}
       aria-modal="true"
       role="dialog"
       aria-labelledby="modal-title"
