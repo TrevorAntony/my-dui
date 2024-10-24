@@ -10,7 +10,7 @@ interface InfiniteScrollTableProps {
   header?: string;
   subHeader?: string;
   variant?: "card" | "no-card" | "plain";
-  modal: React.ComponentType<unknown>;
+  modal?: React.ComponentType<unknown>;
   children?: React.ReactNode;
   exportData?: boolean | string;
   initialColumns?: string;
