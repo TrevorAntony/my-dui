@@ -13,6 +13,7 @@ import GridLayoutTester from "./content-components/GridLayoutTester";
 import TabLayoutTester from "./content-components/TabLayoutTester";
 import SingleTableLayoutTester from "./content-components/SingleTableLayoutTester";
 import DataTaskHandler from "./ui-components/data-task-handler";
+import Settings from "./ui-components/duft-settings/duft-settings";
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             <Route path="tab" element={<TabLayoutTester />} />
             <Route path="table" element={<SingleTableLayoutTester />} />
             <Route path="data-task/:id" element={<DataTaskHandler />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="s" element={<SamplePage />} />
         </Route>
