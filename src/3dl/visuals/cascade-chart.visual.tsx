@@ -1,67 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState, useEffect, useCallback } from "react";
 import ApexTree from "apextree";
-import { MantineReactTable } from "mantine-react-table";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
 import CascadeSkeleton from "../../ui-components/cascade-skeleton";
+import { cascadeDefaultOptions } from "../../helpers/constants";
+import type { Cascade } from "../../types/cascade";
+import { DataProvider } from "../context/DataContext";
+import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
 import type { VisualProps } from "../../types/visual-props";
-
-// TO:DO move this to a constants file
-const defaultOptions = {
-  contentKey: "data",
-  width: "100%",
-  height: "100%",
-  nodeWidth: 900,
-  nodeHeight: 300,
-  childrenSpacing: 200,
-  siblingSpacing: 100,
-  fontSize: "20px",
-  fontWeight: 300,
-  fontColor: "black",
-  borderWidth: 2,
-  borderColorHover: "#b0decb",
-  nodeBGColorHover: "#b0decb",
-  nodeBGColor: "#eff8f4",
-  highlightOnHover: true,
-  enableExpandCollapse: false,
-  direction: "left",
-  enableToolbar: false,
-  canvasStyle: {
-    background: "white",
-  },
-  nodeTemplate: (node: Record<string, unknown>) => {
-    const { label, value } = node;
-    const formattedValue = Number(value).toLocaleString();
-    if (!value || !label) {
-      return "";
-    }
-
-    return `
-      <div 
-      id=${node["id"]}
-        style="
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        height: 100%;
-        padding-left: 5%;
-        cursor: pointer;
-      "
-      >
-        <div style="font-size: 3.5em; line-height: 1.50; font-weight: 700">${formattedValue}</div>
-        <div style="font-size: 1.8em;">${node["label"]}</div>
-      </div>
-    `;
-  },
-};
-
-type CascadeDataType = {
-  id: string;
-  options: any;
-  data: any;
-  children?: any;
-};
 
 const CascadeChart = ({
   container: Container,
@@ -70,9 +16,8 @@ const CascadeChart = ({
   cascadeObject,
   exportData,
   detailsComponent,
-  ...props
 }: VisualProps) => {
-  const [cascadeData, setCascadeData] = useState<CascadeDataType | null>(null);
+  const [cascadeData, setCascadeData] = useState<Cascade | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");
   const [modalCascadeHeadLabels, setModalCascadeHeadLabels] = useState([]);
@@ -89,7 +34,7 @@ const CascadeChart = ({
       async function processNode(node: Record<string, unknown>) {
         const { query } = node["data"] as { query: string };
         const queryResult = await fetchCascade(query);
-        const result: CascadeDataType = {
+        const result: Cascade = {
           id: node["id"] as string,
           options: node["options"] ? node["options"] : [],
           data: {
@@ -144,7 +89,7 @@ const CascadeChart = ({
 
       try {
         setCascadeData(null);
-        const results: CascadeDataType = await processNode(dataStructure);
+        const results: Cascade = await processNode(dataStructure);
         setCascadeData(results);
       } catch (error) {
         console.error("Error fetching data", error);
@@ -158,48 +103,44 @@ const CascadeChart = ({
   }, [cascade, fetchCascadeData]);
 
   useEffect(() => {
-    if (!cascadeData) return null;
+    if (!cascadeData) {
+      return undefined;
+    }
 
     const svgElement = document.getElementById("svg-tree");
     if (!svgElement) {
       console.error("Element with id 'svg-tree' not found");
-      return null;
+      return undefined;
     }
 
-    const tree = new ApexTree(svgElement, defaultOptions);
+    const tree = new ApexTree(svgElement, cascadeDefaultOptions);
     tree.render(cascadeData);
 
-    const toggleModal = (label, details, headLabels) => {
+    const toggleModal = (
+      label: string,
+      details: Record<string, unknown>[],
+      headLabels: string[],
+    ) => {
       setModalCascadeData(details);
       setCascadeTitle(label);
       setModalCascadeHeadLabels(headLabels);
       setIsModalOpen(!isModalOpen);
     };
 
-    const transformHeadLabel = (arr) =>
-      arr.map((column) => ({
-        accessorKey: column,
-        header: column,
-        size: 150,
-      }));
-
-    // Function to traverse nodes recursively
-    const traverseNodes = (node) => {
+    const traverseNodes = (node: Cascade) => {
       const { id, label, details } = node.data;
-
       const headLabels = details.length > 0 ? Object.keys(details[0]) : [];
 
-      const transformedHeadLabels = transformHeadLabel(headLabels);
-
       const nodeElement = document.getElementById(id);
+
       if (nodeElement) {
         nodeElement.addEventListener("click", () => {
-          toggleModal(label, details, transformedHeadLabels);
+          toggleModal(label, details, headLabels);
         });
       }
 
       if (node.children && node.children.length > 0) {
-        node.children.forEach((child) => traverseNodes(child));
+        node.children.forEach((child: Cascade) => traverseNodes(child));
       }
     };
 
@@ -212,11 +153,8 @@ const CascadeChart = ({
         svgElement.innerHTML = "";
       }
     };
-  }, [cascadeData]);
+  }, [cascadeData, isModalOpen]);
 
-  if (!cascadeData) {
-    return <div>Loading data...</div>;
-  }
   if (!cascadeData) {
     return <CascadeSkeleton />;
   }
@@ -229,7 +167,7 @@ const CascadeChart = ({
           width: "100%",
           maxWidth: "100%",
           height: "auto",
-          ...defaultOptions.canvasStyle,
+          ...cascadeDefaultOptions.canvasStyle,
         }}
       ></div>
       <DuftModal
@@ -237,19 +175,14 @@ const CascadeChart = ({
         onClose={handleCloseModal}
         title={cascadeTitle}
       >
-        {/* TO:DO replace this table with the InfiniteScrollTable */}
-        <MantineReactTable
-          columns={modalCascadeHeadLabels}
-          enableTopToolbar={false}
-          enableBottomToolbar={false}
-          enableStickyHeader
-          data={modalCascadeData}
-          enableGlobalFilter
-          enablePagination={false}
-          initialState={{ pagination: { pageSize: 10, pageIndex: 0 } }}
-          {...props}
-          mantineTableContainerProps={{ sx: { maxHeight: "300px" } }}
-        />
+        <DataProvider value={{ data: modalCascadeData }}>
+          <InfiniteScrollTable
+            header={header}
+            subHeader={cascadeTitle}
+            initialColumns={modalCascadeHeadLabels.join(",")}
+            exportData={false}
+          />
+        </DataProvider>
       </DuftModal>
     </>
   );
