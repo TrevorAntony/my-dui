@@ -1,13 +1,13 @@
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import ApexTree from "apextree";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
 import CascadeSkeleton from "../../ui-components/cascade-skeleton";
-import type { ContainerComponentProps } from "../types/types";
 import { cascadeDefaultOptions } from "../../helpers/constants";
 import type { Cascade } from "../../types/cascade";
 import { DataProvider } from "../context/DataContext";
 import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
+import type { VisualProps } from "../../types/visual-props";
 
 const CascadeChart = ({
   container: Container,
@@ -16,14 +16,7 @@ const CascadeChart = ({
   cascadeObject,
   exportData,
   detailsComponent,
-}: {
-  container: React.ComponentType<ContainerComponentProps>;
-  header: string;
-  subHeader: string;
-  cascadeObject: Record<string, unknown>;
-  exportData: string;
-  detailsComponent: string;
-}) => {
+}: VisualProps) => {
   const [cascadeData, setCascadeData] = useState<Cascade | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");
