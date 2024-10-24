@@ -1,7 +1,7 @@
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import React, { createContext, useContext } from "react";
 interface DataContextType {
-  data: any[];
+  data: unknown[];
   pageUpdater?: () => void;
   resetPage?: () => void;
   handleSearchChange?: (newSearchText: string) => void;
@@ -26,7 +26,7 @@ const defaultDataContext: DataContextType = {
   pageSize: undefined,
 };
 const DataContext = createContext<DataContextType | undefined>(
-  defaultDataContext
+  defaultDataContext,
 );
 export const useDataContext = (): DataContextType => {
   const context = useContext(DataContext);

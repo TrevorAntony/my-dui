@@ -1,12 +1,18 @@
 import { useDataContext } from "../context/DataContext";
 
+type DataItem = {
+  category?: string;
+  value?: number;
+  [key: string]: unknown;
+};
+
 const Tile = ({ label }: { label?: string }) => {
   const { data } = useDataContext();
 
   return (
     <div style={styles.tileContainer as React.CSSProperties}>
       <div style={styles.label}>{label}</div>
-      <div style={styles.value}>{data[0].value}</div>
+      <div style={styles.value}>{(data as DataItem[])[0].value}</div>
     </div>
   );
 };
