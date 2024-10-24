@@ -1,7 +1,7 @@
 export interface ContainerComponentProps {
   header: string;
   subHeader?: string;
-  variant?: "card" | "default";
+  variant?: "card" | "no-card" | "plain";
   children: React.ReactNode;
   query?: string;
   exportData?: string | boolean;
