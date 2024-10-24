@@ -6,7 +6,7 @@ import { useLayout } from "../../ui-elements/single-layout";
 import TableContent from "./table-components/TableContent";
 
 interface InfiniteScrollTableProps {
-  container: React.ComponentType<ContainerComponentProps>;
+  container?: React.ComponentType<ContainerComponentProps>;
   header?: string;
   subHeader?: string;
   variant?: "card" | "no-card" | "plain";
