@@ -15,7 +15,7 @@ export interface Connection {
   params: Param[];
 }
 
-interface DataConnectionsResponse {
+export interface DataConnectionsResponse {
   system: Connection[];
   user: Connection[];
 }
