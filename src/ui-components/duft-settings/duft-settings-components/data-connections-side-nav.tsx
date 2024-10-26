@@ -1,4 +1,8 @@
-import type { Connection, DataConnectionsResponse } from "../resources";
+import {
+  isValidArray,
+  type Connection,
+  type DataConnectionsResponse,
+} from "../resources";
 
 const DataConnectionSelector = ({
   dataConnections,
@@ -8,60 +12,70 @@ const DataConnectionSelector = ({
   dataConnections: DataConnectionsResponse;
   selectedConnection: Connection;
   handleConnectionClick: (connection: Connection) => void;
-}) => (
-  <nav className="w-64 border-r border-gray-300 p-4">
-    <h3 className="mb-4 text-lg font-semibold">Data Connections</h3>
+}) => {
+  if (
+    !dataConnections ||
+    typeof dataConnections !== "object" ||
+    Object.keys(dataConnections).length === 0
+  ) {
+    return <div>No data connections available.</div>;
+  }
 
-    {/* System Connections */}
-    <div>
-      <h4 className="mb-2 text-base font-semibold">System Connections</h4>
-      <ul className="mb-4 space-y-2">
-        {dataConnections?.system?.map((connection, index) => (
-          <li
-            key={index}
-            className={`cursor-pointer rounded px-3 py-2 hover:bg-gray-100 ${
-              selectedConnection?.id === connection.id
-                ? "bg-highlight-100 font-semibold text-highlight-700"
-                : ""
-            }`}
-          >
-            <button
-              type="button"
-              className="w-full text-left"
-              onClick={() => handleConnectionClick(connection)}
-            >
-              {connection.name || `System Connection ${index + 1}`}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+  const hasConnections = Object.keys(dataConnections).some((key) =>
+    isValidArray(dataConnections[key]),
+  );
 
-    {/* User Connections */}
-    <div>
-      <h4 className="mb-2 text-base font-semibold">User Connections</h4>
-      <ul className="space-y-2">
-        {dataConnections?.user?.map((connection, index) => (
-          <li
-            key={index}
-            className={`cursor-pointer rounded px-3 py-2 hover:bg-gray-100 ${
-              selectedConnection?.id === connection.id
-                ? "bg-highlight-100 font-semibold text-highlight-700"
-                : ""
-            }`}
-          >
-            <button
-              type="button"
-              className="w-full text-left"
-              onClick={() => handleConnectionClick(connection)}
-            >
-              {connection.name || `User Connection ${index + 1}`}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </nav>
-);
+  if (!hasConnections) {
+    return <div>No data connections available.</div>;
+  }
+  if (typeof handleConnectionClick !== "function") {
+    console.error("handleConnectionClick is not a function");
+    return null;
+  }
+
+  return (
+    <nav className="w-64 border-r border-gray-300 p-4">
+      <h3 className="mb-4 text-lg font-semibold">Data Connections</h3>
+
+      {Object.keys(dataConnections).map((key) => (
+        <div key={key}>
+          <h4 className="mb-2 text-base font-semibold">{`${
+            key.charAt(0).toUpperCase() + key.slice(1)
+          } Connections`}</h4>
+          <ul className="space-y-2">
+            {Array.isArray(dataConnections[key]) ? (
+              dataConnections[key].map(
+                (connection: Connection, index: number) => (
+                  <li
+                    key={index}
+                    className={`cursor-pointer rounded px-3 py-2 hover:bg-gray-100 ${
+                      selectedConnection?.id === connection.id
+                        ? "bg-highlight-100 font-semibold text-highlight-700"
+                        : ""
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      className="w-full text-left"
+                      onClick={() => handleConnectionClick(connection)}
+                    >
+                      {connection.name ||
+                        `${
+                          key.charAt(0).toUpperCase() + key.slice(1)
+                        } Connection ${index + 1}`}
+                    </button>
+                  </li>
+                ),
+              )
+            ) : (
+              <li>No connections available for {key}.</li>
+            )}
+          </ul>
+          <div className="mb-4" /> {/* This empty div adds spacing */}
+        </div>
+      ))}
+    </nav>
+  );
+};
 
 export default DataConnectionSelector;

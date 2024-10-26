@@ -24,6 +24,10 @@ export interface DataConnectionFormProps {
   connection: Connection;
 }
 
+export const isValidArray = (array) => {
+  return Array.isArray(array) && array?.length > 0;
+};
+
 export const useDataConnections = () => {
   const [dataConnections, setDataConnections] =
     useState<DataConnectionsResponse | null>(null);
