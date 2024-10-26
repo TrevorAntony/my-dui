@@ -10,6 +10,7 @@ import {
   HiHashtag,
   HiOutlineFolder,
 } from "react-icons/hi";
+import { MdOutlineSettings } from "react-icons/md";
 
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
@@ -48,6 +49,11 @@ const ExampleSidebar: FC = function () {
             <div className="flex flex-col">
               <Sidebar.Items>
                 <SystemSidebar />
+                <Sidebar.ItemGroup key="home-group">
+                  <SidebarNavLink to={"/settings"} icon={MdOutlineSettings}>
+                    Settings
+                  </SidebarNavLink>
+                </Sidebar.ItemGroup>
                 {config.debugMode === "true" ? (
                   <>
                     <SidebarGroup title="Test 3DL Components">
