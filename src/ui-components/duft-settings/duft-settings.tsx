@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DuftModal from "../../components/duft-modal";
-import SettingsDisplay from "./settings-display";
+import SettingsDisplay from "./duft-settings-components/settings-display";
 
 const Settings = () => {
   const [openSettings, setOpenSettings] = useState<boolean>(true);
