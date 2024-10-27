@@ -15,7 +15,7 @@ export interface Connection {
   params: Param[];
 }
 
-interface DataConnectionsResponse {
+export interface DataConnectionsResponse {
   system: Connection[];
   user: Connection[];
 }
@@ -23,6 +23,10 @@ interface DataConnectionsResponse {
 export interface DataConnectionFormProps {
   connection: Connection;
 }
+
+export const isValidArray = (array) => {
+  return Array.isArray(array) && array?.length > 0;
+};
 
 export const useDataConnections = () => {
   const [dataConnections, setDataConnections] =
