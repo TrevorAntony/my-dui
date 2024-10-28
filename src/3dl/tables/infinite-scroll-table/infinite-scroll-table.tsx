@@ -15,6 +15,7 @@ interface InfiniteScrollTableProps {
   exportData?: boolean | string;
   initialColumns?: string;
   detailsComponent?: string;
+  searchHint?: string;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -27,6 +28,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   exportData,
   initialColumns,
   detailsComponent,
+  searchHint,
 }) => {
   const {
     data,
@@ -126,6 +128,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       pageSize={pageSize}
       query={query}
       exportData={exportData}
+      searchHint={searchHint}
     >
       {children}
     </TableContent>
