@@ -6,6 +6,7 @@ interface SearchBarProps {
   handleSearchChange: (value: string) => void;
   loading: boolean;
   searchColumns: string;
+  searchHint?: string;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -13,11 +14,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
   handleSearchChange,
   loading,
   searchColumns,
+  searchHint,
 }) => (
   <div className="relative flex-1" style={{ maxWidth: "500px" }}>
     <input
       type="text"
-      placeholder={`Search by ${searchColumns}`}
+      placeholder={`Search by ${searchHint || searchColumns}`}
       value={searchText}
       onChange={(e) => handleSearchChange(e.target.value)}
       className="w-full rounded border border-gray-300 p-2 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -28,6 +28,7 @@ const TableContent = ({
   pageSize,
   exportData = "false",
   query,
+  searchHint,
 }: {
   data: any[];
   loading: boolean;
@@ -47,6 +48,7 @@ const TableContent = ({
   pageSize?: string | number;
   exportData?: string | boolean;
   query?: string;
+  searchHint?: string;
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
@@ -96,6 +98,7 @@ const TableContent = ({
             handleSearchChange={handleSearchChange}
             loading={loading}
             searchColumns={searchColumns}
+            searchHint={searchHint}
           />
         )}
         <ColumnToggle
