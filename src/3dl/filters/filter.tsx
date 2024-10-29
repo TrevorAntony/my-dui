@@ -35,18 +35,16 @@ const Filter: React.FC<FilterProps> = ({
       if (values) {
         loadedOptions = values.split(",");
       } else if (values_query && options) {
-        loadedOptions = (options as { [key: string]: string }[]).map(
-          (option) => {
-            const optionValues = Object.values(option);
-            const [label, value] =
-              optionValues.length === 2
-                ? optionValues
-                : [optionValues[0], optionValues[0]];
-            return `${label} - ${value}`;
-          },
-        );
+        loadedOptions = (
+          options as { label?: string; value?: string; [key: string]: string }[]
+        ).map((option) => {
+          const optionValues = Object.values(option);
+          const [label] = optionValues;
+          return `${option?.label || label}`;
+        });
       }
 
+      // Dispatch the loaded options to data state
       dispatch({
         type: "SET_DATA",
         payload: { key: name, data: loadedOptions },
@@ -64,8 +62,19 @@ const Filter: React.FC<FilterProps> = ({
   }, [dispatch, name, selectedValue, isLoaded]);
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value.split(" - ").pop();
-    setSelectedValue(value);
+    const selectedLabel = event.target.value;
+    const selectedOption = (
+      options as { label?: string; value?: string; [key: string]: string }[]
+    ).find(
+      (option) =>
+        option.label === selectedLabel ||
+        Object.values(option)[0] === selectedLabel,
+    );
+
+    const value =
+      selectedOption?.value || Object.values(selectedOption || {})[0];
+
+    setSelectedValue(selectedLabel);
     setFilter(dispatch, name, value);
   };
 
