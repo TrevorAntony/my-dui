@@ -71,7 +71,7 @@ const useDataSetLogic = ({
       const stateFilters = state.filters || {};
 
       const placeholders = query.match(/\$[a-zA-Z_]+/g) || [];
-      placeholders.forEach((placeholder) => {
+      placeholders.forEach((placeholder: string) => {
         const filterKey = placeholder.substring(1);
         const filterValue = filters[filterKey] || stateFilters[filterKey] || "";
         tempQuery = tempQuery.replace(placeholder, filterValue);
