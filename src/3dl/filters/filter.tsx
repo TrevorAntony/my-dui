@@ -33,18 +33,20 @@ const Filter: React.FC<FilterProps> = ({
       let loadedOptions: string[] = [];
 
       if (values) {
-        // Split static values by comma and dispatch to data state
         loadedOptions = values.split(",");
       } else if (values_query && options) {
-        // Extract strings from the JSON blobs returned by the query
         loadedOptions = (options as { [key: string]: string }[]).map(
           (option) => {
-            return Object.values(option)[0] || "";
+            const optionValues = Object.values(option);
+            const [label, value] =
+              optionValues.length === 2
+                ? optionValues
+                : [optionValues[0], optionValues[0]];
+            return `${label} - ${value}`;
           },
         );
       }
 
-      // Dispatch the loaded options to data state
       dispatch({
         type: "SET_DATA",
         payload: { key: name, data: loadedOptions },
@@ -61,11 +63,10 @@ const Filter: React.FC<FilterProps> = ({
     }
   }, [dispatch, name, selectedValue, isLoaded]);
 
-  // Handle changes in selection
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
+    const value = event.target.value.split(" - ").pop();
     setSelectedValue(value);
-    setFilter(dispatch, name, value); // Use setFilter utility to update the filter state
+    setFilter(dispatch, name, value);
   };
 
   if (loading) {
