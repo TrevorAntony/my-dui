@@ -3,8 +3,8 @@ import type { Reducer } from "react";
 import React, { useReducer, createContext, useContext } from "react";
 
 interface DashboardState {
-  filters: Record<string, any>;
-  data: Record<string, any>;
+  filters: Record<string, string>;
+  data: Record<string, string[]>;
   debug: boolean;
   designSystem: string;
   theme?: Record<string, unknown>;
@@ -91,8 +91,8 @@ const Dashboard = ({
   const [state, dispatch] = useReducer<
     Reducer<DashboardState, DashboardAction>
   >(dashboardReducer, {
-    filters: {} as Record<string, unknown>,
-    data: {} as Record<string, unknown>,
+    filters: {} as Record<string, string>,
+    data: {} as Record<string, string[]>,
     debug,
     designSystem,
     theme,
