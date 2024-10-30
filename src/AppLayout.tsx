@@ -5,6 +5,10 @@ import { SidebarProvider, useSidebarContext } from "./context/SidebarContext";
 import Navbar from "./components/navbar";
 import Sidebar from "./components/sidebar";
 import classNames from "classnames";
+import {
+  SidebarConfigProvider,
+  useSidebarConfigContext,
+} from "./3dl/context/SidebarConfigContext";
 
 interface NavbarSidebarLayoutProps {
   isFooter?: boolean;
@@ -13,11 +17,13 @@ interface NavbarSidebarLayoutProps {
 const AppLayout: React.FC = () => {
   return (
     <SidebarProvider>
-      <Navbar />
-      <div className="flex items-start pt-16">
-        <Sidebar />
-        <MainContent isFooter={true} />
-      </div>
+      <SidebarConfigProvider>
+        <Navbar />
+        <div className="flex items-start pt-16">
+          <Sidebar />
+          <MainContent isFooter={true} />
+        </div>
+      </SidebarConfigProvider>
     </SidebarProvider>
   );
 };
@@ -48,9 +54,11 @@ const MainContent: FC<PropsWithChildren<NavbarSidebarLayoutProps>> = function ({
 };
 
 const MainContentFooter: FC = function () {
+  const sidebarConfig = useSidebarConfigContext();
+
   return (
     <p className="my-8 text-center text-sm text-gray-500 dark:text-gray-300">
-      &copy; 2024 UCSF-IGHS. All rights reserved.
+      &copy; {`Powered by DUFT. ${sidebarConfig.system.settings.footer}`}.
     </p>
   );
 };

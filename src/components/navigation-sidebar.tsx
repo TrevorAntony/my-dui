@@ -4,9 +4,9 @@ import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import { SidebarNavLink } from "./sidebar-nav-link";
 import { Sidebar } from "flowbite-react";
-import { useSidebarConfig } from "../hooks/useSideBarConfig";
 
 import type { MenuItem, DataTaskItem, NavigationConfig } from "./types";
+import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
 
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,
@@ -174,7 +174,7 @@ const renderSidebarMenu = (config: NavigationConfig) => {
 };
 
 const SystemSidebar = () => {
-  const { sidebarConfig } = useSidebarConfig();
+  const sidebarConfig = useSidebarConfigContext();
 
   return <>{renderSidebarMenu(sidebarConfig)}</>;
 };

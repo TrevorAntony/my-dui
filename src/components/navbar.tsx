@@ -4,10 +4,12 @@ import { HiMenuAlt1, HiX } from "react-icons/hi";
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
 import config from "../config";
+import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
 
 const ExampleNavbar: FC = function () {
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
+  const sidebarConfig = useSidebarConfigContext();
 
   return (
     <Navbar fluid>
@@ -34,7 +36,7 @@ const ExampleNavbar: FC = function () {
                 className="mr-3 h-6 sm:h-8"
               />
               <span className="self-center whitespace-nowrap text-2xl font-semibold text-highlight-800 dark:text-highlight-200">
-                {config.title}
+                {sidebarConfig.system.settings?.appName || config.title}
               </span>
             </Navbar.Brand>
           </div>

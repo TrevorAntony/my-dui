@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchDataWithoutStore } from "../api/api";
 import { defaultSidebarConfig } from "../helpers/constants";
-import type { SidebarConfig } from "../types/side-bar-config";
+import type { NavigationConfig } from "../components/types";
 
 export const useSidebarConfig = () => {
   const [sidebarConfig, setSidebarConfig] = useState(defaultSidebarConfig);
@@ -10,7 +10,7 @@ export const useSidebarConfig = () => {
     const loadSidebarConfig = async () => {
       try {
         const config = await fetchDataWithoutStore("/navigation");
-        setSidebarConfig((config as SidebarConfig) || defaultSidebarConfig);
+        setSidebarConfig((config as NavigationConfig) || defaultSidebarConfig);
       } catch (err) {
         console.error("Failed to load sidebar config", err);
         setSidebarConfig(defaultSidebarConfig);

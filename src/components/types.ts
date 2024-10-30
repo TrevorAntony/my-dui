@@ -21,6 +21,10 @@ export interface DataTaskItem {
 }
 
 export interface SystemConfig {
+  settings?: {
+    appName: string;
+    footer: string;
+  };
   home?: DashboardItem;
   menu?: {
     header?: string;

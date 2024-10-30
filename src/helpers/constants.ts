@@ -1,17 +1,27 @@
-import type { SidebarConfig } from "../types/side-bar-config";
+import type { NavigationConfig } from "../components/types";
 
-export const defaultSidebarConfig: SidebarConfig = {
+export const defaultSidebarConfig: NavigationConfig = {
   system: {
+    settings: { appName: "", footer: "" },
     home: {
-      title: "Home",
-      icon: "home-icon",
-      dashboard: "/",
+      title: "",
+      icon: "",
+      dashboard: "",
     },
-    menu: [],
-    dataTasks: [],
+    menu: {
+      header: "",
+      items: [],
+    },
+    dataTasks: {
+      header: "",
+      items: [],
+    },
   },
   user: {
-    menu: [],
+    menu: {
+      header: "",
+      items: [],
+    },
   },
 };
 
