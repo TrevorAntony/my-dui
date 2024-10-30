@@ -86,7 +86,10 @@ const CardComponent: FC<CardComponentProps> = ({
                 onClick={toggleModal}
                 title="Show Details"
               >
-                <HiOutlineExternalLink className=" text-gray-400" size={20} />
+                <HiOutlineExternalLink
+                  className=" text-gray-400 hover:text-gray-600"
+                  size={20}
+                />
               </button>
             )}
           </div>
