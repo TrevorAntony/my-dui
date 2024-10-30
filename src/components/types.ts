@@ -22,14 +22,26 @@ export interface DataTaskItem {
 
 export interface SystemConfig {
   home?: DashboardItem;
-  menu?: MenuItem[];
-  dataTasks?: DataTaskItem[];
+  menu?: {
+    header?: string;
+    items?: MenuItem[];
+  };
+  dataTasks?: {
+    header?: string;
+    items?: DataTaskItem[];
+  };
 }
 
 export interface UserConfig {
   home?: DashboardItem;
-  menu?: MenuItem[];
-  dataTasks?: DataTaskItem[];
+  menu?: {
+    header?: string;
+    items?: MenuItem[];
+  };
+  dataTasks?: {
+    header?: string;
+    items?: DataTaskItem[];
+  };
 }
 
 export interface NavigationConfig {
