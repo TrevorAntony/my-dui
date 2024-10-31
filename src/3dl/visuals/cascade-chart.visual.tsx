@@ -8,6 +8,7 @@ import type { Cascade } from "../../types/cascade";
 import { DataProvider } from "../context/DataContext";
 import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
 import type { VisualProps } from "../../types/visual-props";
+import CardComponent from "../../components/card-component";
 
 const CascadeChart = ({
   container: Container,
@@ -181,10 +182,10 @@ const CascadeChart = ({
       >
         <DataProvider value={{ data: modalCascadeData }}>
           <InfiniteScrollTable
-            header={header}
-            subHeader={cascadeTitle}
             initialColumns={modalCascadeHeadLabels.join(",")}
             exportData={false}
+            container={CardComponent}
+            variant="plain"
           />
         </DataProvider>
       </DuftModal>
