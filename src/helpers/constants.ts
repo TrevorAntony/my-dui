@@ -48,10 +48,25 @@ export const cascadeDefaultOptions = {
     background: "white",
   },
   nodeTemplate: (node: Record<string, unknown>) => {
-    const { label, value } = node;
+    const { value } = node;
     const formattedValue = Number(value).toLocaleString();
-    if (!value || !label) {
-      return "";
+    if (!value) {
+      return `
+      <div 
+      id=${node["id"]}
+        style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        height: 100%;
+        padding-left: 5%;
+        cursor: pointer;
+      "
+      >
+        <div style="font-size: 3.5em; line-height: 1.50; font-weight: 700">0</div>
+        <div style="font-size: 1.8em;">${node["label"]}</div>
+      </div>
+    `;
     }
 
     return `
