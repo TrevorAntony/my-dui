@@ -14,6 +14,7 @@ const CascadeChart = ({
   header,
   subHeader = "",
   cascadeObject,
+  direction = cascadeDefaultOptions.direction,
   exportData,
   detailsComponent,
 }: VisualProps) => {
@@ -113,7 +114,10 @@ const CascadeChart = ({
       return undefined;
     }
 
-    const tree = new ApexTree(svgElement, cascadeDefaultOptions);
+    const tree = new ApexTree(svgElement, {
+      ...cascadeDefaultOptions,
+      direction,
+    });
     tree.render(cascadeData);
 
     const toggleModal = (
@@ -153,7 +157,7 @@ const CascadeChart = ({
         svgElement.innerHTML = "";
       }
     };
-  }, [cascadeData, isModalOpen]);
+  }, [cascadeData, isModalOpen, direction]);
 
   if (!cascadeData) {
     return <CascadeSkeleton />;
