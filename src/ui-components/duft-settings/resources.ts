@@ -22,6 +22,7 @@ export interface DataConnectionsResponse {
 
 export interface DataConnectionFormProps {
   connection: Connection;
+  handleConnectionClick: (connection?: Connection) => void;
 }
 
 export const isValidArray = (array) => {

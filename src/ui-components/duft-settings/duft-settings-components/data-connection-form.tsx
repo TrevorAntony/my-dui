@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import type { FC } from "react";
-import { Toast } from "flowbite-react";
+import { Button } from "flowbite-react";
 import config from "../../../config";
 import type { DataConnectionFormProps } from "../resources";
+import ToastNotification from "../../notification-toast";
 
-const DataConnectionForm: FC<DataConnectionFormProps> = ({ connection }) => {
+const DataConnectionForm: FC<DataConnectionFormProps> = ({
+  connection,
+  handleConnectionClick,
+}) => {
   const [formData, setFormData] = useState({
     server: "",
     username: "",
@@ -109,32 +113,29 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({ connection }) => {
             </button>
           </div>
         </div>
-        <button
-          type="submit"
-          className="rounded-md bg-highlight-500 px-4 py-2 font-semibold text-white hover:bg-highlight-700"
-        >
-          Save
-        </button>
+        <div className="flex space-x-2">
+          <Button
+            type="submit"
+            className="w-[65px] rounded-md bg-highlight-500 px-2 py-1 text-sm font-semibold text-white hover:bg-highlight-700"
+          >
+            Save
+          </Button>
+          <Button
+            type="button"
+            onClick={() => handleConnectionClick()}
+            className="w-[65px] rounded-md border border-highlight-200 bg-white px-2 py-1 text-sm font-semibold text-highlight-850 hover:bg-highlight-100"
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
 
-      {/* Toast notification */}
-      {showToast && (
-        <div className="fixed right-4 top-4 z-50">
-          <Toast>
-            <div
-              className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
-                toastType === "success"
-                  ? "bg-green-200 text-green-500"
-                  : "bg-red-200 text-red-800"
-              }`}
-            >
-              {toastType === "success" ? "✓" : "✕"}
-            </div>
-            <div className="ml-3 text-sm font-normal">{toastMessage}</div>
-            <Toast.Toggle onClick={() => setShowToast(false)} />
-          </Toast>
-        </div>
-      )}
+      <ToastNotification
+        show={showToast}
+        message={toastMessage}
+        type={toastType}
+        onClose={() => setShowToast(false)}
+      />
     </>
   );
 };
