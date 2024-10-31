@@ -37,6 +37,7 @@ function ExportData() {
           title="Confirm Export"
           executeButtonName="Export"
           modalWidth="narrow"
+          modalHeight="small"
           defaultButton="execute"
           closeButtonLabel="Cancel"
         >

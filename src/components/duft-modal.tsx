@@ -58,14 +58,12 @@ const DuftModal: React.FC<DuftModalProps> = ({
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const executeButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  // State to manage the size and position of the modal
   const [size, setSize] = useState<{ width: number; height: number }>({
     width: modalWidthMap[modalWidth] || 800,
     height: 600,
   });
-  const [position, setPosition] = useState({ x: 50, y: 50 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  // Update height and position based on modalHeight prop
   useEffect(() => {
     const windowHeight = window.innerHeight;
     const windowWidth = window.innerWidth;
@@ -74,9 +72,15 @@ const DuftModal: React.FC<DuftModalProps> = ({
       ? windowHeight * heightPercentage
       : 600;
 
-    // Calculate center position - update y to center vertically
     const x = (windowWidth - (modalWidthMap[modalWidth] || 800)) / 2;
-    const y = -(windowHeight - initialHeight) * 0.7; // Center vertically
+    // const y = -(windowHeight - initialHeight) * 0.2; // Center vertically
+    // const y = -(windowHeight - initialHeight) * 0.7; // Center vertically
+    const y =
+      modalHeightMap[modalHeight] <= 0.3
+        ? -(windowHeight - initialHeight) * 0.2
+        : -(windowHeight - initialHeight) * 0.7;
+
+    console.log("current height: ", modalHeightMap[modalHeight]);
 
     setSize((prevSize) => ({ ...prevSize, height: initialHeight }));
     setPosition({ x, y });
@@ -114,7 +118,6 @@ const DuftModal: React.FC<DuftModalProps> = ({
           bottomRight: true,
           right: true,
         }}
-        // Update size dynamically during resizing
         onResize={(_e, _direction, ref) => {
           setSize({
             width: ref.offsetWidth,
@@ -122,7 +125,6 @@ const DuftModal: React.FC<DuftModalProps> = ({
           });
         }}
         onResizeStop={(_e, _direction, ref) => {
-          // Finalize the size on resize stop
           setSize({
             width: ref.offsetWidth,
             height: ref.offsetHeight,
@@ -153,7 +155,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
             : null}
         </div>
 
-        <div className="flex justify-end gap-4 border-t px-6 py-4">
+        <Modal.Footer className="flex justify-end gap-4 border-t px-6">
           {executeButtonName && onExecute && (
             <Button
               color={defaultButton === "execute" ? "primary" : "pink"}
@@ -173,7 +175,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
           >
             {closeButtonLabel}
           </Button>
-        </div>
+        </Modal.Footer>
       </Rnd>
     </Modal>
   );
