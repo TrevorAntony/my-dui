@@ -12,4 +12,5 @@ export interface VisualProps {
   direction?: string;
   modalWidth?: "narrow" | "medium" | "wide";
   modalHeight?: "tiny" | "smaller" | "small" | "medium" | "large";
+  children?: React.ReactNode;
 }
