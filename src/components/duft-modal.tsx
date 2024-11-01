@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { Modal, Button } from "flowbite-react";
 import { Rnd } from "react-rnd";
 import { HiX } from "react-icons/hi";
@@ -40,6 +40,26 @@ export interface DuftModalProps {
   defaultButton?: "execute" | "close";
 }
 
+const calculateInitialModalConfig = (
+  modalWidth: keyof typeof modalWidthMap,
+  modalHeight: keyof typeof modalHeightMap,
+) => {
+  const windowHeight = window.innerHeight;
+  const windowWidth = window.innerWidth;
+
+  const width = modalWidthMap[modalWidth] || 800;
+  const heightPercentage = modalHeightMap[modalHeight];
+  const height = heightPercentage ? windowHeight * heightPercentage : 600;
+
+  const x = (windowWidth - width) / 2;
+  const y =
+    heightPercentage <= 0.3
+      ? -(windowHeight - height) * 0.2
+      : -(windowHeight - height) * 0.7;
+
+  return { width, height, x, y };
+};
+
 const DuftModal: React.FC<DuftModalProps> = ({
   isOpen,
   onClose,
@@ -58,34 +78,16 @@ const DuftModal: React.FC<DuftModalProps> = ({
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const executeButtonRef = useRef<HTMLButtonElement | null>(null);
 
+  const initialConfig = calculateInitialModalConfig(modalWidth, modalHeight);
+
   const [size, setSize] = useState<{ width: number; height: number }>({
-    width: modalWidthMap[modalWidth] || 800,
-    height: 600,
+    width: initialConfig.width,
+    height: initialConfig.height,
   });
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const windowHeight = window.innerHeight;
-    const windowWidth = window.innerWidth;
-    const heightPercentage = modalHeightMap[modalHeight];
-    const initialHeight = heightPercentage
-      ? windowHeight * heightPercentage
-      : 600;
-
-    const x = (windowWidth - (modalWidthMap[modalWidth] || 800)) / 2;
-    // const y = -(windowHeight - initialHeight) * 0.2; // Center vertically
-    // const y = -(windowHeight - initialHeight) * 0.7; // Center vertically
-    const y =
-      modalHeightMap[modalHeight] <= 0.3
-        ? -(windowHeight - initialHeight) * 0.2
-        : -(windowHeight - initialHeight) * 0.7;
-
-    console.log("current height: ", modalHeightMap[modalHeight]);
-
-    setSize((prevSize) => ({ ...prevSize, height: initialHeight }));
-    setPosition({ x, y });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalHeight, modalWidth]);
+  const [position, setPosition] = useState({
+    x: initialConfig.x,
+    y: initialConfig.y,
+  });
 
   const resolvedModalWidth = size.width;
   const resolvedModalHeight = size.height;
@@ -132,7 +134,6 @@ const DuftModal: React.FC<DuftModalProps> = ({
         }}
         className="rounded-lg bg-white shadow"
       >
-        {/* Modal Header */}
         <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
           <span id="modal-title">{title}</span>
           <button
@@ -146,14 +147,16 @@ const DuftModal: React.FC<DuftModalProps> = ({
           </button>
         </div>
 
-        {/* Modal Body */}
-        <div className="p-6" style={finalModalBodyStyle as React.CSSProperties}>
+        <Modal.Body
+          className="p-6"
+          style={finalModalBodyStyle as React.CSSProperties}
+        >
           {children
             ? children
             : modalContent
             ? renderModalContent(modalContent)
             : null}
-        </div>
+        </Modal.Body>
 
         <Modal.Footer className="flex justify-end gap-4 border-t px-6">
           {executeButtonName && onExecute && (
