@@ -45,7 +45,7 @@ const DataTaskHandler: React.FC = () => {
       title={title}
       executeButtonName={buttonName}
       modalWidth="narrow"
-      modalHeight="small"
+      modalHeight="tiny"
       closeButtonLabel="Cancel"
     >
       <p>{prompt}</p>

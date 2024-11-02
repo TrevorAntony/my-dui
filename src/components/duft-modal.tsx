@@ -13,7 +13,7 @@ const modalWidthMap = {
 
 const modalHeightMap = {
   tiny: 0.08,
-  smaller: 0.15,
+  smaller: 0.19,
   small: 0.3,
   medium: 0.6,
   large: 0.8,
@@ -47,17 +47,17 @@ const calculateInitialModalConfig = (
   const windowHeight = window.innerHeight;
   const windowWidth = window.innerWidth;
 
-  const width = modalWidthMap[modalWidth] || 800;
+  const width = modalWidthMap[modalWidth];
   const heightPercentage = modalHeightMap[modalHeight];
-  const height = heightPercentage ? windowHeight * heightPercentage : 600;
-
+  const height = heightPercentage && windowHeight * heightPercentage;
+  const minHeight = heightPercentage <= 0.08 ? 180 : 150;
   const x = (windowWidth - width) / 2;
   const y =
     heightPercentage <= 0.3
       ? -(windowHeight - height) * 0.2
       : -(windowHeight - height) * 0.7;
 
-  return { width, height, x, y };
+  return { width, height, minHeight, x, y };
 };
 
 const DuftModal: React.FC<DuftModalProps> = ({
@@ -113,7 +113,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
         position={position}
         onDragStop={(_e, data) => setPosition({ x: data.x, y: data.y })}
         minWidth={300}
-        minHeight={200}
+        minHeight={initialConfig.minHeight}
         bounds="window"
         enableResizing={{
           bottom: true,
@@ -148,7 +148,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
         </div>
 
         <Modal.Body
-          className="p-6"
+          className="py-6"
           style={finalModalBodyStyle as React.CSSProperties}
         >
           {children
