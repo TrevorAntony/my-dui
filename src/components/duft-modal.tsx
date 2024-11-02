@@ -28,7 +28,7 @@ export interface DuftModalProps {
   isOpen: boolean;
   onClose: () => void;
   onExecute?: () => void;
-  executeButtonName?: string;
+  executeButtonText?: string;
   title?: string;
   children?: React.ReactNode;
   modalContent?: ModalContent;
@@ -36,7 +36,7 @@ export interface DuftModalProps {
   modalWidth?: keyof typeof modalWidthMap;
   modalHeight?: keyof typeof modalHeightMap;
   disableButtons?: boolean;
-  closeButtonLabel?: string;
+  cancelButtonText?: string;
   defaultButton?: "execute" | "close";
 }
 
@@ -64,7 +64,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
   isOpen,
   onClose,
   onExecute,
-  executeButtonName = "Run",
+  executeButtonText = "Run",
   title = "More info",
   children,
   modalContent,
@@ -72,7 +72,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
   modalWidth = "medium",
   modalHeight = "medium",
   disableButtons = false,
-  closeButtonLabel = "Close",
+  cancelButtonText = "Close",
   defaultButton = "close",
 }) => {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -159,14 +159,14 @@ const DuftModal: React.FC<DuftModalProps> = ({
         </Modal.Body>
 
         <Modal.Footer className="flex justify-end gap-4 border-t px-6">
-          {executeButtonName && onExecute && (
+          {executeButtonText && onExecute && (
             <Button
               color={defaultButton === "execute" ? "primary" : "pink"}
               onClick={onExecute}
               disabled={disableButtons}
               ref={executeButtonRef}
             >
-              {executeButtonName || "Run"}
+              {executeButtonText || "Run"}
             </Button>
           )}
 
@@ -176,7 +176,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
             disabled={disableButtons}
             ref={closeButtonRef}
           >
-            {closeButtonLabel}
+            {cancelButtonText}
           </Button>
         </Modal.Footer>
       </Rnd>

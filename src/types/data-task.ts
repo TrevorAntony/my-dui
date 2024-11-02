@@ -4,7 +4,8 @@ export type DataTask = {
   prompt: string;
   task: string;
   title: string;
-  buttonName: string;
+  executeButtonText: string;
+  cancelButtonText: string;
 };
 
 export type DataTaskResponse = {
