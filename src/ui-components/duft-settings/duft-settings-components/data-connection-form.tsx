@@ -1,19 +1,53 @@
-import { useEffect, useState } from "react";
+/* eslint-disable tailwindcss/no-custom-classname */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import { useEffect, useState, useRef } from "react";
 import type { FC } from "react";
-import { Toast } from "flowbite-react";
+import { Button } from "flowbite-react";
 import config from "../../../config";
 import type { DataConnectionFormProps } from "../resources";
+import ToastNotification from "../../notification-toast";
 
-const DataConnectionForm: FC<DataConnectionFormProps> = ({ connection }) => {
+const DataConnectionForm: FC<DataConnectionFormProps> = ({
+  connection,
+  handleConnectionClick,
+}) => {
   const [formData, setFormData] = useState({
     server: "",
     username: "",
     password: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("success");
+  const formHasChanges = useRef(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    formHasChanges.current = true;
+  };
+
+  const fetchData = (conn) => {
+    if (conn) {
+      fetch(`${config.apiBaseUrl}/data-connections/${conn.id}/parameters`)
+        .then((response) => response.json())
+        .then((data) => {
+          setFormData(data);
+          formHasChanges.current = false;
+        })
+        .catch((error) =>
+          console.error("Error fetching connection details:", error),
+        );
+    } else {
+      setFormData({
+        server: "",
+        username: "",
+        password: "",
+      });
+      formHasChanges.current = false;
+    }
+  };
 
   useEffect(() => {
     setFormData({
@@ -21,20 +55,22 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({ connection }) => {
       username: "",
       password: "",
     });
+    if (!connection) return;
 
-    if (connection) {
-      fetch(`${config.apiBaseUrl}/data-connections/${connection.id}/parameters`)
-        .then((response) => response.json())
-        .then((data) => setFormData(data))
-        .catch((error) =>
-          console.error("Error fetching connection details:", error),
-        );
+    if (formHasChanges.current) {
+      const userConfirmed = window.confirm(
+        "You have unsaved changes. Do you want to discard them and proceed?",
+      );
+
+      if (userConfirmed) {
+        fetchData(connection);
+      } else {
+        return;
+      }
+    } else {
+      fetchData(connection);
     }
   }, [connection]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,7 +106,6 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({ connection }) => {
     <>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className="mb-2 block font-semibold">Server</label>
           <p className="text-sm text-gray-700">{formData.server || "N/A"}</p>
         </div>
@@ -84,7 +119,7 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({ connection }) => {
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-1/2 rounded border px-3 py-2"
+            className="focus:border-highlight-500 w-1/2 rounded px-3 py-2 focus:ring-0"
           />
         </div>
         <div className="mb-4">
@@ -98,43 +133,40 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({ connection }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full rounded border px-3 py-2"
+              className="focus:border-highlight-500 w-full rounded px-3 py-2 focus:ring-0"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-3 text-sm text-highlight-850"
+              className="text-highlight-850 absolute right-2 top-3 text-sm"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
         </div>
-        <button
-          type="submit"
-          className="rounded-md bg-highlight-500 px-4 py-2 font-semibold text-white hover:bg-highlight-700"
-        >
-          Save
-        </button>
+        <div className="flex space-x-2">
+          <Button
+            type="submit"
+            className="bg-highlight-500 hover:bg-highlight-700 w-[65px] rounded-md px-2 py-1 text-sm font-semibold text-white"
+          >
+            Save
+          </Button>
+          <Button
+            type="button"
+            onClick={() => handleConnectionClick(null)}
+            className="border-highlight-200 text-highlight-850 hover:bg-highlight-100 w-[65px] rounded-md border bg-white px-2 py-1 text-sm font-semibold"
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
 
-      {/* Toast notification */}
-      {showToast && (
-        <div className="fixed right-4 top-4 z-50">
-          <Toast>
-            <div
-              className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
-                toastType === "success"
-                  ? "bg-green-200 text-green-500"
-                  : "bg-red-200 text-red-800"
-              }`}
-            >
-              {toastType === "success" ? "✓" : "✕"}
-            </div>
-            <div className="ml-3 text-sm font-normal">{toastMessage}</div>
-            <Toast.Toggle onClick={() => setShowToast(false)} />
-          </Toast>
-        </div>
-      )}
+      <ToastNotification
+        show={showToast}
+        message={toastMessage}
+        type={toastType}
+        onClose={() => setShowToast(false)}
+      />
     </>
   );
 };

@@ -2,7 +2,10 @@ import type { FC } from "react";
 import type { DataConnectionFormProps } from "../resources";
 import DataConnectionForm from "./data-connection-form";
 
-const ConnectionContent: FC<DataConnectionFormProps> = ({ connection }) => (
+const ConnectionContent: FC<DataConnectionFormProps> = ({
+  connection,
+  handleConnectionClick,
+}) => (
   <div className="flex-1 p-4">
     {connection ? (
       <div>
@@ -10,7 +13,10 @@ const ConnectionContent: FC<DataConnectionFormProps> = ({ connection }) => (
           {connection.name} Configuration
         </h3>
         <p className="mb-4 text-sm text-gray-600">{connection.description}</p>
-        <DataConnectionForm connection={connection} />
+        <DataConnectionForm
+          connection={connection}
+          handleConnectionClick={handleConnectionClick}
+        />
       </div>
     ) : (
       <p>Select a connection to view details.</p>
