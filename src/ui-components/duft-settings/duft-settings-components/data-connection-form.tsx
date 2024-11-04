@@ -1,3 +1,5 @@
+/* eslint-disable tailwindcss/no-custom-classname */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState, useRef } from "react";
 import type { FC } from "react";
 import { Button } from "flowbite-react";
@@ -14,32 +16,25 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
     username: "",
     password: "",
   });
-  const [initialFormData, setInitialFormData] = useState({
-    server: "",
-    username: "",
-    password: "",
-  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("success");
-  const formHasChanges = useRef(false); // Tracks if form has changes
+  const formHasChanges = useRef(false);
 
-  // Handle form changes and set change tracking
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    formHasChanges.current = true; // Mark form as changed
+    formHasChanges.current = true;
   };
 
-  // Function to fetch data for the new connection
   const fetchData = (conn) => {
     if (conn) {
       fetch(`${config.apiBaseUrl}/data-connections/${conn.id}/parameters`)
         .then((response) => response.json())
         .then((data) => {
           setFormData(data);
-          setInitialFormData(data);
-          formHasChanges.current = false; // Reset tracking on new fetch
+          formHasChanges.current = false;
         })
         .catch((error) =>
           console.error("Error fetching connection details:", error),
@@ -50,44 +45,33 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
         username: "",
         password: "",
       });
-      setInitialFormData({
-        server: "",
-        username: "",
-        password: "",
-      });
-      formHasChanges.current = false; // Reset tracking when no connection
+      formHasChanges.current = false;
     }
   };
 
-  // Effect to handle connection change
   useEffect(() => {
     setFormData({
       server: "",
       username: "",
       password: "",
     });
-    if (!connection) return; // Do nothing if no connection is passed
+    if (!connection) return;
 
-    // Check if form has unsaved changes
     if (formHasChanges.current) {
       const userConfirmed = window.confirm(
         "You have unsaved changes. Do you want to discard them and proceed?",
       );
 
       if (userConfirmed) {
-        // If confirmed, fetch the new connection's data
         fetchData(connection);
       } else {
-        // If not confirmed, retain the current form state
         return;
       }
     } else {
-      // No unsaved changes, fetch data immediately
       fetchData(connection);
     }
   }, [connection]);
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch(`${config.apiBaseUrl}/data-connections/${connection.id}/parameters`, {
@@ -135,7 +119,7 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-1/2 rounded border px-3 py-2"
+            className="focus:border-highlight-500 w-1/2 rounded px-3 py-2 focus:ring-0"
           />
         </div>
         <div className="mb-4">
@@ -149,12 +133,12 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full rounded border px-3 py-2"
+              className="focus:border-highlight-500 w-full rounded px-3 py-2 focus:ring-0"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-3 text-sm text-highlight-850"
+              className="text-highlight-850 absolute right-2 top-3 text-sm"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
@@ -163,14 +147,14 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
         <div className="flex space-x-2">
           <Button
             type="submit"
-            className="w-[65px] rounded-md bg-highlight-500 px-2 py-1 text-sm font-semibold text-white hover:bg-highlight-700"
+            className="bg-highlight-500 hover:bg-highlight-700 w-[65px] rounded-md px-2 py-1 text-sm font-semibold text-white"
           >
             Save
           </Button>
           <Button
             type="button"
             onClick={() => handleConnectionClick(null)}
-            className="w-[65px] rounded-md border border-highlight-200 bg-white px-2 py-1 text-sm font-semibold text-highlight-850 hover:bg-highlight-100"
+            className="border-highlight-200 text-highlight-850 hover:bg-highlight-100 w-[65px] rounded-md border bg-white px-2 py-1 text-sm font-semibold"
           >
             Cancel
           </Button>
