@@ -1,16 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Reducer } from "react";
 import React, { useReducer, createContext, useContext } from "react";
-
-interface DashboardState {
-  filters: Record<string, string>;
-  data: Record<string, string[]>;
-  debug: boolean;
-  designSystem: string;
-  theme?: Record<string, unknown>;
-  layout: string;
-}
-
+import type { DashboardState } from "../../types/dashboard";
 interface DashboardAction {
   type: string;
   payload: any;
