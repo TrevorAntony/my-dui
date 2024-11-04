@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import DuftModal from "../components/duft-modal";
-import { useSidebarConfig } from "../hooks/useSideBarConfig";
 import type { DataTask } from "../types/data-task";
 import { executeDataTask } from "../helpers/data-task-helpers";
+import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
 
 const DataTaskHandler: React.FC = () => {
-  const { sidebarConfig } = useSidebarConfig();
+  const sidebarConfig = useSidebarConfigContext();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const { id } = useParams<{ id: string }>();
 
-  const activeDataTask = sidebarConfig.system.dataTasks.find(
+  const activeDataTask = sidebarConfig.system.dataTasks.items?.find(
     (taskItem: DataTask) => taskItem.task === id,
   ) as DataTask | undefined;
 

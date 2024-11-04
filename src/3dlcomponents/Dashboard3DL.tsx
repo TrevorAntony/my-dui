@@ -41,6 +41,7 @@ import {
   Query,
   InfiniteScrollTable,
   ExportData,
+  Markdown,
 } from "../3dl";
 import {
   DuftGrid,
@@ -358,6 +359,16 @@ const Dashboard3DL: React.FC = () => {
               SingleViewHeader: DuftSingleView.Header,
               ExportData,
               SingleTableLayoutTester,
+              Markdown: (props: React.ComponentProps<typeof Markdown>) => (
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <Markdown
+                    {...(props as React.ComponentProps<typeof Markdown>)}
+                    container={
+                      CardComponent as React.ComponentType<ContainerComponentProps>
+                    }
+                  />
+                </ErrorBoundary>
+              ),
             }}
             jsx={dashboardData}
           />

@@ -4,9 +4,9 @@ import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import { SidebarNavLink } from "./sidebar-nav-link";
 import { Sidebar } from "flowbite-react";
-import { useSidebarConfig } from "../hooks/useSideBarConfig";
 
 import type { MenuItem, DataTaskItem, NavigationConfig } from "./types";
+import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
 
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,
@@ -17,9 +17,9 @@ const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
 
 const renderSidebarMenu = (config: NavigationConfig) => {
   const homeConfig = config.system?.home;
-  const systemMenu = config.system?.menu || [];
-  const userMenu = config.user?.menu || [];
-  const dataTaskMenu = config.system?.dataTasks || [];
+  const systemMenu = config.system?.menu?.items || [];
+  const userMenu = config.user?.menu?.items || [];
+  const dataTaskMenu = config.system?.dataTasks?.items || [];
 
   const homeLink = homeConfig ? (
     <Sidebar.ItemGroup key="home-group">
@@ -34,7 +34,10 @@ const renderSidebarMenu = (config: NavigationConfig) => {
 
   const dataTaskGroup =
     dataTaskMenu.length > 0 ? (
-      <SidebarGroup key="data-tasks-group" title="Actions">
+      <SidebarGroup
+        key="data-tasks-group"
+        title={`${config.system?.dataTasks?.header}` || "actions"}
+      >
         {dataTaskMenu.map((item: DataTaskItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
           if (
@@ -77,7 +80,11 @@ const renderSidebarMenu = (config: NavigationConfig) => {
 
   const systemGroup =
     systemMenu.length > 0 ? (
-      <SidebarGroup key="system-group" title="dashboards">
+      <SidebarGroup
+        key="system-group"
+        // title="dashboards"
+        title={`${config.system?.menu?.header}` || "dashboards"}
+      >
         {systemMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
           if (
@@ -116,7 +123,10 @@ const renderSidebarMenu = (config: NavigationConfig) => {
 
   const userGroup =
     userMenu.length > 0 ? (
-      <SidebarGroup key="user-group" title="User">
+      <SidebarGroup
+        key="user-group"
+        title={`${config.user?.menu?.header}` || "user dashboards"}
+      >
         {userMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
           if (
@@ -164,7 +174,7 @@ const renderSidebarMenu = (config: NavigationConfig) => {
 };
 
 const SystemSidebar = () => {
-  const { sidebarConfig } = useSidebarConfig();
+  const sidebarConfig = useSidebarConfigContext();
 
   return <>{renderSidebarMenu(sidebarConfig)}</>;
 };

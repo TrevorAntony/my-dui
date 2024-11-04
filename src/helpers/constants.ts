@@ -1,32 +1,27 @@
-import type { SidebarConfig } from "../types/side-bar-config";
+import type { NavigationConfig } from "../components/types";
 
-export const modalWidthMap = {
-  mini: 400,
-  narrow: 600,
-  medium: 800,
-  wide: 1000,
-};
-
-export const modalHeightMap = {
-  tiny: 0.08,
-  smaller: 0.19,
-  small: 0.3,
-  medium: 0.6,
-  large: 0.8,
-};
-
-export const defaultSidebarConfig: SidebarConfig = {
+export const defaultSidebarConfig: NavigationConfig = {
   system: {
+    settings: { appName: "", footer: "" },
     home: {
-      title: "Home",
-      icon: "home-icon",
-      dashboard: "/",
+      title: "",
+      icon: "",
+      dashboard: "",
     },
-    menu: [],
-    dataTasks: [],
+    menu: {
+      header: "",
+      items: [],
+    },
+    dataTasks: {
+      header: "",
+      items: [],
+    },
   },
   user: {
-    menu: [],
+    menu: {
+      header: "",
+      items: [],
+    },
   },
 };
 
@@ -53,10 +48,25 @@ export const cascadeDefaultOptions = {
     background: "white",
   },
   nodeTemplate: (node: Record<string, unknown>) => {
-    const { label, value } = node;
+    const { value } = node;
     const formattedValue = Number(value).toLocaleString();
-    if (!value || !label) {
-      return "";
+    if (!value) {
+      return `
+      <div 
+      id=${node["id"]}
+        style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        height: 100%;
+        padding-left: 5%;
+        cursor: pointer;
+      "
+      >
+        <div style="font-size: 3.5em; line-height: 1.50; font-weight: 700">0</div>
+        <div style="font-size: 1.8em;">${node["label"]}</div>
+      </div>
+    `;
     }
 
     return `

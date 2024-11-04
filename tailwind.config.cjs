@@ -83,7 +83,39 @@ module.exports = {
         "monospace",
       ],
     },
-    extend: {},
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            /* Add this to customize table styles */
+            table: {
+              tableLayout: "auto",
+              width: "100%",
+            },
+            thead: {
+              borderBottom: "1px solid #ccc",
+            },
+            "thead th": {
+              padding: "0.5em",
+              fontWeight: "600",
+              textAlign: "left",
+              borderRight:
+                "1px solid #ccc" /* Add right border to header cells */,
+            },
+            "tbody td": {
+              padding: "0.5em",
+              borderBottom: "1px solid #eee",
+              borderRight:
+                "1px solid #eee" /* Add right border to body cells */,
+            },
+            "th:last-child, td:last-child": {
+              borderRight:
+                "none" /* Remove right border from last column cells */,
+            },
+          },
+        },
+      },
+    },
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [require("flowbite/plugin"), require("@tailwindcss/typography")],
 };

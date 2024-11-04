@@ -1,4 +1,6 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useContext, useCallback } from "react";
+import { DashboardContext } from "../utilities/Dashboard";
+import type { DashboardState } from "../../types/dashboard";
 import ApexTree from "apextree";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
@@ -8,15 +10,20 @@ import type { Cascade } from "../../types/cascade";
 import { DataProvider } from "../context/DataContext";
 import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
 import type { VisualProps } from "../../types/visual-props";
+import CardComponent from "../../components/card-component";
 
 const CascadeChart = ({
   container: Container,
   header,
   subHeader = "",
   cascadeObject,
+  direction = cascadeDefaultOptions.direction,
   exportData,
   detailsComponent,
 }: VisualProps) => {
+  const { state } = useContext(DashboardContext) || {
+    state: {} as DashboardState,
+  };
   const [cascadeData, setCascadeData] = useState<Cascade | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");
@@ -33,7 +40,7 @@ const CascadeChart = ({
     async (dataStructure: Record<string, unknown>) => {
       async function processNode(node: Record<string, unknown>) {
         const { query } = node["data"] as { query: string };
-        const queryResult = await fetchCascade(query);
+        const queryResult = await fetchCascade(query, state.filters);
         const result: Cascade = {
           id: node["id"] as string,
           options: node["options"] ? node["options"] : [],
@@ -95,7 +102,7 @@ const CascadeChart = ({
         console.error("Error fetching data", error);
       }
     },
-    [],
+    [state.filters],
   );
 
   useEffect(() => {
@@ -113,7 +120,10 @@ const CascadeChart = ({
       return undefined;
     }
 
-    const tree = new ApexTree(svgElement, cascadeDefaultOptions);
+    const tree = new ApexTree(svgElement, {
+      ...cascadeDefaultOptions,
+      direction,
+    });
     tree.render(cascadeData);
 
     const toggleModal = (
@@ -153,7 +163,7 @@ const CascadeChart = ({
         svgElement.innerHTML = "";
       }
     };
-  }, [cascadeData, isModalOpen]);
+  }, [cascadeData, isModalOpen, direction]);
 
   if (!cascadeData) {
     return <CascadeSkeleton />;
@@ -177,10 +187,10 @@ const CascadeChart = ({
       >
         <DataProvider value={{ data: modalCascadeData }}>
           <InfiniteScrollTable
-            header={header}
-            subHeader={cascadeTitle}
             initialColumns={modalCascadeHeadLabels.join(",")}
             exportData={false}
+            container={CardComponent}
+            variant="plain"
           />
         </DataProvider>
       </DuftModal>
