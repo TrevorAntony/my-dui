@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { FC } from "react";
 import { Button } from "flowbite-react";
 import config from "../../../config";
@@ -14,32 +14,80 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
     username: "",
     password: "",
   });
+  const [initialFormData, setInitialFormData] = useState({
+    server: "",
+    username: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("success");
+  const formHasChanges = useRef(false); // Tracks if form has changes
 
+  // Handle form changes and set change tracking
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    formHasChanges.current = true; // Mark form as changed
+  };
+
+  // Function to fetch data for the new connection
+  const fetchData = (conn) => {
+    if (conn) {
+      fetch(`${config.apiBaseUrl}/data-connections/${conn.id}/parameters`)
+        .then((response) => response.json())
+        .then((data) => {
+          setFormData(data);
+          setInitialFormData(data);
+          formHasChanges.current = false; // Reset tracking on new fetch
+        })
+        .catch((error) =>
+          console.error("Error fetching connection details:", error),
+        );
+    } else {
+      setFormData({
+        server: "",
+        username: "",
+        password: "",
+      });
+      setInitialFormData({
+        server: "",
+        username: "",
+        password: "",
+      });
+      formHasChanges.current = false; // Reset tracking when no connection
+    }
+  };
+
+  // Effect to handle connection change
   useEffect(() => {
     setFormData({
       server: "",
       username: "",
       password: "",
     });
+    if (!connection) return; // Do nothing if no connection is passed
 
-    if (connection) {
-      fetch(`${config.apiBaseUrl}/data-connections/${connection.id}/parameters`)
-        .then((response) => response.json())
-        .then((data) => setFormData(data))
-        .catch((error) =>
-          console.error("Error fetching connection details:", error),
-        );
+    // Check if form has unsaved changes
+    if (formHasChanges.current) {
+      const userConfirmed = window.confirm(
+        "You have unsaved changes. Do you want to discard them and proceed?",
+      );
+
+      if (userConfirmed) {
+        // If confirmed, fetch the new connection's data
+        fetchData(connection);
+      } else {
+        // If not confirmed, retain the current form state
+        return;
+      }
+    } else {
+      // No unsaved changes, fetch data immediately
+      fetchData(connection);
     }
   }, [connection]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch(`${config.apiBaseUrl}/data-connections/${connection.id}/parameters`, {
@@ -74,7 +122,6 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
     <>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className="mb-2 block font-semibold">Server</label>
           <p className="text-sm text-gray-700">{formData.server || "N/A"}</p>
         </div>
@@ -122,7 +169,7 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
           </Button>
           <Button
             type="button"
-            onClick={() => handleConnectionClick()}
+            onClick={() => handleConnectionClick(null)}
             className="w-[65px] rounded-md border border-highlight-200 bg-white px-2 py-1 text-sm font-semibold text-highlight-850 hover:bg-highlight-100"
           >
             Cancel
