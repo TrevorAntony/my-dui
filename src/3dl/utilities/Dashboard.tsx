@@ -2,7 +2,7 @@
 import type { Reducer } from "react";
 import React, { useReducer, createContext, useContext } from "react";
 
-interface DashboardState {
+export interface DashboardState {
   filters: Record<string, string>;
   data: Record<string, string[]>;
   debug: boolean;

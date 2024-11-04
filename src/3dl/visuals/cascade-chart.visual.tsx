@@ -1,4 +1,6 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useContext, useCallback } from "react";
+import { DashboardContext } from "../utilities/Dashboard";
+import type { DashboardState } from "../utilities/Dashboard";
 import ApexTree from "apextree";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
@@ -19,6 +21,9 @@ const CascadeChart = ({
   exportData,
   detailsComponent,
 }: VisualProps) => {
+  const { state } = useContext(DashboardContext) || {
+    state: {} as DashboardState,
+  };
   const [cascadeData, setCascadeData] = useState<Cascade | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cascadeTitle, setCascadeTitle] = useState("");
@@ -35,7 +40,7 @@ const CascadeChart = ({
     async (dataStructure: Record<string, unknown>) => {
       async function processNode(node: Record<string, unknown>) {
         const { query } = node["data"] as { query: string };
-        const queryResult = await fetchCascade(query);
+        const queryResult = await fetchCascade(query, state.filters);
         const result: Cascade = {
           id: node["id"] as string,
           options: node["options"] ? node["options"] : [],
@@ -97,7 +102,7 @@ const CascadeChart = ({
         console.error("Error fetching data", error);
       }
     },
-    [],
+    [state.filters],
   );
 
   useEffect(() => {
