@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useContext, useCallback } from "react";
 import { DashboardContext } from "../utilities/Dashboard";
-import type { DashboardState } from "../utilities/Dashboard";
+import type { DashboardState } from "../../types/dashboard";
 import ApexTree from "apextree";
 import fetchCascade from "../../helpers/cascade-helpers";
 import DuftModal from "../../components/duft-modal";
