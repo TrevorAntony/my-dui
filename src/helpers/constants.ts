@@ -1,5 +1,20 @@
 import type { NavigationConfig } from "../components/types";
 
+export const modalWidthMap = {
+  mini: 400,
+  narrow: 600,
+  medium: 800,
+  wide: 1000,
+};
+
+export const modalHeightMap = {
+  tiny: 0.08,
+  smaller: 0.19,
+  small: 0.3,
+  medium: 0.6,
+  large: 0.8,
+};
+
 export const defaultSidebarConfig: NavigationConfig = {
   system: {
     settings: { appName: "", footer: "" },
