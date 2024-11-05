@@ -9,8 +9,8 @@ const SettingsDisplay = () => {
   const [selectedConnection, setSelectedConnection] =
     useState<Connection>(null);
 
-  const handleConnectionClick = (connection: Connection) => {
-    setSelectedConnection(connection);
+  const handleConnectionClick = (connection?: Connection) => {
+    setSelectedConnection(connection || null);
   };
 
   return (
@@ -22,7 +22,10 @@ const SettingsDisplay = () => {
       />
       {/* Separator */}
       <div className="w-px bg-gray-300" />
-      <ConnectionContent connection={selectedConnection} />
+      <ConnectionContent
+        connection={selectedConnection}
+        handleConnectionClick={handleConnectionClick}
+      />
     </div>
   );
 };
