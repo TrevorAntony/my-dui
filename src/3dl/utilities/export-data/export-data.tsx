@@ -35,10 +35,11 @@ function ExportData() {
           onClose={handleModalCancel}
           onExecute={handleModalConfirm}
           title="Confirm Export"
-          executeButtonName="Export"
+          executeButtonText="Export"
           modalWidth="narrow"
+          modalHeight="tiny"
           defaultButton="execute"
-          closeButtonLabel="Cancel"
+          cancelButtonText="Cancel"
         >
           Are you sure you want to export the data?
         </DuftModal>

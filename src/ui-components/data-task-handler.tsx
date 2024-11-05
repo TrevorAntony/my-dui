@@ -19,7 +19,8 @@ const DataTaskHandler: React.FC = () => {
   const {
     title = "Execute Task",
     prompt = "Are you sure?",
-    buttonName = "Execute",
+    executeButtonText = "Execute",
+    cancelButtonText = "Cancel",
   } = activeDataTask || {};
 
   const toggleModal = () => {
@@ -43,9 +44,10 @@ const DataTaskHandler: React.FC = () => {
       onClose={toggleModal}
       onExecute={handleDataTask}
       title={title}
-      executeButtonName={buttonName}
+      executeButtonText={executeButtonText}
       modalWidth="narrow"
-      closeButtonLabel="Cancel"
+      modalHeight="tiny"
+      cancelButtonText={cancelButtonText}
     >
       <p>{prompt}</p>
       {error && <p className="text-red-600">{error}</p>}{" "}

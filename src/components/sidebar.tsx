@@ -229,9 +229,10 @@ const BottomMenu: FC = function () {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Data Refresh"
-        executeButtonName="Run data task"
+        executeButtonText="Run data task"
         disableButtons={data?.isRunning}
         modalWidth="narrow"
+        modalHeight="small"
       >
         <div className="h-[150px] overflow-y-auto">{content}</div>
       </DuftModal>
