@@ -7,6 +7,7 @@ import { Button } from "flowbite-react";
 import config from "../../../config";
 import ToastNotification from "../../notification-toast";
 import type { Connection, DataConnectionFormProps } from "../resources";
+import DuftModal from "../../../components/duft-modal";
 
 const DataConnectionForm: FC<DataConnectionFormProps> = ({
   connection,
@@ -24,6 +25,10 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
   const [toastType, setToastType] = useState("success");
   const formHasChanges = useRef(false);
   const previousConnection = useRef(null);
+
+  // State to control the DuftModal
+  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
+  const [nextConnection, setNextConnection] = useState<Connection | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -58,21 +63,24 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
     }
   };
 
+  const handleConfirmUnsavedChanges = () => {
+    setShowUnsavedChangesModal(false);
+    fetchData(nextConnection); // Fetch new data after confirming
+  };
+
+  const handleCancelUnsavedChanges = () => {
+    setShowUnsavedChangesModal(false);
+    handleConnectionClick(previousConnection.current); // Reset to previous connection
+  };
+
   useEffect(() => {
     // Only proceed if the connection is not the same as the previous one
     if (!connection || connection === previousConnection.current) return;
 
-    // If there are unsaved changes, ask for confirmation
+    // If there are unsaved changes, show DuftModal instead of window.confirm
     if (formHasChanges.current) {
-      const userConfirmed = window.confirm(
-        "You have unsaved changes. Do you want to discard them and proceed?",
-      );
-
-      if (userConfirmed) {
-        fetchData(connection); // Fetch new data only if the user confirms
-      } else {
-        handleConnectionClick(previousConnection.current); // Reset the connection to the previous one
-      }
+      setNextConnection(connection); // Save the new connection temporarily
+      setShowUnsavedChangesModal(true); // Show the DuftModal
     } else {
       fetchData(connection); // Fetch new data if no unsaved changes
     }
@@ -125,7 +133,7 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-1/2 rounded px-3 py-2 focus:border-highlight-500 focus:ring-0"
+            className="focus:border-highlight-500 w-1/2 rounded px-3 py-2 focus:ring-0"
           />
         </div>
         <div className="mb-4">
@@ -139,12 +147,12 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full rounded px-3 py-2 focus:border-highlight-500 focus:ring-0"
+              className="focus:border-highlight-500 w-full rounded px-3 py-2 focus:ring-0"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-3 text-sm text-highlight-850"
+              className="text-highlight-850 absolute right-2 top-3 text-sm"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
@@ -153,14 +161,14 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
         <div className="flex space-x-2">
           <Button
             type="submit"
-            className="w-[65px] rounded-md bg-highlight-500 px-2 py-1 text-sm font-semibold text-white hover:bg-highlight-700"
+            className="bg-highlight-500 hover:bg-highlight-700 w-[65px] rounded-md px-2 py-1 text-sm font-semibold text-white"
           >
             Save
           </Button>
           <Button
             type="button"
             onClick={() => handleConnectionClick(null)}
-            className="w-[65px] rounded-md border border-highlight-200 bg-white px-2 py-1 text-sm font-semibold text-highlight-850 hover:bg-highlight-100"
+            className="border-highlight-200 text-highlight-850 hover:bg-highlight-100 w-[65px] rounded-md border bg-white px-2 py-1 text-sm font-semibold"
           >
             Cancel
           </Button>
@@ -173,6 +181,21 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
         type={toastType}
         onClose={() => setShowToast(false)}
       />
+
+      <DuftModal
+        isOpen={showUnsavedChangesModal}
+        onClose={handleCancelUnsavedChanges}
+        onExecute={handleConfirmUnsavedChanges}
+        title="Unsaved Changes"
+        executeButtonText="Discard Changes"
+        cancelButtonText="Cancel"
+        modalWidth="narrow"
+        modalHeight="tiny"
+      >
+        <p>
+          You have unsaved changes. Do you want to discard them and proceed?
+        </p>
+      </DuftModal>
     </>
   );
 };
