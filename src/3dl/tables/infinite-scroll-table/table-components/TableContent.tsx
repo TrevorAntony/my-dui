@@ -9,6 +9,7 @@ import TableModal from "./TableModal";
 import ExportData from "../../../utilities/export-data/export-data";
 import Dataset from "../../../utilities/data-set";
 import useDuftQuery from "../../../../3dlcomponents/resources/useDuftQuery";
+import EmptyState from "../../../ui-elements/empty-state";
 
 const TableContent = ({
   data,
@@ -135,15 +136,18 @@ const TableContent = ({
             sortState={sortState}
             handleSort={handleSort}
           />
-          <TableBody
-            data={data}
-            headers={headers}
-            visibleColumns={visibleColumns}
-            handleCellClick={handleCellClickInternal}
-          >
-            {children}
-          </TableBody>
+          {data?.length ? (
+            <TableBody
+              data={data}
+              headers={headers}
+              visibleColumns={visibleColumns}
+              handleCellClick={handleCellClickInternal}
+            >
+              {children}
+            </TableBody>
+          ) : null}
         </table>
+        {!data?.length && <EmptyState />}
         {loading && <TableSkeleton />}
       </div>
 
