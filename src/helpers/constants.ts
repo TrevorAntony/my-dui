@@ -1,18 +1,33 @@
 import type { NavigationConfig } from "../components/types";
 
-export const modalWidthMap = {
+export const modalPixelWidthMap = {
   mini: 400,
   narrow: 600,
   medium: 800,
   wide: 1000,
 };
 
-export const modalHeightMap = {
+export const modalViewportHeightRatioMap = {
   tiny: 0.08,
   smaller: 0.19,
   small: 0.3,
   medium: 0.6,
   large: 0.8,
+};
+
+export const modalSymbolicWidthMap = {
+  mini: "sm",
+  narrow: "3xl",
+  medium: "7xl",
+  wide: "full",
+};
+
+export const modalViewportHeightMap = {
+  tiny: "8vh",
+  smaller: "15vh",
+  small: "30vh",
+  medium: "60vh",
+  large: "80vh",
 };
 
 export const defaultSidebarConfig: NavigationConfig = {

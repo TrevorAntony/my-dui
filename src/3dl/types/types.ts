@@ -6,6 +6,7 @@ export interface ContainerComponentProps {
   query?: string;
   exportData?: string | boolean;
   detailsComponent?: string;
+  resize?: string;
 }
 
 export interface ChartDataItem {

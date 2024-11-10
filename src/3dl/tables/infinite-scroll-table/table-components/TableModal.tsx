@@ -8,6 +8,7 @@ interface TableModalProps {
   ModalComponent: React.ElementType;
   renderedChild: React.ReactNode;
   selectedRowData: any;
+  resize?: string;
 }
 
 const TableModal: React.FC<TableModalProps> = ({
@@ -16,11 +17,12 @@ const TableModal: React.FC<TableModalProps> = ({
   ModalComponent,
   renderedChild,
   selectedRowData,
+  resize,
 }) => {
   if (!isOpen || !ModalComponent) return null;
 
   return (
-    <ModalComponent isOpen={isOpen} onClose={onClose}>
+    <ModalComponent isOpen={isOpen} onClose={onClose} resize={resize}>
       {renderedChild ? renderedChild : selectedRowData}
     </ModalComponent>
   );

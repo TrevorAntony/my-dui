@@ -40,6 +40,7 @@ function ExportData() {
           modalHeight="tiny"
           defaultButton="execute"
           cancelButtonText="Cancel"
+          resize="false"
         >
           Are you sure you want to export the data?
         </DuftModal>

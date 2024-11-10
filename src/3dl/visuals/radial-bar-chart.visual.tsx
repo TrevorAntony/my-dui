@@ -7,6 +7,7 @@ const RadialBarChart = ({
   subHeader = header,
   exportData,
   detailsComponent,
+  resize,
   ...props
 }: VisualProps) => {
   // Content to be rendered
@@ -19,6 +20,7 @@ const RadialBarChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </Container>

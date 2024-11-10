@@ -29,6 +29,7 @@ const TableContent = ({
   exportData = "false",
   query,
   searchHint,
+  resize,
 }: {
   data: any[];
   loading: boolean;
@@ -49,6 +50,7 @@ const TableContent = ({
   exportData?: string | boolean;
   query?: string;
   searchHint?: string;
+  resize?: string;
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
@@ -153,6 +155,7 @@ const TableContent = ({
         ModalComponent={ModalComponent ?? (() => null)}
         renderedChild={renderedChild}
         selectedRowData={selectedRowData}
+        resize={resize}
       />
     </div>
   );

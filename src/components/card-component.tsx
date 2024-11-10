@@ -25,6 +25,7 @@ type CardComponentProps = {
   exportData?: string | boolean;
   query?: string;
   detailsComponent?: string;
+  resize?: string;
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -38,6 +39,7 @@ const CardComponent: FC<CardComponentProps> = ({
   exportData = "false",
   query,
   detailsComponent,
+  resize = "false",
 }) => {
   const layout = useLayout();
   const shouldExportData = exportData === "true";
@@ -153,7 +155,12 @@ const CardComponent: FC<CardComponentProps> = ({
       )}
 
       {DetailsComponent && (
-        <DuftModal isOpen={isModalOpen} onClose={toggleModal} title={header}>
+        <DuftModal
+          isOpen={isModalOpen}
+          onClose={toggleModal}
+          title={header}
+          resize={resize}
+        >
           <DetailsComponent
             container={
               detailsComponent === "infinite-scroll-table"

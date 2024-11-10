@@ -233,6 +233,7 @@ const BottomMenu: FC = function () {
         disableButtons={data?.isRunning}
         modalWidth="narrow"
         modalHeight="small"
+        resize="false"
       >
         <div className="h-[150px] overflow-y-auto">{content}</div>
       </DuftModal>

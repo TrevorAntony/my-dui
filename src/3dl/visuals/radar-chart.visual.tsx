@@ -7,6 +7,7 @@ const RadarChart = ({
   subHeader = header,
   exportData,
   detailsComponent,
+  resize,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="radar" />;
@@ -17,6 +18,7 @@ const RadarChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </Container>

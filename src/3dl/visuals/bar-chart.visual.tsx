@@ -6,6 +6,7 @@ const BarChart = ({
   subHeader = header,
   exportData,
   detailsComponent,
+  resize,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="bar" />;
@@ -16,6 +17,7 @@ const BarChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </Container>

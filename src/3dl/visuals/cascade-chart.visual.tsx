@@ -18,6 +18,9 @@ const CascadeChart = ({
   subHeader = "",
   cascadeObject,
   direction = cascadeDefaultOptions.direction,
+  nodeWidth = cascadeDefaultOptions.nodeWidth,
+  nodeHeight = cascadeDefaultOptions.nodeHeight,
+  resize,
   exportData,
   detailsComponent,
 }: VisualProps) => {
@@ -123,6 +126,8 @@ const CascadeChart = ({
     const tree = new ApexTree(svgElement, {
       ...cascadeDefaultOptions,
       direction,
+      nodeWidth,
+      nodeHeight,
     });
     tree.render(cascadeData);
 
@@ -163,7 +168,7 @@ const CascadeChart = ({
         svgElement.innerHTML = "";
       }
     };
-  }, [cascadeData, isModalOpen, direction]);
+  }, [cascadeData, isModalOpen, direction, nodeWidth, nodeHeight]);
 
   if (!cascadeData) {
     return <CascadeSkeleton />;
@@ -184,6 +189,7 @@ const CascadeChart = ({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={cascadeTitle}
+        resize={resize}
       >
         <DataProvider value={{ data: modalCascadeData }}>
           <InfiniteScrollTable
