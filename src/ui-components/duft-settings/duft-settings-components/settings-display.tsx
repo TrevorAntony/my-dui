@@ -21,7 +21,7 @@ const SettingsDisplay = () => {
         handleConnectionClick={handleConnectionClick}
       />
       {/* Separator */}
-      <div className="w-px bg-gray-300" />
+      <div className="w-px overflow-y-auto bg-gray-300" />
       <ConnectionContent
         connection={selectedConnection}
         handleConnectionClick={handleConnectionClick}

@@ -6,7 +6,7 @@ const ConnectionContent: FC<DataConnectionFormProps> = ({
   connection,
   handleConnectionClick,
 }) => (
-  <div className="flex-1 p-4">
+  <div className="h-full flex-1 overflow-y-auto p-4">
     {connection ? (
       <div>
         <h3 className="text-lg font-semibold">

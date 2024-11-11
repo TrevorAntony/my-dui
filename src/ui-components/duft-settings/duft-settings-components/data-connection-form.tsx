@@ -13,87 +13,87 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
   connection,
   handleConnectionClick,
 }) => {
-  const [formData, setFormData] = useState({
-    server: "",
-    username: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState<{ name: string; value: string }[]>(
+    [],
+  );
   const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("success");
   const formHasChanges = useRef(false);
-  const previousConnection = useRef(null);
+  const previousConnection = useRef<Connection | null>(null);
 
-  // State to control the DuftModal
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [nextConnection, setNextConnection] = useState<Connection | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: string,
+  ) => {
+    setFormData((prevFormData) =>
+      prevFormData.map((field) =>
+        field.name === fieldName ? { ...field, value: e.target.value } : field,
+      ),
+    );
     formHasChanges.current = true;
   };
 
   const fetchData = (conn: Connection) => {
     if (conn) {
-      setFormData({
-        server: "",
-        username: "",
-        password: "",
-      });
       fetch(`${config.apiBaseUrl}/data-connections/${conn.id}/parameters`)
         .then((response) => response.json())
         .then((data) => {
-          setFormData(data); // Set form data based on the fetched connection
+          const fields = conn.params.map((param) => ({
+            name: param.name,
+            value: data[param.name] || "",
+          }));
+          setFormData(fields);
           formHasChanges.current = false;
-          previousConnection.current = conn; // Update the previous connection
+          previousConnection.current = conn;
         })
         .catch((error) =>
           console.error("Error fetching connection details:", error),
         );
     } else {
-      // Reset form to empty when no connection
-      setFormData({
-        server: "",
-        username: "",
-        password: "",
-      });
+      setFormData([]);
       formHasChanges.current = false;
     }
   };
 
   const handleConfirmUnsavedChanges = () => {
     setShowUnsavedChangesModal(false);
-    fetchData(nextConnection); // Fetch new data after confirming
+    fetchData(nextConnection);
   };
 
   const handleCancelUnsavedChanges = () => {
     setShowUnsavedChangesModal(false);
-    handleConnectionClick(previousConnection.current); // Reset to previous connection
+    handleConnectionClick(previousConnection.current);
   };
 
   useEffect(() => {
-    // Only proceed if the connection is not the same as the previous one
     if (!connection || connection === previousConnection.current) return;
 
-    // If there are unsaved changes, show DuftModal instead of window.confirm
     if (formHasChanges.current) {
-      setNextConnection(connection); // Save the new connection temporarily
-      setShowUnsavedChangesModal(true); // Show the DuftModal
+      setNextConnection(connection);
+      setShowUnsavedChangesModal(true);
     } else {
-      fetchData(connection); // Fetch new data if no unsaved changes
+      fetchData(connection);
     }
   }, [connection, handleConnectionClick]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formattedData = formData.reduce((acc, field) => {
+      acc[field.name] = field.value;
+      return acc;
+    }, {});
+
     fetch(`${config.apiBaseUrl}/data-connections/${connection.id}/parameters`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(formattedData),
     })
       .then((response) => {
         if (response.status === 200) {
@@ -118,63 +118,58 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
 
   return (
     <>
+      {/* <div className="overflow-auto"> */}
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="mb-2 block font-semibold">Server</label>
-          <p className="text-sm text-gray-700">{formData.server || "N/A"}</p>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="username" className="mb-2 block font-semibold">
-            Username
-          </label>
-          <input
-            id="username"
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="focus:border-highlight-500 w-1/2 rounded px-3 py-2 focus:ring-0"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="mb-2 block font-semibold">
-            Password
-          </label>
-          <div className="relative w-1/2">
-            <input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="focus:border-highlight-500 w-full rounded px-3 py-2 focus:ring-0"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="text-highlight-850 absolute right-2 top-3 text-sm"
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
-          </div>
-        </div>
+        {connection.params.map((param) => {
+          const fieldData = formData.find((field) => field.name === param.name);
+          return (
+            <div key={param.name} className="mb-4">
+              <label htmlFor={param.name} className="mb-2 block font-semibold">
+                {param.label}
+              </label>
+              <div className="relative w-1/2">
+                <input
+                  id={param.name}
+                  type={
+                    param.type === "password" && !showPassword
+                      ? "password"
+                      : "text"
+                  }
+                  name={param.name}
+                  value={fieldData?.value || ""}
+                  onChange={(e) => handleChange(e, param.name)}
+                  className="w-full rounded px-3 py-2 pr-10 focus:border-highlight-500 focus:ring-0"
+                />
+                {param.type === "password" && fieldData?.value && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 top-3 text-sm text-highlight-850"
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
         <div className="flex space-x-2">
           <Button
             type="submit"
-            className="bg-highlight-500 hover:bg-highlight-700 w-[65px] rounded-md px-2 py-1 text-sm font-semibold text-white"
+            className="w-[65px] rounded-md bg-highlight-500 px-2 py-1 text-sm font-semibold text-white hover:bg-highlight-700"
           >
             Save
           </Button>
           <Button
             type="button"
             onClick={() => handleConnectionClick(null)}
-            className="border-highlight-200 text-highlight-850 hover:bg-highlight-100 w-[65px] rounded-md border bg-white px-2 py-1 text-sm font-semibold"
+            className="w-[65px] rounded-md border border-highlight-200 bg-white px-2 py-1 text-sm font-semibold text-highlight-850 hover:bg-highlight-100"
           >
             Cancel
           </Button>
         </div>
       </form>
-
+      {/* </div> */}
       <ToastNotification
         show={showToast}
         message={toastMessage}
