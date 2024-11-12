@@ -3,6 +3,8 @@ import type { DataTaskResponse } from "../types/data-task";
 
 export const executeDataTask = async (
   id: string,
+  accessToken: string,
+  logout: () => void,
 ): Promise<DataTaskResponse> => {
   const url = `${config.apiBaseUrl}/run-data-task`;
   const payload = {
@@ -15,9 +17,12 @@ export const executeDataTask = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(payload),
     });
+
+    if (response.status === 401) logout();
 
     if (response.status === 202) {
       return { success: true };

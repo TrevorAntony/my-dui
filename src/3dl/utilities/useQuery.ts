@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import config from "../../config";
+import { useAuth } from "../../context/AuthContext";
 
 const useQuery = (query) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const { accessToken, logout } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,12 +24,15 @@ const useQuery = (query) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify(payload),
           },
         );
 
         const result = await response.json();
+
+        if (response.status === 401) logout();
 
         if (!response.ok) {
           throw new Error(

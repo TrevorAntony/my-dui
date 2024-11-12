@@ -18,7 +18,17 @@ export const fetchDataWithoutStore = async (
   endpoint: string,
 ): Promise<unknown> => {
   try {
-    const response = await fetch(`${config.apiBaseUrl}${endpoint}`);
+    const token = localStorage.getItem("accessToken");
+
+    const response = await fetch(`${config.apiBaseUrl}${endpoint}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.status === 401) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      window.location.href = "/login";
+    }
     return await response.json();
   } catch (error) {
     console.error("Failed to fetch data", error);

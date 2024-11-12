@@ -4,12 +4,13 @@ import DuftModal from "../components/duft-modal";
 import type { DataTask } from "../types/data-task";
 import { executeDataTask } from "../helpers/data-task-helpers";
 import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
+import { useAuth } from "../context/AuthContext";
 
 const DataTaskHandler: React.FC = () => {
   const sidebarConfig = useSidebarConfigContext();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const { accessToken, logout } = useAuth();
   const { id } = useParams<{ id: string }>();
 
   const activeDataTask = sidebarConfig.system.dataTasks.items?.find(
@@ -30,7 +31,7 @@ const DataTaskHandler: React.FC = () => {
   };
 
   const handleDataTask = async () => {
-    const result = await executeDataTask(id || "");
+    const result = await executeDataTask(id || "", accessToken, logout);
     if (result.success) {
       setIsOpen(false);
     } else {
