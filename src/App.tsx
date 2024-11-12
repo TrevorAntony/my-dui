@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import AppLayout from "./AppLayout";
 import ComponentA from "./content-components/ComponentA";
 import ComponentB from "./content-components/ComponentB";
@@ -16,14 +21,27 @@ import Login from "./ui-components/login";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./ui-components/private-route";
 import "./App.css";
+import { useDuftConfigurations } from "./context/ConfigContext";
 
 const App: React.FC = () => {
+  const authenticationEnabled = useDuftConfigurations();
+
   return (
     <Router>
       <AuthProvider>
         <Routes>
           <Route element={<FlowbiteWrapper />}>
-            <Route path="*" element={<PrivateRoute />}>
+            {/* Handle redirects for '/' and '/home' */}
+            <Route path="/" element={<Navigate to="/dashboard/home" />} />
+            <Route path="/home" element={<Navigate to="/dashboard/home" />} />
+
+            {/* Private Routes */}
+            <Route
+              path="*"
+              element={
+                <PrivateRoute authenticationEnabled={authenticationEnabled} />
+              }
+            >
               <Route element={<AppLayout />}>
                 <Route path="dashboard/:id?" element={<Dashboard3DL />} />
                 <Route path="a/:id?" element={<ComponentA />} />
@@ -36,8 +54,12 @@ const App: React.FC = () => {
                 <Route path="table" element={<SingleTableLayoutTester />} />
                 <Route path="data-task/:id" element={<DataTaskHandler />} />
                 <Route path="settings" element={<Settings />} />
+
+                {/* Catch-all route for unavailable routes */}
+                <Route path="*" element={<Navigate to="/dashboard/home" />} />
               </Route>
             </Route>
+
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
           </Route>

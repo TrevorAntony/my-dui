@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
 import App from "./App";
 import { AppStateProvider } from "./AppStateContext";
+import { ConfigProvider } from "./context/ConfigContext";
 
 const container = document.getElementById("root");
 
@@ -20,8 +21,10 @@ root.render(
   <StrictMode>
     <AppStateProvider>
       <QueryClientProvider client={queryClient}>
-        <App />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ConfigProvider>
+          <App />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        </ConfigProvider>
       </QueryClientProvider>
     </AppStateProvider>
   </StrictMode>,
