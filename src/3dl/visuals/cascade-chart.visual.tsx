@@ -123,11 +123,16 @@ const CascadeChart = ({
       return undefined;
     }
 
+    const parsedNodeWidth =
+      Number(nodeWidth) || cascadeDefaultOptions.nodeWidth;
+    const parsedNodeHeight =
+      Number(nodeHeight) || cascadeDefaultOptions.nodeHeight;
+
     const tree = new ApexTree(svgElement, {
       ...cascadeDefaultOptions,
       direction,
-      nodeWidth,
-      nodeHeight,
+      nodeWidth: parsedNodeWidth,
+      nodeHeight: parsedNodeHeight,
     });
     tree.render(cascadeData);
 

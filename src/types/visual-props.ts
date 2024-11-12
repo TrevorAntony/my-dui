@@ -9,8 +9,8 @@ export interface VisualProps {
   tableMaxHeight?: string;
   showToolbar?: boolean | string;
   cascadeObject?: Record<string, unknown>;
-  nodeWidth?: number;
-  nodeHeight?: number;
+  nodeWidth?: number | string;
+  nodeHeight?: number | string;
   direction?: string;
   resize?: string;
   modalWidth?: "narrow" | "medium" | "wide";
