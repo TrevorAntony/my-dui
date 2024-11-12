@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "yarn typecheck && vite build",
+    "postbuild": "mkdir -p ../duft-server/static/frontend && cp -R ./dist/* ../duft-server/static/frontend",
     "dev": "vite --host",
     "test": "vitest",
     "format": "prettier --check --ignore-path .gitignore --write .",
