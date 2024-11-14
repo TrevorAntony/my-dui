@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import config from "../../config";
 import { useAuth } from "../../context/AuthContext";
+import { useDuftConfigurations } from "../../context/ConfigContext";
 
 const useQuery = (query) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const { accessToken, logout } = useAuth();
+  const authenticationEnabled = useDuftConfigurations();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,10 +26,12 @@ const useQuery = (query) => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
+              ...(authenticationEnabled && {
+                Authorization: `Bearer ${accessToken}`,
+              }),
             },
             body: JSON.stringify(payload),
-          },
+          }
         );
 
         const result = await response.json();
@@ -40,7 +44,7 @@ const useQuery = (query) => {
               result.message +
               "\n" +
               "Original query: " +
-              query,
+              query
           );
         }
 

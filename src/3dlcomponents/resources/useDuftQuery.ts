@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
 import config from "../../config";
+import { useDuftConfigurations } from "../../context/ConfigContext";
 
 interface DuftQueryResult<T> {
   data: T | undefined;
@@ -24,13 +25,14 @@ const fetchDuftData = async <T>(
   accessToken: string,
   refreshAccessToken: () => Promise<string | undefined>,
   logout: () => void,
+  authenticationEnabled: boolean
 ): Promise<T> => {
   const makeRequest = async (token: string): Promise<Response> => {
     return fetch(`${config.apiBaseUrl}/run-query`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        ...(authenticationEnabled && { Authorization: `Bearer ${token}` }),
       },
       body: JSON.stringify(requestPayload),
     });
@@ -60,12 +62,20 @@ const fetchDuftData = async <T>(
 
 const useDuftQuery = <T>(requestPayload: RequestData): DuftQueryResult<T> => {
   const { accessToken, refreshAccessToken, logout } = useAuth();
+  const authenticationEnabled = useDuftConfigurations();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["duftQuery", requestPayload],
     queryFn: () =>
-      fetchDuftData<T>(requestPayload, accessToken, refreshAccessToken, logout),
-    enabled: !!requestPayload?.query && !!accessToken,
+      fetchDuftData<T>(
+        requestPayload,
+        accessToken,
+        refreshAccessToken,
+        logout,
+        authenticationEnabled
+      ),
+    enabled:
+      !!requestPayload?.query && (!authenticationEnabled || !!accessToken),
     refetchOnWindowFocus: false,
   });
 

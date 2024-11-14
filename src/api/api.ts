@@ -3,7 +3,7 @@ import config from "../config";
 
 export const fetchDataAndStore = async (
   endpoint: string,
-  setData: (data: unknown) => void,
+  setData: (data: unknown) => void
 ): Promise<void> => {
   try {
     const response = await fetch(`${config.apiBaseUrl}${endpoint}`);
@@ -16,12 +16,17 @@ export const fetchDataAndStore = async (
 
 export const fetchDataWithoutStore = async (
   endpoint: string,
+  authenticationEnabled?: boolean
 ): Promise<unknown> => {
   try {
-    const token = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
 
     const response = await fetch(`${config.apiBaseUrl}${endpoint}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        ...(authenticationEnabled && {
+          Authorization: `Bearer ${accessToken}`,
+        }),
+      },
     });
 
     if (response.status === 401) {
@@ -29,6 +34,7 @@ export const fetchDataWithoutStore = async (
       localStorage.removeItem("refreshToken");
       window.location.href = "/login";
     }
+
     return await response.json();
   } catch (error) {
     console.error("Failed to fetch data", error);
