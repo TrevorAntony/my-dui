@@ -13,7 +13,7 @@ export const calculateInitialModalSizeConfig = (
   const minHeight = heightPercentage <= 0.08 ? 180 : 150;
   const x = (windowWidth - width) / 2;
   const y =
-    heightPercentage <= 0.3
+    heightPercentage <= 0.36
       ? -(windowHeight - height) * 0.2
       : -(windowHeight - height) * 0.7;
 

@@ -10,7 +10,7 @@ export const modalPixelWidthMap = {
 export const modalViewportHeightRatioMap = {
   tiny: 0.08,
   smaller: 0.19,
-  small: 0.3,
+  small: 0.36,
   medium: 0.6,
   large: 0.8,
 };
@@ -25,7 +25,7 @@ export const modalSymbolicWidthMap = {
 export const modalViewportHeightMap = {
   tiny: "8vh",
   smaller: "15vh",
-  small: "30vh",
+  small: "22vh",
   medium: "60vh",
   large: "80vh",
 };
