@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
 import config from "../../config";
 import { useDuftConfigurations } from "../../context/ConfigContext";
+import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
 
 interface DuftQueryResult<T> {
   data: T | undefined;
@@ -20,60 +21,21 @@ type RequestData = {
   current_page?: number;
 };
 
-const fetchDuftData = async <T>(
-  requestPayload: RequestData,
-  accessToken: string,
-  refreshAccessToken: () => Promise<string | undefined>,
-  logout: () => void,
-  authenticationEnabled: boolean
-): Promise<T> => {
-  const makeRequest = async (token: string): Promise<Response> => {
-    return fetch(`${config.apiBaseUrl}/run-query`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(authenticationEnabled && { Authorization: `Bearer ${token}` }),
-      },
-      body: JSON.stringify(requestPayload),
-    });
-  };
+const client = new DuftHttpClient(config.apiBaseUrl);
 
-  let response = await makeRequest(accessToken);
+const fetchDuftData = async <T>(requestPayload: RequestData): Promise<T> => {
+  let response = await client.getQueryData(requestPayload);
 
-  // If access token is expired, try refreshing it
-  if (response.status === 401) {
-    const newAccessToken = await refreshAccessToken();
-
-    if (newAccessToken) {
-      response = await makeRequest(newAccessToken);
-    } else {
-      logout(); // Logout if refresh fails
-      throw new Error("Session expired. Please log in again.");
-    }
-  }
-
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(`Network response was not ok: ${errorMessage}`);
-  }
-
-  return response.json();
+  return response;
 };
 
 const useDuftQuery = <T>(requestPayload: RequestData): DuftQueryResult<T> => {
-  const { accessToken, refreshAccessToken, logout } = useAuth();
+  const { accessToken } = useAuth();
   const authenticationEnabled = useDuftConfigurations();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["duftQuery", requestPayload],
-    queryFn: () =>
-      fetchDuftData<T>(
-        requestPayload,
-        accessToken,
-        refreshAccessToken,
-        logout,
-        authenticationEnabled
-      ),
+    queryFn: () => fetchDuftData<T>(requestPayload),
     enabled:
       !!requestPayload?.query && (!authenticationEnabled || !!accessToken),
     refetchOnWindowFocus: false,

@@ -14,25 +14,67 @@ export const fetchDataAndStore = async (
   }
 };
 
+//this function should eventually be deprecated in favor of the http client methods
 export const fetchDataWithoutStore = async (
   endpoint: string,
   authenticationEnabled?: boolean
 ): Promise<unknown> => {
   try {
-    const accessToken = localStorage.getItem("accessToken");
+    let accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
 
-    const response = await fetch(`${config.apiBaseUrl}${endpoint}`, {
+    const addAuthenticationHeader = !!accessToken || !!authenticationEnabled;
+
+    let response = await fetch(`${config.apiBaseUrl}${endpoint}`, {
       headers: {
-        ...(authenticationEnabled && {
+        ...(addAuthenticationHeader && {
           Authorization: `Bearer ${accessToken}`,
         }),
       },
     });
 
-    if (response.status === 401) {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      window.location.href = "/login";
+    // If the access token is expired (401), try to refresh it
+    if (response.status === 401 && refreshToken) {
+      console.log("Access token expired, attempting to refresh...");
+
+      const refreshResponse = await fetch(
+        `http://localhost:8000/api/token/refresh/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refresh: refreshToken }),
+        }
+      );
+
+      if (refreshResponse.ok) {
+        const { access: newAccessToken } = await refreshResponse.json();
+        localStorage.setItem("accessToken", newAccessToken);
+
+        console.log("Access token refreshed successfully");
+
+        // Retry the original request with the new access token
+        accessToken = newAccessToken;
+        response = await fetch(`${config.apiBaseUrl}${endpoint}`, {
+          headers: {
+            ...(addAuthenticationHeader && {
+              Authorization: `Bearer ${accessToken}`,
+            }),
+          },
+        });
+      } else {
+        // If refresh token is invalid, clear storage and redirect to login
+        console.error("Failed to refresh token, redirecting to login...");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/login";
+        return;
+      }
+    }
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
     }
 
     return await response.json();

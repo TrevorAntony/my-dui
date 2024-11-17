@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import JSXParser from "react-jsx-parser";
-import { fetchDataWithoutStore } from "../api/api";
 import CardComponent from "../components/card-component";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "../ui-components/error-fallback";
@@ -58,55 +56,8 @@ import DuftModal from "../components/duft-modal";
 import type { ContainerComponentProps } from "../3dl/types/types";
 import SingleTableLayoutTester from "../content-components/SingleTableLayoutTester";
 import DataString from "../components/dashboard-meta";
-import { useDuftConfigurations } from "../context/ConfigContext";
-
-const useDashboardData = (id: string) => {
-  const [dashboardData, setDashboardData] = useState<string | null>(null);
-  const authenticationEnabled = useDuftConfigurations();
-  useEffect(() => {
-    if (id) {
-      fetchDataWithoutStore(`/3dldashboard/${id}`, authenticationEnabled)
-        .then((data) => {
-          // Remove unnecessary whitespace and empty fragments
-          const cleanedJSX = (data as string)
-            .replace(/>\s+</g, "><") // Remove whitespace between tags
-            .replace(/<>\s*<\/>/g, ""); // Remove empty fragments
-
-          setDashboardData(cleanedJSX);
-        })
-        .catch((error) => console.error("Error loading dashboard data", error));
-    }
-  }, [id]);
-
-  return dashboardData;
-};
-
-const useThemeData = () => {
-  const [themeData, setThemeData] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const authenticationEnabled = useDuftConfigurations();
-
-  useEffect(() => {
-    const fetchTheme = async () => {
-      try {
-        const data = await fetchDataWithoutStore(
-          "/theme",
-          authenticationEnabled
-        );
-        setThemeData(data as object);
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTheme();
-  }, []);
-
-  return { themeData, loading, error };
-};
+import useDashboardData from "./resources/useDashboardData";
+import useThemeData from "./resources/useTheme";
 
 const Dashboard3DL: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
