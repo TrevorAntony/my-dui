@@ -20,6 +20,7 @@ export { default as AreaChart } from "./visuals/area-chart.visual";
 export { default as StackedBarChart } from "./visuals/stacked-bar-chart.visual";
 export { default as PercentStackedBarChart } from "./visuals/percent-stacked-bar-chart.visual";
 export { default as ClusteredBarChart } from "./visuals/clustered-bar-chart.visual";
+export { default as ClusteredLineChart } from "./visuals/clustered-line-chart.visual";
 export { default as HeatmapChart } from "./visuals/heat-map-chart.visual";
 export { default as RadarChart } from "./visuals/radar-chart.visual";
 export { default as CascadeChart } from "./visuals/cascade-chart.visual";
