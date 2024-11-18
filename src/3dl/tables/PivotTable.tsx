@@ -17,6 +17,7 @@ interface PivotTableProps {
   pivotCols?: string[];
   exportData?: string;
   detailsComponent?: React.ReactNode;
+  resize?: string;
 }
 
 const PivotTable: FC<PivotTableProps> = ({
@@ -28,6 +29,7 @@ const PivotTable: FC<PivotTableProps> = ({
   pivotCols = [],
   exportData,
   detailsComponent,
+  resize = "false",
 }) => {
   const initialPivotRows = pivotRows;
   const initialPivotCols = pivotCols;
@@ -75,7 +77,7 @@ const PivotTable: FC<PivotTableProps> = ({
         return prevState;
       });
     }
-  }, [data, initialPivotRows, initialPivotCols]);
+  }, [data, initialPivotRows, initialPivotCols, hasValidData]);
 
   const content = hasValidData ? (
     <div>
@@ -106,6 +108,7 @@ const PivotTable: FC<PivotTableProps> = ({
       variant={variant}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {wrappedContent}
     </ContainerComponent>

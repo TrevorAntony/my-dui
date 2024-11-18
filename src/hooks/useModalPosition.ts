@@ -1,9 +1,5 @@
 import { useState } from "react";
-
-interface Position {
-  x: number;
-  y: number;
-}
+import type { Position } from "../types/modal";
 
 export const useModalPosition = (initialX: number, initialY: number) => {
   const [position, setPosition] = useState<Position>({
