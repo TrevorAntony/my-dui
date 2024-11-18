@@ -7,6 +7,7 @@ const LineChart = ({
   subHeader = header,
   exportData,
   detailsComponent,
+  resize,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="line" />;
@@ -17,6 +18,7 @@ const LineChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </Container>

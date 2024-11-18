@@ -14,6 +14,7 @@ const Settings = () => {
       }}
       modalWidth="medium"
       modalHeight="medium"
+      resize="false"
     >
       <SettingsDisplay />
     </DuftModal>
