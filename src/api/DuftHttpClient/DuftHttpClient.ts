@@ -88,7 +88,7 @@ export class DuftHttpClient {
         console.log("Access token expired, attempting to refresh...");
 
         const refreshResponse = await fetch(
-          `http://localhost:8000/api/token/refresh/`,
+          `http://127.0.0.1:8000/api/token/refresh/`,
           {
             method: "POST",
             headers: {
