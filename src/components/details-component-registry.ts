@@ -4,6 +4,7 @@ import {
   AreaChart,
   CascadeChart,
   ClusteredBarChart,
+  ClusteredLineChart,
   DonutChart,
   HeatmapChart,
   PercentStackedBarChart,
@@ -25,6 +26,7 @@ export interface DetailsComponentRegistry {
   "area-chart": typeof AreaChart;
   "cascade-chart": typeof CascadeChart;
   "clustered-bar-chart": typeof ClusteredBarChart;
+  "clustered-line-chart": typeof ClusteredLineChart;
   "donut-chart": typeof DonutChart;
   "heat-map": typeof HeatmapChart;
   "percentage-stacked-chart": typeof PercentStackedBarChart;
@@ -46,6 +48,7 @@ const detailsComponentRegistry: DetailsComponentRegistry = {
   "area-chart": AreaChart,
   "cascade-chart": CascadeChart,
   "clustered-bar-chart": ClusteredBarChart,
+  "clustered-line-chart": ClusteredLineChart,
   "donut-chart": DonutChart,
   "heat-map": HeatmapChart,
   "percentage-stacked-chart": PercentStackedBarChart,
