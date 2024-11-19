@@ -9,11 +9,10 @@ const DataTaskHandler: React.FC = () => {
   const sidebarConfig = useSidebarConfigContext();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
   const { id } = useParams<{ id: string }>();
 
   const activeDataTask = sidebarConfig.system.dataTasks.items?.find(
-    (taskItem: DataTask) => taskItem.task === id,
+    (taskItem: DataTask) => taskItem.task === id
   ) as DataTask | undefined;
 
   const {
@@ -31,7 +30,8 @@ const DataTaskHandler: React.FC = () => {
 
   const handleDataTask = async () => {
     const result = await executeDataTask(id || "");
-    if (result.success) {
+
+    if (result.message.includes("Script started successfully")) {
       setIsOpen(false);
     } else {
       setError(result.error || "Unknown error occurred.");

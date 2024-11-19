@@ -37,4 +37,8 @@ export default defineConfig({
   preview: {
     port: 3031,
   },
+  test: {
+    environment: "jsdom",
+    setupFiles: "./setupTests.ts", // Path to your test setup file
+  },
 });

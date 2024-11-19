@@ -8,6 +8,7 @@ import config from "../../../config";
 import ToastNotification from "../../notification-toast";
 import type { Connection, DataConnectionFormProps } from "../resources";
 import DuftModal from "../../../components/duft-modal";
+import { useAuth } from "../../../context/AuthContext";
 
 const DataConnectionForm: FC<DataConnectionFormProps> = ({
   connection,
@@ -25,6 +26,7 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
 
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [nextConnection, setNextConnection] = useState<Connection | null>(null);
+  const { accessToken, logout } = useAuth();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -40,7 +42,11 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
 
   const fetchData = (conn: Connection) => {
     if (conn) {
-      fetch(`${config.apiBaseUrl}/data-connections/${conn.id}/parameters`)
+      fetch(`${config.apiBaseUrl}/data-connections/${conn.id}/parameters`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           const fields = conn.params.map((param) => ({
@@ -92,10 +98,15 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(formattedData),
     })
       .then((response) => {
+        if (response.status === 401) {
+          logout();
+          throw new Error("Session expired. Please log in again.");
+        }
         if (response.status === 200) {
           return response.json();
         } else {
@@ -106,7 +117,7 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
         setToastMessage("Data connection updated successfully!");
         setToastType("success");
         setShowToast(true);
-        setTimeout(() => (window.location.href = "/"), 1000);
+        setTimeout(() => (window.location.href = "/dashboard/home"), 1000);
       })
       .catch((error) => {
         console.error("Error saving connection details:", error);

@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../context/AuthContext";
 import config from "../../config";
+import { useDuftConfigurations } from "../../context/ConfigContext";
+import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
 
 interface DuftQueryResult<T> {
   data: T | undefined;
@@ -18,28 +21,23 @@ type RequestData = {
   current_page?: number;
 };
 
+const client = new DuftHttpClient(config.apiBaseUrl);
+
 const fetchDuftData = async <T>(requestPayload: RequestData): Promise<T> => {
-  const response = await fetch(`${config.apiBaseUrl}/run-query`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestPayload),
-  });
+  let response = await client.getQueryData(requestPayload);
 
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(`Network response was not ok: ${errorMessage}`);
-  }
-
-  return response.json();
+  return response;
 };
 
 const useDuftQuery = <T>(requestPayload: RequestData): DuftQueryResult<T> => {
+  const { accessToken } = useAuth();
+  const authenticationEnabled = useDuftConfigurations();
+
   const { data, error, isLoading } = useQuery({
     queryKey: ["duftQuery", requestPayload],
     queryFn: () => fetchDuftData<T>(requestPayload),
-    enabled: !!requestPayload?.query,
+    enabled:
+      !!requestPayload?.query && (!authenticationEnabled || !!accessToken),
     refetchOnWindowFocus: false,
   });
 
