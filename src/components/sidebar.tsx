@@ -205,6 +205,7 @@ const BottomMenu: FC = function () {
     setIsModalOpen(false);
     setModalContent([]);
     channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
+    window.location.reload();
   };
 
   const divStyle = {
