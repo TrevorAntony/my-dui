@@ -9,6 +9,7 @@ import {
   SidebarConfigProvider,
   useSidebarConfigContext,
 } from "./3dl/context/SidebarConfigContext";
+import { useVersion } from "./hooks/useVersion";
 
 interface NavbarSidebarLayoutProps {
   isFooter?: boolean;
@@ -55,10 +56,12 @@ const MainContent: FC<PropsWithChildren<NavbarSidebarLayoutProps>> = function ({
 
 const MainContentFooter: FC = function () {
   const sidebarConfig = useSidebarConfigContext();
+  const version = useVersion();
 
   return (
     <p className="my-8 text-center text-sm text-gray-500 dark:text-gray-300">
       &copy; {`Powered by DUFT. ${sidebarConfig.system.settings.footer}`}.
+      {version && ` Version: ${version}`}
     </p>
   );
 };
