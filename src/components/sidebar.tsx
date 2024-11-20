@@ -20,12 +20,14 @@ import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./navigation-sidebar";
 import DuftModal from "./duft-modal";
 import { renderModalContent } from "../helpers/modalContentHelper";
+import SettingsDisplay from "../ui-components/duft-settings/duft-settings-components/settings-display";
 
 const ExampleSidebar: FC = function () {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =
     useSidebarContext();
 
   const [currentPage, setCurrentPage] = useState("");
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     const newPage = window.location.pathname;
@@ -50,7 +52,14 @@ const ExampleSidebar: FC = function () {
               <Sidebar.Items>
                 <SystemSidebar />
                 <Sidebar.ItemGroup key="home-group">
-                  <SidebarNavLink to={"/settings"} icon={MdOutlineSettings}>
+                  <SidebarNavLink
+                    to="#"
+                    icon={MdOutlineSettings}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsSettingsOpen(true);
+                    }}
+                  >
                     Settings
                   </SidebarNavLink>
                 </Sidebar.ItemGroup>
@@ -133,6 +142,18 @@ const ExampleSidebar: FC = function () {
           </div>
         </Sidebar>
       </div>
+      <DuftModal
+        isOpen={isSettingsOpen}
+        title="Settings"
+        onClose={() => {
+          setIsSettingsOpen(false);
+        }}
+        modalWidth="medium"
+        modalHeight="medium"
+        resize="false"
+      >
+        <SettingsDisplay />
+      </DuftModal>
     </div>
   );
 };
