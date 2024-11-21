@@ -2,7 +2,7 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
-import ChartSkeleton from "../../ui-components/chart-skeleton";
+import EmptyState from "../ui-elements/empty-state";
 import type { ChartType } from "../types/types";
 
 type DataItem = {
@@ -24,7 +24,7 @@ const BaseXYChart = ({
   const { data } = useDataContext();
 
   if (!data || !Array.isArray(data) || !data.length) {
-    return <ChartSkeleton />;
+    return <EmptyState message="No data available for this chart" />;
   }
 
   if (!theme || !Object.keys(theme).length)

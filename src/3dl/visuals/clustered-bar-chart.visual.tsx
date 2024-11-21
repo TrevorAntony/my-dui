@@ -2,9 +2,8 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
-import ChartSkeleton from "../../ui-components/chart-skeleton";
 import type { VisualProps } from "../../types/visual-props";
-
+import EmptyState from "../ui-elements/empty-state";
 type DataItem = {
   category?: string;
   value?: number;
@@ -19,12 +18,22 @@ const ClusteredBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  ...props
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
 
-  if (!data || !Array.isArray(data)) {
-    return <ChartSkeleton />;
+  if (!data || !Array.isArray(data) || !data.length) {
+    const content = (
+      <EmptyState message="No data available for clustered bar chart" />
+    );
+    return Container ? (
+      <Container header={""} {...props}>
+        {content}
+      </Container>
+    ) : (
+      content
+    );
   }
 
   // Extract categories
