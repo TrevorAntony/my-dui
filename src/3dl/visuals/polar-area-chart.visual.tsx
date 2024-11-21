@@ -8,6 +8,7 @@ const PolarAreaChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="polarArea" />;
@@ -19,6 +20,7 @@ const PolarAreaChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={children}
     >
       {content}
     </Container>

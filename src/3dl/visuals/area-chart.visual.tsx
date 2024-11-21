@@ -8,6 +8,7 @@ const AreaChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="area" />;
@@ -19,6 +20,7 @@ const AreaChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={children}
     >
       {content}
     </Container>

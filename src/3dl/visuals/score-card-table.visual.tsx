@@ -16,6 +16,7 @@ const ScoreCardTable = ({
   exportData,
   detailsComponent,
   resize = "false",
+  children,
   ...props
 }: VisualProps) => {
   const { data } = useDataContext();
@@ -120,6 +121,7 @@ const ScoreCardTable = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={children}
     >
       {content}
     </ContainerComponent>

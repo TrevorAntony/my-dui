@@ -42,6 +42,7 @@ import {
   InfiniteScrollTable,
   ExportData,
   Markdown,
+  InfoTag,
 } from "../3dl";
 import {
   DuftGrid,
@@ -369,6 +370,7 @@ const Dashboard3DL: React.FC = () => {
                   />
                 </ErrorBoundary>
               ),
+              InfoTag,
             }}
             jsx={dashboardData}
           />

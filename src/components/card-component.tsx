@@ -26,6 +26,7 @@ type CardComponentProps = {
   query?: string;
   detailsComponent?: string;
   resize?: string;
+  infoTagContent?: ReactNode;
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -39,7 +40,8 @@ const CardComponent: FC<CardComponentProps> = ({
   exportData = "false",
   query,
   detailsComponent,
-  resize = "false",
+  resize,
+  infoTagContent,
 }) => {
   const layout = useLayout();
   const shouldExportData = exportData === "true";
@@ -68,8 +70,9 @@ const CardComponent: FC<CardComponentProps> = ({
               </span>
             )}
           </div>
-
           <div className="flex items-center space-x-2">
+            {infoTagContent ? infoTagContent : null}
+
             {shouldExportData && layout !== "single-layout" && (
               <div className="self-start">
                 {query ? (

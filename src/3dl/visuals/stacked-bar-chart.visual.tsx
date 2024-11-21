@@ -19,6 +19,7 @@ const StackedBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
@@ -110,6 +111,7 @@ const StackedBarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={children}
     >
       {content}
     </Container>

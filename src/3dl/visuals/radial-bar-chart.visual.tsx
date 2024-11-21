@@ -8,6 +8,7 @@ const RadialBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
   ...props
 }: VisualProps) => {
   // Content to be rendered
@@ -21,6 +22,7 @@ const RadialBarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={children}
     >
       {content}
     </Container>

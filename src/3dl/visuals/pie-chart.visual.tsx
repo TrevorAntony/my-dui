@@ -8,6 +8,7 @@ const PieChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="pie" />;
@@ -19,6 +20,7 @@ const PieChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={children}
     >
       {content}
     </Container>

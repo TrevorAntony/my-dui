@@ -6,6 +6,7 @@ const BarChart = ({
   subHeader = header,
   exportData,
   detailsComponent,
+  children,
   resize,
   ...props
 }: VisualProps) => {
@@ -18,6 +19,7 @@ const BarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={children}
     >
       {content}
     </Container>

@@ -23,6 +23,7 @@ const CascadeChart = ({
   resize,
   exportData,
   detailsComponent,
+  children,
 }: VisualProps) => {
   const { state } = useContext(DashboardContext) || {
     state: {} as DashboardState,
@@ -214,6 +215,7 @@ const CascadeChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      infoTagContent={children}
     >
       {content}
     </Container>

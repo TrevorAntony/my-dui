@@ -8,6 +8,7 @@ const DonutChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="donut" />;
@@ -19,6 +20,7 @@ const DonutChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={children}
     >
       {content}
     </Container>
