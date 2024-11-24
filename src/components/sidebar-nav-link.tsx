@@ -18,14 +18,14 @@ export const SidebarNavLink: React.FC<SidebarNavLinkProps> = ({
   return (
     <NavLink
       to={to}
-      className={({ isActive }) => (isActive ? "active-link" : "")}
+      className={({ isActive }) => (isActive && to !== "#" ? "active-link" : "")}
       onClick={onClick}
     >
       {({ isActive }) => (
         <Sidebar.Item
           as="div"
           icon={Icon}
-          className={isActive ? "bg-highlight-100 dark:bg-highlight-900" : ""} // This needs to be updated to actually use the theme
+          className={isActive && to !== "#" ? "bg-highlight-100 dark:bg-highlight-900" : ""}
         >
           {children}
         </Sidebar.Item>

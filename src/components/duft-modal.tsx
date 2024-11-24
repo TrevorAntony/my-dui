@@ -65,7 +65,7 @@ const DuftModal: React.FC<DuftModalProps> = ({
     <Modal
       show={isOpen}
       onClose={onClose}
-      size={resolvedWidth}
+      size={"lg"}
       className="relative"
     >
       {shouldResize ? (

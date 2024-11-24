@@ -70,9 +70,10 @@ const ExampleSidebar: FC = function () {
                     onClick={(e) => {
                       e.preventDefault();
                       setIsAboutOpen(true);
+                      console.log("Set About True")
                     }}
                   >
-                    Settings
+                    About DUFT
                   </SidebarNavLink>                  
                 </Sidebar.ItemGroup>
                 {config.debugMode === "true" ? (
@@ -166,7 +167,12 @@ const ExampleSidebar: FC = function () {
       >
         <SettingsDisplay />
       </DuftModal>
-        <AboutDlg />
+      <AboutDlg
+        isOpen={isAboutOpen}
+        onClose={() => {
+          setIsAboutOpen(false);
+        }}
+      />
     </div>
   );
 };
