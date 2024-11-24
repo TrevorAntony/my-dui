@@ -260,9 +260,9 @@ const BottomMenu: FC = function () {
   return (
     <>
       <div className="flex items-center justify-center gap-x-5">
-        <Tooltip content="Data task indicator">
+        
           <div style={divStyle}></div>
-        </Tooltip>
+        
       </div>
 
       <DuftModal
