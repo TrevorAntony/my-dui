@@ -128,7 +128,8 @@ const AboutDlg = ({ isOpen, onClose }) => {
             </Tabs.Item>
             <Tabs.Item title="About DUFT" icon={MdDashboard}>
               <DuftHeader version="1.0.4" />
-              <h3 className="font-semibold text-xl pt-6 pb-4">About DUFT</h3>
+              <div className="text-default pt-2">
+              <h3 className="font-semibold text-xl pb-4">About DUFT</h3>
               <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                 <div className="text-sm text-gray-600 dark:text-gray-300">
                   <p>DUFT Platform Version 1.0.4</p>
@@ -137,6 +138,7 @@ const AboutDlg = ({ isOpen, onClose }) => {
                   <p>Powered by ReactJS / Tailwind / Flowbite</p>
                   <p>Built on Macs</p>
                 </div>
+              </div>
               </div>
             </Tabs.Item>
             <Tabs.Item title="Extensions" disabled={true} ></Tabs.Item>

@@ -19,7 +19,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route element={<FlowbiteWrapper />}>
+        
           <Route path="/" element={<AppLayout />}>
             <Route path="dashboard/:id?" element={<Dashboard3DL />} />
             <Route path="a/:id?" element={<ComponentA />} />
@@ -34,7 +34,7 @@ const App: React.FC = () => {
             <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="s" element={<SamplePage />} />
-        </Route>
+        
       </Routes>
     </Router>
   );

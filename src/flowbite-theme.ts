@@ -1,6 +1,7 @@
 import type { CustomFlowbiteTheme } from "flowbite-react";
 
 const flowbiteTheme: CustomFlowbiteTheme = {
+  
   badge: {
     root: {
       color: {
