@@ -1,52 +1,115 @@
+import {
+  BadRequestError,
+  ForbiddenError,
+  NotFoundError,
+  ServerError,
+  TeapotError,
+  UnauthorizedError,
+  UnknownHttpError,
+} from "./ErrorClasses";
+import type { Config } from "../../context/types";
+
 export class DuftHttpClient {
   private baseUrl: string;
+  private getAuthToken: () => string | undefined;
+  private setAuthToken: (token: string) => void;
+  private updateConfig: ((config: Config) => void) | undefined;
 
-  constructor(baseUrl: string) {
+  // Array of public routes
+  private readonly publicRoutes = ["/token"];
+
+  constructor(
+    baseUrl: string,
+    getAuthToken?: () => string | undefined,
+    setAuthToken?: (token: string) => void,
+    updateConfig?: (config: Config) => void
+  ) {
     this.baseUrl = baseUrl;
+
+    // Default implementations for the callbacks
+    this.getAuthToken = getAuthToken || (() => undefined);
+    this.setAuthToken = setAuthToken || (() => {});
+    this.updateConfig = updateConfig || (() => {});
   }
 
-  // Fetch current configuration from the API
-  async getCurrentConfig(): Promise<any> {
-    try {
-      const response = await fetch(`${this.baseUrl}/get-current-config`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error fetching config: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Failed to fetch current config:", error);
-      throw error;
-    }
-  }
-
-  // Fetch navigation file (protected route)
-  async getNavigationFile(): Promise<any> {
-    return this.makeRequestWithAuth("GET", `${this.baseUrl}/navigation`);
-  }
-
-  // Fetch dashboard file (protected route)
-  async getDashboardFile(myFile: string): Promise<any> {
-    return this.makeRequestWithAuth(
-      "GET",
-      `${this.baseUrl}/3dldashboard/${myFile}`
+  // Generic method for making HTTP requests
+  private async makeRequest(
+    method: string,
+    endpoint: string,
+    body?: Record<string, any>
+  ): Promise<any> {
+    const isPublicRoute = this.publicRoutes.some((route) =>
+      endpoint.startsWith(`${this.baseUrl}${route}`)
     );
+
+    const token = isPublicRoute ? undefined : this.getAuthToken();
+    // const token = this.getAuthToken();
+
+    const response = await fetch(endpoint, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      ...(body && { body: JSON.stringify(body) }),
+    });
+
+    // Handle errors using custom error classes
+    if (!response.ok) {
+      const errorPayload = await response.json().catch(() => null); // Fallback for non-JSON responses
+
+      switch (response.status) {
+        case 400:
+          throw new BadRequestError(errorPayload);
+        case 401:
+          throw new UnauthorizedError(errorPayload);
+        case 403:
+          throw new ForbiddenError(errorPayload);
+        case 404:
+          throw new NotFoundError(errorPayload);
+        case 418:
+          throw new TeapotError(errorPayload);
+        case 500:
+        case 502:
+        case 503:
+        case 504:
+          throw new ServerError(response.status, errorPayload);
+        default:
+          throw new UnknownHttpError(response.status, errorPayload);
+      }
+    }
+
+    // Parse and return JSON response
+    return await response.json();
   }
 
-  // Fetch theme file (protected route)
+  // Public API methods
+  async getCurrentConfig(): Promise<Config> {
+    //add logic to fetch token from local storage and use it here.
+    const response = await this.makeRequest(
+      "GET",
+      `${this.baseUrl}/get-current-config`
+    );
+    if (this.updateConfig) {
+      this.updateConfig(response);
+    }
+    return response;
+  }
+
+  async getNavigationFile(): Promise<any> {
+    return this.makeRequest("GET", `${this.baseUrl}/navigation`);
+  }
+
+  async getDashboardFile(myFile: string): Promise<any> {
+    return this.makeRequest("GET", `${this.baseUrl}/3dldashboard/${myFile}`);
+  }
+
   async getTheme(): Promise<any> {
-    return this.makeRequestWithAuth("GET", `${this.baseUrl}/theme`);
+    return this.makeRequest("GET", `${this.baseUrl}/theme`);
   }
 
-  // Run query with a payload (protected route)
   async getQueryData(requestPayload: Record<string, any>): Promise<any> {
-    return this.makeRequestWithAuth(
+    return this.makeRequest(
       "POST",
       `${this.baseUrl}/run-query`,
       requestPayload
@@ -54,90 +117,27 @@ export class DuftHttpClient {
   }
 
   async runDataTask(taskPayload: Record<string, any>): Promise<any> {
-    return this.makeRequestWithAuth(
+    return this.makeRequest(
       "POST",
       `${this.baseUrl}/run-data-task`,
       taskPayload
     );
   }
 
-  // Private helper method to centralize authenticated requests
-  private async makeRequestWithAuth(
-    method: string,
-    endpoint: string,
-    body?: Record<string, any>
-  ): Promise<any> {
-    try {
-      let accessToken = localStorage.getItem("accessToken");
-      const refreshToken = localStorage.getItem("refreshToken");
-      const authenticationEnabled = !!accessToken || !!refreshToken;
+  async login(username: string, password: string): Promise<any> {
+    const response = await this.makeRequest("POST", `${this.baseUrl}/token/`, {
+      username,
+      password,
+    });
 
-      let response = await fetch(endpoint, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          ...(authenticationEnabled && {
-            Authorization: `Bearer ${accessToken}`,
-          }),
-        },
-        ...(body && { body: JSON.stringify(body) }),
-      });
-
-      // Handle token expiration (401) and attempt to refresh
-      if (response.status === 401 && refreshToken) {
-        console.log("Access token expired, attempting to refresh...");
-
-        const refreshResponse = await fetch(
-          `http://127.0.0.1:8000/api/token/refresh/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ refresh: refreshToken }),
-          }
-        );
-
-        if (refreshResponse.ok) {
-          const { access: newAccessToken } = await refreshResponse.json();
-          localStorage.setItem("accessToken", newAccessToken);
-
-          console.log("Access token refreshed successfully");
-
-          // Retry the original request with the new access token
-          accessToken = newAccessToken;
-          response = await fetch(endpoint, {
-            method,
-            headers: {
-              "Content-Type": "application/json",
-              ...(authenticationEnabled && {
-                Authorization: `Bearer ${accessToken}`,
-              }),
-            },
-            ...(body && { body: JSON.stringify(body) }),
-          });
-        } else {
-          // If refresh token is invalid, clear storage and redirect to login
-          console.error("Failed to refresh token, redirecting to login...");
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          window.location.href = "/login";
-          return;
-        }
-      } else if (response.status === 401 && !refreshToken) {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        window.location.href = "/login";
-      }
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Failed to fetch data", error);
-      throw error;
+    if (response.access) {
+      this.setAuthToken(response.access);
     }
+
+    return response;
+  }
+
+  async logout() {
+    this.setAuthToken(null);
   }
 }

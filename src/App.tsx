@@ -1,5 +1,5 @@
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -21,11 +21,8 @@ import Login from "./ui-components/login";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./ui-components/private-route";
 import "./App.css";
-import { useDuftConfigurations } from "./context/ConfigContext";
 
 const App: React.FC = () => {
-  const authenticationEnabled = useDuftConfigurations();
-
   return (
     <Router>
       <AuthProvider>
@@ -36,12 +33,7 @@ const App: React.FC = () => {
             <Route path="/home" element={<Navigate to="/dashboard/home" />} />
 
             {/* Private Routes */}
-            <Route
-              path="*"
-              element={
-                <PrivateRoute authenticationEnabled={authenticationEnabled} />
-              }
-            >
+            <Route path="*" element={<PrivateRoute />}>
               <Route element={<AppLayout />}>
                 <Route path="dashboard/:id?" element={<Dashboard3DL />} />
                 <Route path="a/:id?" element={<ComponentA />} />

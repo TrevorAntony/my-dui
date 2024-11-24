@@ -1,37 +1,43 @@
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+// import { useAppState } from "../AppStateContext";
+import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
+import {
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage,
+  // createConfigUpdateCallback,
+  updateConfigFromHttpClient,
+} from "../api/DuftHttpClient/local-storage-functions";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const client = new DuftHttpClient(
+    "http://127.0.0.1:8000/api/v2",
+    getTokenFromLocalStorage,
+    setTokenInLocalStorage,
+    updateConfigFromHttpClient
+  );
+
+  const login = async (username: string, password: string) => {
+    setLoading(true);
+    setError(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid username or password.");
-      }
-
-      const data = await response.json();
-      const { access, refresh } = data;
-      login(access, refresh);
+      await client.login(username, password);
     } catch (err) {
       setError("Invalid username or password. Please try again.");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    login(username, password);
   };
 
   return (
@@ -65,7 +71,7 @@ const Login = () => {
                   id="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 text-gray-900 focus:border-highlight-600 focus:ring-highlight-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-highlight-500 dark:focus:ring-highlight-500"
+                  className="focus:border-highlight-600 focus:ring-highlight-600 dark:focus:border-highlight-500 dark:focus:ring-highlight-500 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
                   placeholder="admin"
                   required
                 />
@@ -84,15 +90,16 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="abcd1234"
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 text-gray-900 focus:border-highlight-600 focus:ring-highlight-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-highlight-500 dark:focus:ring-highlight-500"
+                  className="focus:border-highlight-600 focus:ring-highlight-600 dark:focus:border-highlight-500 dark:focus:ring-highlight-500 block w-full rounded-lg border border-gray-300 bg-gray-100 p-2.5 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="w-full rounded-lg bg-highlight-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-highlight-700 focus:outline-none focus:ring-4 focus:ring-highlight-300 dark:bg-highlight-600 dark:hover:bg-highlight-700 dark:focus:ring-highlight-800"
+                className="bg-highlight-600 hover:bg-highlight-700 focus:ring-highlight-300 dark:bg-highlight-600 dark:hover:bg-highlight-700 dark:focus:ring-highlight-800 w-full rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
+                disabled={loading}
               >
-                Sign in
+                {loading ? "Logging in..." : "Sign in"}
               </button>
             </form>
           </div>

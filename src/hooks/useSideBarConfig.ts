@@ -3,8 +3,16 @@ import { defaultSidebarConfig } from "../helpers/constants";
 import type { NavigationConfig } from "../components/types";
 import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
 import config from "../config";
+import {
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage,
+} from "../api/DuftHttpClient/local-storage-functions";
 
-const client = new DuftHttpClient(config.apiBaseUrl);
+const client = new DuftHttpClient(
+  config.apiBaseUrl,
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage
+);
 
 export const useSidebarConfig = () => {
   const [sidebarConfig, setSidebarConfig] = useState(defaultSidebarConfig);
