@@ -18,6 +18,7 @@ const ClusteredBarChart = ({
   userOptions = {},
   exportData,
   detailsComponent,
+  resize,
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
   const { data } = useDataContext();
@@ -107,6 +108,7 @@ const ClusteredBarChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </Container>

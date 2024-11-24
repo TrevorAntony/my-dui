@@ -12,6 +12,7 @@ const Markdown = ({
   header = "Markdown Content",
   subHeader = header,
   children,
+  resize,
 }: VisualProps) => {
   const markdown = React.useMemo(() => {
     return extractTextFromChildren(children);
@@ -29,7 +30,7 @@ const Markdown = ({
   );
 
   return Container ? (
-    <Container header={header} subHeader={subHeader}>
+    <Container header={header} subHeader={subHeader} resize={resize}>
       {content}
     </Container>
   ) : (

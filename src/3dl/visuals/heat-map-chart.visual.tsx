@@ -7,6 +7,7 @@ const HeatmapChart = ({
   subHeader = header,
   exportData,
   detailsComponent,
+  resize,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="heatmap" />;
@@ -17,6 +18,7 @@ const HeatmapChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </Container>
