@@ -10,7 +10,6 @@ import ComponentB from "./content-components/ComponentB";
 import ComponentC from "./content-components/ComponentC";
 import FlowbiteWrapper from "./components/flowbite-wrapper";
 import ComponentD from "./content-components/ComponentD";
-import APITestComponent from "./content-components/APITestComponent";
 import Dashboard3DL from "./3dlcomponents/Dashboard3DL";
 import GridLayoutTester from "./content-components/GridLayoutTester";
 import TabLayoutTester from "./content-components/TabLayoutTester";
@@ -40,7 +39,6 @@ const App: React.FC = () => {
                 <Route path="b" element={<ComponentB />} />
                 <Route path="c" element={<ComponentC />} />
                 <Route path="d" element={<ComponentD />} />
-                <Route path="api" element={<APITestComponent />} />
                 <Route path="grid" element={<GridLayoutTester />} />
                 <Route path="tab" element={<TabLayoutTester />} />
                 <Route path="table" element={<SingleTableLayoutTester />} />
