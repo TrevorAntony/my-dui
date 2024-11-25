@@ -11,6 +11,7 @@ import { DataProvider } from "../context/DataContext";
 import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
 import type { VisualProps } from "../../types/visual-props";
 import CardComponent from "../../components/card-component";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 
 const CascadeChart = ({
   container: Container,
@@ -215,7 +216,7 @@ const CascadeChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
-      infoTagContent={children}
+      infoTagContent={getInfoTagContents(children)}
     >
       {content}
     </Container>

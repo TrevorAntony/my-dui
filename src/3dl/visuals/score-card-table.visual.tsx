@@ -6,6 +6,7 @@ import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
 import TableSkeleton from "../../ui-components/table-skeleton";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 
 const ScoreCardTable = ({
   container: ContainerComponent,
@@ -121,7 +122,7 @@ const ScoreCardTable = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
-      infoTagContent={children}
+      infoTagContent={getInfoTagContents(children)}
     >
       {content}
     </ContainerComponent>

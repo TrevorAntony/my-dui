@@ -4,6 +4,7 @@ import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 
 type DataItem = {
   category?: string;
@@ -110,7 +111,7 @@ const ClusteredBarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
-      infoTagContent={children}
+      infoTagContent={getInfoTagContents(children)}
     >
       {content}
     </Container>

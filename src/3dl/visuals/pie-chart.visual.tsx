@@ -1,5 +1,6 @@
 import BaseCircularChart from "../base-visuals/base-circular-chart";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 
 const PieChart = ({
   container: Container,
@@ -20,7 +21,7 @@ const PieChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
-      infoTagContent={children}
+      infoTagContent={getInfoTagContents(children)}
     >
       {content}
     </Container>
