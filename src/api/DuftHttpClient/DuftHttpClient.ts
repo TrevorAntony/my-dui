@@ -12,38 +12,83 @@ import type { Config } from "../../context/types";
 export class DuftHttpClient {
   private baseUrl: string;
   private getAuthToken: () => string | undefined;
-  private setAuthToken: (token: string) => void;
+  private getRefreshToken: () => string | undefined;
+  private setAuthToken: (
+    accessToken: string | null,
+    refreshToken: string | null
+  ) => void;
   private updateConfig: ((config: Config) => void) | undefined;
+  private isRefreshing = false;
 
   // Array of public routes
-  private readonly publicRoutes = ["/token"];
+  private readonly publicRoutes = ["/token", "/get-current-config"];
 
   constructor(
     baseUrl: string,
     getAuthToken?: () => string | undefined,
-    setAuthToken?: (token: string) => void,
-    updateConfig?: (config: Config) => void
+    setAuthToken?: (
+      accessToken: string | null,
+      refreshToken: string | null
+    ) => void,
+    updateConfig?: (config: Config) => void,
+    getRefreshToken?: () => string | undefined
   ) {
     this.baseUrl = baseUrl;
 
     // Default implementations for the callbacks
     this.getAuthToken = getAuthToken || (() => undefined);
+    this.getRefreshToken = getRefreshToken || (() => undefined);
     this.setAuthToken = setAuthToken || (() => {});
     this.updateConfig = updateConfig || (() => {});
+  }
+
+  private async refreshToken(): Promise<boolean> {
+    if (this.isRefreshing) return false;
+
+    try {
+      this.isRefreshing = true;
+      const refreshToken = this.getRefreshToken();
+
+      if (!refreshToken) {
+        return false;
+      }
+
+      const response = await this.makeRequest(
+        "POST",
+        `${this.baseUrl}/token/refresh/`,
+        {
+          refresh: refreshToken,
+        }
+      );
+
+      if (response.access) {
+        this.setAuthToken(response.access, response.refresh);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      this.setAuthToken(null, null); // Clear tokens on refresh failure
+      return false;
+    } finally {
+      this.isRefreshing = false;
+    }
   }
 
   // Generic method for making HTTP requests
   private async makeRequest(
     method: string,
     endpoint: string,
-    body?: Record<string, any>
+    body?: Record<string, any>,
+    forceAuth?: boolean
   ): Promise<any> {
     const isPublicRoute = this.publicRoutes.some((route) =>
       endpoint.startsWith(`${this.baseUrl}${route}`)
     );
 
-    const token = isPublicRoute ? undefined : this.getAuthToken();
-    // const token = this.getAuthToken();
+    // Use authentication if forced or if it's not a public route
+    const useAuth = forceAuth || !isPublicRoute;
+    const token = useAuth ? this.getAuthToken() : undefined;
 
     const response = await fetch(endpoint, {
       method,
@@ -62,6 +107,14 @@ export class DuftHttpClient {
         case 400:
           throw new BadRequestError(errorPayload);
         case 401:
+          if (!endpoint.includes("/token/refresh/")) {
+            const refreshed = await this.refreshToken();
+            if (refreshed) {
+              // Retry the original request with new token
+              return this.makeRequest(method, endpoint, body, forceAuth);
+            }
+            //We may not need the logic in the `if` statement anymore, since the app will reload with a fresh token once setAuthToken is called.
+          }
           throw new UnauthorizedError(errorPayload);
         case 403:
           throw new ForbiddenError(errorPayload);
@@ -84,11 +137,12 @@ export class DuftHttpClient {
   }
 
   // Public API methods
-  async getCurrentConfig(): Promise<Config> {
-    //add logic to fetch token from local storage and use it here.
+  async getCurrentConfig(useAuthentication: boolean = false): Promise<Config> {
     const response = await this.makeRequest(
       "GET",
-      `${this.baseUrl}/get-current-config`
+      `${this.baseUrl}/get-current-config`,
+      undefined,
+      useAuthentication
     );
     if (this.updateConfig) {
       this.updateConfig(response);
@@ -130,14 +184,14 @@ export class DuftHttpClient {
       password,
     });
 
-    if (response.access) {
-      this.setAuthToken(response.access);
+    if (response.access && response.refresh) {
+      this.setAuthToken(response.access, response.refresh);
     }
 
     return response;
   }
 
   async logout() {
-    this.setAuthToken(null);
+    this.setAuthToken(null, null);
   }
 }

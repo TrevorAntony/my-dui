@@ -1,10 +1,8 @@
 import { useState } from "react";
-// import { useAppState } from "../AppStateContext";
 import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
 import {
   getTokenFromLocalStorage,
   setTokenInLocalStorage,
-  // createConfigUpdateCallback,
   updateConfigFromHttpClient,
 } from "../api/DuftHttpClient/local-storage-functions";
 

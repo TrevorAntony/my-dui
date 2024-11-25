@@ -18,21 +18,26 @@ const client = new DuftHttpClient(
 );
 
 const useCurrentConfig = () => {
+  const { state } = useAppState();
+  const hasConfig = Boolean(state.config);
+  const authToken = getTokenFromLocalStorage();
+
   return useQuery({
-    queryKey: ["config"], // Unique identifier for this query
-    queryFn: () => client.getCurrentConfig(), // Fetch function
-    staleTime: Infinity, // Data is always fresh during the lifecycle of the app
-    cacheTime: 0, // Remove cached data on browser refresh
-    refetchOnWindowFocus: false, // No refetch on window focus
-    refetchOnMount: false, // No refetch on component remount
-    refetchOnReconnect: false, // No refetch on network reconnect
-    retry: 2, // Retry on failure
+    queryKey: ["config"],
+    queryFn: () => client.getCurrentConfig(Boolean(authToken)), //the param is dependent on the state of the token.
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    enabled: !hasConfig, // Only run if we don't have config in state
+    retry: 2,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 };
 
 const AppInitializer: React.FC = () => {
   const { state } = useAppState();
-  const { isError, error, isLoading } = useCurrentConfig();
+  const { isLoading, error: isError } = useCurrentConfig();
 
   if (isLoading) {
     return (
@@ -47,7 +52,7 @@ const AppInitializer: React.FC = () => {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-lg text-red-600">
-          Failed to load configuration. Please try again later.
+          Failed to load configuration. Please check your authentication status.
         </div>
       </div>
     );

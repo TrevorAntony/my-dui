@@ -18,13 +18,32 @@ export function getTokenFromLocalStorage(): string | undefined {
   return token || undefined; // Return undefined if the token is null
 }
 
+export function getRefreshToken(): string | undefined {
+  const token = localStorage.getItem("refreshToken");
+  return token || undefined;
+}
+
 /**
  * Stores the token in localStorage.
  * @param {string} token - The token to store.
  */
-export function setTokenInLocalStorage(token: string): void {
-  localStorage.setItem("accessToken", token);
-  client.getCurrentConfig();
+export function setTokenInLocalStorage(
+  accessToken: string | null,
+  refreshToken: string | null
+): void {
+  if (accessToken) {
+    localStorage.setItem("accessToken", accessToken);
+  } else {
+    localStorage.removeItem("accessToken");
+  }
+
+  if (refreshToken) {
+    localStorage.setItem("refreshToken", refreshToken);
+  } else {
+    localStorage.removeItem("refreshToken");
+  }
+  // Update config after token change
+  client.getCurrentConfig(accessToken ? true : false);
 }
 
 export function updateConfigFromHttpClient(config: Config): void {
