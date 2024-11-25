@@ -3,6 +3,7 @@ import { useDataContext } from "../../context/DataContext";
 import { jsonToCSV, downloadCSV } from "./helpers";
 import ExportButton from "./export-button";
 import DuftModal from "../../../components/duft-modal";
+import { Button, Modal } from "flowbite-react";
 
 function ExportData() {
   const { data } = useDataContext();
@@ -30,20 +31,26 @@ function ExportData() {
     <>
       <ExportButton onClick={handleButtonClick} />
       {isModalOpen && (
-        <DuftModal
-          isOpen={isModalOpen}
-          onClose={handleModalCancel}
-          onExecute={handleModalConfirm}
-          title="Confirm Export"
-          executeButtonText="Export"
-          modalWidth="narrow"
-          modalHeight="tiny"
-          defaultButton="execute"
-          cancelButtonText="Cancel"
-          resize="false"
+        <Modal
+          show={isModalOpen}
+          onClose={() => handleModalCancel()}
+          position="center"
+          size="3xl"
         >
-          Are you sure you want to export the data?
-        </DuftModal>
+          <Modal.Header>Confirm Export</Modal.Header>
+          <Modal.Body className="flex flex-col overflow-hidden ">
+            <div className="text-default">
+              Are you sure you want to export the data?
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full justify-end">
+              <Button onClick={() => handleModalCancel()} color="primary">
+                Close
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
       )}
     </>
   );
