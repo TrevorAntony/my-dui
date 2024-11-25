@@ -1,18 +1,49 @@
 import type { ReactNode } from "react";
 import React, { createContext, useReducer, useContext, useEffect } from "react";
 import DispatchService from "../services/dispatchService";
-import type { AppState, AppStateAction } from "./types";
+import type { Config } from "./types";
+import { GlobalState, type AppState, type AppStateAction } from "./types";
+import {
+  clearTokensFromLocalStorage,
+  setTokenInLocalStorage,
+} from "../api/DuftHttpClient/local-storage-functions";
 
+// First add the enum
 const initialState: AppState = {
   config: null,
+  state: GlobalState.SPLASH,
+};
+
+const updateGlobalState = (config: Config): GlobalState => {
+  console.log(config);
+  if (!config.features.user_authentication) {
+    return GlobalState.APP_READY;
+  }
+
+  return config.currentUser ? GlobalState.APP_READY : GlobalState.AUTH_REQUIRED;
 };
 
 function appStateReducer(state: AppState, action: AppStateAction): AppState {
   switch (action.type) {
-    case "SET_CONFIG":
+    case "SET_CONFIG": {
+      if (
+        action.payload.features &&
+        !action.payload.features.user_authentication
+      ) {
+        clearTokensFromLocalStorage();
+      }
+      const newState = updateGlobalState(action.payload);
+
       return {
         ...state,
         config: action.payload,
+        state: newState,
+      };
+    }
+    case "SET_STATE":
+      return {
+        ...state,
+        state: action.payload,
       };
     default:
       return state;

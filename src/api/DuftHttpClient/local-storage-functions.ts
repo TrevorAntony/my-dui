@@ -43,14 +43,21 @@ export function setTokenInLocalStorage(
     localStorage.removeItem("refreshToken");
   }
   // Update config after token change
-  client.getCurrentConfig(accessToken ? true : false);
+  client.getCurrentConfig();
+  console.log("donnneee!");
 }
 
 export function updateConfigFromHttpClient(config: Config): void {
   try {
+    console.log(config);
     const dispatch = DispatchService.getDispatch();
     dispatch({ type: "SET_CONFIG", payload: config });
   } catch (error) {
     console.warn("Dispatch not available:", error);
   }
+}
+
+export function clearTokensFromLocalStorage(): void {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
 }

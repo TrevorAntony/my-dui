@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppStateProvider } from "./context/AppStateContext";
 import AppInitializer from "./ui-components/app-initializer";
 
-import "./index.css";
 import { Flowbite } from "flowbite-react";
 import theme from "./flowbite-theme";
 

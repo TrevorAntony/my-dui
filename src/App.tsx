@@ -30,22 +30,20 @@ const App: React.FC = () => {
           <Route path="/home" element={<Navigate to="/dashboard/home" />} />
 
           {/* Private Routes */}
-          <Route path="*" element={<PrivateRoute />}>
-            <Route element={<AppLayout />}>
-              <Route path="dashboard/:id?" element={<Dashboard3DL />} />
-              <Route path="a/:id?" element={<ComponentA />} />
-              <Route path="b" element={<ComponentB />} />
-              <Route path="c" element={<ComponentC />} />
-              <Route path="d" element={<ComponentD />} />
-              <Route path="grid" element={<GridLayoutTester />} />
-              <Route path="tab" element={<TabLayoutTester />} />
-              <Route path="table" element={<SingleTableLayoutTester />} />
-              <Route path="data-task/:id" element={<DataTaskHandler />} />
-              <Route path="settings" element={<Settings />} />
+          <Route element={<AppLayout />}>
+            <Route path="dashboard/:id?" element={<Dashboard3DL />} />
+            <Route path="a/:id?" element={<ComponentA />} />
+            <Route path="b" element={<ComponentB />} />
+            <Route path="c" element={<ComponentC />} />
+            <Route path="d" element={<ComponentD />} />
+            <Route path="grid" element={<GridLayoutTester />} />
+            <Route path="tab" element={<TabLayoutTester />} />
+            <Route path="table" element={<SingleTableLayoutTester />} />
+            <Route path="data-task/:id" element={<DataTaskHandler />} />
+            <Route path="settings" element={<Settings />} />
 
-              {/* Catch-all route for unavailable routes */}
-              <Route path="*" element={<Navigate to="/dashboard/home" />} />
-            </Route>
+            {/* Catch-all route for unavailable routes */}
+            <Route path="*" element={<Navigate to="/dashboard/home" />} />
           </Route>
 
           {/* Public routes */}

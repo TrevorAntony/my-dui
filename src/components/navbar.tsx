@@ -1,12 +1,15 @@
 import type { FC } from "react";
-import { DarkThemeToggle, Navbar } from "flowbite-react";
+import { Button, DarkThemeToggle, Navbar } from "flowbite-react";
 import { HiMenuAlt1, HiX } from "react-icons/hi";
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
 import config from "../config";
 import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
+import { useAppState } from "../context/AppStateContext";
+import { setTokenInLocalStorage } from "../api/DuftHttpClient/local-storage-functions";
 
 const ExampleNavbar: FC = function () {
+  const { state } = useAppState();
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
   const sidebarConfig = useSidebarConfigContext();
@@ -35,7 +38,7 @@ const ExampleNavbar: FC = function () {
                 src="/public/images/duft.png"
                 className="mr-3 h-6 sm:h-8"
               />
-              <span className="self-center whitespace-nowrap text-2xl font-semibold text-highlight-800 dark:text-highlight-200">
+              <span className="text-highlight-800 dark:text-highlight-200 self-center whitespace-nowrap text-2xl font-semibold">
                 {sidebarConfig.system.settings?.appName || config.title}
               </span>
             </Navbar.Brand>
@@ -43,7 +46,12 @@ const ExampleNavbar: FC = function () {
           <div className="flex items-center lg:gap-3">
             <div className="flex items-center">
               {/* <DarkThemeToggle /> */}
-              
+              <div className="text-default">
+                <Button onClick={() => setTokenInLocalStorage(null, null)}>
+                  logout
+                </Button>
+                {state?.config?.currentUser?.username}
+              </div>
             </div>
           </div>
         </div>

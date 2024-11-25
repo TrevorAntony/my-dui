@@ -9,6 +9,8 @@ import {
 import App from "../App";
 import Login from "./login";
 import { checkAuthEnabled, checkUserLoggedIn } from "../utils/auth-utils";
+import Splash from "./splash";
+import { GlobalState } from "../context/types";
 
 const client = new DuftHttpClient(
   "http://127.0.0.1:8000/api/v2",
@@ -20,11 +22,10 @@ const client = new DuftHttpClient(
 const useCurrentConfig = () => {
   const { state } = useAppState();
   const hasConfig = Boolean(state.config);
-  const authToken = getTokenFromLocalStorage();
 
   return useQuery({
     queryKey: ["config"],
-    queryFn: () => client.getCurrentConfig(Boolean(authToken)), //the param is dependent on the state of the token.
+    queryFn: () => client.getCurrentConfig(false), //the param is dependent on the state of the token.
     staleTime: Infinity,
     cacheTime: Infinity,
     enabled: !hasConfig, // Only run if we don't have config in state
@@ -37,36 +38,15 @@ const useCurrentConfig = () => {
 
 const AppInitializer: React.FC = () => {
   const { state } = useAppState();
-  const { isLoading, error: isError } = useCurrentConfig();
+  useCurrentConfig();
 
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-lg">Loading configuration...</div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    console.error("Failed to fetch configuration:", error);
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-lg text-red-600">
-          Failed to load configuration. Please check your authentication status.
-        </div>
-      </div>
-    );
-  }
-
-  const isAuthEnabled = checkAuthEnabled(state);
-  const isLoggedIn = checkUserLoggedIn(state);
-
-  // If auth is enabled and user is not logged in, show login
-  if (isAuthEnabled && !isLoggedIn) {
+  if (state.state === GlobalState.SPLASH) {
+    return <Splash />;
+  } else if (state.state === GlobalState.APP_READY) {
+    return <App />;
+  } else if (state.state === GlobalState.AUTH_REQUIRED) {
     return <Login />;
   }
-
-  return <App />;
 };
 
 export default AppInitializer;

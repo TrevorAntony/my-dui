@@ -90,12 +90,19 @@ export class DuftHttpClient {
     const useAuth = forceAuth || !isPublicRoute;
     const token = useAuth ? this.getAuthToken() : undefined;
 
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    // Only add Authorization header if token is a non-empty string
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+      console.log(headers["Authorization"]);
+    }
+
     const response = await fetch(endpoint, {
       method,
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers,
       ...(body && { body: JSON.stringify(body) }),
     });
 
@@ -114,8 +121,9 @@ export class DuftHttpClient {
               return this.makeRequest(method, endpoint, body, forceAuth);
             }
             //We may not need the logic in the `if` statement anymore, since the app will reload with a fresh token once setAuthToken is called.
+            throw new UnauthorizedError(errorPayload);
           }
-          throw new UnauthorizedError(errorPayload);
+          break;
         case 403:
           throw new ForbiddenError(errorPayload);
         case 404:
@@ -137,7 +145,8 @@ export class DuftHttpClient {
   }
 
   // Public API methods
-  async getCurrentConfig(useAuthentication: boolean = false): Promise<Config> {
+  async getCurrentConfig(useAuthentication: boolean = true): Promise<Config> {
+    //fetch token (if available) from local storage from here, instead of from the initializer
     const response = await this.makeRequest(
       "GET",
       `${this.baseUrl}/get-current-config`,
