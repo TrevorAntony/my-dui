@@ -8,6 +8,7 @@ import type { DetailsComponentRegistry } from "./details-component-registry";
 import { getDetailsComponent } from "./details-component-registry";
 import DuftModal from "./duft-modal";
 import { HiOutlineExternalLink } from "react-icons/hi";
+import { Button, Modal } from "flowbite-react";
 
 type MoreInfoProps = {
   text: string;
@@ -84,7 +85,7 @@ const CardComponent: FC<CardComponentProps> = ({
 
             {DetailsComponent && (
               <button
-                className="pl-2 pt-[1.85px] dark:text-highlight-500"
+                className="dark:text-highlight-500 pl-2 pt-[1.85px]"
                 onClick={toggleModal}
                 title="Show Details"
               >
@@ -107,7 +108,7 @@ const CardComponent: FC<CardComponentProps> = ({
             <div className="shrink-0">
               <NavLink
                 to={moreInfo.link}
-                className="inline-flex items-center rounded-md p-1 text-xs font-medium uppercase text-highlight-700 hover:bg-gray-100 dark:text-highlight-500 dark:hover:bg-gray-700 sm:text-sm"
+                className="text-highlight-700 dark:text-highlight-500 inline-flex items-center rounded-md p-1 text-xs font-medium uppercase hover:bg-gray-100 dark:hover:bg-gray-700 sm:text-sm"
               >
                 {moreInfo.text}
                 <svg
@@ -155,23 +156,33 @@ const CardComponent: FC<CardComponentProps> = ({
       )}
 
       {DetailsComponent && (
-        <DuftModal
-          isOpen={isModalOpen}
-          onClose={toggleModal}
-          title={header}
-          resize={resize}
+        <Modal
+          show={isModalOpen}
+          onClose={() => toggleModal()}
+          position="center"
+          size="5xl"
         >
-          <DetailsComponent
-            container={
-              detailsComponent === "infinite-scroll-table"
-                ? CardComponent
-                : null
-            }
-            variant={
-              detailsComponent === "infinite-scroll-table" ? "plain" : variant
-            }
-          />
-        </DuftModal>
+          <Modal.Header>{header}</Modal.Header>
+          <Modal.Body className="flex flex-col overflow-hidden ">
+            <DetailsComponent
+              container={
+                detailsComponent === "infinite-scroll-table"
+                  ? CardComponent
+                  : null
+              }
+              variant={
+                detailsComponent === "infinite-scroll-table" ? "plain" : variant
+              }
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full justify-end">
+              <Button onClick={() => toggleModal()} color="primary">
+                Close
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
       )}
     </>
   );
