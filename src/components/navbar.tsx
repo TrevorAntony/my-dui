@@ -42,7 +42,8 @@ const ExampleNavbar: FC = function () {
           </div>
           <div className="flex items-center lg:gap-3">
             <div className="flex items-center">
-              <DarkThemeToggle />
+              {/* <DarkThemeToggle /> */}
+              
             </div>
           </div>
         </div>

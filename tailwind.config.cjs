@@ -6,6 +6,12 @@ module.exports = {
     "./node_modules/flowbite-react/lib/**/*.{js,ts}",
     "./src/**/*.{ts,tsx}",
   ],
+  corePlugins: {
+    preflight: true, // Optional, to ensure no conflicts
+  },
+  experimental: {
+    optimizeUniversalDefaults: true, // Optional, for better optimisation
+  }, 
   theme: {
     colors: {
       primary: {
@@ -115,6 +121,29 @@ module.exports = {
           },
         },
       },
+      colors: {
+        primary: {
+          DEFAULT: "#2563eb",
+          dark: "#93c5fd",
+        },
+        highlight: {
+          DEFAULT: "var(--highlight-color)",
+          dark: "#ffbfd7",
+        },
+      },      
+      textColor: {
+        DEFAULT: "#1e293b", // Default text colour for light mode
+        dark: "#f8fafc",    // Default text colour for dark mode
+        primary: {
+          DEFAULT: "#2563eb", // Your primary colour
+          dark: "#93c5fd",    // Lighter variant for dark mode
+        },
+        highlight: {
+          DEFAULT: "var(--highlight-color)",
+          dark: "#ffbfd7",
+        },
+      },
+
     },
   },
   plugins: [require("flowbite/plugin"), require("@tailwindcss/typography")],

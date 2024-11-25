@@ -13,9 +13,9 @@ const DuftTabset: React.FC<DuftTabChildren> = ({
 }) => {
   return (
     <div className="w-full">
-      <Tabs.Group aria-label="Tabs with underline" style="underline">
+      <Tabs aria-label="Tabs with underline" variant="underline">
         {children}
-      </Tabs.Group>
+      </Tabs>
     </div>
   );
 };

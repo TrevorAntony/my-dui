@@ -15,6 +15,7 @@ const ScoreCardTable = ({
   showToolbar,
   exportData,
   detailsComponent,
+  resize = "false",
   ...props
 }: VisualProps) => {
   const { data } = useDataContext();
@@ -118,6 +119,7 @@ const ScoreCardTable = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </ContainerComponent>

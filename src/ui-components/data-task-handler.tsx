@@ -25,7 +25,7 @@ const DataTaskHandler: React.FC = () => {
   const toggleModal = () => {
     setIsOpen(!isOpen);
     setError(null);
-    window.location.href = "/dashboard/home";
+    window.location.reload();
   };
 
   const handleDataTask = async () => {
@@ -48,6 +48,7 @@ const DataTaskHandler: React.FC = () => {
       modalWidth="narrow"
       modalHeight="tiny"
       cancelButtonText={cancelButtonText}
+      resize="false"
     >
       <p>{prompt}</p>
       {error && <p className="text-red-600">{error}</p>}{" "}

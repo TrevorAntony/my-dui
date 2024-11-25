@@ -9,7 +9,10 @@ export interface VisualProps {
   tableMaxHeight?: string;
   showToolbar?: boolean | string;
   cascadeObject?: Record<string, unknown>;
+  nodeWidth?: number | string;
+  nodeHeight?: number | string;
   direction?: string;
+  resize?: string;
   modalWidth?: "narrow" | "medium" | "wide";
   modalHeight?: "tiny" | "smaller" | "small" | "medium" | "large";
   children?: React.ReactNode;

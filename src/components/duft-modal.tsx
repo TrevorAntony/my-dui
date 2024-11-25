@@ -1,11 +1,17 @@
-import React, { useRef, useMemo } from "react";
+import React from "react";
 import { Modal } from "flowbite-react";
 import { renderModalContent } from "../helpers/modalContentHelper";
-import { calculateInitialModalSizeConfig } from "../helpers/modal-size-config";
-import { useModalSize } from "../hooks/useModalSize";
-import { useModalPosition } from "../hooks/useModalPosition";
+import StaticModalContainer from "./static-modal-container";
 import DraggableResizableModalContainer from "./draggable-resizable-modal-container";
-import type { modalWidthMap, modalHeightMap } from "../helpers/constants";
+import { useModalConfig } from "../hooks/useModalConfig";
+import type {
+  modalPixelWidthMap,
+  modalViewportHeightRatioMap,
+} from "../helpers/constants";
+import type {
+  modalSymbolicWidthMap,
+  modalViewportHeightMap,
+} from "../helpers/constants";
 
 type ModalContent =
   | string
@@ -21,11 +27,16 @@ export interface DuftModalProps {
   children?: React.ReactNode;
   modalContent?: ModalContent;
   handleButtonClose?: () => void;
-  modalWidth?: keyof typeof modalWidthMap;
-  modalHeight?: keyof typeof modalHeightMap;
+  modalWidth?:
+    | keyof typeof modalPixelWidthMap
+    | keyof typeof modalSymbolicWidthMap;
+  modalHeight?:
+    | keyof typeof modalViewportHeightRatioMap
+    | keyof typeof modalViewportHeightMap;
   disableButtons?: boolean;
   cancelButtonText?: string;
   defaultButton?: "execute" | "close";
+  resize?: string;
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
@@ -42,65 +53,59 @@ const DuftModal: React.FC<DuftModalProps> = ({
   disableButtons = false,
   cancelButtonText = "Close",
   defaultButton = "close",
+  resize = "false",
 }) => {
-  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
-  const executeButtonRef = useRef<HTMLButtonElement | null>(null);
-
-  const initialConfig = useMemo(
-    () => calculateInitialModalSizeConfig(modalWidth, modalHeight),
-    [modalWidth, modalHeight],
+  const { resolvedWidth, containerProps, finalModalBodyStyle } = useModalConfig(
+    { resize, modalWidth, modalHeight },
   );
 
-  const { size, handleResize } = useModalSize(
-    initialConfig.width,
-    initialConfig.height,
-  );
-  const { position, handleDragStop } = useModalPosition(
-    initialConfig.x,
-    initialConfig.y,
-  );
-
-  const resolvedModalWidth = size.width;
-  const resolvedModalHeight = size.height;
-
-  const finalModalBodyStyle: React.CSSProperties = {
-    height: resolvedModalHeight ? resolvedModalHeight - 116 : "auto",
-    overflowY: "auto" as React.CSSProperties["overflowY"],
-    overflowX: "auto" as React.CSSProperties["overflowX"],
-  };
+  const shouldResize = resize === "true";
 
   return (
     <Modal
       show={isOpen}
       onClose={onClose}
-      size={resolvedModalWidth}
-      className="fixed inset-0 flex items-center justify-center"
-      aria-modal="true"
-      role="dialog"
-      aria-labelledby="modal-title"
+      size={"lg"}
+      className="relative"
     >
-      <DraggableResizableModalContainer
-        title={title}
-        onClose={onClose}
-        disableButtons={disableButtons}
-        resolvedModalWidth={resolvedModalWidth}
-        resolvedModalHeight={resolvedModalHeight}
-        position={position}
-        handleDragStop={handleDragStop}
-        minHeight={initialConfig.minHeight}
-        handleResize={handleResize}
-        finalModalBodyStyle={finalModalBodyStyle}
-        modalContent={modalContent ? renderModalContent(modalContent) : null}
-        executeButtonText={executeButtonText}
-        onExecute={onExecute}
-        executeButtonRef={executeButtonRef}
-        closeButtonRef={closeButtonRef}
-        handleButtonClose={handleButtonClose}
-        cancelButtonText={cancelButtonText}
-        defaultButton={defaultButton}
-      >
-        {children}
-      </DraggableResizableModalContainer>
+      {shouldResize ? (
+        <DraggableResizableModalContainer
+          title={title}
+          onClose={onClose}
+          disableButtons={disableButtons}
+          resolvedModalWidth={containerProps.resolvedModalWidth}
+          resolvedModalHeight={containerProps.resolvedModalHeight}
+          position={containerProps.position}
+          handleDragStop={containerProps.handleDragStop}
+          minHeight={containerProps.initialConfig?.minHeight}
+          handleResize={containerProps.handleResize}
+          finalModalBodyStyle={finalModalBodyStyle}
+          modalContent={modalContent ? renderModalContent(modalContent) : null}
+          executeButtonText={executeButtonText}
+          onExecute={onExecute}
+          executeButtonRef={containerProps.executeButtonRef}
+          closeButtonRef={containerProps.closeButtonRef}
+          handleButtonClose={handleButtonClose}
+          cancelButtonText={cancelButtonText}
+          defaultButton={defaultButton}
+        >
+          {children}
+        </DraggableResizableModalContainer>
+      ) : (
+        <StaticModalContainer
+          title={title}
+          onClose={onClose}
+          disableButtons={disableButtons}
+          finalModalBodyStyle={finalModalBodyStyle}
+          modalContent={modalContent ? renderModalContent(modalContent) : null}
+          executeButtonText={executeButtonText}
+          onExecute={onExecute}
+          handleButtonClose={handleButtonClose}
+          cancelButtonText={cancelButtonText}
+        >
+          {children}
+        </StaticModalContainer>
+      )}
     </Modal>
   );
 };

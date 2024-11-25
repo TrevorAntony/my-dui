@@ -83,7 +83,10 @@ const DraggableResizableModalContainer: React.FC<
 
     <Modal.Body
       className="py-6"
-      style={finalModalBodyStyle as React.CSSProperties}
+      style={{
+        ...finalModalBodyStyle,
+        overflow: "hidden",
+      }}
     >
       {children ? children : modalContent}
     </Modal.Body>
