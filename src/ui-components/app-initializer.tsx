@@ -25,7 +25,7 @@ const useCurrentConfig = () => {
 
   return useQuery({
     queryKey: ["config"],
-    queryFn: () => client.getCurrentConfig(false), //the param is dependent on the state of the token.
+    queryFn: () => client.getCurrentConfig(), //the param is dependent on the state of the token.
     staleTime: Infinity,
     cacheTime: Infinity,
     enabled: !hasConfig, // Only run if we don't have config in state
