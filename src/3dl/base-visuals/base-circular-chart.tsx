@@ -4,6 +4,7 @@ import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import type { ChartDataItem, ChartType, Options } from "../types/types";
 import EmptyState from "../ui-elements/empty-state";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const BaseCircularChart = ({
   chartType = "pie",
@@ -13,7 +14,11 @@ const BaseCircularChart = ({
   userOptions?: object;
 }) => {
   const theme = useThemeContext();
-  const { data } = useDataContext();
+  const { data, loading } = useDataContext();
+
+  if (loading) {
+    return <ChartSkeleton />;
+  }
 
   if (!Array.isArray(data) || data.length === 0) {
     return <EmptyState message="No data available for this chart" />;

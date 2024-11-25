@@ -6,6 +6,7 @@ import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
 import type { VisualProps } from "../../types/visual-props";
 import EmptyState from "../ui-elements/empty-state";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const ScoreCardTable = ({
   container: ContainerComponent,
@@ -18,8 +19,11 @@ const ScoreCardTable = ({
   resize = "false",
   ...props
 }: VisualProps) => {
-  const { data } = useDataContext();
+  const { data, loading } = useDataContext();
   const layout = useLayout();
+  if (loading) {
+    return <ChartSkeleton />;
+  }
 
   if (!data || !Array.isArray(data) || data.length === 0) {
     const content = (

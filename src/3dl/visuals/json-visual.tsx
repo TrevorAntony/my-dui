@@ -1,3 +1,4 @@
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 import EmptyState from "../ui-elements/empty-state";
 
 // Helper function to recursively render JSON data
@@ -26,7 +27,16 @@ const renderJson = (data) => {
 };
 
 // JSONVisual component that renders the JSON data
-const JSONVisual = ({ data }: { data: unknown }) => {
+const JSONVisual = ({
+  data,
+  loading,
+}: {
+  data: unknown;
+  loading?: boolean;
+}) => {
+  if (loading) {
+    return <ChartSkeleton />;
+  }
   if (!data) {
     return <EmptyState message="No JSON data available" />;
   }

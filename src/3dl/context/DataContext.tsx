@@ -19,7 +19,7 @@ const defaultDataContext: DataContextType = {
   setQuery: () => {},
   resetPage: () => {},
   pageUpdater: () => {},
-  loading: false,
+  loading: true,
   handleSearchChange: () => {},
   handleSortChange: () => {},
   searchColumns: undefined,

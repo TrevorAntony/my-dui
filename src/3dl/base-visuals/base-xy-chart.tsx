@@ -4,6 +4,7 @@ import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import EmptyState from "../ui-elements/empty-state";
 import type { ChartType } from "../types/types";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 type DataItem = {
   category?: string;
@@ -21,7 +22,11 @@ const BaseXYChart = ({
   isHorizontal?: boolean;
 }) => {
   const theme = useThemeContext();
-  const { data } = useDataContext();
+  const { data, loading } = useDataContext();
+
+  if (loading) {
+    return <ChartSkeleton />;
+  }
 
   if (!data || !Array.isArray(data) || !data.length) {
     return <EmptyState message="No data available for this chart" />;

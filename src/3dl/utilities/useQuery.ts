@@ -14,14 +14,13 @@ const useQuery = (query) => {
   const client = new DuftHttpClient(
     config.apiBaseUrl,
     getTokenFromLocalStorage,
-    setTokenInLocalStorage
+    setTokenInLocalStorage,
   );
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-
         const payload = {
           query,
           data_connection_id: config.dataConnection,

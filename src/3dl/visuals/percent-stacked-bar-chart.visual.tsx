@@ -4,6 +4,7 @@ import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
 import EmptyState from "../ui-elements/empty-state";
 import type { VisualProps } from "../../types/visual-props";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 type DataItem = {
   category?: string;
@@ -22,7 +23,11 @@ const PercentStackedBarChart = ({
   ...props
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
-  const { data } = useDataContext();
+  const { data, loading } = useDataContext();
+
+  if (loading) {
+    return <ChartSkeleton />;
+  }
 
   if (!data || !Array.isArray(data) || !data.length) {
     const content = (
