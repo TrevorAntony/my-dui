@@ -2,7 +2,7 @@ import config from "../config";
 
 async function fetchCascade(
   query: string,
-  filters: Record<string, string> = {},
+  filters: Record<string, string> = {}
 ) {
   let modifiedQuery = query;
 
@@ -19,7 +19,7 @@ async function fetchCascade(
   };
 
   try {
-    const response = await fetch(`${config.apiBaseUrl}/query-engine`, {
+    const response = await fetch(`${config.apiBaseUrl}/run-query`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ async function fetchCascade(
           result.message +
           "\n" +
           "Original query: " +
-          modifiedQuery,
+          modifiedQuery
       );
     }
 
