@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useAppState } from "../context/AppStateContext";
 import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
 import {
@@ -11,6 +11,7 @@ import Login from "./login";
 import { checkAuthEnabled, checkUserLoggedIn } from "../utils/auth-utils";
 import Splash from "./splash";
 import { GlobalState } from "../context/types";
+import { UnauthorizedError } from "../api/DuftHttpClient/ErrorClasses";
 
 const client = new DuftHttpClient(
   "http://127.0.0.1:8000/api/v2",
@@ -19,26 +20,22 @@ const client = new DuftHttpClient(
   updateConfigFromHttpClient
 );
 
-const useCurrentConfig = () => {
-  const { state } = useAppState();
-  const hasConfig = Boolean(state.config);
-
-  return useQuery({
-    queryKey: ["config"],
-    queryFn: () => client.getCurrentConfig(), //the param is dependent on the state of the token.
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    enabled: !hasConfig, // Only run if we don't have config in state
-    retry: 2,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-  });
-};
-
 const AppInitializer: React.FC = () => {
   const { state } = useAppState();
-  useCurrentConfig();
+
+  useEffect(() => {
+    const initConfig = async () => {
+      try {
+        await client.getCurrentConfig();
+      } catch (error) {
+        if (error instanceof UnauthorizedError) {
+          // This is the better way
+          await client.getCurrentConfig(false);
+        }
+      }
+    };
+    initConfig();
+  }, []);
 
   if (state.state === GlobalState.SPLASH) {
     return <Splash />;

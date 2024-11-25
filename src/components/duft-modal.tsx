@@ -56,18 +56,13 @@ const DuftModal: React.FC<DuftModalProps> = ({
   resize = "false",
 }) => {
   const { resolvedWidth, containerProps, finalModalBodyStyle } = useModalConfig(
-    { resize, modalWidth, modalHeight },
+    { resize, modalWidth, modalHeight }
   );
 
   const shouldResize = resize === "true";
 
   return (
-    <Modal
-      show={isOpen}
-      onClose={onClose}
-      size={"lg"}
-      className="relative"
-    >
+    <Modal show={isOpen} onClose={onClose} size={"lg"} className="relative">
       {shouldResize ? (
         <DraggableResizableModalContainer
           title={title}
