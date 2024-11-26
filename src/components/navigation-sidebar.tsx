@@ -91,13 +91,14 @@ const renderSidebarMenu = (config: NavigationConfig) => {
                 paths={item.dashboards.map((d) => d.dashboard)}
               >
                 {item.dashboards.map((nestedItem, nestedIndex) => (
-                  <SidebarNavLink
-                    key={nestedIndex}
-                    to={nestedItem.dashboard}
-                    icon={iconMap[nestedItem.icon] || HiChartPie}
-                  >
-                    {nestedItem.title}
-                  </SidebarNavLink>
+                  <div key={nestedIndex} className="pl-2">
+                    <SidebarNavLink
+                      to={nestedItem.dashboard}
+                      icon={iconMap[nestedItem.icon] || HiChartPie}
+                    >
+                      {nestedItem.title}
+                    </SidebarNavLink>
+                  </div>
                 ))}
               </SidebarCollapse>
             );
