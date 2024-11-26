@@ -150,8 +150,8 @@ const TableContent = ({
             </TableBody>
           ) : null}
         </table>
-        {!data?.length && <EmptyState />}
         {loading && <TableSkeleton />}
+        {!loading && !data?.length && <EmptyState />}
       </div>
 
       <Modal

@@ -18,10 +18,13 @@ export class DuftHttpClient {
     refreshToken: string | null
   ) => void;
   private updateConfig: ((config: Config) => void) | undefined;
-  private isRefreshing = false;
 
   // Array of public routes
-  private readonly publicRoutes = ["/token", "/get-current-config"];
+  private readonly publicRoutes = [
+    "/token",
+    "/token/refresh",
+    "/get-current-config",
+  ];
 
   constructor(
     baseUrl: string,
@@ -40,39 +43,6 @@ export class DuftHttpClient {
     this.getRefreshToken = getRefreshToken || (() => undefined);
     this.setAuthToken = setAuthToken || (() => {});
     this.updateConfig = updateConfig || (() => {});
-  }
-
-  private async refreshToken(): Promise<boolean> {
-    if (this.isRefreshing) return false;
-
-    try {
-      this.isRefreshing = true;
-      const refreshToken = this.getRefreshToken();
-
-      if (!refreshToken) {
-        return false;
-      }
-
-      const response = await this.makeRequest(
-        "POST",
-        `${this.baseUrl}/token/refresh/`,
-        {
-          refresh: refreshToken,
-        }
-      );
-
-      if (response.access) {
-        this.setAuthToken(response.access, response.refresh);
-        return true;
-      }
-
-      return false;
-    } catch (error) {
-      this.setAuthToken(null, null); // Clear tokens on refresh failure
-      return false;
-    } finally {
-      this.isRefreshing = false;
-    }
   }
 
   // Generic method for making HTTP requests
@@ -114,14 +84,16 @@ export class DuftHttpClient {
         case 400:
           throw new BadRequestError(errorPayload);
         case 401:
+          console.log("failed_token: ", token);
           if (!endpoint.includes("/token/refresh/")) {
-            const refreshed = await this.refreshToken();
-            if (refreshed) {
-              // Retry the original request with new token
-              return this.makeRequest(method, endpoint, body, forceAuth);
+            try {
+              await this.refreshToken();
+            } catch {
+              //We may not need the logic in the `if` statement anymore, since the app will reload with a fresh token once setAuthToken is called.
+              throw new UnauthorizedError(errorPayload);
             }
-            //We may not need the logic in the `if` statement anymore, since the app will reload with a fresh token once setAuthToken is called.
-            throw new UnauthorizedError(errorPayload);
+            // Retry the original request with new token
+            // return this.makeRequest(method, endpoint, body, forceAuth);
           }
           break;
         case 403:
@@ -187,7 +159,7 @@ export class DuftHttpClient {
     );
   }
 
-  async login(username: string, password: string): Promise<any> {
+  async login(username: string, password: string): Promise<object> {
     const response = await this.makeRequest("POST", `${this.baseUrl}/token/`, {
       username,
       password,
@@ -198,6 +170,30 @@ export class DuftHttpClient {
     }
 
     return response;
+  }
+
+  private async refreshToken(): Promise<object> {
+    try {
+      const refreshToken = this.getRefreshToken();
+      console.log("refresh token: ", refreshToken);
+
+      const response = await this.makeRequest(
+        "POST",
+        `${this.baseUrl}/token/refresh/`,
+        {
+          refresh: refreshToken,
+        }
+      );
+
+      const { access, refresh } = response;
+
+      if (access) {
+        console.log("refresh token received: ", access);
+        this.setAuthToken(access, refresh);
+      }
+    } catch (error) {
+      this.setAuthToken(null, null); // Clear tokens on refresh failure
+    }
   }
 
   async logout() {

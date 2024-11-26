@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import config from "../../config";
 import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
 import {
+  getRefreshToken,
   getTokenFromLocalStorage,
   setTokenInLocalStorage,
+  updateConfigFromHttpClient,
 } from "../../api/DuftHttpClient/local-storage-functions";
 
 interface DuftQueryResult<T> {
@@ -26,7 +28,9 @@ type RequestData = {
 const client = new DuftHttpClient(
   config.apiBaseUrl,
   getTokenFromLocalStorage,
-  setTokenInLocalStorage
+  setTokenInLocalStorage,
+  updateConfigFromHttpClient,
+  getRefreshToken
 );
 
 const useDuftQuery = <T>(requestPayload: RequestData): DuftQueryResult<T> => {
