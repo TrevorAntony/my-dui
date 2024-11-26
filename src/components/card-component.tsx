@@ -88,7 +88,7 @@ const CardComponent: FC<CardComponentProps> = ({
 
             {DetailsComponent && (
               <button
-                className="dark:text-highlight-500 pl-2 pt-[1.85px]"
+                className="pl-2 pt-[1.85px] dark:text-highlight-500"
                 onClick={toggleModal}
                 title="Show Details"
               >
@@ -111,7 +111,7 @@ const CardComponent: FC<CardComponentProps> = ({
             <div className="shrink-0">
               <NavLink
                 to={moreInfo.link}
-                className="text-highlight-700 dark:text-highlight-500 inline-flex items-center rounded-md p-1 text-xs font-medium uppercase hover:bg-gray-100 dark:hover:bg-gray-700 sm:text-sm"
+                className="inline-flex items-center rounded-md p-1 text-xs font-medium uppercase text-highlight-700 hover:bg-gray-100 dark:text-highlight-500 dark:hover:bg-gray-700 sm:text-sm"
               >
                 {moreInfo.text}
                 <svg
