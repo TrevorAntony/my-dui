@@ -9,9 +9,8 @@ const useQuery = (query) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-
         const payload = {
           query,
           data_connection_id: config.dataConnection,

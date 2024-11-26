@@ -36,9 +36,11 @@ export const client = new DuftHttpClient(
 );
 
 function Root() {
-  const [mode, setMode] = useState<"dark" | "light">(
-    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-  );
+  const getPreferredMode = (): "dark" | "light" =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  const [mode, setMode] = useState<"dark" | "light">(getPreferredMode());
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -49,8 +51,8 @@ function Root() {
       document.documentElement.classList.add(newMode);
     };
 
-    // Initial sync to DOM
-    updateTheme(mode);
+    // Sync the mode on first render
+    updateTheme(getPreferredMode());
 
     const handleChange = (event: MediaQueryListEvent) => {
       const newMode = event.matches ? "dark" : "light";
@@ -62,7 +64,7 @@ function Root() {
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
     };
-  }, [mode]);
+  }, []);
 
   return (
     <StrictMode>

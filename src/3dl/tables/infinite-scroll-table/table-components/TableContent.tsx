@@ -132,7 +132,7 @@ const TableContent = ({
             : "h-[500px] overflow-y-auto rounded"
         }
       >
-        <table className="min-w-full table-auto border-collapse">
+        <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
           <TableHeader
             headers={headers}
             visibleColumns={visibleColumns}
@@ -150,6 +150,7 @@ const TableContent = ({
             </TableBody>
           ) : null}
         </table>
+
         {loading && <TableSkeleton />}
         {!loading && !data?.length && <EmptyState />}
       </div>
