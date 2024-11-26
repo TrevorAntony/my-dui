@@ -5,11 +5,8 @@ import { SidebarProvider, useSidebarContext } from "./context/SidebarContext";
 import Navbar from "./components/navbar";
 import Sidebar from "./components/sidebar";
 import classNames from "classnames";
-import {
-  SidebarConfigProvider,
-  useSidebarConfigContext,
-} from "./3dl/context/SidebarConfigContext";
-import { useVersion } from "./hooks/useVersion";
+import { SidebarConfigProvider } from "./3dl/context/SidebarConfigContext";
+import { useAppState } from "./context/AppStateContext";
 
 interface NavbarSidebarLayoutProps {
   isFooter?: boolean;
@@ -55,13 +52,12 @@ const MainContent: FC<PropsWithChildren<NavbarSidebarLayoutProps>> = function ({
 };
 
 const MainContentFooter: FC = function () {
-  const sidebarConfig = useSidebarConfigContext();
-  const version = useVersion();
+  const { state } = useAppState();
 
   return (
     <p className="my-8 text-center text-sm text-gray-500 dark:text-gray-300">
-      &copy; {`Powered by DUFT. ${sidebarConfig.system.settings.footer}`}.
-      {version && ` Version: ${version}`}
+      © {new Date().getFullYear()} DUFT Version {state.config?.version}. All
+      Rights Reserved.
     </p>
   );
 };
