@@ -40,6 +40,7 @@ import {
   InfiniteScrollTable,
   ExportData,
   Markdown,
+  HtmlSnippet
 } from "../3dl";
 import {
   DuftGrid,
@@ -319,6 +320,16 @@ const Dashboard3DL: React.FC = () => {
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <Markdown
                     {...(props as React.ComponentProps<typeof Markdown>)}
+                    container={
+                      CardComponent as React.ComponentType<ContainerComponentProps>
+                    }
+                  />
+                </ErrorBoundary>
+              ),
+              HtmlSnippet: (props: React.ComponentProps<typeof HtmlSnippet>) => (
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <HtmlSnippet
+                    {...(props as React.ComponentProps<typeof HtmlSnippet>)}
                     container={
                       CardComponent as React.ComponentType<ContainerComponentProps>
                     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 
 interface HtmlSnippetProps {
   url: string;
@@ -44,3 +44,5 @@ export const HtmlSnippet: React.FC<HtmlSnippetProps> = ({ url, className }) => {
     />
   );
 };
+
+export default HtmlSnippet;
