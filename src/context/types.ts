@@ -28,6 +28,7 @@ interface Settings {
   version: string;
   logoURL: string;
   repository: string;
+  serverBaseURL: string;
   credits: Credits;
   additionalInfo: string;
   [key: string]: any; // Allow for additional custom settings

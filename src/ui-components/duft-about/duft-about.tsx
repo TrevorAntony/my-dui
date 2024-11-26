@@ -6,6 +6,7 @@ import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { Modal } from "flowbite-react";
 import flowbiteTheme from "../../flowbite-theme";
+import { useAppState } from "../../context/AppStateContext";
 
 interface DuftHeaderProps {
   version?: string;
@@ -49,16 +50,19 @@ const DuftHeader: React.FC<DuftHeaderProps> = ({ version = "1.0" }) => {
 };
 
 const ExtensionHeader: React.FC = () => {
+
+  const { state: { config } } = useAppState();
+
   return (
     <div className="text-default mb-4 flex items-start justify-between w-full p-4 bg-highlight-50 dark:bg-highlight-950 rounded-lg">
       <div>
         <div>
           <h3 className="font-semibold text-2xl pb-1 text-highlight-800 dark:text-highlight-200">
-            Quantum Extension
+          { config?.settings?.appName}
           </h3>
           Developed by <br />
-          RMNE Team <br />
-          Ministy of Health and Social Services
+          { config?.settings?.credits?.department} <br />
+          { config?.settings?.credits?.organisaton}
         </div>
       </div>
       <div className="flex items-center space-x-4">
@@ -69,13 +73,13 @@ const ExtensionHeader: React.FC = () => {
           style={{ height: "55px" }}
         />
         <img
-          src="http://127.0.0.1:8000/config/nalogo.jpeg"
+          src={`${config?.serverBaseURL}/config/nalogo.jpeg`}
           alt="UCSF Logo"
           className="dark:hidden pt-3"
           style={{ height: "55px" }}
         />
         <img
-          src="http://127.0.0.1:8000/config/nalogo.jpeg"
+          src={`${config?.serverBaseURL}/config/nalogo.jpeg`}
           alt="UCSF Logo"
           className="hidden dark:block pt-3"
           style={{ height: "55px" }}
@@ -108,6 +112,8 @@ const customTheme = mergeDeep2(flowbiteTheme.tabs, {
 });
 
 const AboutDlg = ({ isOpen, onClose }) => {
+  const { state: { config } } = useAppState();
+  
   return (
     <Modal show={isOpen} onClose={() => onClose()} position="center" size="6xl">
       <Modal.Header>About DUFT</Modal.Header>
@@ -120,9 +126,10 @@ const AboutDlg = ({ isOpen, onClose }) => {
                 <h3 className="font-semibold text-xl pb-4">About DUFT</h3>
                 <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <div className="text-sm text-gray-600 dark:text-gray-300">
-                    <p>DUFT Platform Version 1.0.4</p>
-                    <p>Python Path: /usr/bin/python</p>
-                    <p>Python Version: 3.12</p>
+                    <p>DUFT Platform Version {config?.version}</p>
+                    <p>Python Path: {config?.pythonPath}</p>
+                    <p>Python Version: {config?.pythonVersion}</p>
+                    <p>Server: {config?.serverBaseURL}</p>
                     
                     <p className="pt-4">Backed by Django/Python</p>
                     <p>Powered by ReactJS / Tailwind / Flowbite</p>
@@ -182,7 +189,7 @@ const AboutDlg = ({ isOpen, onClose }) => {
             </Tabs.Item>
             
             <Tabs.Item title="Extensions" disabled={true} ></Tabs.Item>
-            <Tabs.Item title="Quantum Extension" icon={MdDashboard} >
+            <Tabs.Item title={ config?.settings?.name} icon={MdDashboard} >
               <div className="w-full">
                 <ExtensionHeader />
                 <div className="text-default pt-2">
@@ -191,23 +198,25 @@ const AboutDlg = ({ isOpen, onClose }) => {
                     <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <h4 className="font-semibold text-base mb-3">Product Owners</h4>
                       <div className="text-sm text-gray-600 dark:text-gray-300">
-                        <p>MOH Team Member 1</p>
-                        <p>MOH Team Member 2</p>
-                        <p>MOH Team Member 3</p>
+                        {config?.settings?.credits?.productOwners?.map((owner, index) => (
+                          <p key={index}>{owner}</p>
+                        ))}
                       </div>
                     </div>
                     <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <h4 className="font-semibold text-base mb-3">Development Team</h4>
                       <div className="text-sm text-gray-600 dark:text-gray-300">
-                        <p>Davidson Gikandi</p>
+                        {config?.settings?.credits?.developers?.map((developer, index) => (
+                          <p key={index}>{developer}</p>
+                        ))}
                       </div>
                     </div>
                   </div>
                   <h3 className="font-semibold text-xl pb-4 pt-4">About Quantum Extension</h3>
                   <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                     <div className="text-sm text-gray-600 dark:text-gray-300">
-                      <p>Quantum Extension Version 1.0.4</p>
-                      <p>Repository: github.com/duftapp/duft-basic-3dl</p>
+                      <p>{ config?.settings?.name} Version { config?.settings?.version}</p>
+                      <p>Repository: { config?.settings.repository}</p>
                     </div>
                   </div>
                   <h3 className="font-semibold text-xl pb-4 pt-4">Additional Information</h3>
@@ -240,7 +249,7 @@ const AboutDlg = ({ isOpen, onClose }) => {
       </Modal.Body>
       <Modal.Footer>
         <div className="flex justify-end w-full">
-          <Button onClick={() => onClose()} color="primary" >Close</Button>
+          <Button onClick={() => onClose()} color="primary">Close</Button>
         </div>
       </Modal.Footer>
     </Modal>
