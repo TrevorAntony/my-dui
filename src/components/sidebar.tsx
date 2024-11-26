@@ -155,18 +155,6 @@ const ExampleSidebar: FC = function () {
           </div>
         </Sidebar>
       </div>
-      <DuftModal
-        isOpen={isSettingsOpen}
-        title="Settings"
-        onClose={() => {
-          setIsSettingsOpen(false);
-        }}
-        modalWidth="medium"
-        modalHeight="medium"
-        resize="false"
-      >
-        <SettingsDisplay />
-      </DuftModal>
 
       <Modal
         show={isSettingsOpen}

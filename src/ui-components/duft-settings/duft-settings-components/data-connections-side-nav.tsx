@@ -22,7 +22,7 @@ const DataConnectionSelector = ({
   }
 
   const hasConnections = Object.keys(dataConnections).some((key) =>
-    isValidArray(dataConnections[key]),
+    isValidArray(dataConnections[key])
   );
 
   if (!hasConnections) {
@@ -65,7 +65,7 @@ const DataConnectionSelector = ({
                         } Connection ${index + 1}`}
                     </button>
                   </li>
-                ),
+                )
               )
             ) : (
               <li>No connections available for {key}.</li>
