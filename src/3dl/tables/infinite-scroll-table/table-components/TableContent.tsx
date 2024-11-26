@@ -132,26 +132,25 @@ const TableContent = ({
             : "h-[500px] overflow-y-auto rounded"
         }
       >
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-            <TableHeader
+        <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+          <TableHeader
+            headers={headers}
+            visibleColumns={visibleColumns}
+            sortState={sortState}
+            handleSort={handleSort}
+          />
+          {data?.length ? (
+            <TableBody
+              data={data}
               headers={headers}
               visibleColumns={visibleColumns}
-              sortState={sortState}
-              handleSort={handleSort}
-            />
-            {data?.length ? (
-              <TableBody
-                data={data}
-                headers={headers}
-                visibleColumns={visibleColumns}
-                handleCellClick={handleCellClickInternal}
-              >
-                {children}
-              </TableBody>
-            ) : null}
-          </table>
-        </div>
+              handleCellClick={handleCellClickInternal}
+            >
+              {children}
+            </TableBody>
+          ) : null}
+        </table>
+
         {!data?.length && <EmptyState />}
         {loading && <TableSkeleton />}
       </div>

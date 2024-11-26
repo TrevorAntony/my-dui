@@ -23,7 +23,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   }
 
   return (
-    <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+    <thead className="bg-gray-50 text-sm uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
       <tr>
         {preservedHeaders
           ?.filter((header) => visibleColumns[header])
@@ -31,7 +31,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
             <th
               key={header}
               scope="col"
-              className="cursor-pointer px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-600"
+              className="sticky top-0  cursor-pointer bg-gray-50 px-6 py-3 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600"
               onClick={() => handleSort(header)}
             >
               <div className="flex items-center">
