@@ -29,7 +29,8 @@ export function getRefreshToken(): string | undefined {
  */
 export function setTokenInLocalStorage(
   accessToken: string | null,
-  refreshToken: string | null
+  refreshToken: string | null,
+  autoUpdateConfig: boolean = true
 ): void {
   if (accessToken) {
     localStorage.setItem("accessToken", accessToken);
@@ -42,8 +43,11 @@ export function setTokenInLocalStorage(
   } else {
     localStorage.removeItem("refreshToken");
   }
-  // Update config after token change
-  client.getCurrentConfig();
+  
+  // Only update config if autoUpdateConfig is true
+  if (autoUpdateConfig) {
+    client.getCurrentConfig();
+  }
   console.log("donnneee!");
 }
 
