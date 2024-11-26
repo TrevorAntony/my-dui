@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
-import config from "../../config";
-
-const client = new DuftHttpClient(config.apiBaseUrl);
+import { client } from "../..";
 
 const useDashboardData = (id: string) => {
   const [dashboardData, setDashboardData] = useState<string | null>(null);

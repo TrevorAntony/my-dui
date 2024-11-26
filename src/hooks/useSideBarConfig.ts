@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { defaultSidebarConfig } from "../helpers/constants";
 import type { NavigationConfig } from "../components/types";
-import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
-import config from "../config";
-
-const client = new DuftHttpClient(config.apiBaseUrl);
+import { client } from "..";
 
 export const useSidebarConfig = () => {
   const [sidebarConfig, setSidebarConfig] = useState(defaultSidebarConfig);

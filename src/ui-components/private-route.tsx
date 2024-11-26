@@ -1,19 +1,17 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAppState } from "../context/AppStateContext";
+import { checkAuthEnabled, checkUserLoggedIn } from "../utils/auth-utils";
 
-const PrivateRoute = ({
-  authenticationEnabled,
-}: {
-  authenticationEnabled: boolean;
-}) => {
-  const { isAuthenticated } = useAuth();
+const PrivateRoute = () => {
+  const { state } = useAppState();
+  const isAuthEnabled = checkAuthEnabled(state);
+  const isLoggedIn = checkUserLoggedIn(state);
 
-  if (!authenticationEnabled) {
-    console.log("Authentication disabled, rendering outlet.");
+  if (!isAuthEnabled) {
     return <Outlet />;
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import config from "../../config";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
+import { client } from "../..";
 
 const useQuery = (query) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-
-  const client = new DuftHttpClient(config.apiBaseUrl);
 
   useEffect(() => {
     const fetchData = async () => {

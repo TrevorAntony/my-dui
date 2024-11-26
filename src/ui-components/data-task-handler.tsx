@@ -25,7 +25,7 @@ const DataTaskHandler: React.FC = () => {
   const toggleModal = () => {
     setIsOpen(!isOpen);
     setError(null);
-    window.location.href = "/dashboard/home";
+    window.location.reload();
   };
 
   const handleDataTask = async () => {

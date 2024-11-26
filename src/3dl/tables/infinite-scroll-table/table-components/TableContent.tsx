@@ -10,6 +10,7 @@ import ExportData from "../../../utilities/export-data/export-data";
 import Dataset from "../../../utilities/data-set";
 import useDuftQuery from "../../../../3dlcomponents/resources/useDuftQuery";
 import EmptyState from "../../../ui-elements/empty-state";
+import { Button, Modal } from "flowbite-react";
 
 const TableContent = ({
   data,
@@ -74,7 +75,7 @@ const TableContent = ({
     setSelectedRowData(row);
 
     const matchingChild = React.Children.toArray(children).find(
-      (child) => React.isValidElement(child) && child.props.columnName === key,
+      (child) => React.isValidElement(child) && child.props.columnName === key
     );
 
     if (matchingChild) {
@@ -82,7 +83,7 @@ const TableContent = ({
         matchingChild as React.ReactElement,
         {
           config: row,
-        },
+        }
       );
       setRenderedChild(clonedChild);
     } else {
@@ -149,18 +150,28 @@ const TableContent = ({
             </TableBody>
           ) : null}
         </table>
-        {!data?.length && <EmptyState />}
         {loading && <TableSkeleton />}
+        {!loading && !data?.length && <EmptyState />}
       </div>
 
-      <TableModal
-        isOpen={isModalOpen}
+      <Modal
+        show={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        ModalComponent={ModalComponent ?? (() => null)}
-        renderedChild={renderedChild}
-        selectedRowData={selectedRowData}
-        resize={resize}
-      />
+        position="center"
+        size="4xl"
+      >
+        <Modal.Header>"Table content"</Modal.Header>
+        <Modal.Body className="flex flex-col overflow-hidden ">
+          {renderedChild}
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full justify-end">
+            <Button onClick={() => setIsModalOpen(false)} color="primary">
+              Close
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

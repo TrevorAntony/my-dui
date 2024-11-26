@@ -2,6 +2,7 @@
 import { useState, useEffect, useContext, useMemo } from "react";
 import { DashboardContext } from "./Dashboard";
 import config from "../../config";
+import { client } from "../..";
 
 interface UseDataSetLogicProps {
   query: string;
@@ -54,7 +55,7 @@ const useDataSetLogic = ({
       sortColumn,
       pageSize,
       currentPage,
-    ],
+    ]
   );
 
   const {
@@ -95,22 +96,12 @@ const useDataSetLogic = ({
     const fetchData = async () => {
       if (debug === true || debug === "true") {
         try {
-          const response = await fetch(`${config.apiBaseUrl}/build-query`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestData),
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          console.log("Debug - /build-query response:", data);
+          // Call the getQueryData method
+          const data = await client.getQueryData(requestData);
+          console.log("Debug - /run-query response:", data);
         } catch (error) {
-          console.error("Debug - Error fetching /build-query:", error);
+          // Handle any errors thrown by the client
+          console.error("Debug - Error fetching /run-query:", error);
         }
       }
     };

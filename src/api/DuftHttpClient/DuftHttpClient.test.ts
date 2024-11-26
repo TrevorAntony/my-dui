@@ -1,69 +1,223 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { DuftHttpClient } from "./DuftHttpClient";
+import { UnauthorizedError } from "./ErrorClasses";
 
-const BASE_URL = "http://127.0.0.1:8000/api/v2";
-
-it("should fetch the current config from the API", async () => {
+describe("DuftHttpClient - getCurrentConfig", () => {
+  const BASE_URL = "http://127.0.0.1:8000/api/v2";
   const client = new DuftHttpClient(BASE_URL);
-  const config = await client.getCurrentConfig();
 
-  expect(config).toBeDefined();
-  expect(config).toHaveProperty("features");
+  it("should fetch the current config successfully", async () => {
+    try {
+      const response = await client.getCurrentConfig();
 
-  const features = config.features;
-  expect(Array.isArray(features)).toBe(true);
+      // General structure
+      expect(response).toBeDefined();
+      expect(response).toHaveProperty("settings");
 
-  // Find the feature flag for user authentication and assert its value
-  const userAuthFeature = features.find(
-    (feature: { user_authentication?: boolean }) =>
-      "user_authentication" in feature
-  );
-  expect(userAuthFeature?.user_authentication).toBe(false);
-
-  // Assert other properties in the response
-  expect(config).toHaveProperty("currentUser", null);
-  expect(config).toHaveProperty("currentUserPermissions");
-  expect(config.currentUserPermissions).toEqual([]);
-  expect(config).toHaveProperty("currentUserRoles");
-  expect(config.currentUserRoles).toEqual([]);
-
-  // Check settings
-  expect(config).toHaveProperty("settings");
-  expect(config.settings).toHaveProperty("appName", "DUFT (configurable)");
-  expect(config.settings).toHaveProperty("footer", "Configurable footer text");
-  expect(config.settings).toHaveProperty("custom", "Custom setting");
+      // Features structure and values
+      expect(Array.isArray(response.features)).toBe(true);
+      expect(response.features.length).toBeGreaterThan(0);
+    } catch (error) {
+      console.error("Error fetching current config:", error);
+      throw error;
+    }
+  });
 });
 
-describe("DuftHttpClient Integration Tests", () => {
-  const baseUrl = BASE_URL;
-  const httpClient = new DuftHttpClient(baseUrl);
+describe("DuftHttpClient - Real Authentication and getCurrentConfig", () => {
+  const BASE_URL = "http://127.0.0.1:8000/api/v2";
 
-  beforeAll(() => {
-    localStorage.setItem(
-      "accessToken",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMxODc0NDAzLCJpYXQiOjE3MzE4NzQxMDMsImp0aSI6ImJjZjc1MTM5YzdkYTQ3ZWZiZDllZTlhNjY3YTgzN2EwIiwidXNlcl9pZCI6MX0.mZ6l8oWBYFENd_sYqjt74FGIZyt5-2mqR_9a5G_fzNs"
-    );
-    localStorage.setItem(
-      "refreshToken",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMTk2MDUwMywiaWF0IjoxNzMxODc0MTAzLCJqdGkiOiJkYWZiMDRiNGU3MjY0NmMyYmE3MDA4ZGRhMDM1NjgwYiIsInVzZXJfaWQiOjF9.mO6_1S26Fe0MryJzMV7-StWDaAWzb9oYIyN7lNibE_Q"
-    );
+  // In-memory token storage for the test
+  let tokenStore: string | null;
+
+  const getTokenFromStore = (): string | null => {
+    return tokenStore;
+  };
+
+  const setTokenInStore = (token: string): void => {
+    tokenStore = token;
+  };
+
+  const client = new DuftHttpClient(
+    BASE_URL,
+    getTokenFromStore,
+    setTokenInStore
+  );
+
+  beforeEach(() => {
+    tokenStore = null; // Reset token store before each test
   });
 
-  afterAll(() => {
-    // Clear tokens from localStorage after tests
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+  it("should fetch user, roles, and permissions after successful authentication", async () => {
+    // Replace with valid test credentials
+    const username = "admin";
+    const password = "--------";
+
+    // Authenticate and store token
+    const loginResponse = await client.login(username, password);
+
+    expect(loginResponse).toHaveProperty("access");
+    expect(loginResponse.access).toBeDefined();
+    expect(typeof loginResponse.access).toBe("string");
+
+    // Ensure the token is stored in the in-memory store
+    expect(tokenStore).toBe(loginResponse.access);
+
+    // Fetch configuration
+    const configResponse = await client.getCurrentConfig();
+
+    expect(configResponse).toHaveProperty("currentUser");
+    expect(configResponse).toHaveProperty("currentUserRoles");
+
+    expect(configResponse.currentUser).not.toBeNull();
+    expect(configResponse.currentUserPermissions.length).toBeGreaterThan(0);
+    expect(configResponse.currentUserRoles.length).toBeGreaterThan(0);
+  });
+});
+
+describe("DuftHttpClient - login", () => {
+  const BASE_URL = "http://127.0.0.1:8000/api/v2";
+  const client = new DuftHttpClient(BASE_URL);
+
+  it("should login successfully and return a token", async () => {
+    const username = "data_manager"; // Replace with valid test credentials
+    const password = "--------"; // Replace with valid test credentials
+
+    try {
+      const response = await client.login(username, password);
+
+      // General structure
+      expect(response).toBeDefined();
+      expect(response).toHaveProperty("access");
+      expect(typeof response.access).toBe("string");
+    } catch (error) {
+      console.error("Error during login:", error);
+      throw error;
+    }
   });
 
-  it("should successfully run a data task", async () => {
-    const taskPayload = {
-      data_task_id: "SAMPLE-NOTEBOOK",
-    };
+  it("should throw UnauthorizedError for invalid credentials", async () => {
+    const invalidUsername = "invalid_user"; // Invalid username
+    const invalidPassword = "wrong_password"; // Invalid password
 
-    const result = await httpClient.runDataTask(taskPayload);
+    try {
+      await client.login(invalidUsername, invalidPassword);
+      // If no error is thrown, fail the test
+      throw new Error("Expected UnauthorizedError but no error was thrown");
+    } catch (error) {
+      // Validate that the error is an instance of UnauthorizedError
+      expect(error).toBeInstanceOf(UnauthorizedError);
 
-    expect(result).toBeDefined();
-    expect(result).toHaveProperty("message");
-    expect(result.message).toBe("Script started successfully.");
+      // Optionally check for a specific error message or payload
+      if (error instanceof UnauthorizedError) {
+        expect(error.message).toBeDefined();
+        expect(error.message).toContain("Unauthorized"); // Adjust based on your API's error response
+      }
+    }
   });
+});
+
+describe("DuftHttpClient - Protected Routes", () => {
+  const BASE_URL = "http://127.0.0.1:8000/api/v2";
+
+  // In-memory token storage for the test
+  let tokenStore: string | null;
+
+  const getTokenFromStore = (): string | null => {
+    return tokenStore;
+  };
+
+  const setTokenInStore = (token: string): void => {
+    tokenStore = token;
+  };
+
+  const client = new DuftHttpClient(
+    BASE_URL,
+    getTokenFromStore,
+    setTokenInStore
+  );
+
+  beforeEach(() => {
+    tokenStore = null; // Reset token store before each test
+  });
+
+  it("should fetch navigation file after authenticating", async () => {
+    const username = "data_manager"; // Replace with valid credentials
+    const password = "--------"; // Replace with valid credentials
+
+    try {
+      // Step 1: Authenticate and retrieve the token
+      const loginResponse = await client.login(username, password);
+      expect(loginResponse).toHaveProperty("access");
+
+      const token = loginResponse.access;
+      expect(typeof token).toBe("string");
+
+      // Step 3: Access the protected route
+      const navigationResponse = await client.getNavigationFile();
+
+      // Step 4: Assert the returned data structure
+      expect(navigationResponse).toBeDefined();
+    } catch (error) {
+      console.error("Error fetching protected route data:", error);
+      throw error;
+    }
+  });
+});
+
+describe("DuftHttpClient - Token Refresh", () => {
+  const BASE_URL = "http://127.0.0.1:8000/api/v2";
+  let accessToken: string | null = null;
+  let refreshToken: string | null = null;
+
+  const getAccessToken = () => accessToken;
+  const getRefreshToken = () => refreshToken;
+  const setTokens = (
+    newAccessToken: string | null,
+    newRefreshToken: string | null
+  ) => {
+    accessToken = newAccessToken;
+    refreshToken = newRefreshToken;
+  };
+
+  const client = new DuftHttpClient(
+    BASE_URL,
+    getAccessToken,
+    setTokens,
+    undefined,
+    getRefreshToken
+  );
+
+  beforeEach(() => {
+    accessToken = null;
+    refreshToken = null;
+  });
+
+  it("should refresh token when access token expires", async () => {
+    // First login to get initial tokens
+    const username = "data_manager"; // Replace with valid test credentials
+    const password = "--------"; // Replace with valid test credentials
+
+    const loginResponse = await client.login(username, password);
+    expect(loginResponse).toHaveProperty("access");
+    expect(loginResponse).toHaveProperty("refresh");
+
+    // Store the initial tokens for comparison
+    const initialAccessToken = accessToken;
+
+    // Wait for access token to expire (adjust time based on your token expiry setting)
+    // For testing, you might want to set a short expiry time in your dev environment
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // 5 seconds
+
+    // Make a request that should trigger token refresh
+    const response = await client.getCurrentConfig();
+
+    // Verify we got a new access token
+    expect(accessToken).toBeDefined();
+    expect(accessToken).not.toBe(initialAccessToken);
+
+    // Verify the new token works by making another request
+    const secondResponse = await client.getCurrentConfig();
+    expect(secondResponse).toBeDefined();
+  }, 10000); // Increase timeout to account for waiting period
 });
