@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAppState } from '../context/AppStateContext';
 
 interface HtmlSnippetProps {
   url: string;
@@ -6,13 +7,15 @@ interface HtmlSnippetProps {
 }
 
 export const HtmlSnippet: React.FC<HtmlSnippetProps> = ({ url, className }) => {
+  const { state: { config } } = useAppState();
   const [content, setContent] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchHtml = async () => {
       try {
-        const response = await fetch(url);
+        const fullUrl = `${config?.settings?.serverBaseURL}${url}`;
+        const response = await fetch(fullUrl);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -25,8 +28,10 @@ export const HtmlSnippet: React.FC<HtmlSnippetProps> = ({ url, className }) => {
       }
     };
 
-    fetchHtml();
-  }, [url]);
+    if (config?.settings?.serverBaseURL) {
+      fetchHtml();
+    }
+  }, [url, config?.settings?.serverBaseURL]);
 
   if (error) {
     return <div className="error">{error}</div>;
