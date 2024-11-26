@@ -31,16 +31,18 @@ const TableHeader: React.FC<TableHeaderProps> = ({
             <th
               key={header}
               scope="col"
-              className="sticky top-0  cursor-pointer bg-gray-50 px-6 py-3 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600"
+              className="sticky top-0 cursor-pointer bg-gray-50 px-6 py-3 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600"
               onClick={() => handleSort(header)}
             >
               <div className="flex items-center">
                 {header.charAt(0).toUpperCase() + header.slice(1)}
                 <svg
-                  className={`ml-1.5 h-4 w-4 ${
+                  className={`ml-1.5 ${
+                    sortState[header] ? "h-5 w-5" : "h-4 w-4"
+                  } ${
                     sortState[header]
-                      ? "text-blue-600 dark:text-blue-500"
-                      : "text-gray-400 dark:text-gray-600"
+                      ? "text-highlight-600 dark:text-highlight-600"
+                      : "text-gray-600 dark:text-gray-300"
                   }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
