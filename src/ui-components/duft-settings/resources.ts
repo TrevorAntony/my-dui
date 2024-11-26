@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import config from "../../config";
-import { useAuth } from "../../context/AuthContext";
+import { client } from "../../index";
 
 interface Param {
   name: string;
@@ -33,33 +32,19 @@ export const isValidArray = (array) => {
 export const useDataConnections = () => {
   const [dataConnections, setDataConnections] =
     useState<DataConnectionsResponse | null>(null);
-  const { accessToken, logout } = useAuth();
 
   useEffect(() => {
     const fetchDataConnections = async () => {
       try {
-        const response = await fetch(`${config.apiBaseUrl}/data-connections`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        if (response.status === 401) {
-          logout();
-          throw new Error("Session expired. Please log in again.");
-        }
-
-        const data: DataConnectionsResponse = await response.json();
+        const data = await client.getDataConnections();
         setDataConnections(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    if (accessToken) {
-      fetchDataConnections();
-    }
-  }, [accessToken, logout]);
+    fetchDataConnections();
+  }, []);
 
   return dataConnections;
 };

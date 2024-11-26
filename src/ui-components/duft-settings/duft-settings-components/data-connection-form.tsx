@@ -9,6 +9,7 @@ import ToastNotification from "../../notification-toast";
 import type { Connection, DataConnectionFormProps } from "../resources";
 import DuftModal from "../../../components/duft-modal";
 import { useAuth } from "../../../context/AuthContext";
+import { client } from "../../../index";
 
 const DataConnectionForm: FC<DataConnectionFormProps> = ({
   connection,
@@ -40,26 +41,20 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
     formHasChanges.current = true;
   };
 
-  const fetchData = (conn: Connection) => {
+  const fetchData = async (conn: Connection) => {
     if (conn) {
-      fetch(`${config.apiBaseUrl}/data-connections/${conn.id}/parameters`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          const fields = conn.params.map((param) => ({
-            name: param.name,
-            value: data[param.name] || "",
-          }));
-          setFormData(fields);
-          formHasChanges.current = false;
-          previousConnection.current = conn;
-        })
-        .catch((error) =>
-          console.error("Error fetching connection details:", error)
-        );
+      try {
+        const data = await client.getConnectionParameters(conn.id);
+        const fields = conn.params.map((param) => ({
+          name: param.name,
+          value: data[param.name] || "",
+        }));
+        setFormData(fields);
+        formHasChanges.current = false;
+        previousConnection.current = conn;
+      } catch (error) {
+        console.error("Error fetching connection details:", error);
+      }
     } else {
       setFormData([]);
       formHasChanges.current = false;

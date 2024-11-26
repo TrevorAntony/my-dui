@@ -256,4 +256,15 @@ export class DuftHttpClient {
   async logout() {
     this.setAuthToken(null, null);
   }
+
+  async getDataConnections(): Promise<any> {
+    return this.makeRequest("GET", `${this.baseUrl}/data-connections`);
+  }
+
+  async getConnectionParameters(connectionId: string): Promise<any> {
+    return this.makeRequest(
+      "GET",
+      `${this.baseUrl}/data-connections/${connectionId}/parameters`
+    );
+  }
 }
