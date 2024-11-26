@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { FiChevronUp, FiChevronDown } from "react-icons/fi";
-import { LuChevronsUpDown } from "react-icons/lu";
 
 interface TableHeaderProps {
   headers: string[];
   visibleColumns: Record<string, boolean>;
-  sortState: Record<string, "ASC" | "DESC" | null>; // Null for unsorted columns
+  sortState: Record<string, "ASC" | "DESC" | null>;
   handleSort: (column: string) => void;
 }
 
@@ -25,29 +23,54 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   }
 
   return (
-    <thead className="bg-gray-50 dark:bg-gray-900">
+    <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
       <tr>
         {preservedHeaders
           ?.filter((header) => visibleColumns[header])
           .map((header) => (
             <th
               key={header}
-              className="sticky top-0 cursor-pointer select-none bg-gray-100 px-4 py-2 text-left text-gray-500 hover:text-gray-900 dark:bg-gray-900 dark:text-gray-300"
+              scope="col"
+              className="cursor-pointer px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-600"
               onClick={() => handleSort(header)}
             >
-              <div className="flex items-center justify-start space-x-2">
-                <span>{header.charAt(0).toUpperCase() + header.slice(1)}</span>
-                {sortState[header] ? (
-                  <span>
-                    {sortState[header] === "ASC" ? (
-                      <FiChevronUp className="h-4 w-4 text-gray-600" />
-                    ) : (
-                      <FiChevronDown className="h-4 w-4 text-gray-600" />
-                    )}
-                  </span>
-                ) : (
-                  <LuChevronsUpDown />
-                )}
+              <div className="flex items-center">
+                {header.charAt(0).toUpperCase() + header.slice(1)}
+                <svg
+                  className={`ml-1.5 h-4 w-4 ${
+                    sortState[header]
+                      ? "text-blue-600 dark:text-blue-500"
+                      : "text-gray-400 dark:text-gray-600"
+                  }`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  {sortState[header] ? (
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d={
+                        sortState[header] === "ASC"
+                          ? "M8 20V10m0 10-3-3m3 3 3-3" // Up
+                          : "M8 10v10m0-10-3 3m3-3 3 3" // Down
+                      }
+                    />
+                  ) : (
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 20V10m0 10-3-3m3 3 3-3m5-13v10m0-10 3 3m-3-3-3 3"
+                    />
+                  )}
+                </svg>
               </div>
             </th>
           ))}

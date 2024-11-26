@@ -75,7 +75,7 @@ const TableContent = ({
     setSelectedRowData(row);
 
     const matchingChild = React.Children.toArray(children).find(
-      (child) => React.isValidElement(child) && child.props.columnName === key
+      (child) => React.isValidElement(child) && child.props.columnName === key,
     );
 
     if (matchingChild) {
@@ -83,7 +83,7 @@ const TableContent = ({
         matchingChild as React.ReactElement,
         {
           config: row,
-        }
+        },
       );
       setRenderedChild(clonedChild);
     } else {
@@ -132,24 +132,26 @@ const TableContent = ({
             : "h-[500px] overflow-y-auto rounded"
         }
       >
-        <table className="min-w-full table-auto border-collapse">
-          <TableHeader
-            headers={headers}
-            visibleColumns={visibleColumns}
-            sortState={sortState}
-            handleSort={handleSort}
-          />
-          {data?.length ? (
-            <TableBody
-              data={data}
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+            <TableHeader
               headers={headers}
               visibleColumns={visibleColumns}
-              handleCellClick={handleCellClickInternal}
-            >
-              {children}
-            </TableBody>
-          ) : null}
-        </table>
+              sortState={sortState}
+              handleSort={handleSort}
+            />
+            {data?.length ? (
+              <TableBody
+                data={data}
+                headers={headers}
+                visibleColumns={visibleColumns}
+                handleCellClick={handleCellClickInternal}
+              >
+                {children}
+              </TableBody>
+            ) : null}
+          </table>
+        </div>
         {!data?.length && <EmptyState />}
         {loading && <TableSkeleton />}
       </div>
