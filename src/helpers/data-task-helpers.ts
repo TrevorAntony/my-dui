@@ -1,8 +1,5 @@
-import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
-import config from "../config";
+import { client } from "..";
 import type { DataTaskResponse } from "../types/data-task";
-
-const client = new DuftHttpClient(config.apiBaseUrl);
 
 export const executeDataTask = async (
   id: string

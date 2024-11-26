@@ -1,23 +1,11 @@
 import { useState } from "react";
-import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
-import {
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-  updateConfigFromHttpClient,
-} from "../api/DuftHttpClient/local-storage-functions";
+import { client } from "..";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const client = new DuftHttpClient(
-    "http://127.0.0.1:8000/api/v2",
-    getTokenFromLocalStorage,
-    setTokenInLocalStorage,
-    updateConfigFromHttpClient
-  );
 
   const login = async (username: string, password: string) => {
     setLoading(true);

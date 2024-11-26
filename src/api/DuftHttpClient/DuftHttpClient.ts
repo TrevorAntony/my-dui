@@ -31,7 +31,7 @@ export class DuftHttpClient {
   // Shared promise to handle token refresh concurrency
   private refreshTokenPromise: Promise<void> | null = null;
 
-  private constructor(
+  public constructor(
     baseUrl: string,
     getAuthToken?: () => string | undefined,
     setAuthToken?: (
@@ -85,9 +85,13 @@ export class DuftHttpClient {
 
         console.log("Refreshing token with refresh token:", refreshToken);
 
-        const response = await this.makeRequest("POST", `${this.baseUrl}/token/refresh/`, {
-          refresh: refreshToken,
-        });
+        const response = await this.makeRequest(
+          "POST",
+          `${this.baseUrl}/token/refresh/`,
+          {
+            refresh: refreshToken,
+          }
+        );
 
         const { access, refresh } = response;
 
@@ -129,7 +133,10 @@ export class DuftHttpClient {
       headers["Authorization"] = `Bearer ${token}`;
     }
 
-    console.log(`Making request to ${endpoint} with method ${method} and headers`, headers);
+    console.log(
+      `Making request to ${endpoint} with method ${method} and headers`,
+      headers
+    );
 
     const response = await fetch(endpoint, {
       method,
@@ -153,7 +160,10 @@ export class DuftHttpClient {
               return this.makeRequest(method, endpoint, body, forceAuth); // Retry with refreshed token
             }
           } catch (error) {
-            console.error("Unauthorized error after token refresh attempt:", error);
+            console.error(
+              "Unauthorized error after token refresh attempt:",
+              error
+            );
             throw new UnauthorizedError(errorPayload);
           }
         }
@@ -230,7 +240,11 @@ export class DuftHttpClient {
     });
 
     if (response.access && response.refresh) {
-      console.log("Login successful, setting tokens:", response.access, response.refresh);
+      console.log(
+        "Login successful, setting tokens:",
+        response.access,
+        response.refresh
+      );
       this.setAuthToken(response.access, response.refresh);
     } else {
       console.log("Login failed, no tokens received");
