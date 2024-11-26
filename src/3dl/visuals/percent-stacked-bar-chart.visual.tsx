@@ -2,8 +2,9 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme context
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
-import ChartSkeleton from "../../ui-components/chart-skeleton";
+import EmptyState from "../ui-elements/empty-state";
 import type { VisualProps } from "../../types/visual-props";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 type DataItem = {
   category?: string;
@@ -19,12 +20,26 @@ const PercentStackedBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  ...props
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
-  const { data } = useDataContext();
+  const { data, loading } = useDataContext();
+
+  if (loading) {
+    return <ChartSkeleton />;
+  }
 
   if (!data || !Array.isArray(data) || !data.length) {
-    return <ChartSkeleton />;
+    const content = (
+      <EmptyState message="No data available for percent stacked bar chart" />
+    );
+    return Container ? (
+      <Container header={""} {...props}>
+        {content}
+      </Container>
+    ) : (
+      content
+    );
   }
 
   // Extract categories

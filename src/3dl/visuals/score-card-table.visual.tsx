@@ -4,8 +4,9 @@ import { MantineReactTable } from "mantine-react-table";
 import { Box } from "@mantine/core";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
-import TableSkeleton from "../../ui-components/table-skeleton";
 import type { VisualProps } from "../../types/visual-props";
+import EmptyState from "../ui-elements/empty-state";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const ScoreCardTable = ({
   container: ContainerComponent,
@@ -18,11 +19,23 @@ const ScoreCardTable = ({
   resize = "false",
   ...props
 }: VisualProps) => {
-  const { data } = useDataContext();
+  const { data, loading } = useDataContext();
   const layout = useLayout();
+  if (loading) {
+    return <ChartSkeleton />;
+  }
 
   if (!data || !Array.isArray(data) || data.length === 0) {
-    return <TableSkeleton />;
+    const content = (
+      <EmptyState message="No data available for score card table" />
+    );
+    return ContainerComponent ? (
+      <ContainerComponent header={""} {...props}>
+        {content}
+      </ContainerComponent>
+    ) : (
+      content
+    );
   }
 
   const columns = Object.keys(data[0])
