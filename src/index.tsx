@@ -36,23 +36,24 @@ export const client = new DuftHttpClient(
 );
 
 function Root() {
-  const getPreferredMode = (): "dark" | "light" =>
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  const [mode, setMode] = useState<"dark" | "light">(getPreferredMode());
+  const getPreferredMode = (): "dark" | "light" => 
+    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+  const initialMode = localStorage.getItem("flowbite-theme-mode") as "dark" | "light" || getPreferredMode();
+  const [mode, setMode] = useState<"dark" | "light">(initialMode);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const updateTheme = (newMode: "dark" | "light") => {
       setMode(newMode);
+      localStorage.setItem("flowbite-theme-mode", newMode);
       document.documentElement.classList.remove("dark", "light");
       document.documentElement.classList.add(newMode);
     };
 
     // Sync the mode on first render
-    updateTheme(getPreferredMode());
+    updateTheme(initialMode);
 
     const handleChange = (event: MediaQueryListEvent) => {
       const newMode = event.matches ? "dark" : "light";
@@ -64,7 +65,7 @@ function Root() {
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
     };
-  }, []);
+  }, [initialMode]);
 
   return (
     <StrictMode>
