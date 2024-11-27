@@ -25,7 +25,7 @@ const renderSidebarMenu = (config: NavigationConfig) => {
   const homeLink = homeConfig ? (
     <Sidebar.ItemGroup key="home-group">
       <SidebarNavLink
-        to={homeConfig.dashboard}
+        to="/"  // Always use root path for home link
         icon={iconMap[homeConfig.icon] || HiHome}
       >
         {homeConfig.title}
