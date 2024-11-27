@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Button, DarkThemeToggle, Navbar } from "flowbite-react";
+import { Button, Navbar } from "flowbite-react";
 import { HiMenuAlt1, HiX } from "react-icons/hi";
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
