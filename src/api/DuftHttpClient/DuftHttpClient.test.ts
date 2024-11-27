@@ -163,4 +163,61 @@ describe("DuftHttpClient - Protected Routes", () => {
       throw error;
     }
   });
-}); //refactor this test to use new format.
+});
+
+describe("DuftHttpClient - Token Refresh", () => {
+  const BASE_URL = "http://127.0.0.1:8000/api/v2";
+  let accessToken: string | null = null;
+  let refreshToken: string | null = null;
+
+  const getAccessToken = () => accessToken;
+  const getRefreshToken = () => refreshToken;
+  const setTokens = (
+    newAccessToken: string | null,
+    newRefreshToken: string | null
+  ) => {
+    accessToken = newAccessToken;
+    refreshToken = newRefreshToken;
+  };
+
+  const client = new DuftHttpClient(
+    BASE_URL,
+    getAccessToken,
+    setTokens,
+    undefined,
+    getRefreshToken
+  );
+
+  beforeEach(() => {
+    accessToken = null;
+    refreshToken = null;
+  });
+
+  it("should refresh token when access token expires", async () => {
+    // First login to get initial tokens
+    const username = "data_manager"; // Replace with valid test credentials
+    const password = "--------"; // Replace with valid test credentials
+
+    const loginResponse = await client.login(username, password);
+    expect(loginResponse).toHaveProperty("access");
+    expect(loginResponse).toHaveProperty("refresh");
+
+    // Store the initial tokens for comparison
+    const initialAccessToken = accessToken;
+
+    // Wait for access token to expire (adjust time based on your token expiry setting)
+    // For testing, you might want to set a short expiry time in your dev environment
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // 5 seconds
+
+    // Make a request that should trigger token refresh
+    const response = await client.getCurrentConfig();
+
+    // Verify we got a new access token
+    expect(accessToken).toBeDefined();
+    expect(accessToken).not.toBe(initialAccessToken);
+
+    // Verify the new token works by making another request
+    const secondResponse = await client.getCurrentConfig();
+    expect(secondResponse).toBeDefined();
+  }, 10000); // Increase timeout to account for waiting period
+});

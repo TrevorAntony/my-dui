@@ -2,9 +2,10 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme context
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
-import ChartSkeleton from "../../ui-components/chart-skeleton";
+import EmptyState from "../ui-elements/empty-state";
 import type { VisualProps } from "../../types/visual-props";
 import getInfoTagContents from "../../helpers/get-info-tag-content";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 type DataItem = {
   category?: string;
@@ -21,12 +22,26 @@ const StackedBarChart = ({
   detailsComponent,
   resize,
   children,
+  ...props
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
-  const { data } = useDataContext();
+  const { data, loading } = useDataContext();
 
-  if (!data || !Array.isArray(data) || !data?.length) {
+  if (loading) {
     return <ChartSkeleton />;
+  }
+
+  if (!data || !Array.isArray(data) || !data.length) {
+    const content = (
+      <EmptyState message="No data available for stacked bar chart" />
+    );
+    return Container ? (
+      <Container header={""} {...props}>
+        {content}
+      </Container>
+    ) : (
+      content
+    );
   }
 
   // Extract categories

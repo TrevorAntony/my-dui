@@ -23,8 +23,8 @@ const flowbiteTheme: CustomFlowbiteTheme = {
     color: {
       gray: "text-gray-900 bg-white border border-gray-200 enabled:hover:bg-gray-100 enabled:hover:text-blue-700 focus:ring-blue-700 focus:text-blue-700 dark:bg-transparent dark:text-gray-400 dark:border-gray-600 dark:enabled:hover:text-white dark:enabled:hover:bg-gray-700 focus:ring-2",
       info: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800",
-      primary:
-        "border border-transparent bg-highlight-600 text-white focus:ring-4 focus:ring-highlight-300 enabled:hover:bg-highlight-800 dark:bg-highlight-600 dark:focus:ring-highlight-900 dark:enabled:hover:bg-highlight-700",
+      primary: "min-w-[7.5rem] flex items-center justify-center text-white bg-highlight-600 enabled:hover:bg-highlight-800 focus:ring-4 focus:outline-none focus:ring-highlight-300 font-medium rounded-lg text-sm text-center dark:bg-highlight-600 dark:hover:bg-blue-700 dark:focus:ring-highlight-900 dark:enabled:hover:bg-highlight-700",
+      secondary: "min-w-[7.5rem] flex items-center justify-center ms-3 text-sm font-medium text-gray-800 focus:outline-none bg-gray-50 rounded-lg border border-gray-300 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-600 dark:text-white dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-700",
     },
     inner: {
       base: "flex items-center transition-all duration-200 p-0 ", // Reduced margin

@@ -1,24 +1,11 @@
 import { useEffect } from "react";
 import { useAppState } from "../context/AppStateContext";
-import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
-import {
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-  updateConfigFromHttpClient,
-} from "../api/DuftHttpClient/local-storage-functions";
 import App from "../App";
 import Login from "./login";
-import { checkAuthEnabled, checkUserLoggedIn } from "../utils/auth-utils";
 import Splash from "./splash";
 import { GlobalState } from "../context/types";
 import { UnauthorizedError } from "../api/DuftHttpClient/ErrorClasses";
-
-const client = new DuftHttpClient(
-  "http://127.0.0.1:8000/api/v2",
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-  updateConfigFromHttpClient
-);
+import { client } from "..";
 
 const AppInitializer: React.FC = () => {
   const { state } = useAppState();

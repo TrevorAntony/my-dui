@@ -7,6 +7,7 @@ type SidebarNavLinkProps = {
   icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   children: React.ReactNode;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  className?: string;
 };
 
 export const SidebarNavLink: React.FC<SidebarNavLinkProps> = ({
@@ -14,11 +15,14 @@ export const SidebarNavLink: React.FC<SidebarNavLinkProps> = ({
   icon: Icon,
   children,
   onClick,
+  className,
 }) => {
   return (
     <NavLink
       to={to}
-      className={({ isActive }) => (isActive && to !== "#" ? "active-link" : "")}
+      className={({ isActive }) => 
+        `${isActive && to !== "#" ? "active-link" : ""} ${className || ""}`
+      }
       onClick={onClick}
     >
       {({ isActive }) => (

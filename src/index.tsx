@@ -9,6 +9,14 @@ import theme from "./flowbite-theme";
 
 import "./index.css";
 import "./input.css";
+import { DuftHttpClient } from "./api/DuftHttpClient/DuftHttpClient";
+import config from "./config";
+import {
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage,
+  updateConfigFromHttpClient,
+  getRefreshToken,
+} from "./api/DuftHttpClient/local-storage-functions";
 
 const container = document.getElementById("root");
 
@@ -19,10 +27,20 @@ if (!container) {
 const root = createRoot(container);
 const queryClient = new QueryClient();
 
+export const client = new DuftHttpClient(
+  config.apiBaseUrl,
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage,
+  updateConfigFromHttpClient,
+  getRefreshToken
+);
+
 function Root() {
-  const [mode, setMode] = useState<"dark" | "light">(
-    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-  );
+  const getPreferredMode = (): "dark" | "light" =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  const [mode, setMode] = useState<"dark" | "light">(getPreferredMode());
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -33,8 +51,8 @@ function Root() {
       document.documentElement.classList.add(newMode);
     };
 
-    // Initial sync to DOM
-    updateTheme(mode);
+    // Sync the mode on first render
+    updateTheme(getPreferredMode());
 
     const handleChange = (event: MediaQueryListEvent) => {
       const newMode = event.matches ? "dark" : "light";
@@ -46,7 +64,7 @@ function Root() {
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
     };
-  }, [mode]);
+  }, []);
 
   return (
     <StrictMode>

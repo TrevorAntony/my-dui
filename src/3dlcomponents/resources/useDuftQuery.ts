@@ -1,10 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import config from "../../config";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
-import {
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-} from "../../api/DuftHttpClient/local-storage-functions";
+import { client } from "../..";
 
 interface DuftQueryResult<T> {
   data: T | undefined;
@@ -22,12 +17,6 @@ type RequestData = {
   page_size?: number;
   current_page?: number;
 };
-
-const client = new DuftHttpClient(
-  config.apiBaseUrl,
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage
-);
 
 const useDuftQuery = <T>(requestPayload: RequestData): DuftQueryResult<T> => {
   const { data, error, isLoading } = useQuery({

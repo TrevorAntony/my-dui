@@ -2,11 +2,7 @@
 import { useState, useEffect, useContext, useMemo } from "react";
 import { DashboardContext } from "./Dashboard";
 import config from "../../config";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
-import {
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-} from "../../api/DuftHttpClient/local-storage-functions";
+import { client } from "../..";
 
 interface UseDataSetLogicProps {
   query: string;
@@ -20,12 +16,6 @@ interface UseDataSetLogicProps {
   currentPage?: number;
   debug?: string | boolean;
 }
-
-const client = new DuftHttpClient(
-  config.apiBaseUrl,
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage
-);
 
 const useDataSetLogic = ({
   query,

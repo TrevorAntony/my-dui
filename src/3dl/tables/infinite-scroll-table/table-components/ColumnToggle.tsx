@@ -17,7 +17,7 @@ const ColumnToggle: React.FC<ColumnToggleProps> = ({
     <div className="relative">
       <button className="pt-2" onClick={() => setDropdownOpen((prev) => !prev)}>
         <svg
-          className="h-7 w-7 text-gray-400 hover:text-gray-600 dark:text-white"
+          className="h-7 w-7 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-600"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"

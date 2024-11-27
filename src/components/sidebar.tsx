@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import config from "../config";
 import classNames from "classnames";
-import { Sidebar, Tooltip } from "flowbite-react";
+import { Button, Modal, Sidebar, Tooltip } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import {
@@ -70,11 +70,11 @@ const ExampleSidebar: FC = function () {
                     onClick={(e) => {
                       e.preventDefault();
                       setIsAboutOpen(true);
-                      console.log("Set About True")
+                      console.log("Set About True");
                     }}
                   >
                     About DUFT
-                  </SidebarNavLink>                  
+                  </SidebarNavLink>
                 </Sidebar.ItemGroup>
                 {config.debugMode === "true" ? (
                   <>
@@ -155,18 +155,35 @@ const ExampleSidebar: FC = function () {
           </div>
         </Sidebar>
       </div>
-      <DuftModal
-        isOpen={isSettingsOpen}
-        title="Settings"
+
+      <Modal
+        show={isSettingsOpen}
         onClose={() => {
           setIsSettingsOpen(false);
         }}
-        modalWidth="medium"
-        modalHeight="medium"
-        resize="false"
+        position="center"
+        size="7xl"
       >
-        <SettingsDisplay />
-      </DuftModal>
+        <Modal.Header>Settings</Modal.Header>
+        <Modal.Body className="flex flex-col overflow-hidden ">
+          <div className="flex h-[400px] flex-col overflow-hidden">
+            <SettingsDisplay />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full justify-end">
+            <Button
+              onClick={() => {
+                setIsSettingsOpen(false);
+              }}
+              color="primary"
+            >
+              Close
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+
       <AboutDlg
         isOpen={isAboutOpen}
         onClose={() => {
@@ -260,9 +277,7 @@ const BottomMenu: FC = function () {
   return (
     <>
       <div className="flex items-center justify-center gap-x-5">
-        
-          <div style={divStyle}></div>
-        
+        <div style={divStyle}></div>
       </div>
 
       <DuftModal

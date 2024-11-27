@@ -1,27 +1,16 @@
 import { useState, useEffect } from "react";
 import config from "../../config";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
-import {
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-} from "../../api/DuftHttpClient/local-storage-functions";
+import { client } from "../..";
 
 const useQuery = (query) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const client = new DuftHttpClient(
-    config.apiBaseUrl,
-    getTokenFromLocalStorage,
-    setTokenInLocalStorage
-  );
-
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-
         const payload = {
           query,
           data_connection_id: config.dataConnection,

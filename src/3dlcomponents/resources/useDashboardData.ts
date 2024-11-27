@@ -1,16 +1,5 @@
 import { useState, useEffect } from "react";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
-import config from "../../config";
-import {
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-} from "../../api/DuftHttpClient/local-storage-functions";
-
-const client = new DuftHttpClient(
-  config.apiBaseUrl,
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage
-);
+import { client } from "../..";
 
 const useDashboardData = (id: string) => {
   const [dashboardData, setDashboardData] = useState<string | null>(null);

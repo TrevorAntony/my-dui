@@ -9,13 +9,14 @@ import ToastNotification from "../../notification-toast";
 import type { Connection, DataConnectionFormProps } from "../resources";
 import DuftModal from "../../../components/duft-modal";
 import { useAuth } from "../../../context/AuthContext";
+import { client } from "../../../index";
 
 const DataConnectionForm: FC<DataConnectionFormProps> = ({
   connection,
   handleConnectionClick,
 }) => {
   const [formData, setFormData] = useState<{ name: string; value: string }[]>(
-    [],
+    []
   );
   const [showPassword, setShowPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -30,36 +31,30 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: string,
+    fieldName: string
   ) => {
     setFormData((prevFormData) =>
       prevFormData.map((field) =>
-        field.name === fieldName ? { ...field, value: e.target.value } : field,
-      ),
+        field.name === fieldName ? { ...field, value: e.target.value } : field
+      )
     );
     formHasChanges.current = true;
   };
 
-  const fetchData = (conn: Connection) => {
+  const fetchData = async (conn: Connection) => {
     if (conn) {
-      fetch(`${config.apiBaseUrl}/data-connections/${conn.id}/parameters`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          const fields = conn.params.map((param) => ({
-            name: param.name,
-            value: data[param.name] || "",
-          }));
-          setFormData(fields);
-          formHasChanges.current = false;
-          previousConnection.current = conn;
-        })
-        .catch((error) =>
-          console.error("Error fetching connection details:", error),
-        );
+      try {
+        const data = await client.getConnectionParameters(conn.id);
+        const fields = conn.params.map((param) => ({
+          name: param.name,
+          value: data[param.name] || "",
+        }));
+        setFormData(fields);
+        formHasChanges.current = false;
+        previousConnection.current = conn;
+      } catch (error) {
+        console.error("Error fetching connection details:", error);
+      }
     } else {
       setFormData([]);
       formHasChanges.current = false;
@@ -87,7 +82,7 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
     }
   }, [connection, handleConnectionClick]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formattedData = formData.reduce((acc, field) => {
       acc[field.name] = field.value;
@@ -149,13 +144,13 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
                   name={param.name}
                   value={fieldData?.value || ""}
                   onChange={(e) => handleChange(e, param.name)}
-                  className="w-full rounded px-3 py-2 pr-10 focus:border-highlight-500 focus:ring-0"
+                  className="focus:border-highlight-500 w-full rounded px-3 py-2 pr-10 focus:ring-0"
                 />
                 {param.type === "password" && fieldData?.value && (
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-3 text-sm text-highlight-850"
+                    className="text-highlight-850 absolute right-2 top-3 text-sm"
                   >
                     {showPassword ? "Hide" : "Show"}
                   </button>
@@ -167,14 +162,14 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
         <div className="flex space-x-2">
           <Button
             type="submit"
-            className="w-[65px] rounded-md bg-highlight-500 px-2 py-1 text-sm font-semibold text-white hover:bg-highlight-700"
+            className="bg-highlight-500 hover:bg-highlight-700 w-[65px] rounded-md px-2 py-1 text-sm font-semibold text-white"
           >
             Save
           </Button>
           <Button
             type="button"
             onClick={() => handleConnectionClick(null)}
-            className="w-[65px] rounded-md border border-highlight-200 bg-white px-2 py-1 text-sm font-semibold text-highlight-850 hover:bg-highlight-100"
+            className="border-highlight-200 text-highlight-850 hover:bg-highlight-100 w-[65px] rounded-md border bg-white px-2 py-1 text-sm font-semibold"
           >
             Cancel
           </Button>

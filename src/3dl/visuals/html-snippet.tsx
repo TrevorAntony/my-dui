@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAppState } from '../context/AppStateContext';
+import { useAppState } from '../../context/AppStateContext';
 
 interface HtmlSnippetProps {
   url: string;
@@ -12,15 +12,19 @@ export const HtmlSnippet: React.FC<HtmlSnippetProps> = ({ url, className }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+
     const fetchHtml = async () => {
       try {
-        const fullUrl = `${config?.settings?.serverBaseURL}${url}`;
-        const response = await fetch(fullUrl);
+        console.log("Attempting to fetch from URL:", `${config?.serverBaseURL}${url}`);
+        const fullUrl = `${config?.serverBaseURL}${url}`;
+        const response = await fetch(fullUrl, { cache: 'no-store' });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const html = await response.text();
-        setContent(html);
+        // Replace {baseurl} with actual serverBaseURL
+        const processedHtml = html.replace(/\{baseurl\}/g, config?.serverBaseURL || '');
+        setContent(processedHtml);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load content');
@@ -28,10 +32,11 @@ export const HtmlSnippet: React.FC<HtmlSnippetProps> = ({ url, className }) => {
       }
     };
 
-    if (config?.settings?.serverBaseURL) {
+    if (config?.serverBaseURL) {
       fetchHtml();
+    } else {
     }
-  }, [url, config?.settings?.serverBaseURL]);
+  }, [url, config?.serverBaseURL]);
 
   if (error) {
     return <div className="error">{error}</div>;
@@ -41,6 +46,9 @@ export const HtmlSnippet: React.FC<HtmlSnippetProps> = ({ url, className }) => {
     <div 
       className={className}
       dangerouslySetInnerHTML={{ __html: content }}
+      
     />
   );
 };
+
+export default HtmlSnippet;
