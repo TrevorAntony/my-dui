@@ -337,6 +337,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
                 />
               </ErrorBoundary>
             ),
+            InfoTag,
           }}
           jsx={dashboardData}
         />
