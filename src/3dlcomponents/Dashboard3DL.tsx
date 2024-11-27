@@ -65,7 +65,11 @@ interface Dashboard3DLProps {
   defaultId?: string;
 }
 
-const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
+const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
+  defaultId,
+}: {
+  defaultId: string;
+}) => {
   const { id: routeId } = useParams();
   // Extract the ID from either route params, defaultId prop, or fallback to 'home'
   const id = routeId || defaultId || "home";
@@ -75,6 +79,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
   return (
     <>
       {dashboardData ? (
+        // @ts-expect-error: JSXParser allows multiple props, but expects specific props.
         <JSXParser
           components={{
             Dashboard: (props: React.ComponentProps<typeof Dashboard>) => (
@@ -331,6 +336,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <HtmlSnippet
                   {...(props as React.ComponentProps<typeof HtmlSnippet>)}
+                  //@ts-expect-error This error comes from mismatch between html snippet and the card component. Will discuss and update with Fitti.
                   container={
                     CardComponent as React.ComponentType<ContainerComponentProps>
                   }

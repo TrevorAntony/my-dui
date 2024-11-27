@@ -6,7 +6,6 @@ import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
 import { useLayout } from "../3dl/ui-elements/single-layout";
 import type { DetailsComponentRegistry } from "./details-component-registry";
 import { getDetailsComponent } from "./details-component-registry";
-import DuftModal from "./duft-modal";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { Button, Modal } from "flowbite-react";
 

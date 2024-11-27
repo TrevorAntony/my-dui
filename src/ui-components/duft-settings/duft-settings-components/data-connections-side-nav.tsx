@@ -50,7 +50,7 @@ const DataConnectionSelector = ({
                     key={index}
                     className={`cursor-pointer rounded px-3 py-2 hover:bg-gray-100 ${
                       selectedConnection?.id === connection.id
-                        ? "bg-highlight-100 font-semibold text-highlight-700"
+                        ? "bg-highlight-100 text-highlight-700 font-semibold"
                         : ""
                     }`}
                   >

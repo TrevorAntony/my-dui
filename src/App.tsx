@@ -17,9 +17,7 @@ import DataTaskHandler from "./ui-components/data-task-handler";
 import Settings from "./ui-components/duft-settings/duft-settings";
 import Login from "./ui-components/login";
 import { AuthProvider } from "./context/AuthContext";
-import PrivateRoute from "./ui-components/private-route";
 import "./App.css";
-import { useEffect } from 'react';
 
 const App: React.FC = () => {
   return (

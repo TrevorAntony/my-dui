@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import config from "../config";
 import classNames from "classnames";
-import { Button, Modal, Sidebar, Tooltip } from "flowbite-react";
+import { Button, Modal, Sidebar } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import {
