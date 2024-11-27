@@ -28,7 +28,6 @@ interface Settings {
   version: string;
   logoURL: string;
   repository: string;
-  serverBaseURL: string;
   credits: Credits;
   additionalInfo: string;
   [key: string]: any; // Allow for additional custom settings
@@ -41,6 +40,7 @@ export interface Config {
   currentUserRoles: string[];
   settings: Settings;
   version: string;
+  serverBaseURL: string;
   pythonPath: string;
   pythonVersion: string;
   directories: Record<string, unknown>;

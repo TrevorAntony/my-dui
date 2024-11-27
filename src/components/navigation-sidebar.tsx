@@ -25,7 +25,7 @@ const renderSidebarMenu = (config: NavigationConfig) => {
   const homeLink = homeConfig ? (
     <Sidebar.ItemGroup key="home-group">
       <SidebarNavLink
-        to={homeConfig.dashboard}
+        to="/"  // Always use root path for home link
         icon={iconMap[homeConfig.icon] || HiHome}
       >
         {homeConfig.title}
@@ -91,13 +91,14 @@ const renderSidebarMenu = (config: NavigationConfig) => {
                 paths={item.dashboards.map((d) => d.dashboard)}
               >
                 {item.dashboards.map((nestedItem, nestedIndex) => (
-                  <SidebarNavLink
-                    key={nestedIndex}
-                    to={nestedItem.dashboard}
-                    icon={iconMap[nestedItem.icon] || HiChartPie}
-                  >
-                    {nestedItem.title}
-                  </SidebarNavLink>
+                  <div key={nestedIndex} className="pl-2">
+                    <SidebarNavLink
+                      to={nestedItem.dashboard}
+                      icon={iconMap[nestedItem.icon] || HiChartPie}
+                    >
+                      {nestedItem.title}
+                    </SidebarNavLink>
+                  </div>
                 ))}
               </SidebarCollapse>
             );

@@ -5,6 +5,7 @@ module.exports = {
     "./index.html",
     "./node_modules/flowbite-react/lib/**/*.{js,ts}",
     "./src/**/*.{ts,tsx}",
+    "../duft-config/**/*.html"
   ],
   corePlugins: {
     preflight: true, // Optional, to ensure no conflicts

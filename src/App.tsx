@@ -1,5 +1,5 @@
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -19,18 +19,16 @@ import Login from "./ui-components/login";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./ui-components/private-route";
 import "./App.css";
+import { useEffect } from 'react';
 
 const App: React.FC = () => {
   return (
     <Router>
       <AuthProvider>
         <Routes>
-          {/* Handle redirects for '/' and '/home' */}
-          <Route path="/" element={<Navigate to="/dashboard/home" />} />
-          <Route path="/home" element={<Navigate to="/dashboard/home" />} />
-
-          {/* Private Routes */}
-          <Route element={<AppLayout />}>
+          <Route path="/" element={<AppLayout />}>
+            {/* Root path renders Dashboard3DL with 'home' as the ID param */}
+            <Route index element={<Dashboard3DL defaultId="home" />} />
             <Route path="dashboard/:id?" element={<Dashboard3DL />} />
             <Route path="a/:id?" element={<ComponentA />} />
             <Route path="b" element={<ComponentB />} />
