@@ -8,6 +8,7 @@ dotenv.config();
 
 // ----------------------------------------------------------------------
 
+//@ts-expect-error the defineConfig type is not correct, it should include the test property
 export default defineConfig({
   plugins: [react()],
   base: "./",

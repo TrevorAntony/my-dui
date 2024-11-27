@@ -69,7 +69,6 @@ export const fetchDataWithoutStore = async (
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         window.location.href = "/login";
-        return;
       }
     }
 

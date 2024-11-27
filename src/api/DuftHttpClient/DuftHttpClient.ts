@@ -232,7 +232,7 @@ export class DuftHttpClient {
     );
   }
 
-  async login(username: string, password: string): Promise<object> {
+  async login(username: string, password: string): Promise<any> {
     console.log("Logging in with username:", username);
     const response = await this.makeRequest("POST", `${this.baseUrl}/token/`, {
       username,

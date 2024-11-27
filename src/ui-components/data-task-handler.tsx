@@ -34,7 +34,7 @@ const DataTaskHandler: React.FC = () => {
     if (result.message.includes("Script started successfully")) {
       setIsOpen(false);
     } else {
-      setError(result.error || "Unknown error occurred.");
+      setError("Unknown error occurred.");
     }
   };
 
