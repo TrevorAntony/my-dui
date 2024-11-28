@@ -30,7 +30,6 @@ const TableContent = ({
   exportData = "false",
   query,
   searchHint,
-  resize,
   detailsTitle,
 }: {
   data: any[];
@@ -178,7 +177,7 @@ const TableContent = ({
       position="center"
       size="4xl"
     >
-        <Modal.Header>"Table content"</Modal.Header>
+        <Modal.Header>{detailsTitle}</Modal.Header>
         <Modal.Body className="flex flex-col overflow-hidden ">
           {renderedChild}
         </Modal.Body>
