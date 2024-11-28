@@ -1,9 +1,11 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useThemeMode } from "../context/ThemeModeContext";
 
 const ChartSkeleton = () => {
-  const isDarkMode = localStorage.getItem("flowbite-theme-mode") === "dark";
+  const { mode } = useThemeMode();
+  const isDarkMode = mode === "dark";
 
   return (
     <div>
