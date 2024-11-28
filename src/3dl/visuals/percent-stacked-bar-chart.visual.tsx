@@ -31,7 +31,7 @@ const PercentStackedBarChart = ({
     return <ChartSkeleton />;
   }
 
-  if (!data || !Array.isArray(data) || !data.length) {
+  if (!loading && Array.isArray(data) && data.length === 0) {
     const content = (
       <EmptyState message="No data available for percent stacked bar chart" />
     );
@@ -42,6 +42,9 @@ const PercentStackedBarChart = ({
     ) : (
       content
     );
+  }
+  if (!data) {
+    return null;
   }
 
   // Extract categories

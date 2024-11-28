@@ -27,7 +27,7 @@ const ScoreCardTable = ({
     return <ChartSkeleton />;
   }
 
-  if (!data || !Array.isArray(data) || data.length === 0) {
+  if (!loading && Array.isArray(data) && data.length === 0) {
     const content = (
       <EmptyState message="No data available for score card table" />
     );
@@ -38,6 +38,9 @@ const ScoreCardTable = ({
     ) : (
       content
     );
+  }
+  if (!data) {
+    return null;
   }
 
   const columns = Object.keys(data[0])

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef, useState } from "react";
-import TableSkeleton from "../../../../ui-components/table-skeleton";
+import React, { useEffect, useRef, useState, useDeferredValue, useCallback } from "react";
 import ColumnToggle from "./ColumnToggle";
 import SearchBar from "./SearchBar";
 import TableBody from "./TableBody";
@@ -52,29 +51,18 @@ const TableContent = ({
   searchHint?: string;
   resize?: string;
 }) => {
+  const deferredSearchText = useDeferredValue(searchText);
   const tableRef = useRef<HTMLDivElement>(null);
   const [renderedChild, setRenderedChild] = useState<React.ReactNode>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showEmpty, setShowEmpty] = useState(false);
   const shouldExportData = exportData === "true";
 
+  const handleDeferredSearch = useCallback((value: string) => {
+    handleSearchChange(value);
+  }, [handleSearchChange]);
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    if (!loading && !data?.length) {
-      timeout = setTimeout(() => {
-        setShowEmpty(true);
-      }, 1000);
-    } else {
-      setShowEmpty(false);
-    }
-
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
-  }, [loading, data]);
+    handleDeferredSearch(deferredSearchText);
+  }, [deferredSearchText, handleDeferredSearch]);
 
   const handleScroll = () => {
     const table = tableRef.current;
@@ -158,15 +146,14 @@ const TableContent = ({
             </TableBody>
           )}
         </table>
-        {loading && !data?.length && (
+        {loading && !data && (
           <div className="flex h-40 items-center justify-center">
             <Spinner
               size="xl"
-              className="text-gray-400 dark:text-gray-300 fill-gray-600 dark:fill-gray-400" />
+              className="text-gray-500 dark:text-gray-300 fill-gray-600 dark:fill-gray-400" />
           </div>
         )}
-        {loading && <TableSkeleton />}
-        {!loading && !data?.length && showEmpty && <EmptyState />}
+        {!loading && !data?.length  && <EmptyState />}
       </div>
      
     </div><Modal
