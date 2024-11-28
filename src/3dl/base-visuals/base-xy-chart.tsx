@@ -28,8 +28,12 @@ const BaseXYChart = ({
     return <ChartSkeleton />;
   }
 
-  if (!data || !Array.isArray(data) || !data.length) {
+  if (!loading && Array.isArray(data) && data.length === 0) {
     return <EmptyState message="No data available for this chart" />;
+  }
+
+  if (!data) {
+    return null;
   }
 
   if (!theme || !Object.keys(theme).length)

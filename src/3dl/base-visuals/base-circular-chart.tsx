@@ -20,8 +20,12 @@ const BaseCircularChart = ({
     return <ChartSkeleton />;
   }
 
-  if (!Array.isArray(data) || data.length === 0) {
+  if (!loading && Array.isArray(data) && data.length === 0) {
     return <EmptyState message="No data available for this chart" />;
+  }
+
+  if (!data) {
+    return null;
   }
 
   const { apex: apexOptions } = theme["themes"][0];
