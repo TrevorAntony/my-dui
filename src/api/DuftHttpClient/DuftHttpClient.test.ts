@@ -16,7 +16,7 @@ describe("DuftHttpClient - getCurrentConfig", () => {
 
       // Features structure and values
       expect(Array.isArray(response.features)).toBe(true);
-      expect(response.features.length).toBeGreaterThan(0);
+      expect(Object.keys(response.features)).toBeGreaterThan(0);
     } catch (error) {
       console.error("Error fetching current config:", error);
       throw error;
@@ -210,7 +210,7 @@ describe("DuftHttpClient - Token Refresh", () => {
     await new Promise((resolve) => setTimeout(resolve, 5000)); // 5 seconds
 
     // Make a request that should trigger token refresh
-    const response = await client.getCurrentConfig();
+    await client.getCurrentConfig();
 
     // Verify we got a new access token
     expect(accessToken).toBeDefined();

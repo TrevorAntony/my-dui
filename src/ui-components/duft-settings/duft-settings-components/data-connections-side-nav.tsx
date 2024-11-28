@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/no-custom-classname */
 import {
   isValidArray,
   type Connection,
@@ -48,9 +49,9 @@ const DataConnectionSelector = ({
                 (connection: Connection, index: number) => (
                   <li
                     key={index}
-                    className={`cursor-pointer rounded px-3 py-2 hover:bg-gray-100 ${
+                    className={`dark:hover:bg-highlight-800 cursor-pointer rounded px-3 py-2 hover:bg-gray-100 ${
                       selectedConnection?.id === connection.id
-                        ? "bg-highlight-100 font-semibold text-highlight-700"
+                        ? "bg-highlight-100 dark:bg-highlight-900 text-highlight-700 dark:text-highlight-200 dark:hover:bg-highlight-900 font-semibold"
                         : ""
                     }`}
                   >

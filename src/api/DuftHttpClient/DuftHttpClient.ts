@@ -232,7 +232,7 @@ export class DuftHttpClient {
     );
   }
 
-  async login(username: string, password: string): Promise<object> {
+  async login(username: string, password: string): Promise<any> {
     console.log("Logging in with username:", username);
     const response = await this.makeRequest("POST", `${this.baseUrl}/token/`, {
       username,
@@ -265,6 +265,17 @@ export class DuftHttpClient {
     return this.makeRequest(
       "GET",
       `${this.baseUrl}/data-connections/${connectionId}/parameters`
+    );
+  }
+
+  async updateConnectionParameters(
+    connectionId: string,
+    parameters: Record<string, any>
+  ): Promise<any> {
+    return this.makeRequest(
+      "POST",
+      `${this.baseUrl}/data-connections/${connectionId}/parameters`,
+      parameters
     );
   }
 }

@@ -55,9 +55,11 @@ const DuftModal: React.FC<DuftModalProps> = ({
   defaultButton = "close",
   resize = "false",
 }) => {
-  const { resolvedWidth, containerProps, finalModalBodyStyle } = useModalConfig(
-    { resize, modalWidth, modalHeight }
-  );
+  const { containerProps, finalModalBodyStyle } = useModalConfig({
+    resize,
+    modalWidth,
+    modalHeight,
+  });
 
   const shouldResize = resize === "true";
 

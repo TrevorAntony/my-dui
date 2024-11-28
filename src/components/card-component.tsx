@@ -6,7 +6,6 @@ import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
 import { useLayout } from "../3dl/ui-elements/single-layout";
 import type { DetailsComponentRegistry } from "./details-component-registry";
 import { getDetailsComponent } from "./details-component-registry";
-import DuftModal from "./duft-modal";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { Button, Modal } from "flowbite-react";
 
@@ -27,6 +26,7 @@ type CardComponentProps = {
   query?: string;
   detailsComponent?: string;
   resize?: string;
+  infoTagContent?: ReactNode;
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -40,7 +40,8 @@ const CardComponent: FC<CardComponentProps> = ({
   exportData = "false",
   query,
   detailsComponent,
-  resize = "false",
+  resize,
+  infoTagContent,
 }) => {
   const layout = useLayout();
   const shouldExportData = exportData === "true";
@@ -69,8 +70,9 @@ const CardComponent: FC<CardComponentProps> = ({
               </span>
             )}
           </div>
-
           <div className="flex items-center space-x-2">
+            {infoTagContent ? infoTagContent : null}
+
             {shouldExportData && layout !== "single-layout" && (
               <div className="self-start">
                 {query ? (
@@ -85,7 +87,7 @@ const CardComponent: FC<CardComponentProps> = ({
 
             {DetailsComponent && (
               <button
-                className="dark:text-highlight-500 pl-2 pt-[1.85px]"
+                className="pl-2 pt-[1.85px] dark:text-highlight-500"
                 onClick={toggleModal}
                 title="Show Details"
               >
@@ -108,7 +110,7 @@ const CardComponent: FC<CardComponentProps> = ({
             <div className="shrink-0">
               <NavLink
                 to={moreInfo.link}
-                className="text-highlight-700 dark:text-highlight-500 inline-flex items-center rounded-md p-1 text-xs font-medium uppercase hover:bg-gray-100 dark:hover:bg-gray-700 sm:text-sm"
+                className="inline-flex items-center rounded-md p-1 text-xs font-medium uppercase text-highlight-700 hover:bg-gray-100 dark:text-highlight-500 dark:hover:bg-gray-700 sm:text-sm"
               >
                 {moreInfo.text}
                 <svg

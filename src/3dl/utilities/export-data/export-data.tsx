@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDataContext } from "../../context/DataContext";
 import { jsonToCSV, downloadCSV } from "./helpers";
 import ExportButton from "./export-button";
-import DuftModal from "../../../components/duft-modal";
 import { Button, Modal } from "flowbite-react";
 
 function ExportData() {
@@ -45,7 +44,10 @@ function ExportData() {
           </Modal.Body>
           <Modal.Footer>
             <div className="flex w-full justify-end">
-              <Button onClick={() => handleModalCancel()} color="primary">
+              <Button onClick={() => handleModalConfirm()} color="primary">
+                Export
+              </Button>
+              <Button onClick={() => handleModalCancel()} color="secondary">
                 Close
               </Button>
             </div>

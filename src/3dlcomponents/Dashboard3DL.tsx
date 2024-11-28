@@ -40,7 +40,8 @@ import {
   InfiniteScrollTable,
   ExportData,
   Markdown,
-  HtmlSnippet
+  InfoTag,
+  HtmlSnippet,
 } from "../3dl";
 import {
   DuftGrid,
@@ -64,16 +65,21 @@ interface Dashboard3DLProps {
   defaultId?: string;
 }
 
-const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
+const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
+  defaultId,
+}: {
+  defaultId: string;
+}) => {
   const { id: routeId } = useParams();
   // Extract the ID from either route params, defaultId prop, or fallback to 'home'
-  const id = routeId || defaultId || 'home';
+  const id = routeId || defaultId || "home";
   const dashboardData = useDashboardData(id);
   const { themeData } = useThemeData();
 
   return (
     <>
       {dashboardData ? (
+        // @ts-expect-error: JSXParser allows multiple props, but expects specific props.
         <JSXParser
           components={{
             Dashboard: (props: React.ComponentProps<typeof Dashboard>) => (
@@ -122,7 +128,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             RadialBarChart: (
-              props: React.ComponentProps<typeof RadialBarChart>
+              props: React.ComponentProps<typeof RadialBarChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <RadialBarChart
@@ -134,7 +140,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             PolarAreaChart: (
-              props: React.ComponentProps<typeof PolarAreaChart>
+              props: React.ComponentProps<typeof PolarAreaChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <PolarAreaChart
@@ -166,7 +172,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             HeatmapChart: (
-              props: React.ComponentProps<typeof HeatmapChart>
+              props: React.ComponentProps<typeof HeatmapChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <HeatmapChart
@@ -188,7 +194,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             CascadeChart: (
-              props: React.ComponentProps<typeof CascadeChart>
+              props: React.ComponentProps<typeof CascadeChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <CascadeChart
@@ -200,7 +206,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             ScoreCardTable: (
-              props: React.ComponentProps<typeof ScoreCardTable>
+              props: React.ComponentProps<typeof ScoreCardTable>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <ScoreCardTable
@@ -232,12 +238,10 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             InfiniteScrollTable: (
-              props: React.ComponentProps<typeof InfiniteScrollTable>
+              props: React.ComponentProps<typeof InfiniteScrollTable>,
             ) => (
               <InfiniteScrollTable
-                {...(props as React.ComponentProps<
-                  typeof InfiniteScrollTable
-                >)}
+                {...(props as React.ComponentProps<typeof InfiniteScrollTable>)}
                 container={
                   CardComponent as React.ComponentType<ContainerComponentProps>
                 }
@@ -245,7 +249,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               />
             ),
             StackedBarChart: (
-              props: React.ComponentProps<typeof StackedBarChart>
+              props: React.ComponentProps<typeof StackedBarChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <StackedBarChart
@@ -267,7 +271,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             PercentStackedBarChart: (
-              props: React.ComponentProps<typeof PercentStackedBarChart>
+              props: React.ComponentProps<typeof PercentStackedBarChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <PercentStackedBarChart
@@ -281,13 +285,11 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             ClusteredBarChart: (
-              props: React.ComponentProps<typeof ClusteredBarChart>
+              props: React.ComponentProps<typeof ClusteredBarChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <ClusteredBarChart
-                  {...(props as React.ComponentProps<
-                    typeof ClusteredBarChart
-                  >)}
+                  {...(props as React.ComponentProps<typeof ClusteredBarChart>)}
                   container={
                     CardComponent as React.ComponentType<ContainerComponentProps>
                   }
@@ -295,7 +297,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               </ErrorBoundary>
             ),
             PreviewQuery: (
-              props: React.ComponentProps<typeof PreviewQuery>
+              props: React.ComponentProps<typeof PreviewQuery>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <PreviewQuery
@@ -334,12 +336,14 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({ defaultId }) => {
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <HtmlSnippet
                   {...(props as React.ComponentProps<typeof HtmlSnippet>)}
+                  //@ts-expect-error This error comes from mismatch between html snippet and the card component. Will discuss and update with Fitti.
                   container={
                     CardComponent as React.ComponentType<ContainerComponentProps>
                   }
                 />
               </ErrorBoundary>
             ),
+            InfoTag,
           }}
           jsx={dashboardData}
         />

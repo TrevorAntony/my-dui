@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Button, DarkThemeToggle, Navbar } from "flowbite-react";
+import { Avatar, Dropdown, Button, Navbar } from "flowbite-react";
 import { HiMenuAlt1, HiX } from "react-icons/hi";
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
@@ -7,12 +7,17 @@ import config from "../config";
 import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
 import { useAppState } from "../context/AppStateContext";
 import { setTokenInLocalStorage } from "../api/DuftHttpClient/local-storage-functions";
+import { userDropdownTheme } from "../flowbite-theme";
 
 const ExampleNavbar: FC = function () {
   const { state } = useAppState();
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
   const sidebarConfig = useSidebarConfigContext();
+
+  const handleLogout = () => {
+    setTokenInLocalStorage(null, null);
+  };
 
   return (
     <Navbar fluid>
@@ -45,13 +50,35 @@ const ExampleNavbar: FC = function () {
           </div>
           <div className="flex items-center lg:gap-3">
             <div className="flex items-center">
-              {/* <DarkThemeToggle /> */}
-              <div className="text-default">
-                <Button onClick={() => setTokenInLocalStorage(null, null)}>
-                  logout
-                </Button>
-                {state?.config?.currentUser?.username}
-              </div>
+              <Dropdown
+                arrowIcon={false}
+                inline
+                theme={userDropdownTheme}
+                label={
+                  <div className="flex items-center gap-2">
+                    <Avatar
+                      alt="User"
+                      img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                      rounded
+                      size="sm"
+                    />
+                    <div className="text-left">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        {state?.config?.currentUser?.username}
+                      </div>
+                    </div>
+                  </div>
+                }
+              >
+                <Dropdown.Divider />
+                <Dropdown.Item>
+                  Dashboard
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={handleLogout}>
+                  Sign out
+                </Dropdown.Item>
+              </Dropdown>
             </div>
           </div>
         </div>

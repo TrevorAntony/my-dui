@@ -1,5 +1,24 @@
 import type { CustomFlowbiteTheme } from "flowbite-react";
 
+export const userDropdownTheme = {
+  floating: {
+    base: "z-10 w-fit rounded-lg bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600",
+    content: "py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200",
+    target: "w-fit dark:text-white",
+  },
+  content: "py-1",
+  item: {
+    base: "flex items-center justify-start py-2 px-4 text-sm text-gray-700 cursor-pointer w-full hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white",
+    icon: "mr-2 h-4 w-4"
+  },
+  header: {
+    base: "block py-2 px-4 text-sm text-gray-700 dark:text-gray-200",
+  },
+  divider: {
+    base: "my-1 h-px bg-gray-100 dark:bg-gray-600",
+  }
+};
+
 const flowbiteTheme: CustomFlowbiteTheme = {
   
   badge: {

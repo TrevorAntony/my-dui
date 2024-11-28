@@ -3,13 +3,10 @@
 
 import type { FC } from "react";
 import { useEffect, useState, useRef } from "react";
-import { Button } from "flowbite-react";
-import config from "../../../config";
+import { Button, Modal } from "flowbite-react";
 import ToastNotification from "../../notification-toast";
 import type { Connection, DataConnectionFormProps } from "../resources";
-import DuftModal from "../../../components/duft-modal";
-import { useAuth } from "../../../context/AuthContext";
-import { client } from "../../../index";
+import { client } from "../../..";
 
 const DataConnectionForm: FC<DataConnectionFormProps> = ({
   connection,
@@ -27,7 +24,6 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
 
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [nextConnection, setNextConnection] = useState<Connection | null>(null);
-  const { accessToken, logout } = useAuth();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -82,44 +78,27 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
     }
   }, [connection, handleConnectionClick]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formattedData = formData.reduce((acc, field) => {
       acc[field.name] = field.value;
       return acc;
     }, {});
 
-    fetch(`${config.apiBaseUrl}/data-connections/${connection.id}/parameters`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify(formattedData),
-    })
-      .then((response) => {
-        if (response.status === 401) {
-          logout();
-          throw new Error("Session expired. Please log in again.");
-        }
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          throw new Error("Failed to update. Server responded with an error.");
-        }
-      })
-      .then(() => {
-        setToastMessage("Data connection updated successfully!");
-        setToastType("success");
-        setShowToast(true);
-        setTimeout(() => (window.location.href = "/dashboard/home"), 1000);
-      })
-      .catch((error) => {
-        console.error("Error saving connection details:", error);
-        setToastMessage("Failed to save data.");
-        setToastType("error");
-        setShowToast(true);
-      });
+    try {
+      await client.updateConnectionParameters(connection.id, formattedData);
+      setToastMessage("Data connection updated successfully!");
+      setToastType("success");
+      setShowToast(true);
+      setTimeout(() => {
+        handleConnectionClick(null);
+      }, 1000);
+    } catch (error) {
+      console.error("Error saving connection details:", error);
+      setToastMessage("Error on saving data connection details");
+      setToastType("error");
+      setShowToast(true);
+    }
   };
 
   return (
@@ -144,13 +123,13 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
                   name={param.name}
                   value={fieldData?.value || ""}
                   onChange={(e) => handleChange(e, param.name)}
-                  className="focus:border-highlight-500 w-full rounded px-3 py-2 pr-10 focus:ring-0"
+                  className="focus:border-highlight-500 w-full rounded px-3 py-2 pr-10 focus:ring-0 dark:bg-gray-600 dark:text-white"
                 />
                 {param.type === "password" && fieldData?.value && (
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-highlight-850 absolute right-2 top-3 text-sm"
+                    className="text-highlight-850 dark:text-highlight-400 absolute right-2 top-3 text-sm"
                   >
                     {showPassword ? "Hide" : "Show"}
                   </button>
@@ -160,16 +139,13 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
           );
         })}
         <div className="flex space-x-2">
-          <Button
-            type="submit"
-            className="bg-highlight-500 hover:bg-highlight-700 w-[65px] rounded-md px-2 py-1 text-sm font-semibold text-white"
-          >
+          <Button type="submit" color="primary">
             Save
           </Button>
           <Button
             type="button"
             onClick={() => handleConnectionClick(null)}
-            className="border-highlight-200 text-highlight-850 hover:bg-highlight-100 w-[65px] rounded-md border bg-white px-2 py-1 text-sm font-semibold"
+            color="secondary"
           >
             Cancel
           </Button>
@@ -183,20 +159,35 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
         onClose={() => setShowToast(false)}
       />
 
-      <DuftModal
-        isOpen={showUnsavedChangesModal}
-        onClose={handleCancelUnsavedChanges}
-        onExecute={handleConfirmUnsavedChanges}
-        title="Unsaved Changes"
-        executeButtonText="Discard Changes"
-        cancelButtonText="Cancel"
-        modalWidth="narrow"
-        modalHeight="tiny"
+      <Modal
+        show={showUnsavedChangesModal}
+        onClose={() => handleCancelUnsavedChanges()}
+        position="center"
+        size="3xl"
       >
-        <p>
-          You have unsaved changes. Do you want to discard them and proceed?
-        </p>
-      </DuftModal>
+        <Modal.Header>Unsaved Changes</Modal.Header>
+        <Modal.Body className="flex flex-col overflow-hidden ">
+          <div className="text-default">
+            You have unsaved changes. Do you want to discard them and proceed?
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full justify-end">
+            <Button
+              onClick={() => handleCancelUnsavedChanges()}
+              color="primary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleConfirmUnsavedChanges()}
+              color="secondary"
+            >
+              Discard Changes
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
