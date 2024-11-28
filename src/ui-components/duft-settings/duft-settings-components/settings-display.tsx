@@ -14,7 +14,7 @@ const SettingsDisplay = () => {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="text-default flex h-full">
       <DataConnectionSelector
         dataConnections={dataConnections}
         selectedConnection={selectedConnection}

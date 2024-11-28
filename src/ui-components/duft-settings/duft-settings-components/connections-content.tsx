@@ -12,7 +12,9 @@ const ConnectionContent: FC<DataConnectionFormProps> = ({
         <h3 className="text-lg font-semibold">
           {connection.name} Configuration
         </h3>
-        <p className="mb-4 text-sm text-gray-600">{connection.description}</p>
+        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+          {connection.description}
+        </p>
         <DataConnectionForm
           connection={connection}
           handleConnectionClick={handleConnectionClick}

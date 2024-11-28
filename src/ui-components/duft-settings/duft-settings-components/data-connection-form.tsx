@@ -144,13 +144,13 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
                   name={param.name}
                   value={fieldData?.value || ""}
                   onChange={(e) => handleChange(e, param.name)}
-                  className="focus:border-highlight-500 w-full rounded px-3 py-2 pr-10 focus:ring-0"
+                  className="focus:border-highlight-500 w-full rounded px-3 py-2 pr-10 focus:ring-0 dark:bg-gray-600 dark:text-white"
                 />
                 {param.type === "password" && fieldData?.value && (
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-highlight-850 absolute right-2 top-3 text-sm"
+                    className="text-highlight-850 dark:text-highlight-400 absolute right-2 top-3 text-sm"
                   >
                     {showPassword ? "Hide" : "Show"}
                   </button>
@@ -160,16 +160,13 @@ const DataConnectionForm: FC<DataConnectionFormProps> = ({
           );
         })}
         <div className="flex space-x-2">
-          <Button
-            type="submit"
-            className="bg-highlight-500 hover:bg-highlight-700 w-[65px] rounded-md px-2 py-1 text-sm font-semibold text-white"
-          >
+          <Button type="submit" color="primary">
             Save
           </Button>
           <Button
             type="button"
             onClick={() => handleConnectionClick(null)}
-            className="border-highlight-200 text-highlight-850 hover:bg-highlight-100 w-[65px] rounded-md border bg-white px-2 py-1 text-sm font-semibold"
+            color="secondary"
           >
             Cancel
           </Button>
