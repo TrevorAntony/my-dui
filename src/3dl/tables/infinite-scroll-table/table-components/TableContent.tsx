@@ -29,6 +29,7 @@ const TableContent = ({
   exportData = "false",
   query,
   searchHint,
+  detailsTitle,
 }: {
   data: any[];
   loading: boolean;
@@ -50,6 +51,7 @@ const TableContent = ({
   query?: string;
   searchHint?: string;
   resize?: string;
+  detailsTitle?: string;
 }) => {
   const deferredSearchText = useDeferredValue(searchText);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -162,7 +164,7 @@ const TableContent = ({
       position="center"
       size="4xl"
     >
-        <Modal.Header>"Table content"</Modal.Header>
+        <Modal.Header>{detailsTitle}</Modal.Header>
         <Modal.Body className="flex flex-col overflow-hidden ">
           {renderedChild}
         </Modal.Body>
