@@ -1,7 +1,7 @@
 import React from "react";
 import { Popover } from "flowbite-react";
-import { HiInformationCircle } from "react-icons/hi";
 import type { VisualProps } from "../../../types/visual-props";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 const InfoTag = ({ children }: VisualProps) => {
   const markdown = React.useMemo(() => {
@@ -10,8 +10,11 @@ const InfoTag = ({ children }: VisualProps) => {
 
   return (
     <Popover content={markdown} placement="top" trigger="hover">
-      <button type="button" className="p-1">
-        <HiInformationCircle className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+      <button type="button" className="pl-2 pt-[2.5px] dark:text-highlight-500">
+        <AiOutlineInfoCircle
+          className="h-6 w-6 text-gray-400 hover:text-gray-600"
+          size={20}
+        />
       </button>
     </Popover>
   );
