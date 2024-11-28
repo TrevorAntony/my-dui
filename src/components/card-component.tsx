@@ -40,7 +40,6 @@ const CardComponent: FC<CardComponentProps> = ({
   exportData = "false",
   query,
   detailsComponent,
-  resize,
   infoTagContent,
 }) => {
   const layout = useLayout();
@@ -72,9 +71,8 @@ const CardComponent: FC<CardComponentProps> = ({
           </div>
           <div className="flex items-center space-x-2">
             {infoTagContent ? infoTagContent : null}
-
             {shouldExportData && layout !== "single-layout" && (
-              <div className="self-start">
+              <div className="self-start pl-1">
                 {query ? (
                   <Dataset query={query} useQuery={useDuftQuery}>
                     <ExportData />
@@ -84,10 +82,9 @@ const CardComponent: FC<CardComponentProps> = ({
                 )}
               </div>
             )}
-
             {DetailsComponent && (
               <button
-                className="pl-2 pt-[1.85px] dark:text-highlight-500"
+                className="pl-1 pt-[1.85px] dark:text-highlight-500"
                 onClick={toggleModal}
                 title="Show Details"
               >
