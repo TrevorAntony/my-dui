@@ -22,6 +22,7 @@ import DuftModal from "./duft-modal";
 import { renderModalContent } from "../helpers/modalContentHelper";
 import SettingsDisplay from "../ui-components/duft-settings/duft-settings-components/settings-display";
 import AboutDlg from "../ui-components/duft-about/duft-about";
+import DataTaskDialog from "./data-task-dialog";
 
 const ExampleSidebar: FC = function () {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =
@@ -280,18 +281,15 @@ const BottomMenu: FC = function () {
         <div style={divStyle}></div>
       </div>
 
-      <DuftModal
+      <DataTaskDialog
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Data Refresh"
         executeButtonText="Run data task"
         disableButtons={data?.isRunning}
-        modalWidth="narrow"
-        modalHeight="small"
-        resize="false"
       >
         <div className="h-[180px] overflow-y-auto pb-8">{content}</div>
-      </DuftModal>
+      </DataTaskDialog>
     </>
   );
 };

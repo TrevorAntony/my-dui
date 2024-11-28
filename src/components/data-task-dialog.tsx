@@ -34,12 +34,12 @@ const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
       </Modal.Body>
       <Modal.Footer className="flex justify-end w-full gap-4">
         {executeButtonText && onExecute && (
-          <Button color="primary" onClick={onExecute} disabled={disableButtons}>
+          <Button color="secondary" onClick={onExecute} disabled={disableButtons}>
             {executeButtonText || "Run"}
           </Button>
         )}
         <Button
-          color="secondary"
+          color="primary"
           onClick={handleButtonClose || onClose}
           disabled={disableButtons}
         >
