@@ -40,6 +40,7 @@ import {
   InfiniteScrollTable,
   ExportData,
   Markdown,
+  InfoTag,
   HtmlSnippet,
 } from "../3dl";
 import {
@@ -127,7 +128,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             RadialBarChart: (
-              props: React.ComponentProps<typeof RadialBarChart>
+              props: React.ComponentProps<typeof RadialBarChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <RadialBarChart
@@ -139,7 +140,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             PolarAreaChart: (
-              props: React.ComponentProps<typeof PolarAreaChart>
+              props: React.ComponentProps<typeof PolarAreaChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <PolarAreaChart
@@ -171,7 +172,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             HeatmapChart: (
-              props: React.ComponentProps<typeof HeatmapChart>
+              props: React.ComponentProps<typeof HeatmapChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <HeatmapChart
@@ -193,7 +194,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             CascadeChart: (
-              props: React.ComponentProps<typeof CascadeChart>
+              props: React.ComponentProps<typeof CascadeChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <CascadeChart
@@ -205,7 +206,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             ScoreCardTable: (
-              props: React.ComponentProps<typeof ScoreCardTable>
+              props: React.ComponentProps<typeof ScoreCardTable>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <ScoreCardTable
@@ -237,7 +238,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             InfiniteScrollTable: (
-              props: React.ComponentProps<typeof InfiniteScrollTable>
+              props: React.ComponentProps<typeof InfiniteScrollTable>,
             ) => (
               <InfiniteScrollTable
                 {...(props as React.ComponentProps<typeof InfiniteScrollTable>)}
@@ -248,7 +249,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               />
             ),
             StackedBarChart: (
-              props: React.ComponentProps<typeof StackedBarChart>
+              props: React.ComponentProps<typeof StackedBarChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <StackedBarChart
@@ -270,7 +271,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             PercentStackedBarChart: (
-              props: React.ComponentProps<typeof PercentStackedBarChart>
+              props: React.ComponentProps<typeof PercentStackedBarChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <PercentStackedBarChart
@@ -284,7 +285,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             ClusteredBarChart: (
-              props: React.ComponentProps<typeof ClusteredBarChart>
+              props: React.ComponentProps<typeof ClusteredBarChart>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <ClusteredBarChart
@@ -296,7 +297,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               </ErrorBoundary>
             ),
             PreviewQuery: (
-              props: React.ComponentProps<typeof PreviewQuery>
+              props: React.ComponentProps<typeof PreviewQuery>,
             ) => (
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <PreviewQuery
@@ -342,6 +343,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
                 />
               </ErrorBoundary>
             ),
+            InfoTag,
           }}
           jsx={dashboardData}
         />

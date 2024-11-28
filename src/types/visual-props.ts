@@ -16,4 +16,5 @@ export interface VisualProps {
   modalWidth?: "narrow" | "medium" | "wide";
   modalHeight?: "tiny" | "smaller" | "small" | "medium" | "large";
   children?: React.ReactNode;
+  infoTagContent?: React.ReactNode;
 }

@@ -1,5 +1,6 @@
 import BaseCircularChart from "../base-visuals/base-circular-chart";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 
 const RadialBarChart = ({
   container: Container,
@@ -8,6 +9,7 @@ const RadialBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
   ...props
 }: VisualProps) => {
   // Content to be rendered
@@ -21,6 +23,7 @@ const RadialBarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
     >
       {content}
     </Container>

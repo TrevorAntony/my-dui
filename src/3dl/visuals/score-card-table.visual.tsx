@@ -5,6 +5,7 @@ import { Box } from "@mantine/core";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 import EmptyState from "../ui-elements/empty-state";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 
@@ -17,6 +18,7 @@ const ScoreCardTable = ({
   exportData,
   detailsComponent,
   resize = "false",
+  children,
   ...props
 }: VisualProps) => {
   const { data, loading } = useDataContext();
@@ -133,6 +135,7 @@ const ScoreCardTable = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
     >
       {content}
     </ContainerComponent>

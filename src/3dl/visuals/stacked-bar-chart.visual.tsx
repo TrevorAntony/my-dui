@@ -4,6 +4,7 @@ import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
 import EmptyState from "../ui-elements/empty-state";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 type DataItem = {
@@ -20,6 +21,7 @@ const StackedBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
   ...props
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
@@ -125,6 +127,7 @@ const StackedBarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
     >
       {content}
     </Container>

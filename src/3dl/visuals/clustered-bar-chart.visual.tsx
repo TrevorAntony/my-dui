@@ -3,6 +3,8 @@ import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
+
 import EmptyState from "../ui-elements/empty-state";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 type DataItem = {
@@ -19,6 +21,7 @@ const ClusteredBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  children,
   ...props
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
@@ -123,6 +126,7 @@ const ClusteredBarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
     >
       {content}
     </Container>

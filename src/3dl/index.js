@@ -46,4 +46,5 @@ export { default as Query } from "./utilities/query-component";
 export { default as InfiniteScrollTable } from "./tables/infinite-scroll-table/infinite-scroll-table";
 export { default as ExportData } from "./utilities/export-data/export-data";
 export { default as Markdown } from "./visuals/markdown";
+export { default as InfoTag } from "./utilities/info-tag/info-tag";
 export { default as HtmlSnippet } from "./visuals/html-snippet";
