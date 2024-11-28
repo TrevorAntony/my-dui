@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TableSkeleton from "../../../../ui-components/table-skeleton";
 import ColumnToggle from "./ColumnToggle";
 import SearchBar from "./SearchBar";
@@ -10,6 +10,7 @@ import Dataset from "../../../utilities/data-set";
 import useDuftQuery from "../../../../3dlcomponents/resources/useDuftQuery";
 import EmptyState from "../../../ui-elements/empty-state";
 import { Button, Modal } from "flowbite-react";
+import { Spinner } from "flowbite-react";
 
 const TableContent = ({
   data,
@@ -54,8 +55,26 @@ const TableContent = ({
   const tableRef = useRef<HTMLDivElement>(null);
   const [renderedChild, setRenderedChild] = useState<React.ReactNode>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [showEmpty, setShowEmpty] = useState(false);
   const shouldExportData = exportData === "true";
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (!loading && !data?.length) {
+      timeout = setTimeout(() => {
+        setShowEmpty(true);
+      }, 1000);
+    } else {
+      setShowEmpty(false);
+    }
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [loading, data]);
 
   const handleScroll = () => {
     const table = tableRef.current;
@@ -86,9 +105,9 @@ const TableContent = ({
 
     setIsModalOpen(true);
   };
-
+  
   return (
-    <div className="relative">
+    <><div className="relative">
       <div className="mb-4 flex items-center justify-end space-x-4">
         {searchColumns && (
           <SearchBar
@@ -96,14 +115,12 @@ const TableContent = ({
             handleSearchChange={handleSearchChange}
             loading={loading}
             searchColumns={searchColumns}
-            searchHint={searchHint}
-          />
+            searchHint={searchHint} />
         )}
         <ColumnToggle
           headers={headers}
           visibleColumns={visibleColumns}
-          handleColumnToggle={handleColumnToggle}
-        />
+          handleColumnToggle={handleColumnToggle} />
         {shouldExportData && (
           <div className={`self-start pr-1 pt-1.5`}>
             {query ? (
@@ -120,20 +137,17 @@ const TableContent = ({
       <div
         ref={tableRef}
         onScroll={handleScroll}
-        className={
-          layout === "single-layout"
-            ? "h-[calc(100vh-280px)] overflow-y-auto"
-            : "h-[500px] overflow-y-auto rounded"
-        }
+        className={layout === "single-layout"
+          ? "h-[calc(100vh-280px)] overflow-y-auto"
+          : "h-[500px] overflow-y-auto rounded"}
       >
         <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
           <TableHeader
             headers={headers}
             visibleColumns={visibleColumns}
             sortState={sortState}
-            handleSort={handleSort}
-          />
-          {data?.length ? (
+            handleSort={handleSort} />
+          {data?.length > 0 && (
             <TableBody
               data={data}
               headers={headers}
@@ -142,19 +156,25 @@ const TableContent = ({
             >
               {children}
             </TableBody>
-          ) : null}
+          )}
         </table>
-
+        {loading && !data?.length && (
+          <div className="flex h-40 items-center justify-center">
+            <Spinner
+              size="xl"
+              className="text-gray-400 dark:text-gray-300 fill-gray-600 dark:fill-gray-400" />
+          </div>
+        )}
         {loading && <TableSkeleton />}
-        {!loading && !data?.length && <EmptyState />}
+        {!loading && !data?.length && showEmpty && <EmptyState />}
       </div>
-
-      <Modal
-        show={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        position="center"
-        size="4xl"
-      >
+     
+    </div><Modal
+      show={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      position="center"
+      size="4xl"
+    >
         <Modal.Header>"Table content"</Modal.Header>
         <Modal.Body className="flex flex-col overflow-hidden ">
           {renderedChild}
@@ -167,7 +187,7 @@ const TableContent = ({
           </div>
         </Modal.Footer>
       </Modal>
-    </div>
+    </>
   );
 };
 
