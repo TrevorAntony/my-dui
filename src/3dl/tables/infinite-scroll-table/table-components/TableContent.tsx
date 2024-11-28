@@ -55,26 +55,7 @@ const TableContent = ({
   const tableRef = useRef<HTMLDivElement>(null);
   const [renderedChild, setRenderedChild] = useState<React.ReactNode>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showEmpty, setShowEmpty] = useState(false);
   const shouldExportData = exportData === "true";
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    if (!loading && !data?.length) {
-      timeout = setTimeout(() => {
-        setShowEmpty(true);
-      }, 1000);
-    } else {
-      setShowEmpty(false);
-    }
-
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    };
-  }, [loading, data]);
 
   const handleDeferredSearch = useCallback((value: string) => {
     handleSearchChange(value);
@@ -172,7 +153,7 @@ const TableContent = ({
               className="text-gray-500 dark:text-gray-300 fill-gray-600 dark:fill-gray-400" />
           </div>
         )}
-        {!loading && !data?.length && showEmpty && <EmptyState />}
+        {!loading && !data?.length  && <EmptyState />}
       </div>
      
     </div><Modal

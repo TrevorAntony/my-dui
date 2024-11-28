@@ -28,7 +28,7 @@ const ClusteredBarChart = ({
     return <ChartSkeleton />;
   }
 
-  if (!data || !Array.isArray(data) || !data.length) {
+  if (!loading && Array.isArray(data) && data.length === 0) {
     const content = (
       <EmptyState message="No data available for clustered bar chart" />
     );
@@ -39,6 +39,9 @@ const ClusteredBarChart = ({
     ) : (
       content
     );
+  }
+  if (!data) {
+    return null;
   }
 
   // Extract categories
