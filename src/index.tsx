@@ -36,33 +36,51 @@ export const client = new DuftHttpClient(
 );
 
 function Root() {
-  const getPreferredMode = (): "dark" | "light" =>
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  const [mode, setMode] = useState<"dark" | "light">(getPreferredMode());
+  const getPreferredMode = (): "dark" | "light" => 
+    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+  const [mode, setMode] = useState<"dark" | "light">(() => {
+    const savedMode = localStorage.getItem("flowbite-theme-mode") as "dark" | "light";
+    return savedMode || getPreferredMode();
+  });
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const updateTheme = (newMode: "dark" | "light") => {
-      setMode(newMode);
+      localStorage.setItem("flowbite-theme-mode", newMode);
       document.documentElement.classList.remove("dark", "light");
       document.documentElement.classList.add(newMode);
+      setMode(newMode);
+      document.documentElement.style.display = 'none';
+      void document.documentElement.offsetHeight;
+      document.documentElement.style.display = '';
     };
 
-    // Sync the mode on first render
-    updateTheme(getPreferredMode());
+    // Initial theme sync
+    updateTheme(mode);
 
     const handleChange = (event: MediaQueryListEvent) => {
       const newMode = event.matches ? "dark" : "light";
-      updateTheme(newMode);
+      requestAnimationFrame(() => {
+        updateTheme(newMode);
+      });
+    };
+    const checkThemeSync = () => {
+      const storedMode = localStorage.getItem("flowbite-theme-mode") as "dark" | "light";
+      const systemMode = getPreferredMode();
+      if (storedMode && storedMode !== systemMode) {
+        updateTheme(systemMode);
+      }
     };
 
+    // Add listeners
     mediaQuery.addEventListener("change", handleChange);
+    document.addEventListener("visibilitychange", checkThemeSync);
 
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
+      document.removeEventListener("visibilitychange", checkThemeSync);
     };
   }, []);
 
