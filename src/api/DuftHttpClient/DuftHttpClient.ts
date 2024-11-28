@@ -278,4 +278,8 @@ export class DuftHttpClient {
       parameters
     );
   }
+
+  async getLogFile(): Promise<{ content: string[] }> {
+    return this.makeRequest("GET", `${this.baseUrl}/log`);
+  }
 }
