@@ -267,4 +267,15 @@ export class DuftHttpClient {
       `${this.baseUrl}/data-connections/${connectionId}/parameters`
     );
   }
+
+  async updateConnectionParameters(
+    connectionId: string,
+    parameters: Record<string, any>
+  ): Promise<any> {
+    return this.makeRequest(
+      "POST",
+      `${this.baseUrl}/data-connections/${connectionId}/parameters`,
+      parameters
+    );
+  }
 }
