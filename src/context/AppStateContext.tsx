@@ -3,10 +3,7 @@ import React, { createContext, useReducer, useContext, useEffect } from "react";
 import DispatchService from "../services/dispatchService";
 import type { Config } from "./types";
 import { GlobalState, type AppState, type AppStateAction } from "./types";
-import {
-  clearTokensFromLocalStorage,
-  setTokenInLocalStorage,
-} from "../api/DuftHttpClient/local-storage-functions";
+import { clearTokensFromLocalStorage } from "../api/DuftHttpClient/local-storage-functions";
 
 // First add the enum
 const initialState: AppState = {

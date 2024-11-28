@@ -5,7 +5,6 @@ import ColumnToggle from "./ColumnToggle";
 import SearchBar from "./SearchBar";
 import TableBody from "./TableBody";
 import TableHeader from "./TableHeader";
-import TableModal from "./TableModal";
 import ExportData from "../../../utilities/export-data/export-data";
 import Dataset from "../../../utilities/data-set";
 import useDuftQuery from "../../../../3dlcomponents/resources/useDuftQuery";
@@ -24,7 +23,6 @@ const TableContent = ({
   handleColumnToggle,
   handleSort,
   children,
-  ModalComponent,
   pageUpdater,
   layout,
   searchColumns,
@@ -32,7 +30,6 @@ const TableContent = ({
   exportData = "false",
   query,
   searchHint,
-  resize,
 }: {
   data: any[];
   loading: boolean;
@@ -56,7 +53,6 @@ const TableContent = ({
   resize?: string;
 }) => {
   const tableRef = useRef<HTMLDivElement>(null);
-  const [selectedRowData, setSelectedRowData] = useState<any>(null);
   const [renderedChild, setRenderedChild] = useState<React.ReactNode>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEmpty, setShowEmpty] = useState(false);
@@ -91,8 +87,6 @@ const TableContent = ({
   };
 
   const handleCellClickInternal = (key: string, row: any) => {
-    setSelectedRowData(row);
-
     const matchingChild = React.Children.toArray(children).find(
       (child) => React.isValidElement(child) && child.props.columnName === key
     );

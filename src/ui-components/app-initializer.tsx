@@ -31,6 +31,8 @@ const AppInitializer: React.FC = () => {
   } else if (state.state === GlobalState.AUTH_REQUIRED) {
     return <Login />;
   }
+
+  return null;
 };
 
 export default AppInitializer;

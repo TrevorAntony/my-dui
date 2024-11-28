@@ -29,10 +29,10 @@ export const DataTaskNavLink: React.FC<DataTaskNavLinkProps> = ({
 
   const handleExecute = async () => {
     const result = await executeDataTask(task.task);
-    if (result.success) {
+    if (result?.message) {
       setIsOpen(false);
     } else {
-      setError(result.error || "Unknown error occurred.");
+      setError("Data task operation failed.");
     }
   };
 
