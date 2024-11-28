@@ -18,7 +18,6 @@ import { SidebarNavLink } from "./sidebar-nav-link";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./navigation-sidebar";
-import DuftModal from "./duft-modal";
 import { renderModalContent } from "../helpers/modalContentHelper";
 import SettingsDisplay from "../ui-components/duft-settings/duft-settings-components/settings-display";
 import AboutDlg from "../ui-components/duft-about/duft-about";
