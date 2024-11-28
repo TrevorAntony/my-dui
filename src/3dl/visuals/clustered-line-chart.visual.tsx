@@ -16,6 +16,8 @@ const ClusteredLineChart = ({
   userOptions = {},
   exportData,
   detailsComponent,
+  resize,
+  drag,
 }: VisualProps) => {
   const theme = useThemeContext();
   const { data } = useDataContext();
@@ -87,6 +89,8 @@ const ClusteredLineChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
+      drag={drag}
     >
       {content}
     </Container>
