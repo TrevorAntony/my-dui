@@ -15,12 +15,15 @@ const DuftHeader: React.FC<DuftHeaderProps> = ({
 }: {
   version: string;
 }) => {
+  const {
+    state: { config },
+  } = useAppState();
   return (
     <div className="text-default bg-highlight-100 dark:bg-highlight-900 mb-4 flex w-full items-start justify-between rounded-lg p-4">
       <div>
         <div>
           <h3 className="text-highlight-800 dark:text-highlight-200 pb-1 text-2xl font-semibold">
-            DUFT Version {version}
+            DUFT Version {config?.version || version}
           </h3>
           Proudly developed in Kenya, Uganda, Tanzania, and Namibia <br />
           Institute for Global Health Sciences <br />
@@ -145,7 +148,7 @@ const AboutDlg = ({
         <div className="flex h-[400px] flex-col overflow-hidden">
           <Tabs aria-label="Default tabs" variant="pills" theme={customTheme}>
             <Tabs.Item active title="About DUFT" icon={MdDashboard}>
-              <DuftHeader version="1.0.4" />
+              <DuftHeader />
               <div className="text-default pt-2">
                 <h3 className="pb-4 text-xl font-semibold">About DUFT</h3>
                 <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
@@ -164,7 +167,7 @@ const AboutDlg = ({
             </Tabs.Item>
             <Tabs.Item title="Hall of Fame" icon={HiUserCircle}>
               <div className="w-full">
-                <DuftHeader version="1.0.4" />
+                <DuftHeader />
                 <div className="text-default pt-2">
                   <h3 className="text-xl font-semibold">Credits</h3>
                   <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
