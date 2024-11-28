@@ -7,6 +7,7 @@ const PieChart = ({
   subHeader = header,
   exportData,
   detailsComponent,
+  resize,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="pie" />;
@@ -17,6 +18,7 @@ const PieChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </Container>

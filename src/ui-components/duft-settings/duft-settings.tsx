@@ -10,10 +10,11 @@ const Settings = () => {
       title="Settings"
       onClose={() => {
         setOpenSettings(false);
-        window.location.href = "/";
+        window.location.reload();
       }}
       modalWidth="medium"
       modalHeight="medium"
+      resize="false"
     >
       <SettingsDisplay />
     </DuftModal>

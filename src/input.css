@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .text-default {
+      @apply text-gray-900 dark:text-gray-100;
+    }
+  
+    .text-highlight {
+      color: var(--highlight-color); /* Light mode */
+      @apply dark:text-[#ffbfd7]; /* Dark mode */
+    }
+  }

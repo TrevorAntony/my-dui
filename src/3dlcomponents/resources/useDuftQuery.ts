@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import config from "../../config";
+import { client } from "../..";
 
 interface DuftQueryResult<T> {
   data: T | undefined;
@@ -18,27 +18,10 @@ type RequestData = {
   current_page?: number;
 };
 
-const fetchDuftData = async <T>(requestPayload: RequestData): Promise<T> => {
-  const response = await fetch(`${config.apiBaseUrl}/run-query`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestPayload),
-  });
-
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(`Network response was not ok: ${errorMessage}`);
-  }
-
-  return response.json();
-};
-
 const useDuftQuery = <T>(requestPayload: RequestData): DuftQueryResult<T> => {
   const { data, error, isLoading } = useQuery({
     queryKey: ["duftQuery", requestPayload],
-    queryFn: () => fetchDuftData<T>(requestPayload),
+    queryFn: () => client.getQueryData(requestPayload),
     enabled: !!requestPayload?.query,
     refetchOnWindowFocus: false,
   });

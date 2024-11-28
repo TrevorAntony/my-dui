@@ -7,6 +7,7 @@ import { Sidebar } from "flowbite-react";
 
 import type { MenuItem, DataTaskItem, NavigationConfig } from "./types";
 import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
+import { DataTaskNavLink } from "./data-task-nav-link";
 
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,
@@ -24,7 +25,7 @@ const renderSidebarMenu = (config: NavigationConfig) => {
   const homeLink = homeConfig ? (
     <Sidebar.ItemGroup key="home-group">
       <SidebarNavLink
-        to={homeConfig.dashboard}
+        to="/"  // Always use root path for home link
         icon={iconMap[homeConfig.icon] || HiHome}
       >
         {homeConfig.title}
@@ -53,26 +54,16 @@ const renderSidebarMenu = (config: NavigationConfig) => {
                 paths={item.tasks.map((t) => t.task)}
               >
                 {item.tasks.map((nestedItem, nestedIndex) => (
-                  <SidebarNavLink
+                  <DataTaskNavLink
                     key={nestedIndex}
-                    to={`/data-task/${nestedItem.task}`}
+                    task={nestedItem}
                     icon={iconMap[nestedItem.icon] || HiChartPie}
-                  >
-                    {nestedItem.title}
-                  </SidebarNavLink>
+                  />
                 ))}
               </SidebarCollapse>
             );
           } else {
-            return (
-              <SidebarNavLink
-                key={index}
-                to={`/data-task/${item.task}`}
-                icon={Icon}
-              >
-                {item.title}
-              </SidebarNavLink>
-            );
+            return <DataTaskNavLink key={index} task={item} icon={Icon} />;
           }
         })}
       </SidebarGroup>
@@ -100,13 +91,14 @@ const renderSidebarMenu = (config: NavigationConfig) => {
                 paths={item.dashboards.map((d) => d.dashboard)}
               >
                 {item.dashboards.map((nestedItem, nestedIndex) => (
-                  <SidebarNavLink
-                    key={nestedIndex}
-                    to={nestedItem.dashboard}
-                    icon={iconMap[nestedItem.icon] || HiChartPie}
-                  >
-                    {nestedItem.title}
-                  </SidebarNavLink>
+                  <div key={nestedIndex} className="pl-2">
+                    <SidebarNavLink
+                      to={nestedItem.dashboard}
+                      icon={iconMap[nestedItem.icon] || HiChartPie}
+                    >
+                      {nestedItem.title}
+                    </SidebarNavLink>
+                  </div>
                 ))}
               </SidebarCollapse>
             );

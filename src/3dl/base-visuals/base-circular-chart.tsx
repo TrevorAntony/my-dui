@@ -2,8 +2,9 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
-import ChartSkeleton from "../../ui-components/chart-skeleton";
 import type { ChartDataItem, ChartType, Options } from "../types/types";
+import EmptyState from "../ui-elements/empty-state";
+import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const BaseCircularChart = ({
   chartType = "pie",
@@ -13,10 +14,14 @@ const BaseCircularChart = ({
   userOptions?: object;
 }) => {
   const theme = useThemeContext();
-  const { data } = useDataContext();
+  const { data, loading } = useDataContext();
+
+  if (loading) {
+    return <ChartSkeleton />;
+  }
 
   if (!Array.isArray(data) || data.length === 0) {
-    return <ChartSkeleton />;
+    return <EmptyState message="No data available for this chart" />;
   }
 
   const { apex: apexOptions } = theme["themes"][0];

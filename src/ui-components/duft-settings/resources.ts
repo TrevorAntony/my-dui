@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import config from "../../config";
+import { client } from "../../index";
 
 interface Param {
   name: string;
@@ -34,10 +34,16 @@ export const useDataConnections = () => {
     useState<DataConnectionsResponse | null>(null);
 
   useEffect(() => {
-    fetch(`${config.apiBaseUrl}/data-connections`)
-      .then((response) => response.json())
-      .then((data: DataConnectionsResponse) => setDataConnections(data))
-      .catch((error) => console.error("Error fetching data:", error));
+    const fetchDataConnections = async () => {
+      try {
+        const data = await client.getDataConnections();
+        setDataConnections(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchDataConnections();
   }, []);
 
   return dataConnections;

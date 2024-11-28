@@ -9,6 +9,5 @@ export type DataTask = {
 };
 
 export type DataTaskResponse = {
-  success: boolean;
-  error?: string;
+  message?: string;
 };

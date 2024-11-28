@@ -6,13 +6,15 @@ const ConnectionContent: FC<DataConnectionFormProps> = ({
   connection,
   handleConnectionClick,
 }) => (
-  <div className="flex-1 p-4">
+  <div className="h-full flex-1 overflow-y-auto p-4">
     {connection ? (
       <div>
         <h3 className="text-lg font-semibold">
           {connection.name} Configuration
         </h3>
-        <p className="mb-4 text-sm text-gray-600">{connection.description}</p>
+        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+          {connection.description}
+        </p>
         <DataConnectionForm
           connection={connection}
           handleConnectionClick={handleConnectionClick}

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import config from "../config";
 import classNames from "classnames";
-import { Sidebar, Tooltip } from "flowbite-react";
+import { Button, Modal, Sidebar } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import {
@@ -20,12 +20,16 @@ import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./navigation-sidebar";
 import DuftModal from "./duft-modal";
 import { renderModalContent } from "../helpers/modalContentHelper";
+import SettingsDisplay from "../ui-components/duft-settings/duft-settings-components/settings-display";
+import AboutDlg from "../ui-components/duft-about/duft-about";
 
 const ExampleSidebar: FC = function () {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =
     useSidebarContext();
 
   const [currentPage, setCurrentPage] = useState("");
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   useEffect(() => {
     const newPage = window.location.pathname;
@@ -50,8 +54,26 @@ const ExampleSidebar: FC = function () {
               <Sidebar.Items>
                 <SystemSidebar />
                 <Sidebar.ItemGroup key="home-group">
-                  <SidebarNavLink to={"/settings"} icon={MdOutlineSettings}>
+                  <SidebarNavLink
+                    to="#"
+                    icon={MdOutlineSettings}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsSettingsOpen(true);
+                    }}
+                  >
                     Settings
+                  </SidebarNavLink>
+                  <SidebarNavLink
+                    to="#"
+                    icon={MdOutlineSettings}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsAboutOpen(true);
+                      console.log("Set About True");
+                    }}
+                  >
+                    About DUFT
                   </SidebarNavLink>
                 </Sidebar.ItemGroup>
                 {config.debugMode === "true" ? (
@@ -133,6 +155,41 @@ const ExampleSidebar: FC = function () {
           </div>
         </Sidebar>
       </div>
+
+      <Modal
+        show={isSettingsOpen}
+        onClose={() => {
+          setIsSettingsOpen(false);
+        }}
+        position="center"
+        size="7xl"
+      >
+        <Modal.Header>Settings</Modal.Header>
+        <Modal.Body className="flex flex-col overflow-hidden ">
+          <div className="flex h-[400px] flex-col overflow-hidden">
+            <SettingsDisplay />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full justify-end">
+            <Button
+              onClick={() => {
+                setIsSettingsOpen(false);
+              }}
+              color="primary"
+            >
+              Close
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+
+      <AboutDlg
+        isOpen={isAboutOpen}
+        onClose={() => {
+          setIsAboutOpen(false);
+        }}
+      />
     </div>
   );
 };
@@ -205,7 +262,7 @@ const BottomMenu: FC = function () {
     setIsModalOpen(false);
     setModalContent([]);
     channel.postMessage({ type: "TOGGLE_MODAL", isModalOpen: false });
-    window.location.href = "/dashboard/home";
+    window.location.reload();
   };
 
   const divStyle = {
@@ -220,9 +277,7 @@ const BottomMenu: FC = function () {
   return (
     <>
       <div className="flex items-center justify-center gap-x-5">
-        <Tooltip content="Data task indicator">
-          <div style={divStyle}></div>
-        </Tooltip>
+        <div style={divStyle}></div>
       </div>
 
       <DuftModal
@@ -233,8 +288,9 @@ const BottomMenu: FC = function () {
         disableButtons={data?.isRunning}
         modalWidth="narrow"
         modalHeight="small"
+        resize="false"
       >
-        <div className="h-[150px] overflow-y-auto">{content}</div>
+        <div className="h-[180px] overflow-y-auto pb-8">{content}</div>
       </DuftModal>
     </>
   );

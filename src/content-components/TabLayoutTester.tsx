@@ -28,7 +28,7 @@ const TabLayoutTester: React.FC = () => {
 const TabSample: React.FC = function () {
   return (
     <div>
-      <Tabs.Group aria-label="Tabs with underline" style="underline">
+      <Tabs aria-label="Tabs with underline">
         <Tabs.Item active title="Profile" icon={HiUserCircle}>
           This is{" "}
           <span className="font-medium text-gray-800 dark:text-white">
@@ -78,7 +78,7 @@ const TabSample: React.FC = function () {
         <Tabs.Item disabled title="Disabled">
           Disabled content
         </Tabs.Item>
-      </Tabs.Group>
+      </Tabs>
     </div>
   );
 };

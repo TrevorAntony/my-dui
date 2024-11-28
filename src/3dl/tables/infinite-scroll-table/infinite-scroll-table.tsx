@@ -16,6 +16,7 @@ interface InfiniteScrollTableProps {
   initialColumns?: string;
   detailsComponent?: string;
   searchHint?: string;
+  resize?: string;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -29,6 +30,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   initialColumns,
   detailsComponent,
   searchHint,
+  resize = "false",
 }) => {
   const {
     data,
@@ -51,9 +53,9 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
     {},
   );
-  const [sortState, setSortState] = useState<Record<string, "ASC" | "DESC">>(
-    {},
-  );
+  const [sortState, setSortState] = useState<
+    Record<string, "ASC" | "DESC" | null>
+  >({});
   const initializedRef = useRef(false);
 
   useEffect(() => {
@@ -96,13 +98,26 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   };
 
   const handleSort = (column: string) => {
-    const currentSort = sortState[column] || "ASC";
-    const newSort = currentSort === "ASC" ? "DESC" : "ASC";
-    const sortKey = `${column} ${newSort}`;
-
+    const currentSort = sortState[column];
+    let newSort: "ASC" | "DESC" | null;
+    let sortKey = "";
+    // Implement three-state sorting logic
+    if (!currentSort) {
+      newSort = "ASC";
+      sortKey = `${column} ASC`;
+    } else if (currentSort === "ASC") {
+      newSort = "DESC";
+      sortKey = `${column} DESC`;
+    } else {
+      newSort = null;
+      sortKey = "";
+    }
     setSortState({ [column]: newSort });
-
-    handleSortChange?.(sortKey);
+    if (newSort) {
+      handleSortChange?.(sortKey);
+    } else {
+      handleSortChange?.("");
+    }
   };
 
   const sortedData = useMemo(() => {
@@ -129,6 +144,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       query={query}
       exportData={exportData}
       searchHint={searchHint}
+      resize={resize}
     >
       {children}
     </TableContent>

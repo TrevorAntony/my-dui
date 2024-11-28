@@ -7,6 +7,7 @@ const DonutChart = ({
   subHeader = header,
   exportData,
   detailsComponent,
+  resize,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="donut" />;
@@ -17,6 +18,7 @@ const DonutChart = ({
       subHeader={subHeader}
       exportData={exportData}
       detailsComponent={detailsComponent}
+      resize={resize}
     >
       {content}
     </Container>

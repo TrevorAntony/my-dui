@@ -8,6 +8,7 @@ dotenv.config();
 
 // ----------------------------------------------------------------------
 
+//@ts-expect-error the defineConfig type is not correct, it should include the test property
 export default defineConfig({
   plugins: [react()],
   base: "./",
@@ -36,5 +37,9 @@ export default defineConfig({
   },
   preview: {
     port: 3031,
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: "./setupTests.ts", // Path to your test setup file
   },
 });

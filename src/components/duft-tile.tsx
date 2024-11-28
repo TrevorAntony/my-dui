@@ -3,6 +3,7 @@ import { useDataContext } from "../3dl/context/DataContext";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import DuftModal from "./duft-modal";
 import TileSkeleton from "../ui-components/tile-skeleton";
+import { Button, Modal } from "flowbite-react";
 
 interface DuftTileProps {
   title: string;
@@ -11,6 +12,7 @@ interface DuftTileProps {
   children?: React.ReactNode;
   modalWidth?: "narrow" | "medium" | "wide";
   modalHeight?: "small" | "medium" | "large";
+  resize?: string;
 }
 
 const DuftTile: React.FC<DuftTileProps> = ({
@@ -18,6 +20,7 @@ const DuftTile: React.FC<DuftTileProps> = ({
   children,
   modalWidth,
   modalHeight,
+  resize = "false",
 }) => {
   const { data } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -116,14 +119,34 @@ const DuftTile: React.FC<DuftTileProps> = ({
         )}
       </div>
       <DuftModal
-        isOpen={isModalOpen}
+        isOpen={false}
         onClose={handleCloseModal}
         title={title}
         modalWidth={modalWidth}
         modalHeight={modalHeight}
+        resize={resize}
       >
         {children}
       </DuftModal>
+
+      <Modal
+        show={isModalOpen}
+        onClose={() => handleCloseModal()}
+        position="center"
+        size="7xl"
+      >
+        <Modal.Header>{title}</Modal.Header>
+        <Modal.Body className="flex flex-col overflow-hidden ">
+          {children}
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full justify-end">
+            <Button onClick={() => handleCloseModal()} color="primary">
+              Close
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
