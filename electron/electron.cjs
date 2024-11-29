@@ -1,6 +1,5 @@
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
-const express = require("express");
 const cors = require("cors");
 const os = require('os');
 const fs = require("fs");
@@ -20,15 +19,13 @@ const AppConfig = {
   SERVER_APP_PID_FILE: path.join(app.getPath('userData'), 'serverApp.pid'),
   PLATFORM: os.platform(),
   APP_URL: 'http://localhost:8000',
-  INDEX_PATH_PROD: 'http://localhost:3032',
   RESOURCE_ZIP_PATH: path.join(process.resourcesPath, 'duft_resources.zip'),
   USER_HOME_PATH: path.join(os.homedir()),
   EXTRACT_PATH: path.join(os.homedir(), 'duft_resources'),
   TAR_PATH: path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv.tar.gz'),
   PYTHON_INTERPRETER_PATH: os.platform() === 'win32' ?
     path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv', 'python.exe') :
-    path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv', 'bin', 'python'),
-  STATIC_PATH: path.join(__dirname, "../dist"),
+    path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv', 'bin', 'python')
 };
 
 // Global Variables
