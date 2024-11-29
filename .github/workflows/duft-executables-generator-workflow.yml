@@ -42,7 +42,7 @@ jobs:
           GITHUB_ORG: "UCSF-IGHS"
           GITHUB_TOKEN: ${{ secrets.DUFT_CLONE_TOKEN }}
           REPO2_REPO: "duft-config"
-          REPO2_BRANCH: "namibia-3dl"
+          REPO2_BRANCH: "tanzania-ctca-3dl"
           REPO3_REPO: "duft-workspace-django"
           REPO3_BRANCH: "main"
 
@@ -88,7 +88,7 @@ jobs:
           GITHUB_ORG: "UCSF-IGHS"
           GITHUB_TOKEN: ${{ secrets.DUFT_CLONE_TOKEN }}
           REPO2_REPO: "duft-config"
-          REPO2_BRANCH: "namibia-3dl"
+          REPO2_BRANCH: "tanzania-ctca-3dl"
           REPO3_REPO: "duft-workspace-django"
           REPO3_BRANCH: "main"
 
@@ -134,7 +134,7 @@ jobs:
           GITHUB_ORG: "UCSF-IGHS"
           GITHUB_TOKEN: ${{ secrets.DUFT_CLONE_TOKEN }}
           REPO2_REPO: "duft-config"
-          REPO2_BRANCH: "namibia-3dl"
+          REPO2_BRANCH: "tanzania-ctca-3dl"
           REPO3_REPO: "duft-workspace-django"
           REPO3_BRANCH: "main"
 
