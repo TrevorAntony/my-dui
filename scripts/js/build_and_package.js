@@ -33,10 +33,6 @@ const main = () => {
     targets = args.join(' ');
   }
 
-  console.log('Building renderer process...');
-  runCommand('yarn run build:for:electron');
-
-
   console.log('Temporarily removing electron dependency...');
   modifyPackageJson((packageJson) => {
     packageJson._originalDependencies = { ...packageJson.dependencies };
