@@ -28,8 +28,7 @@ const TableBody: React.FC<TableBodyProps> = ({
           .map((header) => {
             const hasMatchingChild = React.Children.toArray(children).some(
               (child) =>
-                React.isValidElement(child) &&
-                child.props.columnName === header,
+                React.isValidElement(child) && child.props.columnName === header
             );
 
             const formatDate = (value: string) => {

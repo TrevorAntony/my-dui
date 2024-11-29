@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useMemo, useState } from "react";
+import { StrictMode, useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppStateProvider } from "./context/AppStateContext";
@@ -17,7 +17,7 @@ import {
   updateConfigFromHttpClient,
   getRefreshToken,
 } from "./api/DuftHttpClient/local-storage-functions";
-import { ThemeModeProvider, useThemeMode } from './context/ThemeModeContext';
+import { ThemeModeProvider, useThemeMode } from "./context/ThemeModeContext";
 
 const container = document.getElementById("root");
 
@@ -53,16 +53,15 @@ function Root() {
 }
 function FlowbiteWrapper({ children }: { children: React.ReactNode }) {
   const { mode } = useThemeMode();
-  const flowbiteTheme = useMemo(() => ({
-    theme,
-    mode
-  }), [mode]);
-
-  return (
-    <Flowbite theme={flowbiteTheme}>
-      {children}
-    </Flowbite>
+  const flowbiteTheme = useMemo(
+    () => ({
+      theme,
+      mode,
+    }),
+    [mode]
   );
+
+  return <Flowbite theme={flowbiteTheme}>{children}</Flowbite>;
 }
 
 root.render(<Root />);

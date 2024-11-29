@@ -14,13 +14,7 @@ interface DuftTileProps {
   resize?: string;
 }
 
-const DuftTile: React.FC<DuftTileProps> = ({
-  title,
-  children,
-  modalWidth,
-  modalHeight,
-  resize = "false",
-}) => {
+const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
   const { data } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
