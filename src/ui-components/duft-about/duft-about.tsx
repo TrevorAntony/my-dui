@@ -1,10 +1,11 @@
 /* eslint-disable tailwindcss/no-custom-classname */
-import { Button, Tabs } from "flowbite-react";
+import { Button, Tabs, Spinner } from "flowbite-react";
 import { HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { Modal } from "flowbite-react";
 import flowbiteTheme from "../../flowbite-theme";
 import { useAppState } from "../../context/AppStateContext";
+import { useLogFile } from "../../hooks/useLogFile";
 
 interface DuftHeaderProps {
   version?: string;
@@ -140,6 +141,8 @@ const AboutDlg = ({
   const {
     state: { config },
   } = useAppState();
+
+  const { logs, loading, error } = useLogFile(isOpen);
 
   return (
     <Modal show={isOpen} onClose={() => onClose()} position="center" size="6xl">
@@ -278,13 +281,27 @@ const AboutDlg = ({
             </Tabs.Item>
             <Tabs.Item title="System" disabled={true}></Tabs.Item>
             <Tabs.Item title="Log File" icon={MdDashboard}>
-              <div className="text-default mb-4  p-4">
+              <div className="text-default mb-4 p-4">
                 <div>
-                  <div>
-                    <h3 className="text-highlight-800 dark:text-highlight-200 pb-1 text-2xl font-semibold">
-                      Log File
-                    </h3>
-                    <div className="pt-4">The log file will go here</div>
+                  <h3 className="text-highlight-800 dark:text-highlight-200 pb-1 text-2xl font-semibold">
+                    Log File
+                  </h3>
+                  <div className="mt-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
+                    {loading ? (
+                      <div className="flex justify-center p-4">
+                        <Spinner size="lg" />
+                      </div>
+                    ) : error ? (
+                      <div className="text-red-500">{error}</div>
+                    ) : (
+                      <div className="max-h-[300px] overflow-y-auto font-mono text-sm text-gray-600 dark:text-gray-300">
+                        {logs.map((log, index) => (
+                          <div key={index} className="whitespace-pre-wrap py-1">
+                            {log}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

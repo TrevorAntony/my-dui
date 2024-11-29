@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Avatar, Dropdown, Button, Navbar } from "flowbite-react";
+import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { HiMenuAlt1, HiX } from "react-icons/hi";
 import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../helpers/is-small-screen";
@@ -71,13 +71,9 @@ const ExampleNavbar: FC = function () {
                 }
               >
                 <Dropdown.Divider />
-                <Dropdown.Item>
-                  Dashboard
-                </Dropdown.Item>
+                <Dropdown.Item>Dashboard</Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}>
-                  Sign out
-                </Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
               </Dropdown>
             </div>
           </div>
