@@ -284,7 +284,7 @@ const initializeApplication = async () => {
 
 const handleInitialSetup = async () => {
   mainWindow = createMainWindow();
-  mainWindow.loadFile(path.join('setup.html'));
+  mainWindow.loadFile(path.join('../public','setup.html'));
 
   mainWindow.webContents.on('did-finish-load', async () => {
     if (!fs.existsSync(AppConfig.EXTRACT_PATH)) {
