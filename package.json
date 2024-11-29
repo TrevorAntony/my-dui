@@ -188,7 +188,7 @@
         }
       ],
       "icon": "./duft_icon.icns",
-      "artifactName": "${productName}-${version}-${arch}-qe.${ext}"
+      "artifactName": "${productName}-${version}-${arch}-we.${ext}"
     },
     "win": {
       "target": [
@@ -226,7 +226,7 @@
         "deb",
         "rpm"
       ],
-      "artifactName": "${productName}-${version}-${arch}-qe.${ext}"
+      "artifactName": "${productName}-${version}-${arch}-we.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -235,7 +235,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "artifactName": "${productName}-${version}-${arch}-qe.exe"
+      "artifactName": "${productName}-${version}-${arch}-we.exe"
     },
     "msi": {
       "oneClick": false,
@@ -244,7 +244,7 @@
       "createStartMenuShortcut": true,
       "shortcutName": "DUFT Platform",
       "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
-      "artifactName": "${productName}-${version}-${arch}-qe.msi"
+      "artifactName": "${productName}-${version}-${arch}-we.msi"
     }
   }
 }
