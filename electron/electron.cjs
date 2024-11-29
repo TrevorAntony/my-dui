@@ -15,13 +15,11 @@ log.initialize();
 // Configuration Constants
 const AppConfig = {
   IS_DEV: process.env.IS_DEV === "true",
-  PORT_DEV: 3031,
-  PORT_PROD: 3032,
   SOCKETS_PORT: 3037,
   APP_DATA_PATH: app.getPath('userData'),
   SERVER_APP_PID_FILE: path.join(app.getPath('userData'), 'serverApp.pid'),
   PLATFORM: os.platform(),
-  INDEX_PATH_DEV: 'http://localhost:3031',
+  APP_URL: 'http://localhost:8000',
   INDEX_PATH_PROD: 'http://localhost:3032',
   RESOURCE_ZIP_PATH: path.join(process.resourcesPath, 'duft_resources.zip'),
   USER_HOME_PATH: path.join(os.homedir()),
@@ -156,28 +154,6 @@ const handleNestedExtraction = async (extractPath) => {
   }
 };
 
-// Express Server Functions
-const startExpressDevServer = async () => {
-  const expressServerApp = express();
-  expressServerApp.use(cors());
-  expressServerApp.use(express.static(AppConfig.STATIC_PATH));
-  return new Promise((resolve) => {
-    expressServerApp.listen(AppConfig.PORT_DEV, () => {
-      resolve();
-    });
-  });
-};
-
-const startExpressProdServer = async () => {
-  const server = express();
-  server.use(express.static(AppConfig.STATIC_PATH));
-  server.get('/', (req, res) => res.sendFile(path.join(AppConfig.STATIC_PATH, 'index.html')));
-  return new Promise((resolve) => {
-    server.listen(AppConfig.PORT_PROD, () => {
-      resolve();
-    });
-  });
-};
 
 // Python Process Functions
 const startServerApp = (scriptPath, interpreterPath) => {
@@ -266,13 +242,7 @@ const setupWindowOpenHandler = (window) => {
 };
 
 const setupDidFinishLoadHandler = (window) => {
-  window.webContents.on('did-finish-load', async () => {
-    if (AppConfig.IS_DEV) {
-      await startExpressDevServer();
-    } else {
-      await startExpressProdServer();
-    }
-  });
+  window.webContents.on('did-finish-load', async () => {});
 };
 
 const createWindow = async () => {
@@ -317,7 +287,7 @@ const initializeApplication = async () => {
 
 const handleInitialSetup = async () => {
   mainWindow = createMainWindow();
-  mainWindow.loadFile(path.join(AppConfig.STATIC_PATH, 'setup.html'));
+  mainWindow.loadFile(path.join('setup.html'));
 
   mainWindow.webContents.on('did-finish-load', async () => {
     if (!fs.existsSync(AppConfig.EXTRACT_PATH)) {
@@ -336,11 +306,6 @@ const handleInitialSetup = async () => {
 const startServerAndCreateWindow = async (pythonInterpreterPath) => {
   // Start the Express server
   mainWindow = createMainWindow();
-  if (AppConfig.IS_DEV) {
-    await startExpressDevServer();
-  } else {
-    await startExpressProdServer();
-  }
 
   // Check if the server app is running, if not, start it
   if (!isServerAppRunning(path.join(AppConfig.EXTRACT_PATH, 'duft-server', 'manage.py'))) {
@@ -348,5 +313,5 @@ const startServerAndCreateWindow = async (pythonInterpreterPath) => {
   }
 
   // Create and load the main window with the appropriate URL
-  mainWindow.loadURL(AppConfig.IS_DEV ? AppConfig.INDEX_PATH_DEV : AppConfig.INDEX_PATH_PROD);
+  mainWindow.loadURL(AppConfig.APP_URL);
 };
