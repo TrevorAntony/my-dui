@@ -32,7 +32,7 @@ const Markdown = ({
   }
 
   const content = (
-    <div className="prose max-w-none">
+    <div className="w-full">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={markdownComponents}
