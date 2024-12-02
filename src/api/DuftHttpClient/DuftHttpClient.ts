@@ -133,11 +133,6 @@ export class DuftHttpClient {
       headers["Authorization"] = `Bearer ${token}`;
     }
 
-    console.log(
-      `Making request to ${endpoint} with method ${method} and headers`,
-      headers
-    );
-
     const response = await fetch(endpoint, {
       method,
       headers,
