@@ -4,6 +4,7 @@ import { useDataContext } from "../../context/DataContext";
 import type { ContainerComponentProps } from "../../types/types";
 import { useLayout } from "../../ui-elements/single-layout";
 import TableContent from "./table-components/TableContent";
+import { CaseType } from "../../utilities/CaseTransform";
 
 interface InfiniteScrollTableProps {
   container?: React.ComponentType<ContainerComponentProps>;
@@ -18,6 +19,7 @@ interface InfiniteScrollTableProps {
   searchHint?: string;
   resize?: string;
   detailsTitle?: string;
+  headerCase?: CaseType;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -33,6 +35,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   searchHint,
   resize = "false",
   detailsTitle = "More Info",
+  headerCase = 'sentence',
 }) => {
   const {
     data,
@@ -148,6 +151,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       searchHint={searchHint}
       resize={resize}
       detailsTitle={detailsTitle}
+      headerCase={headerCase}
     >
       {children}
     </TableContent>

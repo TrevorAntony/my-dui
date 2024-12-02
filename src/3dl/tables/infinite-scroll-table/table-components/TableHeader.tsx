@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { CaseType, transformCase } from "../../../utilities/CaseTransform";
 
 interface TableHeaderProps {
   headers: string[];
   visibleColumns: Record<string, boolean>;
   sortState: Record<string, "ASC" | "DESC" | null>;
   handleSort: (column: string) => void;
+  caseType?: CaseType;
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({
@@ -12,6 +14,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   visibleColumns,
   sortState,
   handleSort,
+  caseType = 'sentence'
 }) => {
   const [preservedHeaders, setPreservedHeaders] = useState<string[]>(headers);
 
@@ -35,15 +38,13 @@ const TableHeader: React.FC<TableHeaderProps> = ({
               onClick={() => handleSort(header)}
             >
               <div className="flex items-center">
-                {header.charAt(0).toUpperCase() + header.slice(1)}
+                {transformCase(header, caseType)}
                 <svg
-                  className={`ml-1.5 ${
-                    sortState[header] ? "h-5 w-5" : "h-4 w-4"
-                  } ${
-                    sortState[header]
+                  className={`ml-1.5 ${sortState[header] ? "h-5 w-5" : "h-4 w-4"
+                    } ${sortState[header]
                       ? "text-highlight-600 dark:text-highlight-600"
                       : "text-gray-600 dark:text-gray-300"
-                  }`}
+                    }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"

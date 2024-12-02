@@ -2,6 +2,7 @@ import React from "react";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../ui-elements/single-layout";
 import TableSkeleton from "../../ui-components/table-skeleton";
+import { CaseType, transformCase } from "../utilities/CaseTransform";
 
 // Define types for props and data
 interface DataTableProps {
@@ -11,6 +12,7 @@ interface DataTableProps {
   variant?: string;
   exportData?: boolean | string;
   detailsComponent?: string;
+  headerCase?: CaseType;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -20,6 +22,7 @@ const DataTable: React.FC<DataTableProps> = ({
   variant = "card",
   exportData,
   detailsComponent,
+  headerCase = 'sentence',
 }) => {
   const { data } = useDataContext();
   const layout = useLayout();
@@ -46,7 +49,7 @@ const DataTable: React.FC<DataTableProps> = ({
               }`}
             >
               <div className="flex items-center justify-start space-x-2">
-                <span>{header.charAt(0).toUpperCase() + header.slice(1)}</span>
+              <span>{transformCase(header, headerCase)}</span>
               </div>
             </th>
           ))}

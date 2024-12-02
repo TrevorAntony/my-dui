@@ -16,6 +16,7 @@ import useDuftQuery from "../../../../3dlcomponents/resources/useDuftQuery";
 import EmptyState from "../../../ui-elements/empty-state";
 import { Button, Modal } from "flowbite-react";
 import { Spinner } from "flowbite-react";
+import { CaseType } from "../../../utilities/CaseTransform";
 
 const TableContent = ({
   data,
@@ -36,6 +37,7 @@ const TableContent = ({
   query,
   searchHint,
   detailsTitle,
+  headerCase = 'sentence',
 }: {
   data: any[];
   loading: boolean;
@@ -58,6 +60,7 @@ const TableContent = ({
   searchHint?: string;
   resize?: string;
   detailsTitle?: string;
+  headerCase?: CaseType;
 }) => {
   const deferredSearchText = useDeferredValue(searchText);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -151,6 +154,7 @@ const TableContent = ({
               visibleColumns={visibleColumns}
               sortState={sortState}
               handleSort={handleSort}
+              caseType={headerCase}
             />
             {data?.length > 0 && (
               <TableBody
