@@ -10,6 +10,7 @@ const PieChart = ({
   detailsComponent,
   resize,
   children,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="pie" />;
@@ -22,6 +23,7 @@ const PieChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>
