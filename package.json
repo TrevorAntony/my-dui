@@ -2,7 +2,7 @@
   "name": "data-use-facility-tool",
   "author": "UCSF, IGHS | Global Programs <communications@globalhealth.ucsf.edu>",
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "main": "electron/electron.cjs",
   "description": "Platform for Facility Data Use",
   "license": "UNLICENSED",
@@ -50,7 +50,6 @@
     "dotenv": "^16.4.5",
     "electron": "^30.0.7",
     "electron-log": "^5.1.5",
-    "express": "^4.18.2",
     "extract-zip": "2.0.1",
     "flowbite": "^1.8.0",
     "flowbite-react": "^0.10.2",
@@ -165,7 +164,7 @@
       "output": "release"
     },
     "files": [
-      "dist/**/*",
+      "public/setup.html",
       "electron/electron.cjs",
       "package.json",
       "duft_icon.ico",
@@ -189,7 +188,7 @@
         }
       ],
       "icon": "./duft_icon.icns",
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}-we.${ext}"
     },
     "win": {
       "target": [
@@ -227,7 +226,7 @@
         "deb",
         "rpm"
       ],
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}-we.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -236,7 +235,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "artifactName": "${productName}-${version}-${arch}.exe"
+      "artifactName": "${productName}-${version}-${arch}-we.exe"
     },
     "msi": {
       "oneClick": false,
@@ -245,7 +244,7 @@
       "createStartMenuShortcut": true,
       "shortcutName": "DUFT Platform",
       "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
-      "artifactName": "${productName}-${version}-${arch}.msi"
+      "artifactName": "${productName}-${version}-${arch}-we.msi"
     }
   }
 }
