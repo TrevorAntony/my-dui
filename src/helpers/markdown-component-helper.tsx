@@ -3,7 +3,10 @@ import React from "react";
 export const markdownComponents = {
   // Links
   a: ({ children, ...props }) => (
-    <a className="text-blue-600 hover:underline dark:text-blue-500" {...props}>
+    <a
+      className="text-highlight-600 hover:underline dark:text-blue-500"
+      {...props}
+    >
       {children}
     </a>
   ),
