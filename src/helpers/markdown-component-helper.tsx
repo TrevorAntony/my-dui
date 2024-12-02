@@ -1,22 +1,17 @@
 import React from "react";
 
 export const markdownComponents = {
+  // Links
   a: ({ children, ...props }) => (
-    <a className="text-blue-700 hover:underline dark:text-blue-500" {...props}>
+    <a className="text-blue-600 hover:underline dark:text-blue-500" {...props}>
       {children}
     </a>
   ),
-  ul: ({ children, ...props }) => (
-    <ul
-      className="text-default max-w-md list-inside list-disc space-y-1"
-      {...props}
-    >
-      {children}
-    </ul>
-  ),
+
+  // Headings
   h1: ({ children, ...props }) => (
     <h1
-      className="mb-4 text-4xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white"
+      className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-4xl"
       {...props}
     >
       {children}
@@ -24,7 +19,7 @@ export const markdownComponents = {
   ),
   h2: ({ children, ...props }) => (
     <h2
-      className="mb-4 text-3xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white"
+      className="mb-4 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl"
       {...props}
     >
       {children}
@@ -32,7 +27,7 @@ export const markdownComponents = {
   ),
   h3: ({ children, ...props }) => (
     <h3
-      className="mb-4 text-2xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white"
+      className="mb-4 text-xl font-bold text-gray-900 dark:text-white md:text-2xl"
       {...props}
     >
       {children}
@@ -40,7 +35,7 @@ export const markdownComponents = {
   ),
   h4: ({ children, ...props }) => (
     <h4
-      className="mb-4 text-xl font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
+      className="mb-4 text-lg font-semibold text-gray-900 dark:text-white md:text-xl"
       {...props}
     >
       {children}
@@ -48,7 +43,7 @@ export const markdownComponents = {
   ),
   h5: ({ children, ...props }) => (
     <h5
-      className="mb-4 text-lg font-semibold leading-tight tracking-tight text-gray-900 dark:text-white"
+      className="mb-4 text-base font-semibold text-gray-900 dark:text-white md:text-lg"
       {...props}
     >
       {children}
@@ -56,21 +51,111 @@ export const markdownComponents = {
   ),
   h6: ({ children, ...props }) => (
     <h6
-      className="mb-4 text-base font-medium leading-tight tracking-tight text-gray-900 dark:text-white"
+      className="mb-4 text-sm font-medium text-gray-900 dark:text-white md:text-base"
       {...props}
     >
       {children}
     </h6>
   ),
+
+  // Paragraphs
   p: ({ children, ...props }) => (
-    <p className="text-default mb-4 text-base" {...props}>
+    <p
+      className="mb-4 break-words text-base text-gray-700 dark:text-gray-300 md:text-lg"
+      {...props}
+    >
       {children}
     </p>
   ),
+
+  // Strong/Bold Text
   strong: ({ children, ...props }) => (
     <strong className="font-semibold text-gray-900 dark:text-white" {...props}>
       {children}
     </strong>
+  ),
+
+  // Emphasis/Italic Text
+  em: ({ children, ...props }) => (
+    <em className="italic text-gray-900 dark:text-white" {...props}>
+      {children}
+    </em>
+  ),
+
+  // Blockquotes
+  blockquote: ({ children, ...props }) => (
+    <blockquote
+      className="my-4 border-l-4 border-gray-300 pl-4 italic text-gray-700 dark:text-gray-300"
+      {...props}
+    >
+      {children}
+    </blockquote>
+  ),
+
+  // Lists
+  ul: ({ children, ...props }) => (
+    <ul
+      className="mb-4 list-inside list-disc space-y-2 text-gray-700 dark:text-gray-300"
+      {...props}
+    >
+      {children}
+    </ul>
+  ),
+  ol: ({ children, ...props }) => (
+    <ol
+      className="mb-4 list-inside list-decimal space-y-2 text-gray-700 dark:text-gray-300"
+      {...props}
+    >
+      {children}
+    </ol>
+  ),
+  li: ({ children, ...props }) => (
+    <li className="break-words" {...props}>
+      {children}
+    </li>
+  ),
+
+  // Code Blocks and Inline Code
+  code: ({ inline, className, children, ...props }) => {
+    const language = className?.replace("language-", "") || "";
+    return !inline ? (
+      <pre
+        className="my-4 overflow-x-auto rounded-md bg-gray-100 p-4 dark:bg-gray-800"
+        {...props}
+      >
+        <code
+          // eslint-disable-next-line tailwindcss/no-custom-classname
+          className={`${language ? `language-${language}` : ""} text-sm`}
+          {...props}
+        >
+          {children}
+        </code>
+      </pre>
+    ) : (
+      <code
+        className="rounded bg-gray-100 px-1 text-sm dark:bg-gray-800"
+        {...props}
+      >
+        {children}
+      </code>
+    );
+  },
+
+  // Images
+  img: ({ alt, src, title }) => (
+    <img alt={alt} src={src} title={title} className="my-4 h-auto max-w-full" />
+  ),
+
+  // Tables
+  table: ({ children, ...props }) => (
+    <div className="my-4 overflow-x-auto">
+      <table
+        className="min-w-full text-left text-sm text-gray-500 dark:text-gray-400"
+        {...props}
+      >
+        {children}
+      </table>
+    </div>
   ),
   thead: ({ children, ...props }) => (
     <thead
@@ -80,17 +165,16 @@ export const markdownComponents = {
       {children}
     </thead>
   ),
-  table: ({ children, ...props }) => (
-    <table
-      className="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-      {...props}
-    >
+  tbody: ({ children, ...props }) => <tbody {...props}>{children}</tbody>,
+  tr: ({ children, ...props }) => (
+    <tr className="border-b border-gray-200 dark:border-gray-700" {...props}>
       {children}
-    </table>
+    </tr>
   ),
   th: ({ children, ...props }) => (
     <th
-      className="bg-gray-50 px-6 py-3 text-xs font-medium uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
+      scope="col"
+      className="break-words px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-400"
       {...props}
     >
       {children}
@@ -98,7 +182,7 @@ export const markdownComponents = {
   ),
   td: ({ children, ...props }) => (
     <td
-      className="whitespace-nowrap px-6 py-4 text-gray-900 dark:text-white"
+      className="break-words px-4 py-2 text-gray-900 dark:text-white"
       {...props}
     >
       {children}
