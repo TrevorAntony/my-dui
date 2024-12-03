@@ -47,11 +47,11 @@ const TableHeader: React.FC<TableHeaderProps> = ({
               className={`sticky top-0 cursor-pointer px-6 py-3 ${bgClasses} ${hoverClasses}`}
               onClick={() => handleSort(header)}
             >
-              <div className="flex items-center">
-                {transformCase(header, caseType)}
+              <div className="flex items-center min-h-[24px]">
+              <span className="flex-1"> {transformCase(header, caseType)}</span>
                 <svg
-                  className={`ml-1.5 ${sortState[header] ? "h-5 w-5" : "h-4 w-4"
-                    } ${sortState[header]
+                  className={`ml-1.5 h5 w-5 flex-shrink-0 ${
+                    sortState[header]
                       ? "text-highlight-600 dark:text-highlight-600"
                       : "text-gray-600 dark:text-gray-300"
                     }`}
