@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Modal } from "flowbite-react";
 import { Button } from "flowbite-react";
 
@@ -28,10 +28,19 @@ const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
   cancelButtonText = "Close",
   hideCloseButton = false,
 }) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+    }
+  }, [children]);
   return (
     <Modal show={isOpen} onClose={() => onClose()} position="center" size="2xl">
       <Modal.Header className="text-default">{title}</Modal.Header>
-      <Modal.Body className="flex flex-col overflow-auto text-default">
+      <Modal.Body 
+        ref={contentRef}
+        className="flex flex-col overflow-auto text-default"
+      >
         {children}
       </Modal.Body>
       <Modal.Footer className="flex justify-end w-full gap-4">
