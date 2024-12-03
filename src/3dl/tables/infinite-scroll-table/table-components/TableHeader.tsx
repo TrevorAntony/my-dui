@@ -7,6 +7,7 @@ interface TableHeaderProps {
   sortState: Record<string, "ASC" | "DESC" | null>;
   handleSort: (column: string) => void;
   caseType?: CaseType;
+  isInModal?: boolean;
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({
@@ -14,7 +15,8 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   visibleColumns,
   sortState,
   handleSort,
-  caseType = 'sentence'
+  caseType = 'sentence',
+  isInModal = false,
 }) => {
   const [preservedHeaders, setPreservedHeaders] = useState<string[]>(headers);
 
@@ -25,8 +27,16 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     setPreservedHeaders(headers);
   }
 
+  const bgClasses = isInModal
+    ? "bg-gray-200 dark:bg-gray-800"
+    : "bg-gray-100 dark:bg-gray-600";
+
+  const hoverClasses = isInModal
+    ? "hover:bg-gray-400 dark:hover:bg-gray-600"
+    : "hover:bg-gray-200 dark:hover:bg-gray-500";
+
   return (
-    <thead className="bg-gray-50 text-sm uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+    <thead className={`text-sm uppercase text-gray-700 dark:text-gray-400 ${bgClasses}`}>
       <tr>
         {preservedHeaders
           ?.filter((header) => visibleColumns[header])
@@ -34,7 +44,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
             <th
               key={header}
               scope="col"
-              className="sticky top-0 cursor-pointer bg-gray-50 px-6 py-3 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600"
+              className={`sticky top-0 cursor-pointer px-6 py-3 ${bgClasses} ${hoverClasses}`}
               onClick={() => handleSort(header)}
             >
               <div className="flex items-center">
