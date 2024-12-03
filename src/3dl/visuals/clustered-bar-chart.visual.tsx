@@ -22,6 +22,7 @@ const ClusteredBarChart = ({
   detailsComponent,
   resize,
   children,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
@@ -130,6 +131,7 @@ const ClusteredBarChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

@@ -21,6 +21,7 @@ const PercentStackedBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  DataStringQuery,
   children,
   ...props
 }: VisualProps) => {
@@ -132,6 +133,7 @@ const PercentStackedBarChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

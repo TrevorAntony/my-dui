@@ -18,6 +18,7 @@ interface InfiniteScrollTableProps {
   searchHint?: string;
   resize?: string;
   detailsTitle?: string;
+  DataStringQuery?: string;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -33,6 +34,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   searchHint,
   resize = "false",
   detailsTitle = "More Info",
+  DataStringQuery,
 }) => {
   const {
     data,
@@ -53,7 +55,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   }, [data]);
 
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
-    {},
+    {}
   );
   const [sortState, setSortState] = useState<
     Record<string, "ASC" | "DESC" | null>
@@ -78,7 +80,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
             !headers.includes(header)
           ) {
             console.error(
-              `Column "${header}" specified in initialColumns does not exist in the table.`,
+              `Column "${header}" specified in initialColumns does not exist in the table.`
             );
           }
         }
@@ -167,6 +169,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       variant={layout === "single-layout" ? "plain" : variant}
       query={query}
       detailsComponent={detailsComponent as string}
+      DataStringQuery={DataStringQuery}
     >
       {wrappedContent}
     </ContainerComponent>

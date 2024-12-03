@@ -5,7 +5,7 @@ import getInfoTagContents from "../../helpers/get-info-tag-content";
 const PieChart = ({
   container: Container,
   header = "Pie Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   resize,

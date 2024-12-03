@@ -5,11 +5,12 @@ import getInfoTagContents from "../../helpers/get-info-tag-content";
 const LineChart = ({
   container: Container,
   header = "Line Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   resize,
   children,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="line" />;
@@ -22,6 +23,7 @@ const LineChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>
