@@ -13,6 +13,7 @@ export interface DataTaskDialogProps {
   disableButtons?: boolean;
   cancelButtonText?: string;
   defaultButton?: "execute" | "close";
+  hideCloseButton?: boolean;
 }
 
 const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
@@ -25,6 +26,7 @@ const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
   handleButtonClose,
   disableButtons = false,
   cancelButtonText = "Close",
+  hideCloseButton = false,
 }) => {
   return (
     <Modal show={isOpen} onClose={() => onClose()} position="center" size="2xl">
@@ -38,13 +40,15 @@ const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
             {executeButtonText || "Run"}
           </Button>
         )}
-        <Button
-          color="primary"
-          onClick={handleButtonClose || onClose}
-          disabled={disableButtons}
-        >
-          {cancelButtonText}
-        </Button>
+        {!hideCloseButton && (
+          <Button
+            color="primary"
+            onClick={handleButtonClose || onClose}
+            disabled={disableButtons}
+          >
+            {cancelButtonText}
+          </Button>
+        )}
       </Modal.Footer>
     </Modal>
   );

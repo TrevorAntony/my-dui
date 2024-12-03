@@ -286,6 +286,7 @@ const BottomMenu: FC = function () {
         title="Data Refresh"
         executeButtonText="Run data task"
         disableButtons={data?.isRunning}
+        hideCloseButton={data?.isRunning}
       >
         <div className="h-[180px] overflow-y-auto pb-8">{content}</div>
       </DataTaskDialog>
