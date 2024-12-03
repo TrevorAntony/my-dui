@@ -26,10 +26,10 @@ jobs:
           echo "::set-output name=matrix::$MATRIX"
 
   build-linux-executables:
-    needs: generate-matrix
+    needs: generate-implementations-matrix
     strategy:
       matrix:
-        config: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+        config: ${{ fromJson(needs.generate-implementations-matrix.outputs.matrix) }}
       max-parallel: 1 # Ensures the matrix runs serially
     runs-on: ubuntu-latest
     steps:
@@ -73,10 +73,10 @@ jobs:
         run: yarn run build-and-package -- --linux --code=${{ matrix.config.code }}
 
   build-windows-executables:
-    needs: generate-matrix
+    needs: generate-implementations-matrix
     strategy:
       matrix:
-        config: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+        config: ${{ fromJson(needs.generate-implementations-matrix.outputs.matrix) }}
       max-parallel: 1 # Ensures the matrix runs serially
     runs-on: windows-latest
     steps:
@@ -120,10 +120,10 @@ jobs:
         run: yarn run build-and-package -- --win --code=${{ matrix.config.code }}
 
   build-mac-executables:
-    needs: generate-matrix
+    needs: generate-implementations-matrix
     strategy:
       matrix:
-        config: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+        config: ${{ fromJson(needs.generate-implementations-matrix.outputs.matrix) }}
       max-parallel: 1 # Ensures the matrix runs serially
     runs-on: macos-latest
     steps:
