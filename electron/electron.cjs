@@ -25,7 +25,8 @@ const AppConfig = {
   TAR_PATH: path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv.tar.gz'),
   PYTHON_INTERPRETER_PATH: os.platform() === 'win32' ?
     path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv', 'python.exe') :
-    path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv', 'bin', 'python')
+    path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv', 'bin', 'python'),
+  PUBLIC_DIR_PATH: path.join(__dirname, "../public"),
 };
 
 // Global Variables
@@ -284,7 +285,7 @@ const initializeApplication = async () => {
 
 const handleInitialSetup = async () => {
   mainWindow = createMainWindow();
-  mainWindow.loadFile(path.join('../public','setup.html'));
+  mainWindow.loadFile(path.join(AppConfig.PUBLIC_DIR_PATH,'setup.html'));
 
   mainWindow.webContents.on('did-finish-load', async () => {
     if (!fs.existsSync(AppConfig.EXTRACT_PATH)) {
