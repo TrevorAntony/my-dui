@@ -178,24 +178,6 @@ function Pack-Conda-Env {
     [string]$EnvName
   )
 
-
-  # Check if conda-pack is installed, and install it if necessary
-  Write-Host "Checking if conda-pack is installed..."
-  $condaPackInstalled = conda list | Select-String -Pattern "conda-pack"
-
-  if (-not $condaPackInstalled) {
-    Write-Host "Installing conda-pack..."
-    conda install -c conda-forge conda-pack -y
-    if ($?) {
-      Write-Host "conda-pack successfully installed."
-    } else {
-      Write-Host "Failed to install conda-pack." -ForegroundColor Red
-      exit 1
-    }
-  } else {
-    Write-Host "conda-pack is already installed."
-  }
-
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
   Write-Color "Packing Conda environment '$EnvName' into portable-venv.tar.gz..." Blue
   & tar -czf "$ServerAppDir\portable-venv.tar.gz" --strip-components=1 -C "$ServerAppDir" "$EnvName"
