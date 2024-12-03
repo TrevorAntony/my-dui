@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 
+type DteStatus = {
+  is_running: boolean;
+  current_script: string | null;
+};
+
 const useFetchDteStatus = () => {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<DteStatus | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -12,10 +17,10 @@ const useFetchDteStatus = () => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
-        const result = await response.json();
+        const result: DteStatus = await response.json();
         setData(result);
       } catch (err) {
-        setError(err.message);
+        setError((err as Error).message);
       } finally {
         setLoading(false);
       }

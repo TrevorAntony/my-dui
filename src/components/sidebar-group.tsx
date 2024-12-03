@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import { Sidebar } from "flowbite-react"; // Adjust according to your imports
+import { Sidebar } from "flowbite-react";
 import { useSidebarContext } from "../context/SidebarContext";
 
 type SidebarGroupProps = {

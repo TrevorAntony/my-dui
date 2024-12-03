@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDashboardContext, setFilter } from "../utilities/Dashboard";
 import useQuery from "../utilities/useQuery";
 
-// Define the props type for Filter component
 export interface FilterProps {
   name: string;
   values?: string;
@@ -11,7 +10,6 @@ export interface FilterProps {
   className?: string;
 }
 
-// Individual Filter component that fetches options or uses hard-coded values
 const Filter: React.FC<FilterProps> = ({
   name,
   values,
@@ -19,7 +17,13 @@ const Filter: React.FC<FilterProps> = ({
   caption,
   className,
 }) => {
-  const { state, dispatch } = useDashboardContext();
+  const context = useDashboardContext();
+  if (!context) {
+    throw new Error(
+      "useDashboardContext must be used within a DashboardProvider",
+    );
+  }
+  const { state, dispatch } = context;
   const [selectedValue, setSelectedValue] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { data: options, loading, error } = useQuery(values_query);
@@ -29,15 +33,15 @@ const Filter: React.FC<FilterProps> = ({
       let loadedOptions: string[] = [];
 
       if (values) {
-        // Split static values by comma and dispatch to data state
         loadedOptions = values.split(",");
       } else if (values_query && options) {
-        // Extract strings from the JSON blobs returned by the query
-        loadedOptions = (options as { [key: string]: string }[]).map(
-          (option) => {
-            return Object.values(option)[0] || "";
-          }
-        );
+        loadedOptions = (
+          options as { label?: string; value?: string; [key: string]: string }[]
+        ).map((option) => {
+          const optionValues = Object.values(option);
+          const [label] = optionValues;
+          return `${option?.label || label}`;
+        });
       }
 
       // Dispatch the loaded options to data state
@@ -57,11 +61,21 @@ const Filter: React.FC<FilterProps> = ({
     }
   }, [dispatch, name, selectedValue, isLoaded]);
 
-  // Handle changes in selection
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-    setSelectedValue(value);
-    setFilter(dispatch, name, value); // Use setFilter utility to update the filter state
+    const selectedLabel = event.target.value;
+    const selectedOption = (
+      options as { label?: string; value?: string; [key: string]: string }[]
+    ).find(
+      (option) =>
+        option.label === selectedLabel ||
+        Object.values(option)[0] === selectedLabel,
+    );
+
+    const value =
+      selectedOption?.value || Object.values(selectedOption || {})[0];
+
+    setSelectedValue(selectedLabel);
+    setFilter(dispatch, name, value);
   };
 
   if (loading) {
@@ -69,7 +83,8 @@ const Filter: React.FC<FilterProps> = ({
   }
 
   if (error) {
-    return <div>Error fetching options: {error.message}</div>;
+    const errorMessage = (error as { message: string }).message;
+    return <div>Error fetching options: {errorMessage}</div>;
   }
 
   return (

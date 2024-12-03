@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useContext, useMemo } from "react";
 import { DashboardContext } from "./Dashboard";
 import config from "../../config";
+import { client } from "../..";
 
 interface UseDataSetLogicProps {
   query: string;
@@ -27,7 +29,10 @@ const useDataSetLogic = ({
   currentPage,
   debug = false,
 }: UseDataSetLogicProps) => {
-  const { state, dispatch } = useContext(DashboardContext);
+  const { state, dispatch } = useContext(DashboardContext) || {
+    state: {},
+    dispatch: () => {},
+  };
   const [modifiedQuery, setModifiedQuery] = useState<string>(query);
   const [queryReady, setQueryReady] = useState<boolean>(false);
 
@@ -67,7 +72,7 @@ const useDataSetLogic = ({
       const stateFilters = state.filters || {};
 
       const placeholders = query.match(/\$[a-zA-Z_]+/g) || [];
-      placeholders.forEach((placeholder) => {
+      placeholders.forEach((placeholder: string) => {
         const filterKey = placeholder.substring(1);
         const filterValue = filters[filterKey] || stateFilters[filterKey] || "";
         tempQuery = tempQuery.replace(placeholder, filterValue);
@@ -91,22 +96,12 @@ const useDataSetLogic = ({
     const fetchData = async () => {
       if (debug === true || debug === "true") {
         try {
-          const response = await fetch(`${config.apiBaseUrl}/build-query`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestData),
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          console.log("Debug - /build-query response:", data);
+          // Call the getQueryData method
+          const data = await client.getQueryData(requestData);
+          console.log("Debug - /run-query response:", data);
         } catch (error) {
-          console.error("Debug - Error fetching /build-query:", error);
+          // Handle any errors thrown by the client
+          console.error("Debug - Error fetching /run-query:", error);
         }
       }
     };

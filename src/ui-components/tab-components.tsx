@@ -6,12 +6,16 @@ interface DuftTabChildren {
   children: ReactNode;
 }
 
-const DuftTabset: React.FC<DuftTabChildren> = ({ children }) => {
+const DuftTabset: React.FC<DuftTabChildren> = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <div className="w-full">
-      <Tabs.Group aria-label="Tabs with underline" style="underline">
+      <Tabs aria-label="Tabs with underline" variant="underline">
         {children}
-      </Tabs.Group>
+      </Tabs>
     </div>
   );
 };
@@ -19,7 +23,7 @@ const DuftTabset: React.FC<DuftTabChildren> = ({ children }) => {
 interface DuftTabProps {
   active?: boolean;
   title: ReactNode;
-  icon: IconType;
+  icon?: IconType;
   children: ReactNode;
 }
 

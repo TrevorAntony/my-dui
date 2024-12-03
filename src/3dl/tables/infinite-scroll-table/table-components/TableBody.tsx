@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+//TO:DO replace the explicit anys with table data types once added
 import React from "react";
 
 interface TableBodyProps {
@@ -17,7 +19,10 @@ const TableBody: React.FC<TableBodyProps> = ({
 }) => (
   <tbody>
     {data?.map((row) => (
-      <tr key={row.id}>
+      <tr
+        key={row.id}
+        className="border-b bg-white hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+      >
         {headers
           ?.filter((header) => visibleColumns[header])
           .map((header) => {
@@ -38,7 +43,7 @@ const TableBody: React.FC<TableBodyProps> = ({
             return (
               <td
                 key={`${row.id}-${header}`}
-                className="border-b border-gray-300 p-4 dark:text-white"
+                className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                 onClick={
                   hasMatchingChild
                     ? () => handleCellClick(header, row)

@@ -9,7 +9,7 @@ interface RowProps {
 
 interface DuftGridProps {
   children: React.ReactNode;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
@@ -82,7 +82,7 @@ const DuftGridHeader: React.FC<RowProps> = ({ children, small }) => {
 
 const DuftSubheader: React.FC<RowProps> = ({ children }) => {
   const className =
-    "mt-0 text-sm font-medium text-gray-800 dark:text-gray-300 md:mt-6";
+    "mt-0 text-lg font-medium text-gray-800 dark:text-gray-300 md:mt-6";
 
   return (
     <div className="flex justify-start align-text-bottom md:justify-end">

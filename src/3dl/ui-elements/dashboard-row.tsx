@@ -1,6 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
-const DashboardRow = ({ children, data, style = {}, ...props }) => {
+interface DashboardRowProps {
+  children: React.ReactNode;
+  data: any;
+  style?: React.CSSProperties;
+  [key: string]: unknown;
+}
+
+const DashboardRow: React.FC<DashboardRowProps> = ({
+  children,
+  data,
+  style = {},
+  ...props
+}) => {
   const childrenCount = React.Children.count(children);
 
   const rowStyle = {
@@ -10,9 +23,14 @@ const DashboardRow = ({ children, data, style = {}, ...props }) => {
     ...style,
   };
 
-  const childrenWithProps = React.Children.map(children, (child) =>
-    React.cloneElement(child, { data })
-  );
+  const childrenWithProps = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child as React.ReactElement<{ data?: any }>, {
+        data,
+      });
+    }
+    return child;
+  });
 
   return (
     <div style={rowStyle} {...props}>

@@ -16,11 +16,6 @@ import BarChart from "../visuals/bar-chart.visual";
 import LineChart from "../visuals/line-chart.visual";
 import HeatmapChart from "../visuals/heat-map-chart.visual";
 import RadarChart from "../visuals/radar-chart.visual";
-import SmartDataTable from "../visuals/smart-data-table.visual";
-import DataTable from "../tables/DataTable"; // Import the DataTable component
-
-import PivotTable from "../tables/PivotTable"; // Import the PivotTable component
-import JSONVisual from "../visuals/json-visual";
 
 const PreviewPage = () => {
   const [input3DL, setInput3DL] = useState(`
@@ -89,7 +84,6 @@ const PreviewPage = () => {
               { category: 'Jun', value: 60 }
             ]}
           >
-            <SmartDataTable header="Table header"/>
           </DataSet>
         </Section>
       </Filters>
@@ -133,7 +127,6 @@ const PreviewPage = () => {
             LineChart,
             HeatmapChart,
             RadarChart,
-            SmartDataTable,
           }}
           jsx={jsxString}
         />

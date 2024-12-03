@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useDataContext } from "../context/DataContext";
 import DataTable from "../tables/DataTable";
 import PivotTable from "../tables/PivotTable";
@@ -6,7 +6,7 @@ import { DuftTab, DuftTabset } from "../../ui-components/tab-components";
 
 interface PreviewQueryProps {
   children?: React.ReactElement<{ query?: string }>;
-  container?: React.ComponentType<{ children: React.ReactNode }>;
+  container?: React.ElementType;
 }
 
 const PreviewQuery: React.FC<PreviewQueryProps> = ({

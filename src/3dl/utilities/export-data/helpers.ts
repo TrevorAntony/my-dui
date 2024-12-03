@@ -1,5 +1,5 @@
-export function jsonToCSV(json: any[]): string {
-  const header = Object.keys(json[0]).join(",");
+export function jsonToCSV(json: object[]): string {
+  const header = Object.keys(json[0] as object).join(",");
   const rows = json.map((obj) => Object.values(obj).join(","));
   return [header, ...rows].join("\n");
 }

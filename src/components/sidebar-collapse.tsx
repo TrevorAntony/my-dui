@@ -3,10 +3,10 @@ import { useLocation } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
 
 type SidebarCollapseProps = {
-  icon: React.FC<React.SVGProps<SVGSVGElement>>; // Restrict to SVG components
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   label: string;
   children: React.ReactNode;
-  paths: string[]; // Paths that should trigger the collapse to be open
+  paths: string[];
 };
 
 const SidebarCollapse: React.FC<SidebarCollapseProps> = ({
@@ -23,7 +23,7 @@ const SidebarCollapse: React.FC<SidebarCollapseProps> = ({
 
   useEffect(() => {
     if (shouldBeOpen) {
-      setIsCollapseOpen(true); // Open if the path matches
+      setIsCollapseOpen(true);
     }
   }, [shouldBeOpen]);
 
@@ -32,7 +32,7 @@ const SidebarCollapse: React.FC<SidebarCollapseProps> = ({
       icon={Icon}
       label={label}
       open={isCollapseOpen}
-      onClick={() => setIsCollapseOpen(!isCollapseOpen)} // Toggle open state
+      onClick={() => setIsCollapseOpen(!isCollapseOpen)}
     >
       {children}
     </Sidebar.Collapse>

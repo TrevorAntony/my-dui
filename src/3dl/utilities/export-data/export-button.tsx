@@ -7,7 +7,7 @@ function ExportButton({ onClick }: ExportButtonProps) {
     <div className="h-[20px] w-[20px]">
       <button onClick={onClick}>
         <svg
-          className="h-7 w-7 text-gray-400 dark:text-white"
+          className="h-7 w-7 text-gray-400 hover:text-gray-600"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="20"

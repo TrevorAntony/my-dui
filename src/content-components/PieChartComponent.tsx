@@ -10,16 +10,16 @@ const PieChartComponent: React.FC<PieChartProps> = ({ labels, series }) => {
   const options = {
     labels,
     chart: {
-      type: "pie",
+      type: "pie" as const,
     },
     legend: {
-      position: "bottom", // Place the legend at the bottom by default
-      horizontalAlign: "center", // Center the legend horizontally
+      position: "bottom" as const,
+      horizontalAlign: "center" as const,
       itemMargin: {
-        horizontal: 10, // Add horizontal margin between legend items
-        vertical: 5, // Add vertical margin for better spacing
+        horizontal: 10,
+        vertical: 5,
       },
-      fontSize: "14px", // Adjust font size for better readability
+      fontSize: "14px",
     },
     responsive: [
       {
@@ -29,9 +29,9 @@ const PieChartComponent: React.FC<PieChartProps> = ({ labels, series }) => {
             width: "100%",
           },
           legend: {
-            position: "bottom", // Keep the legend at the bottom on smaller screens
+            position: "bottom",
             horizontalAlign: "center",
-            fontSize: "12px", // Adjust font size for smaller screens
+            fontSize: "12px",
           },
         },
       },
@@ -39,7 +39,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({ labels, series }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow">
+    <div className="rounded-lg bg-white p-4 shadow">
       <Chart options={options} series={series} type="pie" width="100%" />
     </div>
   );

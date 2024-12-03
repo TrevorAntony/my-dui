@@ -2,9 +2,12 @@ import React from "react";
 import { HiHome, HiChartPie, HiHashtag, HiOutlineFolder } from "react-icons/hi";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
-import { SidebarNavLink } from "./SidebarNavLink";
+import { SidebarNavLink } from "./sidebar-nav-link";
 import { Sidebar } from "flowbite-react";
-import { useSidebarConfig } from "../hooks/useSideBarConfig";
+
+import type { MenuItem, DataTaskItem, NavigationConfig } from "./types";
+import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
+import { DataTaskNavLink } from "./data-task-nav-link";
 
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,
@@ -13,16 +16,16 @@ const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "hashtag-icon": HiHashtag,
 };
 
-const renderSidebarMenu = (config: any) => {
+const renderSidebarMenu = (config: NavigationConfig) => {
   const homeConfig = config.system?.home;
-  const systemMenu = config.system?.menu || [];
-  const userMenu = config.user?.menu || [];
-  const dataTaskMenu = config.system?.dataTasks || [];
+  const systemMenu = config.system?.menu?.items || [];
+  const userMenu = config.user?.menu?.items || [];
+  const dataTaskMenu = config.system?.dataTasks?.items || [];
 
   const homeLink = homeConfig ? (
     <Sidebar.ItemGroup key="home-group">
       <SidebarNavLink
-        to={homeConfig.dashboard}
+        to="/"  // Always use root path for home link
         icon={iconMap[homeConfig.icon] || HiHome}
       >
         {homeConfig.title}
@@ -32,38 +35,35 @@ const renderSidebarMenu = (config: any) => {
 
   const dataTaskGroup =
     dataTaskMenu.length > 0 ? (
-      <SidebarGroup key="data-tasks-group" title="Actions">
-        {dataTaskMenu.map((item: any, index: number) => {
+      <SidebarGroup
+        key="data-tasks-group"
+        title={`${config.system?.dataTasks?.header}` || "actions"}
+      >
+        {dataTaskMenu.map((item: DataTaskItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          if (item.dashboards && item.dashboards.length > 0) {
+          if (
+            "tasks" in item &&
+            Array.isArray(item.tasks) &&
+            item.tasks?.length
+          ) {
             return (
               <SidebarCollapse
                 key={index}
                 icon={HiOutlineFolder}
                 label={item.title}
-                paths={item.dashboards.map((d: any) => d.dashboard)}
+                paths={item.tasks.map((t) => t.task)}
               >
-                {item.dashboards.map((nestedItem: any, nestedIndex: number) => (
-                  <SidebarNavLink
+                {item.tasks.map((nestedItem, nestedIndex) => (
+                  <DataTaskNavLink
                     key={nestedIndex}
-                    to={nestedItem.dashboard}
+                    task={nestedItem}
                     icon={iconMap[nestedItem.icon] || HiChartPie}
-                  >
-                    {nestedItem.title}
-                  </SidebarNavLink>
+                  />
                 ))}
               </SidebarCollapse>
             );
           } else {
-            return (
-              <SidebarNavLink
-                key={index}
-                to={`/data-task/${item.task}`}
-                icon={Icon}
-              >
-                {item.title}
-              </SidebarNavLink>
-            );
+            return <DataTaskNavLink key={index} task={item} icon={Icon} />;
           }
         })}
       </SidebarGroup>
@@ -71,25 +71,34 @@ const renderSidebarMenu = (config: any) => {
 
   const systemGroup =
     systemMenu.length > 0 ? (
-      <SidebarGroup key="system-group" title="dashboards">
-        {systemMenu.map((item: any, index: number) => {
+      <SidebarGroup
+        key="system-group"
+        // title="dashboards"
+        title={`${config.system?.menu?.header}` || "dashboards"}
+      >
+        {systemMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          if (item.dashboards && item.dashboards.length > 0) {
+          if (
+            "dashboards" in item &&
+            Array.isArray(item.dashboards) &&
+            item.dashboards?.length
+          ) {
             return (
               <SidebarCollapse
                 key={index}
                 icon={HiOutlineFolder}
                 label={item.title}
-                paths={item.dashboards.map((d: any) => d.dashboard)}
+                paths={item.dashboards.map((d) => d.dashboard)}
               >
-                {item.dashboards.map((nestedItem: any, nestedIndex: number) => (
-                  <SidebarNavLink
-                    key={nestedIndex}
-                    to={nestedItem.dashboard}
-                    icon={iconMap[nestedItem.icon] || HiChartPie}
-                  >
-                    {nestedItem.title}
-                  </SidebarNavLink>
+                {item.dashboards.map((nestedItem, nestedIndex) => (
+                  <div key={nestedIndex} className="pl-2">
+                    <SidebarNavLink
+                      to={nestedItem.dashboard}
+                      icon={iconMap[nestedItem.icon] || HiChartPie}
+                    >
+                      {nestedItem.title}
+                    </SidebarNavLink>
+                  </div>
                 ))}
               </SidebarCollapse>
             );
@@ -106,18 +115,25 @@ const renderSidebarMenu = (config: any) => {
 
   const userGroup =
     userMenu.length > 0 ? (
-      <SidebarGroup key="user-group" title="User">
-        {userMenu.map((item: any, index: number) => {
+      <SidebarGroup
+        key="user-group"
+        title={`${config.user?.menu?.header}` || "user dashboards"}
+      >
+        {userMenu.map((item: MenuItem, index: number) => {
           const Icon = iconMap[item.icon] || HiChartPie;
-          if (item.dashboards && item.dashboards.length > 0) {
+          if (
+            "dashboards" in item &&
+            Array.isArray(item.dashboards) &&
+            item.dashboards?.length
+          ) {
             return (
               <SidebarCollapse
                 key={index}
                 icon={Icon}
                 label={item.title}
-                paths={item.dashboards.map((d: any) => d.dashboard)}
+                paths={item.dashboards.map((d) => d.dashboard)}
               >
-                {item.dashboards.map((nestedItem: any, nestedIndex: number) => (
+                {item.dashboards.map((nestedItem, nestedIndex) => (
                   <SidebarNavLink
                     key={nestedIndex}
                     to={nestedItem.dashboard}
@@ -150,7 +166,7 @@ const renderSidebarMenu = (config: any) => {
 };
 
 const SystemSidebar = () => {
-  const { sidebarConfig } = useSidebarConfig();
+  const sidebarConfig = useSidebarConfigContext();
 
   return <>{renderSidebarMenu(sidebarConfig)}</>;
 };

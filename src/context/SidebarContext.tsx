@@ -10,14 +10,17 @@ interface SidebarContextProps {
   setOpenOnSmallScreens: (isOpen: boolean) => void;
 }
 
-const SidebarContext = createContext<SidebarContextProps>(undefined!);
+const SidebarContext = createContext<SidebarContextProps | undefined>(
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  undefined!,
+);
 
 export function SidebarProvider({ children }: PropsWithChildren) {
   const location = isBrowser() ? window.location.pathname : "/";
   const [isOpen, setOpen] = useState(
     isBrowser()
       ? window.localStorage.getItem("isSidebarOpen") === "true"
-      : false
+      : false,
   );
 
   // Save latest state to localStorage
@@ -67,9 +70,9 @@ export function useSidebarContext(): SidebarContextProps {
 
   if (typeof context === "undefined") {
     throw new Error(
-      "useSidebarContext should be used within the SidebarContext provider!"
+      "useSidebarContext should be used within the SidebarContext provider!",
     );
   }
 
-  return context;
+  return context as SidebarContextProps;
 }

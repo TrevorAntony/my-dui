@@ -1,13 +1,13 @@
-// CardComponent.tsx
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Dataset, ExportData } from "../3dl";
 import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
 import { useLayout } from "../3dl/ui-elements/single-layout";
+import type { DetailsComponentRegistry } from "./details-component-registry";
 import { getDetailsComponent } from "./details-component-registry";
-import DuftModal from "./duft-modal";
 import { HiOutlineExternalLink } from "react-icons/hi";
+import { Button, Modal } from "flowbite-react";
 
 type MoreInfoProps = {
   text: string;
@@ -25,7 +25,8 @@ type CardComponentProps = {
   exportData?: string | boolean;
   query?: string;
   detailsComponent?: string;
-  modalSize?: "small" | "medium" | "large";
+  resize?: string;
+  infoTagContent?: ReactNode;
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -39,15 +40,17 @@ const CardComponent: FC<CardComponentProps> = ({
   exportData = "false",
   query,
   detailsComponent,
-  modalSize = "medium",
+  infoTagContent,
 }) => {
   const layout = useLayout();
   const shouldExportData = exportData === "true";
   const isFullHeight = layout === "single-layout";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const detailsComponentKey =
+    detailsComponent as keyof DetailsComponentRegistry;
   const DetailsComponent = detailsComponent
-    ? getDetailsComponent(detailsComponent)
+    ? getDetailsComponent(detailsComponentKey)
     : undefined;
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
@@ -66,10 +69,10 @@ const CardComponent: FC<CardComponentProps> = ({
               </span>
             )}
           </div>
-
           <div className="flex items-center space-x-2">
-            {shouldExportData && (
-              <div className="self-start">
+            {infoTagContent ? infoTagContent : null}
+            {shouldExportData && layout !== "single-layout" && (
+              <div className="self-start pl-1">
                 {query ? (
                   <Dataset query={query} useQuery={useDuftQuery}>
                     <ExportData />
@@ -79,14 +82,16 @@ const CardComponent: FC<CardComponentProps> = ({
                 )}
               </div>
             )}
-
             {DetailsComponent && (
               <button
-                className="pl-2 pt-[1.85px] dark:text-highlight-500"
+                className="pl-1 pt-[1.85px] dark:text-highlight-500"
                 onClick={toggleModal}
                 title="Show Details"
               >
-                <HiOutlineExternalLink className=" text-gray-400" size={20} />
+                <HiOutlineExternalLink
+                  className=" text-gray-400 hover:text-gray-600"
+                  size={20}
+                />
               </button>
             )}
           </div>
@@ -150,14 +155,33 @@ const CardComponent: FC<CardComponentProps> = ({
       )}
 
       {DetailsComponent && (
-        <DuftModal
-          isOpen={isModalOpen}
-          onClose={toggleModal}
-          title={header}
-          modalSize={modalSize}
+        <Modal
+          show={isModalOpen}
+          onClose={() => toggleModal()}
+          position="center"
+          size="5xl"
         >
-          <DetailsComponent />
-        </DuftModal>
+          <Modal.Header>{header}</Modal.Header>
+          <Modal.Body className="flex flex-col overflow-hidden ">
+            <DetailsComponent
+              container={
+                detailsComponent === "infinite-scroll-table"
+                  ? CardComponent
+                  : null
+              }
+              variant={
+                detailsComponent === "infinite-scroll-table" ? "plain" : variant
+              }
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="flex w-full justify-end">
+              <Button onClick={() => toggleModal()} color="primary">
+                Close
+              </Button>
+            </div>
+          </Modal.Footer>
+        </Modal>
       )}
     </>
   );

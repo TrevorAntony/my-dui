@@ -6,6 +6,11 @@ interface DetailsViewProps {
   children: React.ReactNode;
 }
 
+type ChildProps = {
+  columnName?: string;
+  config?: object;
+};
+
 const DetailsView: React.FC<DetailsViewProps> = ({
   columnName,
   config,
@@ -13,11 +18,11 @@ const DetailsView: React.FC<DetailsViewProps> = ({
 }) => {
   const modifiedChildren = React.Children.map(children, (child) =>
     React.isValidElement(child)
-      ? React.cloneElement(child, {
+      ? React.cloneElement(child as React.ReactElement<ChildProps>, {
           columnName,
           config,
         })
-      : child
+      : child,
   );
 
   return <>{modifiedChildren}</>;

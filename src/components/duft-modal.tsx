@@ -1,112 +1,108 @@
 import React from "react";
-import { Modal, Button } from "flowbite-react";
-import { HiX } from "react-icons/hi";
+import { Modal } from "flowbite-react";
 import { renderModalContent } from "../helpers/modalContentHelper";
+import StaticModalContainer from "./static-modal-container";
+import DraggableResizableModalContainer from "./draggable-resizable-modal-container";
+import { useModalConfig } from "../hooks/useModalConfig";
+import type {
+  modalPixelWidthMap,
+  modalViewportHeightRatioMap,
+} from "../helpers/constants";
+import type {
+  modalSymbolicWidthMap,
+  modalViewportHeightMap,
+} from "../helpers/constants";
 
-// Updated Modal Width Map with a smaller size
-const modalWidthMap = {
-  mini: "sm",
-  narrow: "3xl",
-  medium: "7xl",
-  wide: "full",
-};
-
-const modalHeightMap = {
-  tiny: "8vh",
-  smaller: "15vh",
-  small: "30vh",
-  medium: "60vh",
-  large: "80vh",
-};
+type ModalContent =
+  | string
+  | string[]
+  | { [key: string]: string | number | boolean };
 
 export interface DuftModalProps {
   isOpen: boolean;
   onClose: () => void;
   onExecute?: () => void;
-  executeButtonName?: string;
+  executeButtonText?: string;
   title?: string;
   children?: React.ReactNode;
-  modalContent?: string | string[] | Record<string, any>;
+  modalContent?: ModalContent;
   handleButtonClose?: () => void;
-  modalWidth?: keyof typeof modalWidthMap;
-  modalHeight?: keyof typeof modalHeightMap;
+  modalWidth?:
+    | keyof typeof modalPixelWidthMap
+    | keyof typeof modalSymbolicWidthMap;
+  modalHeight?:
+    | keyof typeof modalViewportHeightRatioMap
+    | keyof typeof modalViewportHeightMap;
   disableButtons?: boolean;
-  closeButtonLabel?: string;
+  cancelButtonText?: string;
+  defaultButton?: "execute" | "close";
+  resize?: string;
 }
 
 const DuftModal: React.FC<DuftModalProps> = ({
   isOpen,
   onClose,
   onExecute,
-  executeButtonName = "Run",
+  executeButtonText = "Run",
   title = "More info",
   children,
   modalContent,
   handleButtonClose,
-  modalWidth,
-  modalHeight,
+  modalWidth = "medium",
+  modalHeight = "medium",
   disableButtons = false,
-  closeButtonLabel = "Close",
+  cancelButtonText = "Close",
+  defaultButton = "close",
+  resize = "false",
 }) => {
-  // Determine resolved modal width and height based on the provided props or defaults
-  const resolvedModalWidth = modalWidth ? modalWidthMap[modalWidth] : "7xl";
-  const resolvedModalHeight = modalHeight
-    ? modalHeightMap[modalHeight]
-    : "auto";
+  const { containerProps, finalModalBodyStyle } = useModalConfig({
+    resize,
+    modalWidth,
+    modalHeight,
+  });
 
-  // Smart modal style: Set fixed dimension only when the corresponding prop is provided
-  const finalModalBodyStyle = {
-    height: modalHeight ? resolvedModalHeight : "auto",
-    maxWidth: !modalWidth ? resolvedModalWidth : undefined,
-    overflowY: "auto",
-    overflowX: "auto",
-  };
+  const shouldResize = resize === "true";
 
   return (
-    <Modal
-      show={isOpen}
-      onClose={onClose}
-      size={resolvedModalWidth}
-      className="relative"
-    >
-      {/* Modal Header */}
-      <div className="flex items-center justify-between border-b px-6 py-4 text-lg font-semibold">
-        <span>{title}</span>
-        <button
-          type="button"
-          className="text-gray-500 hover:text-gray-700"
-          onClick={onClose}
-          aria-label="Close modal"
-          disabled={disableButtons}
+    <Modal show={isOpen} onClose={onClose} size={"lg"} className="relative">
+      {shouldResize ? (
+        <DraggableResizableModalContainer
+          title={title}
+          onClose={onClose}
+          disableButtons={disableButtons}
+          resolvedModalWidth={containerProps.resolvedModalWidth}
+          resolvedModalHeight={containerProps.resolvedModalHeight}
+          position={containerProps.position}
+          handleDragStop={containerProps.handleDragStop}
+          minHeight={containerProps.initialConfig?.minHeight}
+          handleResize={containerProps.handleResize}
+          finalModalBodyStyle={finalModalBodyStyle}
+          modalContent={modalContent ? renderModalContent(modalContent) : null}
+          executeButtonText={executeButtonText}
+          onExecute={onExecute}
+          executeButtonRef={containerProps.executeButtonRef}
+          closeButtonRef={containerProps.closeButtonRef}
+          handleButtonClose={handleButtonClose}
+          cancelButtonText={cancelButtonText}
+          defaultButton={defaultButton}
         >
-          <HiX className="h-6 w-6" />
-        </button>
-      </div>
-
-      {/* Modal Body with dynamic or fixed sizing */}
-      <Modal.Body className="p-6" style={finalModalBodyStyle}>
-        {children
-          ? children
-          : modalContent
-          ? renderModalContent(modalContent)
-          : null}
-      </Modal.Body>
-
-      <Modal.Footer className="flex justify-end">
-        {executeButtonName && onExecute && (
-          <Button color="pink" onClick={onExecute} disabled={disableButtons}>
-            {executeButtonName || "Run"}
-          </Button>
-        )}
-
-        <Button
-          color="primary"
-          onClick={handleButtonClose || onClose}
-          disabled={disableButtons}
+          {children}
+        </DraggableResizableModalContainer>
+      ) : (
+        <StaticModalContainer
+          title={title}
+          onClose={onClose}
+          disableButtons={disableButtons}
+          finalModalBodyStyle={finalModalBodyStyle}
+          modalContent={modalContent ? renderModalContent(modalContent) : null}
+          executeButtonText={executeButtonText}
+          onExecute={onExecute}
+          handleButtonClose={handleButtonClose}
+          cancelButtonText={cancelButtonText}
         >
-          {closeButtonLabel}
-        </Button>
-      </Modal.Footer>
+          {children}
+        </StaticModalContainer>
+      )}
     </Modal>
   );
 };

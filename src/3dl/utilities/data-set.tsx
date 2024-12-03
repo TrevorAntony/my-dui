@@ -1,12 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useRef, useMemo, useCallback } from "react";
 import { DataProvider } from "../context/DataContext";
 import useDataSetLogic from "./useDataSetLogic";
 import { processQuery, transposeData } from "../../helpers/visual-helpers";
 
+interface DuftQueryResult<T> {
+  data: T | undefined;
+  isLoading: boolean;
+  error: Error | null;
+}
+
 interface DataSetProps {
   query?: string;
   staticData?: Array<Record<string, any>>;
-  useQuery: () => null;
+  useQuery: <T>(requestPayload: any) => DuftQueryResult<T>;
   filters?: Record<string, any>;
   searchColumns?: string;
   sortColumn?: string;
@@ -33,7 +40,7 @@ const useSearch = (initialSearchText: string = "", delay: number = 500) => {
         setSearchText(newSearchText);
       }, delay);
     },
-    [delay]
+    [delay],
   );
 
   return { searchText, updateSearchText };
@@ -75,7 +82,7 @@ const Dataset: React.FC<DataSetProps> = ({
 
   const shouldTranspose = transpose === "true";
 
-  const { data, loading, error, state } = useDataSetLogic({
+  const { data, loading, error } = useDataSetLogic({
     query,
     staticData,
     useQuery,
@@ -112,7 +119,7 @@ const Dataset: React.FC<DataSetProps> = ({
       resetPage();
       updateSearchText(newSearchText);
     },
-    [resetPage, updateSearchText]
+    [resetPage, updateSearchText],
   );
 
   const handleSortChange = useCallback(
@@ -120,7 +127,7 @@ const Dataset: React.FC<DataSetProps> = ({
       resetPage();
       updateSortText(newSortText);
     },
-    [resetPage, updateSortText]
+    [resetPage, updateSortText],
   );
 
   let finalData = paginatedData;
@@ -153,9 +160,6 @@ const Dataset: React.FC<DataSetProps> = ({
         pageSize,
       }}
     >
-      {state?.debug && (
-        <div style={{ color: "red", fontWeight: "bold" }}>Debug On</div>
-      )}
       {children}
     </DataProvider>
   );

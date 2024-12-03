@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+//TO:DO replace the explicit anys with row types once added
 import React from "react";
 
 interface TableModalProps {
@@ -6,6 +8,7 @@ interface TableModalProps {
   ModalComponent: React.ElementType;
   renderedChild: React.ReactNode;
   selectedRowData: any;
+  resize?: string;
 }
 
 const TableModal: React.FC<TableModalProps> = ({
@@ -14,11 +17,12 @@ const TableModal: React.FC<TableModalProps> = ({
   ModalComponent,
   renderedChild,
   selectedRowData,
+  resize,
 }) => {
   if (!isOpen || !ModalComponent) return null;
 
   return (
-    <ModalComponent isOpen={isOpen} onClose={onClose}>
+    <ModalComponent isOpen={isOpen} onClose={onClose} resize={resize}>
       {renderedChild ? renderedChild : selectedRowData}
     </ModalComponent>
   );

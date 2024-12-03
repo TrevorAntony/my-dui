@@ -6,7 +6,7 @@ import React from "react";
  * Can be extended easily for new content types.
  */
 export const renderModalContent = (
-  modalContent: string | number | string[] | number[] | Record<string, any>
+  modalContent: string | number | string[] | number[] | Record<string, unknown>,
 ): React.ReactNode => {
   if (modalContent === undefined || modalContent === null) return null;
 
@@ -24,7 +24,7 @@ export const renderModalContent = (
   if (Array.isArray(modalContent)) {
     return (
       <ul className="space-y-4">
-        {modalContent.map((item, index) => (
+        {modalContent.map((item: string | number, index: number) => (
           <li key={index}>{item}</li>
         ))}
       </ul>

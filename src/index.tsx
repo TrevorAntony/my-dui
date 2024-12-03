@@ -1,11 +1,23 @@
-import { StrictMode } from "react";
+import { StrictMode, useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { AppStateProvider } from "./context/AppStateContext";
+import AppInitializer from "./ui-components/app-initializer";
+
+import { Flowbite } from "flowbite-react";
+import theme from "./flowbite-theme";
 
 import "./index.css";
-import App from "./App";
-import { AppStateProvider } from "./AppStateContext";
+import "./input.css";
+import { DuftHttpClient } from "./api/DuftHttpClient/DuftHttpClient";
+import config from "./config";
+import {
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage,
+  updateConfigFromHttpClient,
+  getRefreshToken,
+} from "./api/DuftHttpClient/local-storage-functions";
+import { ThemeModeProvider, useThemeMode } from "./context/ThemeModeContext";
 
 const container = document.getElementById("root");
 
@@ -16,13 +28,40 @@ if (!container) {
 const root = createRoot(container);
 const queryClient = new QueryClient();
 
-root.render(
-  <StrictMode>
-    <AppStateProvider>
-      <QueryClientProvider client={queryClient}>
-        <App />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-      </QueryClientProvider>
-    </AppStateProvider>
-  </StrictMode>
+export const client = new DuftHttpClient(
+  config.apiBaseUrl,
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage,
+  updateConfigFromHttpClient,
+  getRefreshToken
 );
+
+function Root() {
+  return (
+    <StrictMode>
+      <ThemeModeProvider>
+        <FlowbiteWrapper>
+          <AppStateProvider>
+            <QueryClientProvider client={queryClient}>
+              <AppInitializer />
+            </QueryClientProvider>
+          </AppStateProvider>
+        </FlowbiteWrapper>
+      </ThemeModeProvider>
+    </StrictMode>
+  );
+}
+function FlowbiteWrapper({ children }: { children: React.ReactNode }) {
+  const { mode } = useThemeMode();
+  const flowbiteTheme = useMemo(
+    () => ({
+      theme,
+      mode,
+    }),
+    [mode]
+  );
+
+  return <Flowbite theme={flowbiteTheme}>{children}</Flowbite>;
+}
+
+root.render(<Root />);

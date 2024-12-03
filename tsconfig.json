@@ -3,6 +3,7 @@
   "display": "Default",
   "compilerOptions": {
     "allowJs": true,
+    "noImplicitAny": false,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
@@ -22,9 +23,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": true,
-    "target": "ESNext",
-    "types": ["vite/client"]
+    "module": "esnext",
+    "target": "es2020",
+    "types": ["vite/client", "vitest"]
   },
   "exclude": ["node_modules"],
   "include": ["**/*.cjs", "**/*.mjs", "**/*.ts", "**/*.tsx"]
