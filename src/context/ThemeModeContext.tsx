@@ -36,33 +36,43 @@ export const ThemeModeProvider: React.FC<ThemeModeProviderProps> = ({ children }
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
+    
     // Initial theme sync
-    updateTheme(mode);
-
+    const systemMode = getPreferredMode();
+    // Sync with localStorage and update theme
+    const storedMode = localStorage.getItem('flowbite-theme-mode') as ThemeMode;
+    if (storedMode && storedMode !== systemMode) {
+      localStorage.setItem('flowbite-theme-mode', systemMode);
+      updateTheme(systemMode);
+    } else if (!storedMode) {
+      localStorage.setItem('flowbite-theme-mode', systemMode);
+      updateTheme(systemMode);
+    }
+  
     const handleChange = (event: MediaQueryListEvent) => {
       const newMode = event.matches ? 'dark' : 'light';
       requestAnimationFrame(() => {
         updateTheme(newMode);
       });
     };
-
-    const checkThemeSync = () => {
-      const storedMode = localStorage.getItem('flowbite-theme-mode') as ThemeMode;
+  
+    const handleVisibilityChange = () => {
+      const currentMode = localStorage.getItem('flowbite-theme-mode') as ThemeMode;
       const systemMode = getPreferredMode();
-      if (storedMode && storedMode !== systemMode) {
+      if (currentMode && currentMode !== systemMode) {
+        localStorage.setItem('flowbite-theme-mode', systemMode);
         updateTheme(systemMode);
       }
     };
-
+  
     mediaQuery.addEventListener('change', handleChange);
-    document.addEventListener('visibilitychange', checkThemeSync);
-
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+  
     return () => {
       mediaQuery.removeEventListener('change', handleChange);
-      document.removeEventListener('visibilitychange', checkThemeSync);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [mode, updateTheme]);
+  }, [updateTheme]);
 
   return (
     <ThemeModeContext.Provider value={{ mode, setMode: updateTheme, toggleMode }}>
