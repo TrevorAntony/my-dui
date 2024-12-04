@@ -5,11 +5,12 @@ import getInfoTagContents from "../../helpers/get-info-tag-content";
 const DonutChart = ({
   container: Container,
   header = "Donut Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   resize,
   children,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="donut" />;
@@ -22,6 +23,7 @@ const DonutChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

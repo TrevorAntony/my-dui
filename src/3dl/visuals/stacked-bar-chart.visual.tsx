@@ -21,6 +21,7 @@ const StackedBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  DataStringQuery,
   children,
   ...props
 }: VisualProps) => {
@@ -131,6 +132,7 @@ const StackedBarChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>
