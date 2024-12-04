@@ -4,11 +4,12 @@ import getInfoTagContents from "../../helpers/get-info-tag-content";
 const BarChart = ({
   container: Container,
   header = "Bar Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   children,
   resize,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="bar" />;
@@ -21,6 +22,7 @@ const BarChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

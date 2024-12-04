@@ -8,6 +8,7 @@ export interface ContainerComponentProps {
   detailsComponent?: string;
   resize?: string;
   infoTagContent?: React.ReactNode;
+  DataStringQuery?: string;
 }
 
 export interface ChartDataItem {

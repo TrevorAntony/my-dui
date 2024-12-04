@@ -5,11 +5,12 @@ import getInfoTagContents from "../../helpers/get-info-tag-content";
 const RadarChart = ({
   container: Container,
   header = "Radar Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   resize,
   children,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="radar" />;
@@ -22,6 +23,7 @@ const RadarChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

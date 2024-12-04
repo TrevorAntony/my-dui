@@ -9,7 +9,15 @@ const InfoTag = ({ children }: VisualProps) => {
   }, [children]);
 
   return (
-    <Popover content={markdown} placement="top" trigger="hover">
+    <Popover
+      content={
+        <div className="max-h-[80vh] max-w-[90vw] overflow-auto p-4 md:max-h-[500px] md:max-w-[600px]">
+          {markdown}
+        </div>
+      }
+      placement="top"
+      trigger="hover"
+    >
       <button type="button" className="pl-2 pt-[2.5px] dark:text-highlight-500">
         <AiOutlineInfoCircle
           className="h-6 w-6 text-gray-400 hover:text-gray-600"

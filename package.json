@@ -188,7 +188,7 @@
         }
       ],
       "icon": "./duft_icon.icns",
-      "artifactName": "${productName}-${version}-${arch}-we.${ext}"
+      "artifactName": "${productName}-${version}-${arch}-${implementationCode}.${ext}"
     },
     "win": {
       "target": [
@@ -217,7 +217,8 @@
           ]
         }
       ],
-      "icon": "./duft_icon.ico"
+      "icon": "./duft_icon.ico",
+      "artifactName": "${productName}-${version}-${arch}-${implementationCode}.${ext}"
     },
     "linux": {
       "icon": "./duft_icon.png",
@@ -226,7 +227,8 @@
         "deb",
         "rpm"
       ],
-      "artifactName": "${productName}-${version}-${arch}-we.${ext}"
+      "icon": "./duft_icon.png",
+      "artifactName": "${productName}-${version}-${arch}-${implementationCode}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -234,8 +236,7 @@
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "artifactName": "${productName}-${version}-${arch}-we.exe"
+      "createStartMenuShortcut": true
     },
     "msi": {
       "oneClick": false,
@@ -243,8 +244,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "DUFT Platform",
-      "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
-      "artifactName": "${productName}-${version}-${arch}-we.msi"
+      "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3"
     }
   }
 }

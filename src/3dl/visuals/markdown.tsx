@@ -11,9 +11,10 @@ import EmptyState from "../ui-elements/empty-state";
 const Markdown = ({
   container: Container,
   header = "Markdown Content",
-  subHeader = header,
+  subHeader = "",
   children,
   resize,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const markdown = React.useMemo(() => {
@@ -32,7 +33,7 @@ const Markdown = ({
   }
 
   const content = (
-    <div className="prose max-w-none">
+    <div className="w-full">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={markdownComponents}
@@ -43,7 +44,12 @@ const Markdown = ({
   );
 
   return Container ? (
-    <Container header={header} subHeader={subHeader} resize={resize}>
+    <Container
+      header={header}
+      subHeader={subHeader}
+      resize={resize}
+      DataStringQuery={DataStringQuery}
+    >
       {content}
     </Container>
   ) : (
