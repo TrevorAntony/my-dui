@@ -37,7 +37,7 @@ const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
   return (
     <Modal show={isOpen} onClose={() => onClose()} position="center" size="2xl">
       <Modal.Header className="text-default">{title}</Modal.Header>
-      <Modal.Body 
+      <Modal.Body
         ref={contentRef}
         className="flex flex-col overflow-auto text-default"
       >
@@ -49,15 +49,14 @@ const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
             {executeButtonText || "Run"}
           </Button>
         )}
-        {!hideCloseButton && (
-          <Button
-            color="primary"
-            onClick={handleButtonClose || onClose}
-            disabled={disableButtons}
-          >
-            {cancelButtonText}
-          </Button>
-        )}
+        <Button
+          color="primary"
+          onClick={handleButtonClose || onClose}
+          disabled={disableButtons || hideCloseButton}
+          className={`${(disableButtons || hideCloseButton) ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          {cancelButtonText}
+        </Button>
       </Modal.Footer>
     </Modal>
   );
