@@ -1,10 +1,13 @@
 import React from "react";
 
 export const markdownComponents = {
+  // Line Break
+  br: () => <br />,
+
   // Links
   a: ({ children, ...props }) => (
     <a
-      className="text-highlight-600 hover:underline dark:text-blue-500"
+      className="text-highlight-600 hover:underline dark:text-highlight-500"
       {...props}
     >
       {children}
@@ -14,7 +17,7 @@ export const markdownComponents = {
   // Headings
   h1: ({ children, ...props }) => (
     <h1
-      className="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-4xl"
+      className="mb-6 text-5xl font-extrabold text-gray-900 dark:text-white"
       {...props}
     >
       {children}
@@ -22,7 +25,7 @@ export const markdownComponents = {
   ),
   h2: ({ children, ...props }) => (
     <h2
-      className="mb-4 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl"
+      className="mb-6 text-4xl font-bold text-gray-900 dark:text-white"
       {...props}
     >
       {children}
@@ -30,7 +33,7 @@ export const markdownComponents = {
   ),
   h3: ({ children, ...props }) => (
     <h3
-      className="mb-4 text-xl font-bold text-gray-900 dark:text-white md:text-2xl"
+      className="mb-5 text-3xl font-bold text-gray-900 dark:text-white"
       {...props}
     >
       {children}
@@ -38,7 +41,7 @@ export const markdownComponents = {
   ),
   h4: ({ children, ...props }) => (
     <h4
-      className="mb-4 text-lg font-semibold text-gray-900 dark:text-white md:text-xl"
+      className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white"
       {...props}
     >
       {children}
@@ -46,7 +49,7 @@ export const markdownComponents = {
   ),
   h5: ({ children, ...props }) => (
     <h5
-      className="mb-4 text-base font-semibold text-gray-900 dark:text-white md:text-lg"
+      className="mb-3 text-xl font-semibold text-gray-900 dark:text-white"
       {...props}
     >
       {children}
@@ -54,17 +57,17 @@ export const markdownComponents = {
   ),
   h6: ({ children, ...props }) => (
     <h6
-      className="mb-4 text-sm font-medium text-gray-900 dark:text-white md:text-base"
+      className="mb-2 text-lg font-medium text-gray-900 dark:text-white"
       {...props}
     >
       {children}
     </h6>
   ),
 
-  // Paragraphs
+  // Paragraph
   p: ({ children, ...props }) => (
     <p
-      className="mb-4 break-words text-base text-gray-700 dark:text-gray-300 md:text-lg"
+      className="mb-4 break-words text-lg leading-relaxed text-gray-700 dark:text-gray-300"
       {...props}
     >
       {children}
@@ -98,7 +101,7 @@ export const markdownComponents = {
   // Lists
   ul: ({ children, ...props }) => (
     <ul
-      className="mb-4 list-inside list-disc space-y-2 text-gray-700 dark:text-gray-300"
+      className="mb-4 list-inside list-disc space-y-2 text-lg text-gray-700 dark:text-gray-300"
       {...props}
     >
       {children}
@@ -106,14 +109,14 @@ export const markdownComponents = {
   ),
   ol: ({ children, ...props }) => (
     <ol
-      className="mb-4 list-inside list-decimal space-y-2 text-gray-700 dark:text-gray-300"
+      className="mb-4 list-inside list-decimal space-y-2 text-lg text-gray-700 dark:text-gray-300"
       {...props}
     >
       {children}
     </ol>
   ),
   li: ({ children, ...props }) => (
-    <li className="break-words" {...props}>
+    <li className="ml-6 break-words" {...props}>
       {children}
     </li>
   ),
@@ -151,9 +154,9 @@ export const markdownComponents = {
 
   // Tables
   table: ({ children, ...props }) => (
-    <div className="my-4 overflow-x-auto">
+    <div className="my-6 overflow-x-auto">
       <table
-        className="min-w-full text-left text-sm text-gray-500 dark:text-gray-400"
+        className="min-w-full text-left text-lg text-gray-500 dark:text-gray-400"
         {...props}
       >
         {children}
@@ -162,7 +165,7 @@ export const markdownComponents = {
   ),
   thead: ({ children, ...props }) => (
     <thead
-      className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
+      className="bg-gray-50 text-base uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
       {...props}
     >
       {children}
@@ -177,7 +180,7 @@ export const markdownComponents = {
   th: ({ children, ...props }) => (
     <th
       scope="col"
-      className="break-words px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-400"
+      className="break-words px-4 py-2 text-base font-medium text-gray-700 dark:text-gray-400"
       {...props}
     >
       {children}
@@ -185,7 +188,7 @@ export const markdownComponents = {
   ),
   td: ({ children, ...props }) => (
     <td
-      className="break-words px-4 py-2 text-gray-900 dark:text-white"
+      className="break-words px-4 py-2 align-top text-gray-900 dark:text-white"
       {...props}
     >
       {children}

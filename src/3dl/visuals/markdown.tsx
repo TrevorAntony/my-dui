@@ -1,6 +1,8 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 import type { VisualProps } from "../../types/visual-props";
 import {
   markdownComponents,
@@ -24,7 +26,7 @@ const Markdown = ({
   if (!markdown) {
     const content = <EmptyState message="No markdown content available" />;
     return Container ? (
-      <Container header={""} {...props}>
+      <Container header="" {...props}>
         {content}
       </Container>
     ) : (
@@ -36,6 +38,10 @@ const Markdown = ({
     <div className="w-full">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[
+          rehypeRaw,
+          [rehypeSanitize], // Use custom schema
+        ]}
         components={markdownComponents}
       >
         {markdown}
