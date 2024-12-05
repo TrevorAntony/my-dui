@@ -40,7 +40,7 @@ const ExampleNavbar: FC = function () {
             <Navbar.Brand href="/">
               <img
                 alt=""
-                src="/public/images/duft.png"
+                src="/public/images/DUFT.png"
                 className="mr-3 h-6 sm:h-8"
               />
               <span className="text-highlight-800 dark:text-highlight-200 self-center whitespace-nowrap text-2xl font-semibold">
