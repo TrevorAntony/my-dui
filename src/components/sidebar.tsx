@@ -205,7 +205,9 @@ const BottomMenu: FC = function () {
   const [modalContent, setModalContent] = useState<string[]>([]);
 
   useEffect(() => {
-    const eventSource = new EventSource("http://127.0.0.1:8000/sse/dte/");
+    const eventSource = new EventSource(
+      `${config.apiBaseUrl || window.location.origin}/sse/dte`
+    ); //use base url
 
     eventSource.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
