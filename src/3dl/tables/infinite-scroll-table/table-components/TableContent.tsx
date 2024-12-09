@@ -37,7 +37,7 @@ const TableContent = ({
   query,
   searchHint,
   detailsTitle,
-  headerCase = 'sentence',
+  headerCase = "sentence",
 }: {
   data: any[];
   loading: boolean;
@@ -186,16 +186,6 @@ const TableContent = ({
       >
         <Modal.Header>{detailsTitle}</Modal.Header>
         <Modal.Body className="flex flex-col overflow-hidden ">
-          <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-            <TableHeader
-              headers={headers}
-              visibleColumns={visibleColumns}
-              sortState={sortState}
-              handleSort={handleSort}
-              caseType={headerCase}
-              isInModal={true}
-            />
-          </table>
           {renderedChild}
         </Modal.Body>
         <Modal.Footer>
