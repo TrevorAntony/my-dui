@@ -4,11 +4,8 @@ on:
   workflow_dispatch: # Allows manual trigger button
     branches:
       - main
-  push:
-    branches:
-      - main
   schedule:
-    - cron: "0 2 * * 1,3,5" # Repeat at 05:00am (EAT) of every Monday, Wednesday and Friday
+    - cron: "0 9 * * 5" # Executes at 9:00am UTC, which is 12:00pm EAT, on Fridays
 jobs:
   generate-implementations-matrix:
     runs-on: ubuntu-latest
@@ -36,10 +33,11 @@ jobs:
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          repository: ${{github.repository}}
+          repository: ${{ github.repository }}
           path: main
+          fetch-depth: 0
 
-      - name: Prepare node
+      - name: Prepare Node.js environment
         uses: actions/setup-node@v4
         with:
           node-version: '22.4.1'
@@ -50,10 +48,9 @@ jobs:
           auto-update-conda: true
           miniforge-version: latest
 
-      - name: Run server resources preparation script
+      - name: Prepare server resources
         working-directory: main
-        run: |
-          sh scripts/shell/server_resources_preparation_actions.sh
+        run: sh scripts/shell/server_resources_preparation_actions.sh
         env:
           GITHUB_ORG: "UCSF-IGHS"
           GITHUB_TOKEN: ${{ secrets.DUFT_CLONE_TOKEN }}
@@ -62,15 +59,46 @@ jobs:
           REPO3_REPO: "duft-workspace-django"
           REPO3_BRANCH: "main"
 
-      - name: Install yarn packages
+      - name: Install dependencies with Yarn
         working-directory: main
         run: yarn install --legacy-peer-deps
 
-      - name: Build executables
+      - name: Build executables for Linux
         working-directory: main
         env:
           GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
         run: yarn run build-and-package -- --linux --code=${{ matrix.config.code }}
+
+      - name: Fetch release tag name
+        working-directory: main
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "TAG_NAME=v$VERSION" >> $GITHUB_ENV
+
+      - name: Clean up existing metadata files from release's assets
+        working-directory: main
+        run: |
+          assets=("latest-linux.yml" "latest-linux-${{ matrix.config.code }}.yml")
+          for asset in "${assets[@]}"; do
+            assetInfo=$(gh release view "${{ env.TAG_NAME }}" --json assets -q ".assets[] | select(.name == \"$asset\")" || echo "")
+            if [ -n "$assetInfo" ]; then
+              echo "Deleting $asset"
+              gh release delete-asset ${{ env.TAG_NAME }} "$asset"
+            else
+              echo "$asset not found. Skipping."
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
+
+      - name: Publish new metadata asset file to release
+        working-directory: main
+        run: |
+          mv dist/latest-linux.yml dist/latest-linux-${{ matrix.config.code }}.yml
+          gh release upload ${{ env.TAG_NAME }} dist/latest-linux-${{ matrix.config.code }}.yml --clobber
+          echo "latest-mac-${{ matrix.config.code }}.yml uploaded"
+        env:
+          GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
 
   build-windows-executables:
     needs: generate-implementations-matrix
@@ -83,10 +111,10 @@ jobs:
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          repository: ${{github.repository}}
+          repository: ${{ github.repository }}
           path: main
 
-      - name: Prepare node
+      - name: Prepare Node.js environment
         uses: actions/setup-node@v4
         with:
           node-version: '22.4.1'
@@ -97,7 +125,7 @@ jobs:
           auto-update-conda: true
           miniforge-version: latest
 
-      - name: Run server resources preparation script
+      - name: Prepare server resources
         working-directory: main
         run: |
           powershell -ExecutionPolicy Bypass -File scripts/powershell/server_resources_preparation_actions.ps1
@@ -109,15 +137,65 @@ jobs:
           REPO3_REPO: "duft-workspace-django"
           REPO3_BRANCH: "main"
 
-      - name: Install yarn packages
+      - name: Install dependencies with Yarn
         working-directory: main
         run: yarn install --legacy-peer-deps
 
-      - name: Build executables for x32 and x64 architectures of Windows platform
+      - name: Build executables for Windows (x32 and x64)
         working-directory: main
         env:
           GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
         run: yarn run build-and-package -- --win --code=${{ matrix.config.code }}
+
+      - name: Fetch release tag name
+        working-directory: main
+        run: |
+          $VERSION = (Get-Content package.json | ConvertFrom-Json).version
+          echo "TAG_NAME=v$VERSION" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        env:
+          GITHUB_ENV: ${{ github.env }}
+
+      - name: Clean up existing metadata files from release's assets
+        working-directory: main
+        run: |
+          Write-Host "Tag Name $env:TAG_NAME"
+          $assets = @("latest.yml", "latest-win-${{ matrix.config.code }}.yml")
+
+          foreach ($asset in $assets) {
+            try
+            {
+              $assetInfo = gh release view $env:TAG_NAME --json assets -q '.assets[] | select(.name == "latest.yml")'
+              Write-Host "$assetInfo"
+
+              if (![string]::IsNullOrEmpty($assetInfo)){
+                Write-Host "Deleting $asset"
+                gh release delete-asset $env:TAG_NAME "$asset"
+              } else {
+                Write-Host "$asset not found. Skipping."
+              }
+          
+            } catch {
+              Write-Host "Error checking or deleting $asset. Skipping."
+            }
+          }
+        env:
+          GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
+
+      - name: Publish new metadata asset file to release
+        working-directory: main
+        run: |
+          $source = Join-Path $PWD "dist\latest.yml"
+          $destination = Join-Path $PWD "dist\latest-win-${{ matrix.config.code }}.yml"
+          
+          if (Test-Path $source) {
+            Rename-Item -Path $source -NewName $destination
+            gh release upload ${{ env.TAG_NAME }} dist\latest-win-${{ matrix.config.code }}.yml --clobber
+            Write-Host "latest-win-${{ matrix.config.code }}.yml uploaded"
+          } else {
+            Write-Host "File '$source' does not exist. Nothing to upload"
+          }
+        env:
+          GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
 
   build-mac-executables:
     needs: generate-implementations-matrix
@@ -130,10 +208,10 @@ jobs:
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          repository: ${{github.repository}}
+          repository: ${{ github.repository }}
           path: main
 
-      - name: Prepare node
+      - name: Prepare Node.js environment
         uses: actions/setup-node@v4
         with:
           node-version: '22.4.1'
@@ -144,10 +222,9 @@ jobs:
           auto-update-conda: true
           miniforge-version: latest
 
-      - name: Run server resources preparation script
+      - name: Prepare server resources
         working-directory: main
-        run: |
-          sh scripts/shell/server_resources_preparation_actions.sh
+        run: sh scripts/shell/server_resources_preparation_actions.sh
         env:
           GITHUB_ORG: "UCSF-IGHS"
           GITHUB_TOKEN: ${{ secrets.DUFT_CLONE_TOKEN }}
@@ -156,12 +233,43 @@ jobs:
           REPO3_REPO: "duft-workspace-django"
           REPO3_BRANCH: "main"
 
-      - name: Install yarn packages
+      - name: Install dependencies with Yarn
         working-directory: main
         run: yarn install --legacy-peer-deps
 
-      - name: Build executables for MacOS platform
+      - name: Build and package executables for MacOS
         working-directory: main
         env:
           GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
         run: yarn run build-and-package -- --mac --code=${{ matrix.config.code }}
+
+      - name: Fetch release tag name
+        working-directory: main
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "TAG_NAME=v$VERSION" >> $GITHUB_ENV
+
+      - name: Clean up existing metadata files from release's assets
+        working-directory: main
+        run: |
+          assets=("latest-mac.yml" "latest-mac-${{ matrix.config.code }}.yml")
+          for asset in "${assets[@]}"; do
+            assetInfo=$(gh release view "${{ env.TAG_NAME }}" --json assets -q ".assets[] | select(.name == \"$asset\")" || echo "")
+            if [ -n "$assetInfo" ]; then
+              echo "Deleting $asset"
+              gh release delete-asset ${{ env.TAG_NAME }} "$asset"
+            else
+              echo "$asset not found. Skipping."
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
+
+      - name: Publish new metadata asset file to release
+        working-directory: main
+        run: |
+          mv dist/latest-mac.yml dist/latest-mac-${{ matrix.config.code }}.yml
+          gh release upload ${{ env.TAG_NAME }} dist/latest-mac-${{ matrix.config.code }}.yml --clobber
+          echo "latest-mac-${{ matrix.config.code }}.yml uploaded"
+        env:
+          GH_TOKEN: ${{ secrets.DUFT_PUBLISH_TOKEN }}
