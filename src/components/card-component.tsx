@@ -8,6 +8,7 @@ import type { DetailsComponentRegistry } from "./details-component-registry";
 import { getDetailsComponent } from "./details-component-registry";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { Button, Modal } from "flowbite-react";
+import DataString from "./dashboard-meta";
 
 type MoreInfoProps = {
   text: string;
@@ -27,6 +28,7 @@ type CardComponentProps = {
   detailsComponent?: string;
   resize?: string;
   infoTagContent?: ReactNode;
+  DataStringQuery?: string;
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -41,6 +43,7 @@ const CardComponent: FC<CardComponentProps> = ({
   query,
   detailsComponent,
   infoTagContent,
+  DataStringQuery,
 }) => {
   const layout = useLayout();
   const shouldExportData = exportData === "true";
@@ -60,9 +63,11 @@ const CardComponent: FC<CardComponentProps> = ({
       {variant !== "plain" && (header || subHeader) && (
         <div className="mb-3 flex items-start justify-between">
           <div>
-            <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-              {header}
-            </h3>
+            <Dataset query={DataStringQuery} useQuery={useDuftQuery}>
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                <DataString>{header}</DataString>
+              </h3>
+            </Dataset>
             {subHeader && (
               <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
                 {subHeader}

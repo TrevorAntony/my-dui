@@ -5,11 +5,12 @@ import getInfoTagContents from "../../helpers/get-info-tag-content";
 const HeatmapChart = ({
   container: Container,
   header = "Heat-map Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   children,
   resize,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="heatmap" />;
@@ -22,6 +23,7 @@ const HeatmapChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

@@ -25,6 +25,7 @@ const CascadeChart = ({
   exportData,
   detailsComponent,
   children,
+  DataStringQuery,
 }: VisualProps) => {
   const { state } = useContext(DashboardContext) || {
     state: {} as DashboardState,
@@ -59,7 +60,7 @@ const CascadeChart = ({
 
         if (node["children"] && (node["children"] as unknown[]).length > 0) {
           const childResults = await Promise.allSettled(
-            (node["children"] as Record<string, unknown>[]).map(processNode),
+            (node["children"] as Record<string, unknown>[]).map(processNode)
           );
 
           result.children = childResults.map((childResult, index) => {
@@ -70,7 +71,7 @@ const CascadeChart = ({
                 `Error processing child node ${(
                   node["children"] as Record<string, unknown>[]
                 )[index]?.["id"]}:`,
-                (childResult as { reason: string }).reason,
+                (childResult as { reason: string }).reason
               );
               return {
                 id:
@@ -107,7 +108,7 @@ const CascadeChart = ({
         console.error("Error fetching data", error);
       }
     },
-    [state.filters],
+    [state.filters]
   );
 
   useEffect(() => {
@@ -141,7 +142,7 @@ const CascadeChart = ({
     const toggleModal = (
       label: string,
       details: Record<string, unknown>[],
-      headLabels: string[],
+      headLabels: string[]
     ) => {
       setModalCascadeData(details);
       setCascadeTitle(label);
@@ -217,6 +218,7 @@ const CascadeChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

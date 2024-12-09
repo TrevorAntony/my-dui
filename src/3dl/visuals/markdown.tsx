@@ -1,6 +1,8 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 import type { VisualProps } from "../../types/visual-props";
 import {
   markdownComponents,
@@ -11,9 +13,10 @@ import EmptyState from "../ui-elements/empty-state";
 const Markdown = ({
   container: Container,
   header = "Markdown Content",
-  subHeader = header,
+  subHeader = "",
   children,
   resize,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const markdown = React.useMemo(() => {
@@ -23,7 +26,7 @@ const Markdown = ({
   if (!markdown) {
     const content = <EmptyState message="No markdown content available" />;
     return Container ? (
-      <Container header={""} {...props}>
+      <Container header="" {...props}>
         {content}
       </Container>
     ) : (
@@ -32,9 +35,13 @@ const Markdown = ({
   }
 
   const content = (
-    <div className="prose max-w-none">
+    <div className="w-full">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={[
+          rehypeRaw,
+          [rehypeSanitize], // Use custom schema
+        ]}
         components={markdownComponents}
       >
         {markdown}
@@ -43,7 +50,12 @@ const Markdown = ({
   );
 
   return Container ? (
-    <Container header={header} subHeader={subHeader} resize={resize}>
+    <Container
+      header={header}
+      subHeader={subHeader}
+      resize={resize}
+      DataStringQuery={DataStringQuery}
+    >
       {content}
     </Container>
   ) : (

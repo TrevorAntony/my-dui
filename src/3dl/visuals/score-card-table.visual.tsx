@@ -12,12 +12,13 @@ import ChartSkeleton from "../../ui-components/chart-skeleton";
 const ScoreCardTable = ({
   container: ContainerComponent,
   header = "Score Card Table",
-  subHeader = header,
+  subHeader = "",
   tableMaxHeight = "300px",
   showToolbar,
   exportData,
   detailsComponent,
   resize = "false",
+  DataStringQuery,
   children,
   ...props
 }: VisualProps) => {
@@ -139,6 +140,7 @@ const ScoreCardTable = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </ContainerComponent>

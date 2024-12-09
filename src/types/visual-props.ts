@@ -17,4 +17,5 @@ export interface VisualProps {
   modalHeight?: "tiny" | "smaller" | "small" | "medium" | "large";
   children?: React.ReactNode;
   infoTagContent?: React.ReactNode;
+  DataStringQuery?: string;
 }
