@@ -2,9 +2,9 @@
 import React, {
   useState,
   useRef,
-  useMemo,
   useCallback,
   useEffect,
+  useMemo,
 } from "react";
 import { useDatasetContext } from "./Dataset2";
 import useDataSetLogic from "./useDataSetLogic";
@@ -95,49 +95,69 @@ const QueryDataset: React.FC<DataSetProps> = ({
     client,
   });
 
-  // const prevSearchTextRef = useRef<string>(searchText);
+  const prevSearchTextRef = useRef<string>(searchText);
 
-  // const updatePaginatedData = useCallback(() => {
-  //   const shouldResetPaginatedData = searchText !== prevSearchTextRef.current;
-  //   prevSearchTextRef.current = searchText;
+  const updatePaginatedData = useCallback(() => {
+    const shouldResetPaginatedData = searchText !== prevSearchTextRef.current;
+    prevSearchTextRef.current = searchText;
 
-  //   if (shouldResetPaginatedData) {
-  //     setPaginatedData(data);
-  //   } else if (currentPage > 1 && pageSize) {
-  //     setPaginatedData((prevData) => [...(prevData || []), ...(data || [])]);
-  //   } else {
-  //     setPaginatedData(data);
-  //   }
-  // }, [data, currentPage, pageSize, searchText]);
+    if (shouldResetPaginatedData) {
+      setPaginatedData(data);
+    } else if (currentPage > 1 && pageSize) {
+      setPaginatedData((prevData) => [...(prevData || []), ...(data || [])]);
+    } else {
+      setPaginatedData(data);
+    }
+  }, [data, currentPage, pageSize, searchText]);
 
-  // useMemo(() => {
-  //   updatePaginatedData();
-  // }, [updatePaginatedData]);
+  useMemo(() => {
+    updatePaginatedData();
+  }, [updatePaginatedData]);
 
-  // const handleSearchChange = useCallback(
-  //   (newSearchText: string) => {
-  //     resetPage();
-  //     updateSearchText(newSearchText);
-  //   },
-  //   [resetPage, updateSearchText]
-  // );
+  const handleSearchChange = useCallback(
+    (newSearchText: string) => {
+      resetPage();
+      updateSearchText(newSearchText);
+    },
+    [resetPage, updateSearchText]
+  );
 
-  // const handleSortChange = useCallback(
-  //   (newSortText: string) => {
-  //     resetPage();
-  //     updateSortText(newSortText);
-  //   },
-  //   [resetPage, updateSortText]
-  // );
+  const handleSortChange = useCallback(
+    (newSortText: string) => {
+      resetPage();
+      updateSortText(newSortText);
+    },
+    [resetPage, updateSortText]
+  );
 
   let finalData = paginatedData;
 
   useEffect(() => {
-    if (data) {
-      console.log("Data received", data);
-      setData(finalData);
-    }
-  }, [finalData, setData]);
+    setData({
+      data: finalData,
+      query,
+      setQuery,
+      resetPage,
+      pageUpdater: updatePage,
+      loading,
+      handleSearchChange,
+      handleSortChange,
+      searchColumns,
+      pageSize,
+    });
+  }, [
+    finalData,
+    query,
+    setQuery,
+    resetPage,
+    updatePage,
+    loading,
+    handleSearchChange,
+    handleSortChange,
+    searchColumns,
+    pageSize,
+    setData,
+  ]);
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;

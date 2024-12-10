@@ -41,7 +41,7 @@ const useQueryData = <T>(
   const client = customClient || defaultClient;
   const { setData } = useDatasetContext();
 
-  const { isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["queryData", requestPayload],
     queryFn: async () => {
       const result = await client.getQueryData(requestPayload);
@@ -53,7 +53,7 @@ const useQueryData = <T>(
   });
 
   return {
-    data: undefined, // Still keeping this undefined as we use context
+    data, // Return the actual data instead of undefined
     isLoading,
     error: error instanceof Error ? error : null,
   };

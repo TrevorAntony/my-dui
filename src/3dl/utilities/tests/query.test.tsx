@@ -78,28 +78,56 @@ test("Dataset context state transitions with Query", async () => {
 
   // Track initial null state
   stateTransitions.push(result.current.data);
-  expect(result.current.data).toBeNull();
+  expect(result.current.data).toBeUndefined();
 
   // Wait for data to load
-  await waitForState((state) => state !== null && Array.isArray(state), result);
+  await waitForState((state) => state !== null, result);
 
   // Track loaded state
   stateTransitions.push(result.current.data);
 
   // Verify state transitions
-  expect(stateTransitions[0]).toBeNull();
-  expect(stateTransitions[1].data).toBeInstanceOf(Array);
-  expect(stateTransitions[1].data.length).toBeGreaterThan(0);
+  expect(stateTransitions[0]).toBeUndefined();
+  // expect(stateTransitions[1]).toBeInstanceOf(Object);
+  expect(stateTransitions[1]).toBeInstanceOf(Array); // The data property contains the array
+  expect(stateTransitions[1].length).toBeGreaterThan(0);
 
   // Verify we only had two state transitions: null -> data
   expect(stateTransitions.length).toBe(2);
 
-  // Optional: Verify specific data properties if needed
-  expect(result.current.data).toHaveProperty("data");
+  // Verify the shape of the returned object and all expected properties
+  expect(result.current).toBeInstanceOf(Object);
+  expect(result.current).toHaveProperty("data");
+  expect(result.current.data).toBeInstanceOf(Array);
 
-  // Verify context has all required properties
-  expect(result.current.data).toHaveProperty("query");
-  expect(result.current.data).toHaveProperty("loading");
-  expect(result.current.data).toHaveProperty("pageSize");
-  expect(result.current.data).toHaveProperty("searchColumns");
+  // Verify all properties that should be present based on setData call
+  const expectedProperties = [
+    "data",
+    "query",
+    "setQuery",
+    "resetPage",
+    "pageUpdater",
+    "loading",
+    "handleSearchChange",
+    "handleSortChange",
+    "searchColumns",
+    "pageSize",
+  ];
+
+  expectedProperties.forEach((prop) => {
+    expect(result.current).toHaveProperty(prop);
+  });
+
+  // Verify types of function properties
+  expect(typeof result.current.setQuery).toBe("function");
+  expect(typeof result.current.resetPage).toBe("function");
+  expect(typeof result.current.pageUpdater).toBe("function");
+  expect(typeof result.current.handleSearchChange).toBe("function");
+  expect(typeof result.current.handleSortChange).toBe("function");
+
+  // Verify loading state is boolean
+  expect(typeof result.current.loading).toBe("boolean");
+
+  // Verify query matches the input
+  expect(result.current.query).toBe("SELECT * FROM dim_age_group");
 });

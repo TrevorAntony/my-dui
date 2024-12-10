@@ -1,17 +1,42 @@
 import React, { createContext, useContext, useState } from "react";
 
-const DatasetContext = createContext({
+interface DatasetContextType {
+  data: any[] | null;
+  query: string;
+  setData: (data: any) => void;
+  setQuery: (query: string) => void;
+  resetPage: () => void;
+  pageUpdater: () => void;
+  loading: boolean;
+  handleSearchChange: (searchText: string) => void;
+  handleSortChange: (sortText: string) => void;
+  searchColumns?: string;
+  pageSize?: number;
+}
+
+const defaultContext: DatasetContextType = {
   data: null,
-  setData: (data: any) => {},
-});
+  query: "",
+  setData: () => {},
+  setQuery: () => {},
+  resetPage: () => {},
+  pageUpdater: () => {},
+  loading: false,
+  handleSearchChange: () => {},
+  handleSortChange: () => {},
+  searchColumns: undefined,
+  pageSize: undefined,
+};
+
+const DatasetContext = createContext<DatasetContextType>(defaultContext);
 
 export const Dataset2: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [data, setData] = useState<null | any[]>(null);
+  const [data, setData] = useState<null | DatasetContextType>(null);
 
   return (
-    <DatasetContext.Provider value={{ data, setData }}>
+    <DatasetContext.Provider value={{ ...data, setData }}>
       {children}
     </DatasetContext.Provider>
   );
