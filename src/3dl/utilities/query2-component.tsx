@@ -18,13 +18,32 @@ interface DuftQueryResult<T> {
   error: Error | null;
 }
 
+interface QueryObject {
+  props?: {
+    children?: string;
+  };
+}
+
+const extractQueryFromChild = (queryInput: string | QueryObject): string => {
+  if (typeof queryInput === "string") {
+    return queryInput.trim();
+  }
+
+  if (typeof queryInput === "object" && queryInput?.props?.children) {
+    return queryInput.props.children.trim();
+  }
+
+  console.warn("Invalid query input:", queryInput);
+  return "";
+};
+
 interface DataSetProps {
   useQuery: <T>(requestPayload: any) => DuftQueryResult<T>;
   filters?: Record<string, any>;
   searchColumns?: string;
   pageSize?: number;
   debug?: string | boolean;
-  children: string;
+  children: string | QueryObject; // Updated type
   client?: DuftHttpClient;
 }
 
@@ -72,7 +91,9 @@ const QueryDataset: React.FC<DataSetProps> = ({
   const { columnName, config } = detailsContext || {};
 
   const initialQuery =
-    config && columnName ? processQuery(queryAsChild, config) : queryAsChild;
+    config && columnName
+      ? processQuery(extractQueryFromChild(queryAsChild), config)
+      : extractQueryFromChild(queryAsChild);
   const [query, setQuery] = useState<string>(initialQuery);
 
   const [currentPage, updatePage, resetPage] = useCurrentPage(1);
@@ -144,6 +165,7 @@ const QueryDataset: React.FC<DataSetProps> = ({
       handleSortChange,
       searchColumns,
       pageSize,
+      searchText,
     });
   }, [
     finalData,
@@ -157,11 +179,12 @@ const QueryDataset: React.FC<DataSetProps> = ({
     searchColumns,
     pageSize,
     setData,
+    searchText,
   ]);
 
-  if (error) {
-    return <div>Error fetching data: {error.message}</div>;
-  }
+  // if (error) {
+  //   return <div>Error fetching data: {error.message}</div>;
+  // } this error should also be sent and handled within the visual
 
   return null; // Query component doesn't render anything
 };

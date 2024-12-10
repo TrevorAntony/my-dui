@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, act } from "@testing-library/react";
 import { expect, test, beforeEach } from "vitest";
-import { Dataset2, useDatasetContext } from "../Dataset2";
+import Dataset2, { useDatasetContext } from "../Dataset2";
 import QueryDataset from "../query2-component";
 import useQueryData from "../../../3dlcomponents/resources/useQueryData";
 import { DuftHttpClient } from "../../../api/DuftHttpClient/DuftHttpClient";
@@ -88,7 +88,6 @@ test("Dataset context state transitions with Query", async () => {
 
   // Verify state transitions
   expect(stateTransitions[0]).toBeUndefined();
-  // expect(stateTransitions[1]).toBeInstanceOf(Object);
   expect(stateTransitions[1]).toBeInstanceOf(Array); // The data property contains the array
   expect(stateTransitions[1].length).toBeGreaterThan(0);
 

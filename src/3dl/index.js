@@ -48,3 +48,5 @@ export { default as ExportData } from "./utilities/export-data/export-data";
 export { default as Markdown } from "./visuals/markdown";
 export { default as InfoTag } from "./utilities/info-tag/info-tag";
 export { default as HtmlSnippet } from "./visuals/html-snippet";
+export { default as Dataset2 } from "./utilities/Dataset2";
+export { default as QueryDataset } from "./utilities/query2-component";

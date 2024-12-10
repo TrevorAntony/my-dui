@@ -12,6 +12,7 @@ interface DataContextType {
   searchText?: string;
   searchColumns?: string;
   pageSize?: string | number;
+  setData?: (data: any) => void;
 }
 const defaultDataContext: DataContextType = {
   data: [],
@@ -26,7 +27,7 @@ const defaultDataContext: DataContextType = {
   pageSize: undefined,
 };
 const DataContext = createContext<DataContextType | undefined>(
-  defaultDataContext,
+  defaultDataContext
 );
 export const useDataContext = (): DataContextType => {
   const context = useContext(DataContext);

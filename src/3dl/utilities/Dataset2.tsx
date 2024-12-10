@@ -12,6 +12,7 @@ interface DatasetContextType {
   handleSortChange: (sortText: string) => void;
   searchColumns?: string;
   pageSize?: number;
+  searchText?: string;
 }
 
 const defaultContext: DatasetContextType = {
@@ -26,13 +27,12 @@ const defaultContext: DatasetContextType = {
   handleSortChange: () => {},
   searchColumns: undefined,
   pageSize: undefined,
+  searchText: undefined,
 };
 
 const DatasetContext = createContext<DatasetContextType>(defaultContext);
 
-export const Dataset2: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const Dataset2: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [data, setData] = useState<null | DatasetContextType>(null);
 
   return (
@@ -43,3 +43,5 @@ export const Dataset2: React.FC<{ children: React.ReactNode }> = ({
 };
 
 export const useDatasetContext = () => useContext(DatasetContext);
+
+export default Dataset2;
