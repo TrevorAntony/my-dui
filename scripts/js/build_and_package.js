@@ -55,6 +55,7 @@ const main = () => {
   try {
     modifyPackageJson(packageJsonPath, (packageJson) => {
       delete packageJson.dependencies.electron;
+      packageJson.version = "v".concat(packageJson.version)
       const targetConfig = packageJson.build[target];
       if (targetConfig && targetConfig.artifactName) {
         targetConfig.artifactName = targetConfig.artifactName.replace('${implementationCode}', implementationCode);
