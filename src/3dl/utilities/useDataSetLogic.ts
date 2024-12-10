@@ -2,7 +2,14 @@
 import { useState, useEffect, useContext, useMemo } from "react";
 import { DashboardContext } from "./Dashboard";
 import config from "../../config";
-import { client } from "../..";
+import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
+import {
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage,
+  updateConfigFromHttpClient,
+  getRefreshToken,
+} from "../../api/DuftHttpClient/local-storage-functions";
+// import { client } from "../..";
 
 interface UseDataSetLogicProps {
   query: string;
@@ -15,7 +22,16 @@ interface UseDataSetLogicProps {
   pageSize?: number;
   currentPage?: number;
   debug?: string | boolean;
+  client?: DuftHttpClient;
 }
+
+const defaultClient = new DuftHttpClient(
+  config.apiBaseUrl || `${window.location.origin}/api/v2`,
+  getTokenFromLocalStorage,
+  setTokenInLocalStorage,
+  updateConfigFromHttpClient,
+  getRefreshToken
+);
 
 const useDataSetLogic = ({
   query,
@@ -28,6 +44,7 @@ const useDataSetLogic = ({
   pageSize,
   currentPage,
   debug = false,
+  client,
 }: UseDataSetLogicProps) => {
   const { state, dispatch } = useContext(DashboardContext) || {
     state: {},
@@ -62,7 +79,7 @@ const useDataSetLogic = ({
     data: fetchedData,
     isLoading: loading,
     error,
-  } = useQuery(queryReady ? requestData : null);
+  } = useQuery(queryReady ? requestData : null, client);
 
   const data = staticData || fetchedData;
 
@@ -96,11 +113,10 @@ const useDataSetLogic = ({
     const fetchData = async () => {
       if (debug === true || debug === "true") {
         try {
-          // Call the getQueryData method
-          const data = await client.getQueryData(requestData);
+          const debugClient = client || defaultClient;
+          const data = await debugClient.getQueryData(requestData);
           console.log("Debug - /run-query response:", data);
         } catch (error) {
-          // Handle any errors thrown by the client
           console.error("Debug - Error fetching /run-query:", error);
         }
       }
@@ -117,6 +133,7 @@ const useDataSetLogic = ({
     pageSize,
     debug,
     requestData,
+    client,
   ]);
 
   return { data, loading, error, state };
