@@ -19,7 +19,7 @@ async function fetchCascade(
   };
 
   try {
-    const response = await fetch(`${config.apiBaseUrl}/run-query`, {
+    const response = await fetch(`${config.apiBaseUrl}/api/v2/run-query`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

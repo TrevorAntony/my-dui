@@ -213,7 +213,7 @@ const BottomMenu: FC = function () {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      `${config.apiBaseUrl || window.location.origin}/sse/dte`
+      `${config.apiBaseUrl || window.location.origin}/sse/dte/`
     ); //use base url
 
     eventSource.onmessage = (event) => {
@@ -296,10 +296,7 @@ const BottomMenu: FC = function () {
         disableButtons={data?.isRunning}
         hideCloseButton={data?.isRunning}
       >
-        <div 
-          ref={contentRef}
-          className="h-[180px] overflow-y-auto pb-8"
-        >
+        <div ref={contentRef} className="h-[180px] overflow-y-auto pb-8">
           {content}
         </div>
       </DataTaskDialog>

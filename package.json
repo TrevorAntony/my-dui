@@ -230,7 +230,6 @@
         "deb",
         "rpm"
       ],
-      "icon": "./duft_icon.png",
       "artifactName": "${productName}-${version}-${arch}-${implementationCode}.${ext}"
     },
     "nsis": {
