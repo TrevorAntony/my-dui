@@ -164,7 +164,7 @@
     "compression": "maximum",
     "directories": {
       "buildResources": ".",
-      "output": "release"
+      "output": "dist"
     },
     "files": [
       "public/setup.html",
