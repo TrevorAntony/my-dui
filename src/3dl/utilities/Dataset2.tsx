@@ -56,7 +56,7 @@ export const Dataset2: React.FC<Dataset2Props> = ({
   });
 
   //add filter logic here, listening for filter updates in the dashboard conmponent, and updating the datasetParams accordingly
-  //while setting the page to 1 and appendData to false
+  //while setting the cuurentPage to 1 and appendData to false
 
   const setData = useCallback(
     (newData: any[] | null) => {
