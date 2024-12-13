@@ -4,6 +4,7 @@ import { useDataContext } from "../../context/DataContext";
 import type { ContainerComponentProps } from "../../types/types";
 import { useLayout } from "../../ui-elements/single-layout";
 import TableContent from "./table-components/TableContent";
+import { CaseType } from "../../utilities/CaseTransform";
 
 interface InfiniteScrollTableProps {
   container?: React.ComponentType<ContainerComponentProps>;
@@ -18,6 +19,8 @@ interface InfiniteScrollTableProps {
   searchHint?: string;
   resize?: string;
   detailsTitle?: string;
+  headerCase?: CaseType;
+  DataStringQuery?: string;
 }
 
 const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
@@ -33,6 +36,8 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   searchHint,
   resize = "false",
   detailsTitle = "More Info",
+  headerCase = 'sentence',
+  DataStringQuery,
 }) => {
   const {
     data,
@@ -53,7 +58,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   }, [data]);
 
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(
-    {},
+    {}
   );
   const [sortState, setSortState] = useState<
     Record<string, "ASC" | "DESC" | null>
@@ -78,7 +83,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
             !headers.includes(header)
           ) {
             console.error(
-              `Column "${header}" specified in initialColumns does not exist in the table.`,
+              `Column "${header}" specified in initialColumns does not exist in the table.`
             );
           }
         }
@@ -148,6 +153,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       searchHint={searchHint}
       resize={resize}
       detailsTitle={detailsTitle}
+      headerCase={headerCase}
     >
       {children}
     </TableContent>
@@ -167,6 +173,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       variant={layout === "single-layout" ? "plain" : variant}
       query={query}
       detailsComponent={detailsComponent as string}
+      DataStringQuery={DataStringQuery}
     >
       {wrappedContent}
     </ContainerComponent>

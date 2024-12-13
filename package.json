@@ -65,6 +65,9 @@
     "react-pivottable": "^0.11.0",
     "react-rnd": "^10.4.13",
     "react-sortablejs": "^6.1.4",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.0",
     "sortablejs": "^1.15.0",
     "svgmap": "^2.10.1",
@@ -161,7 +164,7 @@
     "compression": "maximum",
     "directories": {
       "buildResources": ".",
-      "output": "release"
+      "output": "dist"
     },
     "files": [
       "public/setup.html",
@@ -188,7 +191,7 @@
         }
       ],
       "icon": "./duft_icon.icns",
-      "artifactName": "${productName}-${version}-${arch}-we.${ext}"
+      "artifactName": "${productName}-${version}-${arch}-${implementationCode}.${ext}"
     },
     "win": {
       "target": [
@@ -217,7 +220,8 @@
           ]
         }
       ],
-      "icon": "./duft_icon.ico"
+      "icon": "./duft_icon.ico",
+      "artifactName": "${productName}-${version}-${arch}-${implementationCode}.${ext}"
     },
     "linux": {
       "icon": "./duft_icon.png",
@@ -226,7 +230,7 @@
         "deb",
         "rpm"
       ],
-      "artifactName": "${productName}-${version}-${arch}-we.${ext}"
+      "artifactName": "${productName}-${version}-${arch}-${implementationCode}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -234,8 +238,7 @@
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "artifactName": "${productName}-${version}-${arch}-we.exe"
+      "createStartMenuShortcut": true
     },
     "msi": {
       "oneClick": false,
@@ -243,8 +246,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "DUFT Platform",
-      "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3",
-      "artifactName": "${productName}-${version}-${arch}-we.msi"
+      "upgradeCode": "e84c054a-7d0e-4ba4-bfb3-cdf339c6a7e3"
     }
   }
 }

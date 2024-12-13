@@ -7,6 +7,7 @@ import DataTaskDialog from "./data-task-dialog";
 type DataTaskNavLinkProps = {
   task: DataTaskItem;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  hideCloseButton?: boolean;
 };
 
 export const DataTaskNavLink: React.FC<DataTaskNavLinkProps> = ({
@@ -28,10 +29,10 @@ export const DataTaskNavLink: React.FC<DataTaskNavLinkProps> = ({
   };
 
   const handleExecute = async () => {
-    const result = await executeDataTask(task.task);
-    if (result?.message) {
-      setIsOpen(false);
-    } else {
+      const result = await executeDataTask(task.task);
+      if (result?.message) {
+        setIsOpen(false);
+      } else {
       setError("Data task operation failed.");
     }
   };

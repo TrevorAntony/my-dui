@@ -5,11 +5,12 @@ import getInfoTagContents from "../../helpers/get-info-tag-content";
 const PieChart = ({
   container: Container,
   header = "Pie Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   resize,
   children,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="pie" />;
@@ -22,6 +23,7 @@ const PieChart = ({
       detailsComponent={detailsComponent}
       resize={resize}
       infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

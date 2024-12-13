@@ -8,15 +8,30 @@ interface DataStringProps {
 const DataString: React.FC<DataStringProps> = ({ children }) => {
   const { data } = useDataContext();
 
+  const handlePlaceholderReplacement = (text: string): string => {
+    if (Array.isArray(data) && data.length > 0) {
+      return text.replace(
+        /%(\w+)%/g,
+        (match: string, key: string) => data[0][key] || match
+      );
+    }
+    return text;
+  };
+
   const replacePlaceholders = (child: React.ReactNode): React.ReactNode => {
+    if (typeof child === "string") {
+      return handlePlaceholderReplacement(child);
+    }
+
     if (typeof child === "object" && child !== null && "props" in child) {
       if (typeof child.props.children === "string") {
-        if (Array.isArray(data) && data.length > 0) {
-          return child.props?.children.replace(
-            /%(\w+)%/g,
-            (match: string, key: string) => data[0][key] || match,
-          );
-        }
+        return {
+          ...child,
+          props: {
+            ...child.props,
+            children: handlePlaceholderReplacement(child.props.children),
+          },
+        };
       }
       return child;
     }

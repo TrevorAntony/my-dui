@@ -294,9 +294,9 @@ const AboutDlg = ({
                     ) : error ? (
                       <div className="text-red-500">{error}</div>
                     ) : (
-                      <div className="max-h-[300px] overflow-y-auto font-mono text-sm text-gray-600 dark:text-gray-300">
+                      <div className="max-h-[300px] overflow-x-auto overflow-y-auto font-mono text-sm text-gray-600 dark:text-gray-300">
                         {logs.map((log, index) => (
-                          <div key={index} className="whitespace-pre-wrap py-1">
+                          <div key={index} className="whitespace-nowrap py-1">
                             {log}
                           </div>
                         ))}
