@@ -53,7 +53,7 @@ const useQueryData = <T>(
   });
 
   return {
-    data, // Return the actual data instead of undefined
+    data,
     isLoading,
     error: error instanceof Error ? error : null,
   };
