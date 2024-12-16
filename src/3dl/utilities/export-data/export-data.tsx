@@ -1,32 +1,37 @@
 import { useState } from "react";
 import { useDataContext } from "../../context/DataContext";
-import { jsonToCSV, downloadCSV } from "./helpers";
 import ExportButton from "./export-button";
-import ExportDataDialog from "./export-data-dialog"; 
+import ExportDataDialog from "./export-data-dialog";
+import { client } from "../../../api/DuftHttpClient/local-storage-functions";
 
 function ExportData() {
-  const { data } = useDataContext();
+  const { data, query } = useDataContext();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleExport = (format: string, scope: string) => {
-    const dataToExport = scope === "all" ? data : data;
-    
-    if (format === "csv") {
-      const csv = jsonToCSV(dataToExport as object[]);
-      downloadCSV(csv, "export.csv");
-    } else if (format === "excel") {
-      const csv = jsonToCSV(dataToExport as object[]);
-      downloadCSV(csv, "export.xlsx");
-    }
-  };
+  const handleExport = async (format: string, scope: string) => {
+    try {
+      const response = await client.getQueryData({ query, scope, format: format.toLowerCase() });
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement('a');
+      
+      Object.assign(link, {
+        href: url,
+        download: `export.${format.toLowerCase()}`,
+        style: { display: 'none' }
+      });
 
-  const handleButtonClick = () => {
-    setIsDialogOpen(true);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error exporting data:', error);
+    }
   };
 
   return (
     <>
-      <ExportButton onClick={handleButtonClick} />
+      <ExportButton onClick={() => setIsDialogOpen(true)} />
       <ExportDataDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

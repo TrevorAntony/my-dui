@@ -44,7 +44,6 @@ const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
       }} 
       position="center" 
       size="2xl"
-      dismissible={!disableButtons && !hideCloseButton}
     >
       <Modal.Header className="text-default">{title}</Modal.Header>
       <Modal.Body

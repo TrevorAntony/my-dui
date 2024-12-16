@@ -117,7 +117,8 @@ export class DuftHttpClient {
     method: string,
     endpoint: string,
     body?: Record<string, any>,
-    forceAuth?: boolean
+    forceAuth?: boolean,
+    responseType: "json" | "blob" = "json"
   ): Promise<any> {
     const isPublicRoute = this.publicRoutes.some((route) =>
       endpoint.startsWith(`${this.baseUrl}${route}`)
@@ -152,7 +153,7 @@ export class DuftHttpClient {
             if (token) {
               headers["Authorization"] = `Bearer ${token}`;
               console.log("Retrying request with new token:", token);
-              return this.makeRequest(method, endpoint, body, forceAuth); // Retry with refreshed token
+              return this.makeRequest(method, endpoint, body, forceAuth, responseType); // Retry with refreshed token
             }
           } catch (error) {
             console.error(
@@ -183,7 +184,7 @@ export class DuftHttpClient {
       }
     }
 
-    return await response.json();
+    return responseType === "blob" ? response.blob() : response.json();
   }
 
   async getCurrentConfig(useAuthentication: boolean = true): Promise<Config> {
@@ -212,11 +213,14 @@ export class DuftHttpClient {
   }
 
   async getQueryData(requestPayload: Record<string, any>): Promise<any> {
-    return this.makeRequest(
-      "POST",
-      `${this.baseUrl}/run-query`,
-      requestPayload
-    );
+    const { format, ...payload } = requestPayload;
+    const endpoint = format
+      ? `${this.baseUrl}/run-query/${format}`
+      : `${this.baseUrl}/run-query`;
+
+    const responseType =
+      format === "csv" || format === "json" ? "blob" : "json";
+    return this.makeRequest("POST", endpoint, payload, true, responseType);
   }
 
   async runDataTask(taskPayload: Record<string, any>): Promise<any> {

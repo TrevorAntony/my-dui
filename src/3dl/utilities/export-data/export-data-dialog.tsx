@@ -13,7 +13,7 @@ const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
   onClose,
   onExport,
 }) => {
-  const [format, setFormat] = useState("excel");
+  const [format, setFormat] = useState("csv");
   const [scope, setScope] = useState("filtered");
 
   const handleExport = () => {
@@ -53,7 +53,7 @@ const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
               value={format}
               onChange={(e) => setFormat(e.target.value)}
             >
-              <option value="excel">Excel</option>
+              <option value="json">Json</option>
               <option value="csv">CSV</option>
             </Select>
           </div>
