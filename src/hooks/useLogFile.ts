@@ -26,3 +26,20 @@ export const useLogFile = (isOpen: boolean) => {
 
   return { logs, loading, error };
 };
+
+export const downloadLogs = (logs: string[]) => {
+  
+  const content = logs.join('\n');
+  const blob = new Blob([content], { type: 'text/plain' });
+  
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `duft-logs-${new Date().toISOString().split('T')[0]}.txt`;
+  
+  document.body.appendChild(link);
+  link.click();
+  
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+};
