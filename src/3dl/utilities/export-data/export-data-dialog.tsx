@@ -5,7 +5,7 @@ export interface ExportDataDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onExport: (format: string, scope: string) => void;
-  data?: any; // Data to be exported
+  data?: any;
 }
 
 const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
@@ -60,10 +60,10 @@ const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
         </div>
       </Modal.Body>
       <Modal.Footer className="flex justify-end gap-4">
-        <Button color="secondary" onClick={handleExport}>
+        <Button color="primary" onClick={handleExport}>
           Export
         </Button>
-        <Button color="primary" onClick={onClose}>
+        <Button color="secondary" onClick={onClose}>
           Cancel
         </Button>
       </Modal.Footer>

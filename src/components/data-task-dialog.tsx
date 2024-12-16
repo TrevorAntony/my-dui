@@ -35,7 +35,17 @@ const DataTaskDialog: React.FC<DataTaskDialogProps> = ({
     }
   }, [children]);
   return (
-    <Modal show={isOpen} onClose={() => onClose()} position="center" size="2xl">
+    <Modal 
+      show={isOpen} 
+      onClose={() => {
+        if (!disableButtons && !hideCloseButton) {
+          onClose();
+        }
+      }} 
+      position="center" 
+      size="2xl"
+      dismissible={!disableButtons && !hideCloseButton}
+    >
       <Modal.Header className="text-default">{title}</Modal.Header>
       <Modal.Body
         ref={contentRef}
