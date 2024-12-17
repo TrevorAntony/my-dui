@@ -48,3 +48,4 @@ export { default as ExportData } from "./utilities/export-data/export-data";
 export { default as Markdown } from "./visuals/markdown";
 export { default as InfoTag } from "./utilities/info-tag/info-tag";
 export { default as HtmlSnippet } from "./visuals/html-snippet";
+export { default as CascadeNode } from "../components/cascade-node";
