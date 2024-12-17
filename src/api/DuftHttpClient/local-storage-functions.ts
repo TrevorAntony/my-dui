@@ -43,17 +43,15 @@ export function setTokenInLocalStorage(
   } else {
     localStorage.removeItem("refreshToken");
   }
-  
+
   // Only update config if autoUpdateConfig is true
   if (autoUpdateConfig) {
     client.getCurrentConfig();
   }
-  console.log("donnneee!");
 }
 
 export function updateConfigFromHttpClient(config: Config): void {
   try {
-    console.log(config);
     const dispatch = DispatchService.getDispatch();
     dispatch({ type: "SET_CONFIG", payload: config });
   } catch (error) {

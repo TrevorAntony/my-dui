@@ -42,15 +42,11 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
 }) => {
   const {
     data,
-    loading,
+    datasetParams: { loading, searchText, searchColumns, pageSize, query },
     pageUpdater,
-    searchText,
     handleSearchChange,
     handleSortChange,
-    query,
-    searchColumns,
-    pageSize,
-  } = useDataContext();
+  } = useDatasetContext();
 
   const layout = useLayout();
 

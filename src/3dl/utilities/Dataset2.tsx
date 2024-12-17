@@ -1,43 +1,49 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 
-interface DatasetParams {
+export interface DatasetParams {
   filters: any;
   searchText: string;
-  searchColumns: string[];
+  searchColumns: string;
   sortColumn: string;
   currentPage: number;
   pageSize: number;
   debug: boolean;
   appendData: boolean;
+  loading?: boolean;
+  error?: Error | null;
+  query?: string;
 }
 
 const DatasetContext = createContext({
   data: null,
-  setData: (data: any) => {},
+  setData: (_data: any) => {},
   datasetParams: {} as DatasetParams,
-  setDatasetParams: (params: DatasetParams) => {},
+  setDatasetParams: (
+    _params: DatasetParams | ((params: DatasetParams) => DatasetParams)
+  ) => {},
+
   resetPage: () => {},
   pageUpdater: () => {},
-  handleSearchChange: (searchText: string) => {},
-  handleSortChange: (sortColumn: string) => {},
+  handleSearchChange: (_searchText: string) => {},
+  handleSortChange: (_sortColumn: string) => {},
 });
 
 interface Dataset2Props {
   children: React.ReactNode;
   filters?: any;
   searchText?: string;
-  searchColumns?: string[];
+  searchColumns?: string;
   sortColumn?: string;
   currentPage?: number;
   pageSize?: number;
   debug?: boolean;
 }
 
-export const Dataset2: React.FC<Dataset2Props> = ({
+const Dataset2: React.FC<Dataset2Props> = ({
   children,
   filters = {},
   searchText = "",
-  searchColumns = [],
+  searchColumns = "",
   sortColumn = "",
   currentPage = 1,
   pageSize = 10,
@@ -53,6 +59,9 @@ export const Dataset2: React.FC<Dataset2Props> = ({
     pageSize,
     debug,
     appendData: false,
+    loading: false,
+    error: null,
+    query: "",
   });
 
   //add filter logic here, listening for filter updates in the dashboard conmponent, and updating the datasetParams accordingly
@@ -60,7 +69,7 @@ export const Dataset2: React.FC<Dataset2Props> = ({
 
   const setData = useCallback(
     (newData: any[] | null) => {
-      if (datasetParams.appendData && data) {
+      if (datasetParams.appendData && newData) {
         setDataInternal((prevData) => [
           ...(prevData || []),
           ...(newData || []),
@@ -69,7 +78,7 @@ export const Dataset2: React.FC<Dataset2Props> = ({
         setDataInternal(newData);
       }
     },
-    [data, datasetParams.appendData]
+    [datasetParams.appendData]
   );
 
   const resetPage = useCallback(() => {
@@ -125,3 +134,5 @@ export const Dataset2: React.FC<Dataset2Props> = ({
 };
 
 export const useDatasetContext = () => useContext(DatasetContext);
+
+export default Dataset2;
