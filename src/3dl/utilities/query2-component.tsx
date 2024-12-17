@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { DatasetParams, useDatasetContext } from "./Dataset2";
 import useDataSetLogic from "./useDataSetLogic";
 import { processQuery } from "../../helpers/visual-helpers";
 import { useDetailsViewContext } from "./details-view-context";
 import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
+import { useDataContext, DatasetParams } from "../context/DataContext";
 
 interface DuftQueryResult<T> {
   data: T | undefined;
@@ -52,7 +52,7 @@ const QueryDataset: React.FC<DataSetProps> = ({
       pageSize,
       debug,
     },
-  } = useDatasetContext();
+  } = useDataContext();
   const detailsContext = useDetailsViewContext();
   const { columnName, config } = detailsContext || {};
 

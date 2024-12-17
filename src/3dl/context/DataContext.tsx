@@ -1,45 +1,73 @@
-import type { Dispatch, ReactNode, SetStateAction } from "react";
+import type { ReactNode } from "react";
 import React, { createContext, useContext } from "react";
-interface DataContextType {
-  data: unknown[];
-  pageUpdater?: () => void;
-  resetPage?: () => void;
-  handleSearchChange?: (newSearchText: string) => void;
-  handleSortChange?: (newSearchText: string) => void;
-  setQuery?: Dispatch<SetStateAction<string>>;
-  query?: string;
+
+export interface DatasetParams {
+  filters: any;
+  searchText: string;
+  searchColumns: string;
+  sortColumn: string;
+  currentPage: number;
+  pageSize: number;
+  debug: boolean;
+  appendData: boolean;
   loading?: boolean;
-  searchText?: string;
-  searchColumns?: string;
-  pageSize?: string | number;
-  setData?: (data: any) => void;
+  error?: Error | null;
+  query?: string;
+  setQuery?: (query: string) => void;
 }
+
+interface DataContextType {
+  data: any[] | null;
+  setData: (data: any[] | null) => void;
+  datasetParams: DatasetParams;
+  setDatasetParams: (
+    params: DatasetParams | ((params: DatasetParams) => DatasetParams)
+  ) => void;
+  resetPage: () => void;
+  pageUpdater: () => void;
+  handleSearchChange: (newSearchText: string) => void;
+  handleSortChange: (newSortText: string) => void;
+}
+
 const defaultDataContext: DataContextType = {
-  data: [],
-  query: "",
-  setQuery: () => {},
+  data: null,
+  setData: () => {},
+  datasetParams: {
+    filters: {},
+    searchText: "",
+    searchColumns: "",
+    sortColumn: "",
+    currentPage: 1,
+    pageSize: 10,
+    debug: false,
+    appendData: false,
+    loading: false,
+    error: null,
+    query: "",
+    setQuery: () => {},
+  },
+  setDatasetParams: () => {},
   resetPage: () => {},
   pageUpdater: () => {},
-  loading: true,
   handleSearchChange: () => {},
   handleSortChange: () => {},
-  searchColumns: undefined,
-  pageSize: undefined,
 };
-const DataContext = createContext<DataContextType | undefined>(
-  defaultDataContext
-);
-export const useDataContext = (): DataContextType => {
+
+const DataContext = createContext<DataContextType>(defaultDataContext);
+
+export const useDataContext = () => {
   const context = useContext(DataContext);
   if (!context) {
     throw new Error("useDataContext must be used within a DataProvider");
   }
   return context;
 };
+
 interface DataProviderProps {
   value: DataContextType;
   children: ReactNode;
 }
+
 export const DataProvider: React.FC<DataProviderProps> = ({
   value,
   children,

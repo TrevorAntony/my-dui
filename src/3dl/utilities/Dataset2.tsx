@@ -1,33 +1,5 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
-
-export interface DatasetParams {
-  filters: any;
-  searchText: string;
-  searchColumns: string;
-  sortColumn: string;
-  currentPage: number;
-  pageSize: number;
-  debug: boolean;
-  appendData: boolean;
-  loading?: boolean;
-  error?: Error | null;
-  query?: string;
-  setQuery?: (query: string) => void;
-}
-
-const DatasetContext = createContext({
-  data: null,
-  setData: (_data: any) => {},
-  datasetParams: {} as DatasetParams,
-  setDatasetParams: (
-    _params: DatasetParams | ((params: DatasetParams) => DatasetParams)
-  ) => {},
-
-  resetPage: () => {},
-  pageUpdater: () => {},
-  handleSearchChange: (_searchText: string) => {},
-  handleSortChange: (_sortColumn: string) => {},
-});
+import React, { useState, useCallback } from "react";
+import { DataProvider, type DatasetParams } from "../context/DataContext";
 
 interface Dataset2Props {
   children: React.ReactNode;
@@ -117,7 +89,7 @@ const Dataset2: React.FC<Dataset2Props> = ({
   }, []);
 
   return (
-    <DatasetContext.Provider
+    <DataProvider
       value={{
         data,
         setData,
@@ -130,10 +102,7 @@ const Dataset2: React.FC<Dataset2Props> = ({
       }}
     >
       {children}
-    </DatasetContext.Provider>
+    </DataProvider>
   );
 };
-
-export const useDatasetContext = () => useContext(DatasetContext);
-
 export default Dataset2;
