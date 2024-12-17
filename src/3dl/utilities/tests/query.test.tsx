@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, act } from "@testing-library/react";
 import { expect, test, beforeEach } from "vitest";
-import { Dataset2, useDatasetContext } from "../Dataset2";
+import Dataset2, { useDatasetContext } from "../Dataset2";
 import QueryDataset from "../query2-component";
 import useQueryData from "../../../3dlcomponents/resources/useQueryData";
 import { DuftHttpClient } from "../../../api/DuftHttpClient/DuftHttpClient";
@@ -76,30 +76,47 @@ test("Dataset context state transitions with Query", async () => {
     ),
   });
 
-  // Track initial null state
+  // Track and verify initial state
   stateTransitions.push(result.current.data);
   expect(result.current.data).toBeNull();
 
-  // Wait for data to load
+  // Wait for data load
   await waitForState((state) => state !== null, result);
-
-  // Track loaded state
   stateTransitions.push(result.current.data);
 
   // Verify state transitions
-  expect(stateTransitions[0]).toBeNull();
-  expect(stateTransitions[1].data).toBeInstanceOf(Array);
-  expect(stateTransitions[1].data.length).toBeGreaterThan(0);
+  expect(stateTransitions).toEqual([null, expect.any(Array)]);
+  expect(stateTransitions[1].length).toBeGreaterThan(0);
 
-  // Verify we only had two state transitions: null -> data
-  expect(stateTransitions.length).toBe(2);
+  // Verify context structure
+  const expectedContextProps = [
+    "data",
+    "setData",
+    "datasetParams",
+    "setDatasetParams",
+    "pageUpdater",
+    "handleSearchChange",
+    "handleSortChange",
+  ];
+  expectedContextProps.forEach((prop) => {
+    expect(result.current).toHaveProperty(prop);
+  });
 
-  // Optional: Verify specific data properties if needed
-  expect(result.current.data).toHaveProperty("data");
-
-  // Verify context has all required properties
-  expect(result.current.data).toHaveProperty("query");
-  expect(result.current.data).toHaveProperty("loading");
-  expect(result.current.data).toHaveProperty("pageSize");
-  expect(result.current.data).toHaveProperty("searchColumns");
+  // Verify datasetParams structure
+  const expectedParamsProps = [
+    "filters",
+    "searchText",
+    "searchColumns",
+    "sortColumn",
+    "currentPage",
+    "pageSize",
+    "debug",
+    "appendData",
+    "loading",
+    "error",
+    "query",
+  ];
+  expectedParamsProps.forEach((prop) => {
+    expect(result.current.datasetParams).toHaveProperty(prop);
+  });
 });

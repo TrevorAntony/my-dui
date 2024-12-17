@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
-import { useDatasetContext } from "../../3dl/utilities/Dataset2";
 import {
   getTokenFromLocalStorage,
   setTokenInLocalStorage,
@@ -8,6 +7,10 @@ import {
   getRefreshToken,
 } from "../../api/DuftHttpClient/local-storage-functions";
 import config from "../../config";
+// import { client } from "../..";
+// This is commented out for tests to pass, since the http client which is exported from the index file
+// is not provided in the context of the test and throws an error
+// TO-DO: create the singleton client in a location that is accessibqle to the tests and then reinstatiate this import and its usage.
 
 interface QueryResult<T> {
   data: T | undefined;
@@ -39,13 +42,11 @@ const useQueryData = <T>(
   customClient?: DuftHttpClient
 ): QueryResult<T> => {
   const client = customClient || defaultClient;
-  const { setData } = useDatasetContext();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["queryData", requestPayload],
     queryFn: async () => {
       const result = await client.getQueryData(requestPayload);
-      setData(result);
       return result;
     },
     enabled: !!requestPayload?.query,

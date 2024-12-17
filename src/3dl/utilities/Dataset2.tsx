@@ -12,6 +12,7 @@ export interface DatasetParams {
   loading?: boolean;
   error?: Error | null;
   query?: string;
+  setQuery?: (query: string) => void;
 }
 
 const DatasetContext = createContext({

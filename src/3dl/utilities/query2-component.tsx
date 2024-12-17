@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { DatasetParams, useDatasetContext } from "./Dataset2";
 import useDataSetLogic from "./useDataSetLogic";
 import { processQuery } from "../../helpers/visual-helpers";
@@ -56,11 +56,16 @@ const QueryDataset: React.FC<DataSetProps> = ({
   const detailsContext = useDetailsViewContext();
   const { columnName, config } = detailsContext || {};
 
-  const queryString = extractQueryString(queryAsChild as string | QueryObject);
-  const initialQuery =
-    config && columnName ? processQuery(queryString, config) : queryString;
+  const processedQueryString = useMemo(() => {
+    const queryString = extractQueryString(
+      queryAsChild as string | QueryObject
+    );
+    return config && columnName
+      ? processQuery(queryString, config)
+      : queryString;
+  }, [queryAsChild, config, columnName]);
 
-  const [query] = useState<string>(initialQuery);
+  const [query, setQuery] = useState<string>(processedQueryString);
 
   const { data, loading, error } = useDataSetLogic({
     query,
@@ -75,22 +80,21 @@ const QueryDataset: React.FC<DataSetProps> = ({
     client,
   });
 
-  // First effect for params updates
   useEffect(() => {
     setDatasetParams((prev: DatasetParams) => ({
       ...prev,
       loading,
       error,
       query,
+      setQuery,
     }));
-  }, [loading, error, query, setDatasetParams]);
+  }, [loading, error, query, setQuery, setDatasetParams]);
 
-  // Second effect for data updates
   useEffect(() => {
     if (data) {
       setData(data);
     }
-  }, [data, setData]);
+  }, [data]);
 
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
