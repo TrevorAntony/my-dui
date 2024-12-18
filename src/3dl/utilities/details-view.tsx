@@ -1,5 +1,4 @@
 import React from "react";
-import DetailsViewContext from "./details-view-context";
 
 interface DetailsViewProps {
   columnName: string;
@@ -7,16 +6,26 @@ interface DetailsViewProps {
   children: React.ReactNode;
 }
 
+type ChildProps = {
+  columnName?: string;
+  config?: object;
+};
+
 const DetailsView: React.FC<DetailsViewProps> = ({
   columnName,
   config,
   children,
 }) => {
-  return (
-    <DetailsViewContext.Provider value={{ columnName, config }}>
-      {children}
-    </DetailsViewContext.Provider>
+  const modifiedChildren = React.Children.map(children, (child) =>
+    React.isValidElement(child)
+      ? React.cloneElement(child as React.ReactElement<ChildProps>, {
+          columnName,
+          config,
+        })
+      : child
   );
+
+  return <>{modifiedChildren}</>;
 };
 
 export default DetailsView;

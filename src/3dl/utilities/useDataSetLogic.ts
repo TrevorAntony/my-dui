@@ -115,7 +115,7 @@ const useDataSetLogic = ({
         try {
           const debugClient = client || defaultClient;
           const data = await debugClient.getQueryData(requestData);
-          console.log("Debug - /run-query response:", data);
+          //TO-DO: send request to /build-query instead of /run-query
         } catch (error) {
           console.error("Debug - Error fetching /run-query:", error);
         }

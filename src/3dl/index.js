@@ -39,6 +39,7 @@ export { default as Grid } from "./ui-elements/grid";
 export { default as DashboardRow } from "./ui-elements/dashboard-row";
 export { default as DashboardHeader } from "./ui-elements/dashboard-header";
 export { default as DetailsView } from "./utilities/details-view";
+export { default as DetailsView2 } from "./utilities/details-view-2";
 export { default as PreviewQuery } from "./utilities/preview-query";
 export { default as SingleLayout } from "./ui-elements/single-layout";
 export { default as QueryProvider } from "./context/QueryContext";
