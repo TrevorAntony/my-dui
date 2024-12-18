@@ -19,7 +19,7 @@ const Dataset2: React.FC<Dataset2Props> = ({
   searchColumns = "",
   sortColumn = "",
   currentPage = 1,
-  pageSize = 10,
+  pageSize,
   debug = false,
 }) => {
   const [data, setDataInternal] = useState<null | any[]>(null);
