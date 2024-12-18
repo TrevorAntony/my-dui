@@ -58,17 +58,17 @@ const DataContext = createContext<DataContextType>(defaultDataContext);
 export const useDataContext = () => {
   const context = useContext(DataContext);
   if (!context) {
-    throw new Error("useDataContext must be used within a DataProvider");
+    throw new Error("useDataContext must be used within DataContextProvider");
   }
   return context;
 };
 
-interface DataProviderProps {
+interface DataContextProviderProps {
   value: DataContextType;
   children: ReactNode;
 }
 
-export const DataProvider: React.FC<DataProviderProps> = ({
+export const DataContextProvider: React.FC<DataContextProviderProps> = ({
   value,
   children,
 }) => <DataContext.Provider value={value}>{children}</DataContext.Provider>;

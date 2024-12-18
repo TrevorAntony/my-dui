@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook } from "@testing-library/react";
 import { expect, test, beforeEach } from "vitest";
-import Dataset2 from "../Dataset2";
-import QueryDataset from "../query2-component";
+import DataProvider from "../data-provider";
+import QueryData from "../query-data";
 import useQueryData from "../../../3dlcomponents/resources/useQueryData";
 import { DuftHttpClient } from "../../../api/DuftHttpClient/DuftHttpClient";
 import { useDataContext } from "../../context/DataContext";
@@ -68,12 +68,12 @@ test("Dataset context state transitions with Query", async () => {
   const { result } = renderHook(() => useDataContext(), {
     wrapper: ({ children }) => (
       <QueryClientProvider client={testQueryClient}>
-        <Dataset2 pageSize={10}>
-          <QueryDataset useQuery={useQueryData} client={client}>
+        <DataProvider pageSize={10}>
+          <QueryData useQuery={useQueryData} client={client}>
             SELECT * FROM dim_age_group
-          </QueryDataset>
+          </QueryData>
           {children}
-        </Dataset2>
+        </DataProvider>
       </QueryClientProvider>
     ),
   });
@@ -148,12 +148,12 @@ test("useDataSetLogic hook behavior", async () => {
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider>
+            <QueryData useQuery={useQueryData} client={client}>
               SELECT * FROM dim_age_group
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
     }
@@ -198,12 +198,12 @@ test("filtering functionality works correctly", async () => {
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider>
+            <QueryData useQuery={useQueryData} client={client}>
               {query}
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
     }
@@ -223,12 +223,12 @@ test("filtering functionality works correctly", async () => {
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider>
+            <QueryData useQuery={useQueryData} client={client}>
               {query}
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
     }
@@ -273,12 +273,12 @@ test("filtering with invalid search criteria returns empty results", async () =>
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider>
+            <QueryData useQuery={useQueryData} client={client}>
               {query}
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
     }
@@ -317,12 +317,12 @@ test("sorting functionality works correctly", async () => {
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider>
+            <QueryData useQuery={useQueryData} client={client}>
               {query}
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
     }
@@ -341,12 +341,12 @@ test("sorting functionality works correctly", async () => {
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider>
+            <QueryData useQuery={useQueryData} client={client}>
               {query}
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
     }
@@ -398,12 +398,12 @@ test("pagination returns correct number of records", async () => {
       {
         wrapper: ({ children }) => (
           <QueryClientProvider client={testQueryClient}>
-            <Dataset2>
-              <QueryDataset useQuery={useQueryData} client={client}>
+            <DataProvider>
+              <QueryData useQuery={useQueryData} client={client}>
                 {query}
-              </QueryDataset>
+              </QueryData>
               {children}
-            </Dataset2>
+            </DataProvider>
           </QueryClientProvider>
         ),
       }
@@ -433,12 +433,12 @@ test("pagination returns correct number of records", async () => {
         {
           wrapper: ({ children }) => (
             <QueryClientProvider client={testQueryClient}>
-              <Dataset2>
-                <QueryDataset useQuery={useQueryData} client={client}>
+              <DataProvider>
+                <QueryData useQuery={useQueryData} client={client}>
                   {query}
-                </QueryDataset>
+                </QueryData>
                 {children}
-              </Dataset2>
+              </DataProvider>
             </QueryClientProvider>
           ),
         }
@@ -459,7 +459,7 @@ test("pagination returns correct number of records", async () => {
   }
 });
 
-test("incremental page loading appends data in Dataset2 correctly", async () => {
+test("incremental page loading appends data in DataProvider correctly", async () => {
   const testQueryClient = createTestQueryClient();
   const query = "SELECT * FROM dim_age_group";
   const pageSize = 10;
@@ -478,12 +478,12 @@ test("incremental page loading appends data in Dataset2 correctly", async () => 
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider>
+            <QueryData useQuery={useQueryData} client={client}>
               {query}
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
       initialProps: { currentPage: 1 },
@@ -493,12 +493,12 @@ test("incremental page loading appends data in Dataset2 correctly", async () => 
   const { result: contextResult } = renderHook(() => useDataContext(), {
     wrapper: ({ children }) => (
       <QueryClientProvider client={testQueryClient}>
-        <Dataset2 pageSize={10}>
-          <QueryDataset useQuery={useQueryData} client={client}>
+        <DataProvider pageSize={10}>
+          <QueryData useQuery={useQueryData} client={client}>
             {query}
-          </QueryDataset>
+          </QueryData>
           {children}
-        </Dataset2>
+        </DataProvider>
       </QueryClientProvider>
     ),
   });
@@ -569,12 +569,12 @@ test("returns all records when pageSize is not provided", async () => {
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2 pageSize={1000}>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider pageSize={1000}>
+            <QueryData useQuery={useQueryData} client={client}>
               {query}
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
     }
@@ -592,12 +592,12 @@ test("returns all records when pageSize is not provided", async () => {
     {
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
-          <Dataset2>
-            <QueryDataset useQuery={useQueryData} client={client}>
+          <DataProvider>
+            <QueryData useQuery={useQueryData} client={client}>
               {query}
-            </QueryDataset>
+            </QueryData>
             {children}
-          </Dataset2>
+          </DataProvider>
         </QueryClientProvider>
       ),
     }
@@ -620,12 +620,12 @@ test("returns all records when pageSize is not provided", async () => {
   const { result: contextResult } = renderHook(() => useDataContext(), {
     wrapper: ({ children }) => (
       <QueryClientProvider client={testQueryClient}>
-        <Dataset2>
-          <QueryDataset useQuery={useQueryData} client={client}>
+        <DataProvider>
+          <QueryData useQuery={useQueryData} client={client}>
             {query}
-          </QueryDataset>
+          </QueryData>
           {children}
-        </Dataset2>
+        </DataProvider>
       </QueryClientProvider>
     ),
   });

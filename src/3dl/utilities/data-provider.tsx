@@ -1,7 +1,10 @@
 import React, { useState, useCallback } from "react";
-import { DataProvider, type DatasetParams } from "../context/DataContext";
+import {
+  DataContextProvider,
+  type DatasetParams,
+} from "../context/DataContext";
 
-interface Dataset2Props {
+interface DataProviderProps {
   children: React.ReactNode;
   filters?: any;
   searchText?: string;
@@ -12,7 +15,7 @@ interface Dataset2Props {
   debug?: boolean;
 }
 
-const Dataset2: React.FC<Dataset2Props> = ({
+const DataProvider: React.FC<DataProviderProps> = ({
   children,
   filters = {},
   searchText = "",
@@ -89,7 +92,7 @@ const Dataset2: React.FC<Dataset2Props> = ({
   }, []);
 
   return (
-    <DataProvider
+    <DataContextProvider
       value={{
         data,
         setData,
@@ -102,7 +105,7 @@ const Dataset2: React.FC<Dataset2Props> = ({
       }}
     >
       {children}
-    </DataProvider>
+    </DataContextProvider>
   );
 };
-export default Dataset2;
+export default DataProvider;

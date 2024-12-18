@@ -43,8 +43,8 @@ import {
   Markdown,
   InfoTag,
   HtmlSnippet,
-  Dataset2,
-  QueryDataset,
+  DataProvider,
+  QueryData,
 } from "../3dl";
 import {
   DuftGrid,
@@ -106,18 +106,16 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
             Visual5,
             DataString,
             Section,
-            Dataset2,
+            DataProvider,
             Dataset: (props: React.ComponentProps<typeof Dataset>) => (
               <Dataset
                 {...(props as React.ComponentProps<typeof Dataset>)}
                 useQuery={useDuftQuery}
               />
             ),
-            QueryDataset: (
-              props: React.ComponentProps<typeof QueryDataset>
-            ) => (
-              <QueryDataset
-                {...(props as React.ComponentProps<typeof QueryDataset>)}
+            QueryData: (props: React.ComponentProps<typeof QueryData>) => (
+              <QueryData
+                {...(props as React.ComponentProps<typeof QueryData>)}
                 useQuery={useQueryData}
                 client={client}
               />

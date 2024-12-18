@@ -35,7 +35,7 @@ const extractQueryString = (queryInput: string | QueryObject): string => {
   return queryInput?.props?.children.trim();
 };
 
-const QueryDataset: React.FC<DataSetProps> = ({
+const QueryData: React.FC<DataSetProps> = ({
   children: queryAsChild,
   useQuery,
   filters = {},
@@ -103,4 +103,4 @@ const QueryDataset: React.FC<DataSetProps> = ({
   return null;
 };
 
-export default QueryDataset;
+export default QueryData;
