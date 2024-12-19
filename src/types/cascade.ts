@@ -3,6 +3,8 @@
 export type CascadeContent = {
   label: string;
   value: number;
+  nodeId: string;
+  query: string;
 };
 
 export type CascadeColorOptions = {
@@ -23,12 +25,13 @@ export type CascadeNodeProps = {
   id: string;
   parentId: string;
   label: string;
-  data: any;
+  data: { value: number }[];
   options?: {
     nodeBGColorHover?: string;
     borderColorHover?: string;
     nodeBGColor?: string;
   };
+  detailsViewQuery?: string;
   children?: React.ReactNode;
 };
 

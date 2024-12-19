@@ -66,7 +66,7 @@ export const defaultCascadeOptions = {
   width: "100%",
   height: "40vh",
   nodeWidth: 500,
-  nodeHeight: 200,
+  nodeHeight: 180,
   fontSize: "20px",
   fontWeight: 300,
   fontColor: "black",
@@ -87,7 +87,7 @@ export const defaultCascadeOptions = {
     const nodeId = content["nodeId"];
     const label = content["label"];
     let value = content["value"];
-    const details = content["details"];
+    const query = content["query"];
 
     if (typeof value === "number") {
       const formatter = new Intl.NumberFormat("en-US", {
@@ -96,17 +96,16 @@ export const defaultCascadeOptions = {
       });
       value = formatter.format(value);
     }
-
     return `
-      <div 
-        data-id="${nodeId}" 
-        data-label="${label}" 
+      <div
+        data-id="${nodeId}"
+        data-label="${label}"
         data-value="${value}"
-        data-details='${JSON.stringify(details)}'
-        class="apextree-node" 
+        data-query="${query}"
+        class="apextree-node"
         style="display: flex; flex-direction: column; align-items: flex-start; height: auto; cursor: pointer; padding: 5%; justify-content: space-between; border-radius: 10px;">
         <div style="font-size: 1.5em; color: #333333;">${label}</div>
-        <div style="font-size: 3em; line-height: 1.50; font-weight: 300;">${value}</div>
+        <div style="font-size: 2.5em; line-height: 1.50; font-weight: 400;">${value}</div>
       </div>`;
   },
 };

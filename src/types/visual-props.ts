@@ -12,6 +12,7 @@ export interface VisualProps {
   nodeWidth?: number | string;
   nodeHeight?: number | string;
   cascadeScale?: keyof typeof cascadeScaleMap;
+  cascadeSearchColumn?: string;
   direction?: string;
   resize?: string;
   modalWidth?: "narrow" | "medium" | "wide";

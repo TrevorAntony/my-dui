@@ -18,8 +18,10 @@ const buildLookupTable = (
       id: item.id,
       parentId: item.parentId,
       data: {
+        nodeId: item.id,
         label: item.label,
         value: item.data ? item.data[0].value : 0,
+        query: item.detailsViewQuery,
       },
       options: {
         nodeBGColorHover: item.options?.nodeBGColorHover || "#b0decb",
@@ -29,6 +31,7 @@ const buildLookupTable = (
       children: [],
     };
   });
+
   return lookup;
 };
 

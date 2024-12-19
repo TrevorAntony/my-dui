@@ -8,11 +8,12 @@ const CascadeNode: React.FC<CascadeNodeProps> = ({
   parentId,
   label,
   options,
+  detailsViewQuery,
   children,
 }) => {
   const { addCascadeNode } = useContext(CascadeChartContext);
   const { data, loading } = useDataContext();
-  console.log("Node Data: ", data);
+
   useEffect(() => {
     if (addCascadeNode && data && !loading) {
       const nodeData = {
@@ -21,10 +22,11 @@ const CascadeNode: React.FC<CascadeNodeProps> = ({
         label,
         options,
         data,
+        detailsViewQuery,
       };
       addCascadeNode(nodeData);
     }
-  }, [id, parentId, label, options, data, loading, addCascadeNode]);
+  }, [id, parentId, label, options, data, loading, detailsViewQuery, addCascadeNode]);
 
   return <>{children}</>;
 };
