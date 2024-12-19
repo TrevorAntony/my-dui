@@ -5,12 +5,24 @@ import ExportDataDialog from "./export-data-dialog";
 import { client } from "../../../api/DuftHttpClient/local-storage-functions";
 
 function ExportData() {
-  const { data, query } = useDataContext();
+  const { query, searchText, searchColumns, sortColumn } = useDataContext();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleExport = async (format: string, scope: string) => {
     try {
-      const response = await client.getQueryData({ query, scope, format: format.toLowerCase() });
+      const requestPayload = {
+        query,
+        format: format.toLowerCase(),
+        // Only include filters/search/sort if we want filtered data
+        ...(scope === "filtered" && {
+          search_text: searchText,
+          search_columns: searchColumns,
+          sort_column: sortColumn
+        })
+      };
+
+      const response = await client.getQueryData(requestPayload);
+      
       const url = window.URL.createObjectURL(new Blob([response]));
       const link = document.createElement('a');
       
@@ -36,7 +48,6 @@ function ExportData() {
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onExport={handleExport}
-        data={data}
       />
     </>
   );

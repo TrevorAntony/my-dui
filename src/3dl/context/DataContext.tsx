@@ -11,6 +11,7 @@ interface DataContextType {
   loading?: boolean;
   searchText?: string;
   searchColumns?: string;
+  sortColumn?: string;
   pageSize?: string | number;
 }
 const defaultDataContext: DataContextType = {
@@ -23,6 +24,8 @@ const defaultDataContext: DataContextType = {
   handleSearchChange: () => {},
   handleSortChange: () => {},
   searchColumns: undefined,
+  searchText: undefined,
+  sortColumn: undefined,
   pageSize: undefined,
 };
 const DataContext = createContext<DataContextType | undefined>(

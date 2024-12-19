@@ -5,7 +5,6 @@ export interface ExportDataDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onExport: (format: string, scope: string) => void;
-  data?: any;
 }
 
 const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
@@ -35,7 +34,7 @@ const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
             <label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
               Data to export:
             </label>
-            <Select 
+            <Select
               className="flex-1"
               value={scope}
               onChange={(e) => setScope(e.target.value)}
@@ -48,12 +47,12 @@ const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
             <label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
               Data format:
             </label>
-            <Select 
+            <Select
               className="flex-1"
               value={format}
               onChange={(e) => setFormat(e.target.value)}
             >
-              <option value="json">Json</option>
+              <option value="json">JSON</option>
               <option value="csv">CSV</option>
             </Select>
           </div>
