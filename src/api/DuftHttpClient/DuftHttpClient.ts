@@ -213,14 +213,10 @@ export class DuftHttpClient {
   }
 
   async getQueryData(requestPayload: Record<string, any>): Promise<any> {
-    const { format, ...payload } = requestPayload;
-    const endpoint = format
-      ? `${this.baseUrl}/run-query/${format}`
-      : `${this.baseUrl}/run-query`;
-
-    const responseType =
-      format === "csv" || format === "json" ? "blob" : "json";
-    return this.makeRequest("POST", endpoint, payload, true, responseType);
+    const { format, ...otherParams } = requestPayload;
+    const endpoint = `${this.baseUrl}/run-query/${format || 'json'}`;
+    const responseType = format === "csv" ? "blob" : "json";
+    return this.makeRequest("POST", endpoint, otherParams, true, responseType);
   }
 
   async runDataTask(taskPayload: Record<string, any>): Promise<any> {

@@ -1,28 +1,66 @@
 import { useState } from "react";
-import { useDataContext } from "../../context/DataContext";
 import ExportButton from "./export-button";
 import ExportDataDialog from "./export-data-dialog";
 import { client } from "../../../api/DuftHttpClient/local-storage-functions";
+import config from "../../../config";
 
-function ExportData() {
-  const { query, searchText, searchColumns, sortColumn } = useDataContext();
+interface ExportDataProps {
+  query?: string;
+  searchText?: string; 
+  searchColumns?: string;
+  sortColumn?: string;
+  pageSize?: number;
+  currentPage?: number;
+  dataConnectionId?: string;
+}
+
+function ExportData({ 
+  query, 
+  searchText, 
+  searchColumns, 
+  sortColumn, 
+  pageSize,
+  currentPage = 1
+}: ExportDataProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleExport = async (format: string, scope: string) => {
     try {
-      const requestPayload = {
+      if (!query) {
+        throw new Error('Query is required for export');
+      }
+
+      const basePayload = {
         query,
-        format: format.toLowerCase(),
-        // Only include filters/search/sort if we want filtered data
-        ...(scope === "filtered" && {
-          search_text: searchText,
-          search_columns: searchColumns,
-          sort_column: sortColumn
-        })
+        data_connection_id: config.dataConnection || "ANA",
+        current_page: currentPage
       };
 
-      const response = await client.getQueryData(requestPayload);
-      
+      // For filtered data, include search and sort parameters
+      if (scope === "filtered") {
+        const filterParams: Record<string, any> = {};
+        if (searchText) filterParams.search_text = searchText;
+        if (searchColumns) filterParams.search_columns = searchColumns;
+        if (sortColumn) filterParams.sort_column = sortColumn;
+        if (pageSize) {
+          const numPageSize = Number(pageSize);
+          if (!isNaN(numPageSize) && numPageSize > 0) {
+            filterParams.page_size = numPageSize;
+          }
+        }
+
+        Object.assign(basePayload, filterParams);
+      }
+
+      const response = await client.getQueryData({
+        ...basePayload,
+        format: format.toLowerCase()
+      });
+
+      if (!response) {
+        throw new Error('No response received from server');
+      }
+
       const url = window.URL.createObjectURL(new Blob([response]));
       const link = document.createElement('a');
       
@@ -37,7 +75,7 @@ function ExportData() {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error exporting data:', error);
+      console.error('Export error:', error);
     }
   };
 
