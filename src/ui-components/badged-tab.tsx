@@ -1,10 +1,12 @@
+import { FC } from "react";
 import { Tabs, Badge } from "flowbite-react";
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
+import { DuftTabset } from "./tab-components";
 
-export function BadgedTab() {
+export const BadgedTab: FC = () => {
   return (
-    <Tabs aria-label="Default tabs" variant="underline">
+    <DuftTabset>
       <Tabs.Item
         active
         title={
@@ -19,6 +21,7 @@ export function BadgedTab() {
           Profile tab's associated content
         </span>
       </Tabs.Item>
+
       <Tabs.Item
         title={
           <div className="flex items-center gap-2">
@@ -32,6 +35,7 @@ export function BadgedTab() {
           Dashboard tab's associated content
         </span>
       </Tabs.Item>
+
       <Tabs.Item
         title={
           <div className="flex items-center gap-2">
@@ -45,6 +49,7 @@ export function BadgedTab() {
           Settings tab's associated content
         </span>
       </Tabs.Item>
+
       <Tabs.Item
         title={
           <div className="flex items-center gap-2">
@@ -58,6 +63,6 @@ export function BadgedTab() {
           Contacts tab's associated content
         </span>
       </Tabs.Item>
-    </Tabs>
+    </DuftTabset>
   );
-}
+};
