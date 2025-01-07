@@ -21,7 +21,7 @@ const CascadeNode: React.FC<CascadeNodeProps> = ({
         parentId,
         label,
         options,
-        data,
+        data: data as { value: number }[],
         detailsViewQuery,
       };
       addCascadeNode(nodeData);

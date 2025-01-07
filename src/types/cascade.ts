@@ -22,10 +22,10 @@ export type Cascade = {
 };
 
 export type CascadeNodeProps = {
-  id: string;
-  parentId: string;
-  label: string;
-  data: { value: number }[];
+  id?: string;
+  parentId?: string;
+  label?: string;
+  data?: { value: number }[];
   options?: {
     nodeBGColorHover?: string;
     borderColorHover?: string;
