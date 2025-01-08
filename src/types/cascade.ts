@@ -1,27 +1,40 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type Cascade = {
-  id: string;
-  options?: any;
-  data: any;
-  children?: any;
+
+export type CascadeContent = {
+  label: string;
+  value: number;
+  nodeId: string;
+  query: string;
 };
 
-//  TO-DO: Revert to the type below
+export type CascadeColorOptions = {
+  nodeBGColorHover?: string;
+  borderColorHover?: string;
+  nodeBGColor?: string;
+};
 
-// export type CascadeData = {
-//   label: string;
-//   query: string;
-// };
+export type Cascade = {
+  id: string;
+  parentId: string;
+  data: CascadeContent;
+  options?: CascadeColorOptions;
+  children?: Cascade[];
+};
 
-// export type CascadeOptions = {
-//   nodeBGColorHover?: string;
-//   borderColorHover?: string;
-//   nodeBGColor?: string;
-// };
+export type CascadeNodeProps = {
+  id?: string;
+  parentId?: string;
+  label?: string;
+  data?: { value: number }[];
+  options?: {
+    nodeBGColorHover?: string;
+    borderColorHover?: string;
+    nodeBGColor?: string;
+  };
+  detailsViewQuery?: string;
+  children?: React.ReactNode;
+};
 
-// export type Cascade = {
-//   id: string;
-//   data: CascadeData;
-//   options?: CascadeOptions;
-//   children?: Cascade[];
-// };
+export type CascadeChartProps = {
+  children?: React.ReactNode;
+};
