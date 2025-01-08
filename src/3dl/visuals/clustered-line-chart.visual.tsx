@@ -29,7 +29,7 @@ const ClusteredLineChart = ({
 
   if (!data || !Array.isArray(data) || !data.length) {
     const content = (
-      <EmptyState message="No data available for percent stacked bar chart" />
+      <EmptyState message="No data available for clustered line chart" />
     );
     return Container ? (
       <Container header={""} {...props}>
