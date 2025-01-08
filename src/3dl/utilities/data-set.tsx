@@ -157,7 +157,10 @@ const Dataset: React.FC<DataSetProps> = ({
         handleSearchChange,
         handleSortChange,
         searchColumns,
+        searchText,
+        sortColumn: sortText,
         pageSize,
+        currentPage,
       }}
     >
       {children}
