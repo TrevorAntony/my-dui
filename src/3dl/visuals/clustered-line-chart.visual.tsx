@@ -2,6 +2,7 @@ import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
+import EmptyState from "../ui-elements/empty-state";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 import type { VisualProps } from "../../types/visual-props";
 type DataItem = {
@@ -12,16 +13,31 @@ type DataItem = {
 const ClusteredLineChart = ({
   container: Container,
   header,
-  subHeader = header,
+  subHeader = "",
   userOptions = {},
   exportData,
   detailsComponent,
   resize,
+  ...props
 }: VisualProps) => {
   const theme = useThemeContext();
-  const { data } = useDataContext();
-  if (!data || !Array.isArray(data) || !data?.length) {
+  const { data, loading } = useDataContext();
+
+  if (loading) {
     return <ChartSkeleton />;
+  }
+
+  if (!data || !Array.isArray(data) || !data.length) {
+    const content = (
+      <EmptyState message="No data available for percent stacked bar chart" />
+    );
+    return Container ? (
+      <Container header={""} {...props}>
+        {content}
+      </Container>
+    ) : (
+      content
+    );
   }
 
   const categories = (data as DataItem[]).map((item) => item.category);
@@ -60,8 +76,9 @@ const ClusteredLineChart = ({
       opacity: 1,
     },
     legend: {
-      position: "top",
+      position: "bottom",
     },
+    colors: ["#00E396", "#FF4560", "#775DD0", "#FEB019"],
   };
   let mergedOptions = deepMerge(deepCopy(options), deepCopy(apexOptions));
   mergedOptions = deepMerge(mergedOptions, userOptions);

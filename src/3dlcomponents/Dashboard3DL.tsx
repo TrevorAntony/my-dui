@@ -284,6 +284,20 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
                 />
               </ErrorBoundary>
             ),
+            ClusteredLineChart: (
+              props: React.ComponentProps<typeof ClusteredLineChart>
+            ) => (
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <ClusteredLineChart
+                  {...(props as React.ComponentProps<
+                    typeof ClusteredLineChart
+                  >)}
+                  container={
+                    CardComponent as React.ComponentType<ContainerComponentProps>
+                  }
+                />
+              </ErrorBoundary>
+            ),
             ClusteredBarChart: (
               props: React.ComponentProps<typeof ClusteredBarChart>
             ) => (
