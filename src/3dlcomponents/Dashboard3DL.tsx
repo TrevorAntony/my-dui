@@ -51,7 +51,7 @@ import {
 } from "../ui-components/grid-components";
 import useDuftQuery from "./resources/useDuftQuery";
 import { DuftTabset, DuftTab } from "../ui-components/tab-components";
-import { BadgedTab, BadgedDuftTab } from "../ui-components/badged-tab";
+import { CustomDuftTabSet, CustomDuftTab } from "../ui-components/custom-tab-components";
 import DuftTile from "../components/duft-tile";
 import DuftFilter from "../ui-components/filter-components";
 import DuftSingleView from "../ui-components/table-components";
@@ -312,8 +312,8 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
             ),
             TabSet: DuftTabset,
             Tab: DuftTab,
-            BadgedTab,
-            BadgedDuftTab,
+            CustomTabSet: CustomDuftTabSet,
+            CustomTab: CustomDuftTab,
             PreviewPage,
             CascadeNode,
             JSONVisual,
