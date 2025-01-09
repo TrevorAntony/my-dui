@@ -9,11 +9,30 @@ import React, {
 import clsx from "clsx";
 import iconMap from "../helpers/tab-icons";
 import { useDataContext } from "../3dl/context/DataContext";
+import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
+import Dataset from "../3dl/utilities/data-set";
+
+interface DataItem {
+  value: number;
+}
+
+const CustomDuftBadge: FC = () => {
+  const { data } = useDataContext();
+  if (!data || data.length === 0) {
+    return <></>;
+  }
+  const dataItem = (data as DataItem[])[0].value;
+  return (
+    <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-highlight-150 text-default dark:bg-highlight-700">
+      {dataItem}
+    </span>
+  );
+};
 
 interface CustomDuftTabProps {
   title: string;
   icon?: string;
-  badgeContent?: string;
+  badgeQuery?: string;
   active?: boolean;
   onClick?: () => void;
   children: ReactNode;
@@ -22,13 +41,11 @@ interface CustomDuftTabProps {
 const CustomDuftTab: FC<CustomDuftTabProps> = ({
   title,
   icon,
-  badgeContent,
+  badgeQuery,
   active = false,
   onClick,
 }) => {
-  const { data } = useDataContext();
   const Icon = icon ? iconMap[icon] : null;
-  console.log("Hello Data: ", data);
 
   return (
     <button
@@ -42,10 +59,10 @@ const CustomDuftTab: FC<CustomDuftTabProps> = ({
     >
       {Icon && <Icon className="w-6 h-6" />}
       <span className="text-base">{title}</span>
-      {badgeContent && (
-        <span className="ml-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-highlight-150 text-default dark:bg-highlight-700">
-          {badgeContent}
-        </span>
+      {badgeQuery && (
+        <Dataset useQuery={useDuftQuery} query={badgeQuery}>
+          <CustomDuftBadge />
+        </Dataset>
       )}
     </button>
   );
