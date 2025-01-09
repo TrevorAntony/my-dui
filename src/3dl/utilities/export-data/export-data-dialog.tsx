@@ -5,7 +5,6 @@ export interface ExportDataDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onExport: (format: string, scope: string) => void;
-  data?: any; // Data to be exported
 }
 
 const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
@@ -13,7 +12,7 @@ const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
   onClose,
   onExport,
 }) => {
-  const [format, setFormat] = useState("excel");
+  const [format, setFormat] = useState("csv");
   const [scope, setScope] = useState("filtered");
 
   const handleExport = () => {
@@ -35,7 +34,7 @@ const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
             <label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
               Data to export:
             </label>
-            <Select 
+            <Select
               className="flex-1"
               value={scope}
               onChange={(e) => setScope(e.target.value)}
@@ -48,22 +47,22 @@ const ExportDataDialog: React.FC<ExportDataDialogProps> = ({
             <label className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
               Data format:
             </label>
-            <Select 
+            <Select
               className="flex-1"
               value={format}
               onChange={(e) => setFormat(e.target.value)}
             >
-              <option value="excel">Excel</option>
+              <option value="json">JSON</option>
               <option value="csv">CSV</option>
             </Select>
           </div>
         </div>
       </Modal.Body>
       <Modal.Footer className="flex justify-end gap-4">
-        <Button color="secondary" onClick={handleExport}>
+        <Button color="primary" onClick={handleExport}>
           Export
         </Button>
-        <Button color="primary" onClick={onClose}>
+        <Button color="secondary" onClick={onClose}>
           Cancel
         </Button>
       </Modal.Footer>
