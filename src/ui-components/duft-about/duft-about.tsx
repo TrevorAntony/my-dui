@@ -1,10 +1,12 @@
 /* eslint-disable tailwindcss/no-custom-classname */
-import { Button, Tabs } from "flowbite-react";
+import { Button, Tabs, Spinner } from "flowbite-react";
 import { HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { Modal } from "flowbite-react";
 import flowbiteTheme from "../../flowbite-theme";
 import { useAppState } from "../../context/AppStateContext";
+import { downloadLogs, useLogFile } from "../../hooks/useLogFile";
+import ExportButton from "../../3dl/utilities/export-data/export-button";
 
 interface DuftHeaderProps {
   version?: string;
@@ -15,12 +17,15 @@ const DuftHeader: React.FC<DuftHeaderProps> = ({
 }: {
   version: string;
 }) => {
+  const {
+    state: { config },
+  } = useAppState();
   return (
     <div className="text-default bg-highlight-100 dark:bg-highlight-900 mb-4 flex w-full items-start justify-between rounded-lg p-4">
       <div>
         <div>
           <h3 className="text-highlight-800 dark:text-highlight-200 pb-1 text-2xl font-semibold">
-            DUFT Version {version}
+            DUFT Version {config?.version || version}
           </h3>
           Proudly developed in Kenya, Uganda, Tanzania, and Namibia <br />
           Institute for Global Health Sciences <br />
@@ -138,6 +143,8 @@ const AboutDlg = ({
     state: { config },
   } = useAppState();
 
+  const { logs, loading, error } = useLogFile(isOpen);
+
   return (
     <Modal show={isOpen} onClose={() => onClose()} position="center" size="6xl">
       <Modal.Header>About DUFT</Modal.Header>
@@ -145,7 +152,7 @@ const AboutDlg = ({
         <div className="flex h-[400px] flex-col overflow-hidden">
           <Tabs aria-label="Default tabs" variant="pills" theme={customTheme}>
             <Tabs.Item active title="About DUFT" icon={MdDashboard}>
-              <DuftHeader version="1.0.4" />
+              <DuftHeader />
               <div className="text-default pt-2">
                 <h3 className="pb-4 text-xl font-semibold">About DUFT</h3>
                 <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
@@ -164,7 +171,7 @@ const AboutDlg = ({
             </Tabs.Item>
             <Tabs.Item title="Hall of Fame" icon={HiUserCircle}>
               <div className="w-full">
-                <DuftHeader version="1.0.4" />
+                <DuftHeader />
                 <div className="text-default pt-2">
                   <h3 className="text-xl font-semibold">Credits</h3>
                   <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -275,13 +282,36 @@ const AboutDlg = ({
             </Tabs.Item>
             <Tabs.Item title="System" disabled={true}></Tabs.Item>
             <Tabs.Item title="Log File" icon={MdDashboard}>
-              <div className="text-default mb-4  p-4">
+              <div className="text-default mb-4 p-4">
                 <div>
-                  <div>
+                  <div className="flex items-center justify-between">
                     <h3 className="text-highlight-800 dark:text-highlight-200 pb-1 text-2xl font-semibold">
                       Log File
                     </h3>
-                    <div className="pt-4">The log file will go here</div>
+                    {!loading && !error && logs.length > 0 && (
+                      <div className="ml-2">
+                        <ExportButton
+                          onClick={() => downloadLogs(logs)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
+                    {loading ? (
+                      <div className="flex justify-center p-4">
+                        <Spinner size="lg" />
+                      </div>
+                    ) : error ? (
+                      <div className="text-red-500">{error}</div>
+                    ) : (
+                      <div className="max-h-[300px] overflow-x-auto overflow-y-auto font-mono text-sm text-gray-600 dark:text-gray-300">
+                        {logs.map((log, index) => (
+                          <div key={index} className="whitespace-nowrap py-1">
+                            {log}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

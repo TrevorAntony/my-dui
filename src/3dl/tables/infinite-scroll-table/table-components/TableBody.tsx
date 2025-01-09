@@ -21,15 +21,14 @@ const TableBody: React.FC<TableBodyProps> = ({
     {data?.map((row) => (
       <tr
         key={row.id}
-        className="border-b bg-white hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+        className="border-b bg-white hover:bg-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
       >
         {headers
           ?.filter((header) => visibleColumns[header])
           .map((header) => {
             const hasMatchingChild = React.Children.toArray(children).some(
               (child) =>
-                React.isValidElement(child) &&
-                child.props.columnName === header,
+                React.isValidElement(child) && child.props.columnName === header
             );
 
             const formatDate = (value: string) => {

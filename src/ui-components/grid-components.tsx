@@ -26,7 +26,7 @@ const DuftGrid: React.FC<DuftGridProps> = ({ children, ...props }) => {
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
           ? React.cloneElement(child, { ...props })
-          : child,
+          : child
       )}
     </div>
   );
@@ -60,7 +60,7 @@ const DuftGridFullRow: React.FC<DuftGridFullRowProps> = ({
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
           ? React.cloneElement(child, { ...props })
-          : child,
+          : child
       )}
     </div>
   );
@@ -82,7 +82,7 @@ const DuftGridHeader: React.FC<RowProps> = ({ children, small }) => {
 
 const DuftSubheader: React.FC<RowProps> = ({ children }) => {
   const className =
-    "mt-0 text-sm font-medium text-gray-800 dark:text-gray-300 md:mt-6";
+    "mt-0 text-lg font-medium text-gray-800 dark:text-gray-300 md:mt-6";
 
   return (
     <div className="flex justify-start align-text-bottom md:justify-end">

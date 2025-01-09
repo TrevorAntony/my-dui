@@ -18,6 +18,7 @@ interface PivotTableProps {
   exportData?: string;
   detailsComponent?: React.ReactNode;
   resize?: string;
+  DataStringQuery?: string;
 }
 
 const PivotTable: FC<PivotTableProps> = ({
@@ -30,6 +31,7 @@ const PivotTable: FC<PivotTableProps> = ({
   exportData,
   detailsComponent,
   resize = "false",
+  DataStringQuery,
 }) => {
   const initialPivotRows = pivotRows;
   const initialPivotCols = pivotCols;
@@ -109,6 +111,7 @@ const PivotTable: FC<PivotTableProps> = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      DataStringQuery={DataStringQuery}
     >
       {wrappedContent}
     </ContainerComponent>

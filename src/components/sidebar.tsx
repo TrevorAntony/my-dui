@@ -3,7 +3,7 @@ import config from "../config";
 import classNames from "classnames";
 import { Button, Modal, Sidebar } from "flowbite-react";
 import type { FC } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   HiChartPie,
   HiClipboard,
@@ -18,10 +18,10 @@ import { SidebarNavLink } from "./sidebar-nav-link";
 import SidebarCollapse from "./sidebar-collapse";
 import SidebarGroup from "./sidebar-group";
 import SystemSidebar from "./navigation-sidebar";
-import DuftModal from "./duft-modal";
 import { renderModalContent } from "../helpers/modalContentHelper";
 import SettingsDisplay from "../ui-components/duft-settings/duft-settings-components/settings-display";
 import AboutDlg from "../ui-components/duft-about/duft-about";
+import DataTaskDialog from "./data-task-dialog";
 
 const ExampleSidebar: FC = function () {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =
@@ -203,9 +203,18 @@ const BottomMenu: FC = function () {
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<string[]>([]);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const eventSource = new EventSource("http://127.0.0.1:8000/sse/dte/");
+    if (contentRef.current) {
+      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+    }
+  }, [modalContent]);
+
+  useEffect(() => {
+    const eventSource = new EventSource(
+      `${config.apiBaseUrl || window.location.origin}/sse/dte/`
+    ); //use base url
 
     eventSource.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
@@ -279,19 +288,18 @@ const BottomMenu: FC = function () {
       <div className="flex items-center justify-center gap-x-5">
         <div style={divStyle}></div>
       </div>
-
-      <DuftModal
+      <DataTaskDialog
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title="Data Refresh"
         executeButtonText="Run data task"
         disableButtons={data?.isRunning}
-        modalWidth="narrow"
-        modalHeight="small"
-        resize="false"
+        hideCloseButton={data?.isRunning}
       >
-        <div className="h-[180px] overflow-y-auto pb-8">{content}</div>
-      </DuftModal>
+        <div ref={contentRef} className="h-[180px] overflow-y-auto pb-8">
+          {content}
+        </div>
+      </DataTaskDialog>
     </>
   );
 };

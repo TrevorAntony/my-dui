@@ -2,7 +2,7 @@ import type { Config } from "../../context/types";
 import DispatchService from "../../services/dispatchService";
 import { DuftHttpClient } from "./DuftHttpClient";
 
-const client = new DuftHttpClient(
+export const client = new DuftHttpClient(
   "http://127.0.0.1:8000/api/v2",
   getTokenFromLocalStorage,
   setTokenInLocalStorage,

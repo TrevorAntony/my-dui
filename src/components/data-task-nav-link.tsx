@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Sidebar } from "flowbite-react";
-import DuftModal from "./duft-modal";
 import { executeDataTask } from "../helpers/data-task-helpers";
 import type { DataTaskItem } from "./types";
+import DataTaskDialog from "./data-task-dialog";
 
 type DataTaskNavLinkProps = {
   task: DataTaskItem;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  hideCloseButton?: boolean;
 };
 
 export const DataTaskNavLink: React.FC<DataTaskNavLinkProps> = ({
@@ -28,34 +29,36 @@ export const DataTaskNavLink: React.FC<DataTaskNavLinkProps> = ({
   };
 
   const handleExecute = async () => {
-    const result = await executeDataTask(task.task);
-    if (result?.message) {
-      setIsOpen(false);
-    } else {
+      const result = await executeDataTask(task.task);
+      if (result?.message) {
+        setIsOpen(false);
+      } else {
       setError("Data task operation failed.");
     }
   };
 
   return (
     <>
-      <Sidebar.Item as="div" icon={Icon} onClick={handleClick}>
+      <Sidebar.Item
+        as="div"
+        icon={Icon}
+        onClick={handleClick}
+        className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+      >
         {task.title}
       </Sidebar.Item>
 
-      <DuftModal
+      <DataTaskDialog
         isOpen={isOpen}
         onClose={handleClose}
         onExecute={handleExecute}
         title={task.title}
         executeButtonText="Execute"
-        modalWidth="narrow"
-        modalHeight="tiny"
         cancelButtonText="Cancel"
-        resize="false"
       >
         <p>Are you sure?</p>
         {error && <p className="text-red-600">{error}</p>}
-      </DuftModal>
+      </DataTaskDialog>
     </>
   );
 };

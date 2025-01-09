@@ -117,7 +117,8 @@ export class DuftHttpClient {
     method: string,
     endpoint: string,
     body?: Record<string, any>,
-    forceAuth?: boolean
+    forceAuth?: boolean,
+    responseType: "json" | "blob" = "json"
   ): Promise<any> {
     const isPublicRoute = this.publicRoutes.some((route) =>
       endpoint.startsWith(`${this.baseUrl}${route}`)
@@ -132,11 +133,6 @@ export class DuftHttpClient {
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
-
-    console.log(
-      `Making request to ${endpoint} with method ${method} and headers`,
-      headers
-    );
 
     const response = await fetch(endpoint, {
       method,
@@ -157,7 +153,7 @@ export class DuftHttpClient {
             if (token) {
               headers["Authorization"] = `Bearer ${token}`;
               console.log("Retrying request with new token:", token);
-              return this.makeRequest(method, endpoint, body, forceAuth); // Retry with refreshed token
+              return this.makeRequest(method, endpoint, body, forceAuth, responseType); // Retry with refreshed token
             }
           } catch (error) {
             console.error(
@@ -188,7 +184,7 @@ export class DuftHttpClient {
       }
     }
 
-    return await response.json();
+    return responseType === "blob" ? response.blob() : response.json();
   }
 
   async getCurrentConfig(useAuthentication: boolean = true): Promise<Config> {
@@ -217,11 +213,10 @@ export class DuftHttpClient {
   }
 
   async getQueryData(requestPayload: Record<string, any>): Promise<any> {
-    return this.makeRequest(
-      "POST",
-      `${this.baseUrl}/run-query`,
-      requestPayload
-    );
+    const { format, ...otherParams } = requestPayload;
+    const endpoint = `${this.baseUrl}/run-query/${format || 'json'}`;
+    const responseType = format === "csv" ? "blob" : "json";
+    return this.makeRequest("POST", endpoint, otherParams, true, responseType);
   }
 
   async runDataTask(taskPayload: Record<string, any>): Promise<any> {
@@ -266,5 +261,20 @@ export class DuftHttpClient {
       "GET",
       `${this.baseUrl}/data-connections/${connectionId}/parameters`
     );
+  }
+
+  async updateConnectionParameters(
+    connectionId: string,
+    parameters: Record<string, any>
+  ): Promise<any> {
+    return this.makeRequest(
+      "POST",
+      `${this.baseUrl}/data-connections/${connectionId}/parameters`,
+      parameters
+    );
+  }
+
+  async getLogFile(): Promise<{ content: string[] }> {
+    return this.makeRequest("GET", `${this.baseUrl}/log`);
   }
 }

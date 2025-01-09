@@ -151,21 +151,6 @@ pack_conda_env() {
   local server_app_dir=$1
   local env_name=$2
 
-  # Check if conda-pack is installed, and install it if necessary
-  write_color "Checking if conda-pack is installed..." Blue
-  if ! conda list | grep -q "conda-pack"; then
-    write_color "Installing conda-pack..." Blue
-    conda install -c conda-forge conda-pack -y
-    if [ $? -eq 0 ]; then
-      write_color "conda-pack successfully installed." Green
-    else
-      write_color "Failed to install conda-pack." Red
-      exit 1
-    fi
-  else
-    write_color "conda-pack is already installed." Green
-  fi
-
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
   write_color "Packing Conda environment '$env_name' into portable-venv.tar.gz..." Blue
   tar -czf "${server_app_dir}/portable-venv.tar.gz" --strip-components=1 -C "$server_app_dir" "$env_name"

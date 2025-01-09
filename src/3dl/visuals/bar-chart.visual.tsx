@@ -1,12 +1,15 @@
 import BaseXYChart from "../base-visuals/base-xy-chart";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 const BarChart = ({
   container: Container,
   header = "Bar Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
+  children,
   resize,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="bar" />;
@@ -18,6 +21,8 @@ const BarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

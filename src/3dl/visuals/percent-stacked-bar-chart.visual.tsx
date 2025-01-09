@@ -4,6 +4,7 @@ import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers"; // Importing deepCopy and deepMerge
 import EmptyState from "../ui-elements/empty-state";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 type DataItem = {
@@ -20,6 +21,8 @@ const PercentStackedBarChart = ({
   exportData,
   detailsComponent,
   resize,
+  DataStringQuery,
+  children,
   ...props
 }: VisualProps) => {
   const theme = useThemeContext(); // Accessing the theme context
@@ -29,7 +32,7 @@ const PercentStackedBarChart = ({
     return <ChartSkeleton />;
   }
 
-  if (!data || !Array.isArray(data) || !data.length) {
+  if (!loading && Array.isArray(data) && data.length === 0) {
     const content = (
       <EmptyState message="No data available for percent stacked bar chart" />
     );
@@ -40,6 +43,9 @@ const PercentStackedBarChart = ({
     ) : (
       content
     );
+  }
+  if (!data) {
+    return null;
   }
 
   // Extract categories
@@ -126,6 +132,8 @@ const PercentStackedBarChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

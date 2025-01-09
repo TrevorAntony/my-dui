@@ -1,13 +1,16 @@
 import BaseCircularChart from "../base-visuals/base-circular-chart";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 
 const PolarAreaChart = ({
   container: Container,
   header = "Polar Area Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   resize,
+  children,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseCircularChart {...props} chartType="polarArea" />;
@@ -19,6 +22,8 @@ const PolarAreaChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

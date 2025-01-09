@@ -3,6 +3,7 @@ import {
   BarChart,
   AreaChart,
   CascadeChart,
+  CascadeNode,
   ClusteredBarChart,
   ClusteredLineChart,
   DonutChart,
@@ -25,6 +26,7 @@ export interface DetailsComponentRegistry {
   "line-chart": typeof LineChart;
   "area-chart": typeof AreaChart;
   "cascade-chart": typeof CascadeChart;
+  "cascade-node": typeof CascadeNode;
   "clustered-bar-chart": typeof ClusteredBarChart;
   "clustered-line-chart": typeof ClusteredLineChart;
   "donut-chart": typeof DonutChart;
@@ -47,6 +49,7 @@ const detailsComponentRegistry: DetailsComponentRegistry = {
   "line-chart": LineChart,
   "area-chart": AreaChart,
   "cascade-chart": CascadeChart,
+  "cascade-node": CascadeNode,
   "clustered-bar-chart": ClusteredBarChart,
   "clustered-line-chart": ClusteredLineChart,
   "donut-chart": DonutChart,

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDataContext } from "../3dl/context/DataContext";
 import { HiOutlineExternalLink } from "react-icons/hi";
-import DuftModal from "./duft-modal";
 import TileSkeleton from "../ui-components/tile-skeleton";
 import { Button, Modal } from "flowbite-react";
 
@@ -15,13 +14,7 @@ interface DuftTileProps {
   resize?: string;
 }
 
-const DuftTile: React.FC<DuftTileProps> = ({
-  title,
-  children,
-  modalWidth,
-  modalHeight,
-  resize = "false",
-}) => {
+const DuftTile: React.FC<DuftTileProps> = ({ title, children }) => {
   const { data } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -118,17 +111,6 @@ const DuftTile: React.FC<DuftTileProps> = ({
           <HiOutlineExternalLink style={iconStyle} size={20} />
         )}
       </div>
-      <DuftModal
-        isOpen={false}
-        onClose={handleCloseModal}
-        title={title}
-        modalWidth={modalWidth}
-        modalHeight={modalHeight}
-        resize={resize}
-      >
-        {children}
-      </DuftModal>
-
       <Modal
         show={isModalOpen}
         onClose={() => handleCloseModal()}

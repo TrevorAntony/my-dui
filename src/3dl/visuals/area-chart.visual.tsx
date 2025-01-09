@@ -1,13 +1,16 @@
 import BaseXYChart from "../base-visuals/base-xy-chart";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 
 const AreaChart = ({
   container: Container,
   header = "Area Chart",
-  subHeader = header,
+  subHeader = "",
   exportData,
   detailsComponent,
   resize,
+  children,
+  DataStringQuery,
   ...props
 }: VisualProps) => {
   const content = <BaseXYChart {...props} chartType="area" />;
@@ -19,6 +22,8 @@ const AreaChart = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </Container>

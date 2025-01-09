@@ -12,7 +12,7 @@ module.exports = {
   },
   experimental: {
     optimizeUniversalDefaults: true, // Optional, for better optimisation
-  }, 
+  },
   theme: {
     colors: {
       primary: {
@@ -131,20 +131,19 @@ module.exports = {
           DEFAULT: "var(--highlight-color)",
           dark: "#ffbfd7",
         },
-      },      
+      },
       textColor: {
         DEFAULT: "#1e293b", // Default text colour for light mode
-        dark: "#f8fafc",    // Default text colour for dark mode
+        dark: "#f8fafc", // Default text colour for dark mode
         primary: {
           DEFAULT: "#2563eb", // Your primary colour
-          dark: "#93c5fd",    // Lighter variant for dark mode
+          dark: "#93c5fd", // Lighter variant for dark mode
         },
         highlight: {
           DEFAULT: "var(--highlight-color)",
           dark: "#ffbfd7",
         },
       },
-
     },
   },
   plugins: [require("flowbite/plugin"), require("@tailwindcss/typography")],

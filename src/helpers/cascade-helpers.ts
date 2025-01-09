@@ -1,48 +1,64 @@
-import config from "../config";
+import type { Cascade, CascadeNodeProps } from "../types/cascade";
 
-async function fetchCascade(
-  query: string,
-  filters: Record<string, string> = {}
-) {
-  let modifiedQuery = query;
+export const cleanEmptyChildren = (node: Cascade) => {
+  if (!node.children?.length) {
+    delete node.children;
+  } else {
+    node.children.forEach(cleanEmptyChildren);
+  }
+};
 
-  const placeholders = query.match(/\$[a-zA-Z_]+/g) || [];
-  placeholders.forEach((placeholder: string) => {
-    const filterKey = placeholder.substring(1);
-    const filterValue = filters[filterKey] || "";
-    modifiedQuery = modifiedQuery.replace(placeholder, filterValue);
+const buildLookupTable = (
+  cascadeArray: CascadeNodeProps[],
+): Record<string, Cascade> => {
+  const lookup: Record<string, Cascade> = {};
+
+  cascadeArray.forEach((item) => {
+    lookup[item.id] = {
+      id: item.id,
+      parentId: item.parentId,
+      data: {
+        nodeId: item.id,
+        label: item.label,
+        value: item.data ? item.data[0].value : 0,
+        query: item.detailsViewQuery,
+      },
+      options: {
+        nodeBGColorHover: item.options?.nodeBGColorHover || "#b0decb",
+        nodeBGColor: item.options?.nodeBGColor || "#eff8f4",
+        borderColorHover: item.options?.borderColorHover || "#90c6a4",
+      },
+      children: [],
+    };
   });
 
-  const payload = {
-    query: modifiedQuery,
-    data_connection_id: config.dataConnection,
-  };
+  return lookup;
+};
 
-  try {
-    const response = await fetch(`${config.apiBaseUrl}/run-query`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+const assignChildrenToParents = (
+  cascadeArray: CascadeNodeProps[],
+  lookup: Record<string, Cascade>,
+) => {
+  let root: Cascade | null = null;
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        "Network response was not ok: " +
-          result.message +
-          "\n" +
-          "Original query: " +
-          modifiedQuery
-      );
+  cascadeArray.forEach((item) => {
+    if (item.parentId) {
+      lookup[item.parentId]?.children?.push(lookup[item.id]);
+    } else {
+      root = lookup[item.id];
     }
+  });
 
-    return result;
-  } catch (error) {
-    throw new Error("Error fetching data: " + (error as Error).message);
-  }
-}
+  return root;
+};
 
-export default fetchCascade;
+export const createCascadeObject = (
+  cascadeArray: CascadeNodeProps[],
+  cleanEmptyChildren: (node: Cascade) => void,
+): Cascade | null => {
+  const lookup = buildLookupTable(cascadeArray);
+  const root = assignChildrenToParents(cascadeArray, lookup);
+
+  if (root) cleanEmptyChildren(root);
+  return root;
+};

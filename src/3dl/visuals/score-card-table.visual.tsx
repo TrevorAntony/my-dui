@@ -5,18 +5,21 @@ import { Box } from "@mantine/core";
 import { useDataContext } from "../context/DataContext";
 import { useLayout } from "../utilities/Dashboard";
 import type { VisualProps } from "../../types/visual-props";
+import getInfoTagContents from "../../helpers/get-info-tag-content";
 import EmptyState from "../ui-elements/empty-state";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 
 const ScoreCardTable = ({
   container: ContainerComponent,
   header = "Score Card Table",
-  subHeader = header,
+  subHeader = "",
   tableMaxHeight = "300px",
   showToolbar,
   exportData,
   detailsComponent,
   resize = "false",
+  DataStringQuery,
+  children,
   ...props
 }: VisualProps) => {
   const { data, loading } = useDataContext();
@@ -25,7 +28,7 @@ const ScoreCardTable = ({
     return <ChartSkeleton />;
   }
 
-  if (!data || !Array.isArray(data) || data.length === 0) {
+  if (!loading && Array.isArray(data) && data.length === 0) {
     const content = (
       <EmptyState message="No data available for score card table" />
     );
@@ -36,6 +39,9 @@ const ScoreCardTable = ({
     ) : (
       content
     );
+  }
+  if (!data) {
+    return null;
   }
 
   const columns = Object.keys(data[0])
@@ -133,6 +139,8 @@ const ScoreCardTable = ({
       exportData={exportData}
       detailsComponent={detailsComponent}
       resize={resize}
+      infoTagContent={getInfoTagContents(children)}
+      DataStringQuery={DataStringQuery}
     >
       {content}
     </ContainerComponent>

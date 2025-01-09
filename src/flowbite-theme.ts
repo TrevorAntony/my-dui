@@ -20,6 +20,16 @@ export const userDropdownTheme = {
 };
 
 const flowbiteTheme: CustomFlowbiteTheme = {
+  select: {
+    field: {
+      select: {
+        base: "block w-full border disabled:cursor-not-allowed disabled:opacity-50",
+        colors: {
+          gray: "bg-gray-50 border-gray-300 text-gray-900 focus:border-highlight-700 focus:ring-highlight-700 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-highlight-700 dark:focus:ring-highlight-700"
+        }
+      }
+    },
+  },
   
   badge: {
     root: {
@@ -42,7 +52,7 @@ const flowbiteTheme: CustomFlowbiteTheme = {
     color: {
       gray: "text-gray-900 bg-white border border-gray-200 enabled:hover:bg-gray-100 enabled:hover:text-blue-700 focus:ring-blue-700 focus:text-blue-700 dark:bg-transparent dark:text-gray-400 dark:border-gray-600 dark:enabled:hover:text-white dark:enabled:hover:bg-gray-700 focus:ring-2",
       info: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800",
-      primary: "min-w-[7.5rem] flex items-center justify-center text-white bg-highlight-600 enabled:hover:bg-highlight-800 focus:ring-4 focus:outline-none focus:ring-highlight-300 font-medium rounded-lg text-sm text-center dark:bg-highlight-600 dark:hover:bg-blue-700 dark:focus:ring-highlight-900 dark:enabled:hover:bg-highlight-700",
+      primary: "min-w-[7.5rem] flex items-center justify-center text-white bg-highlight-600 enabled:hover:bg-highlight-800 focus:ring-4 focus:outline-none focus:ring-highlight-300 font-medium rounded-lg text-sm text-center dark:bg-highlight-600 dark:hover:bg-highlight-700 dark:focus:ring-highlight-900 dark:enabled:hover:bg-highlight-700",
       secondary: "min-w-[7.5rem] flex items-center justify-center ms-3 text-sm font-medium text-gray-800 focus:outline-none bg-gray-50 rounded-lg border border-gray-300 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-600 dark:text-white dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-700",
     },
     inner: {

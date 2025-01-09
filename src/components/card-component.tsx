@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { Dataset, ExportData } from "../3dl";
 import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
@@ -8,6 +8,8 @@ import type { DetailsComponentRegistry } from "./details-component-registry";
 import { getDetailsComponent } from "./details-component-registry";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { Button, Modal } from "flowbite-react";
+import DataString from "./dashboard-meta";
+import { useDataContext } from "../3dl/context/DataContext";
 
 type MoreInfoProps = {
   text: string;
@@ -26,6 +28,8 @@ type CardComponentProps = {
   query?: string;
   detailsComponent?: string;
   resize?: string;
+  infoTagContent?: ReactNode;
+  DataStringQuery?: string;
 };
 
 const CardComponent: FC<CardComponentProps> = ({
@@ -37,13 +41,14 @@ const CardComponent: FC<CardComponentProps> = ({
   className = "",
   variant = "card",
   exportData = "false",
-  query,
   detailsComponent,
+  infoTagContent,
+  DataStringQuery,
 }) => {
   const layout = useLayout();
-  const shouldExportData = exportData === "true";
+  const shouldExportData = exportData === "true" || exportData === true;
   const isFullHeight = layout === "single-layout";
-
+  const { query, searchText, searchColumns, sortColumn, currentPage, pageSize } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const detailsComponentKey =
     detailsComponent as keyof DetailsComponentRegistry;
@@ -52,38 +57,42 @@ const CardComponent: FC<CardComponentProps> = ({
     : undefined;
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
+  // Calculate export props once and memoize them
+  const exportProps = useMemo(() => ({
+    query,
+    searchText,
+    searchColumns,
+    sortColumn,
+    pageSize: currentPage && pageSize ? currentPage * Number(pageSize) : undefined,
+    currentPage,
+  }), [query, searchText, searchColumns, sortColumn, currentPage, pageSize]);
 
   const renderContent = () => (
     <>
       {variant !== "plain" && (header || subHeader) && (
         <div className="mb-3 flex items-start justify-between">
           <div>
-            <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-              {header}
-            </h3>
+            <Dataset query={DataStringQuery} useQuery={useDuftQuery}>
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                <DataString>{header}</DataString>
+              </h3>
+            </Dataset>
             {subHeader && (
               <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
                 {subHeader}
               </span>
             )}
           </div>
-
           <div className="flex items-center space-x-2">
+            {infoTagContent ? infoTagContent : null}
             {shouldExportData && layout !== "single-layout" && (
-              <div className="self-start">
-                {query ? (
-                  <Dataset query={query} useQuery={useDuftQuery}>
-                    <ExportData />
-                  </Dataset>
-                ) : (
-                  <ExportData />
-                )}
+              <div className="self-start pl-1">
+                <ExportData {...exportProps} />
               </div>
             )}
-
             {DetailsComponent && (
               <button
-                className="dark:text-highlight-500 pl-2 pt-[1.85px]"
+                className="pl-1 pt-[1.85px] dark:text-highlight-500"
                 onClick={toggleModal}
                 title="Show Details"
               >
@@ -106,7 +115,7 @@ const CardComponent: FC<CardComponentProps> = ({
             <div className="shrink-0">
               <NavLink
                 to={moreInfo.link}
-                className="text-highlight-700 dark:text-highlight-500 inline-flex items-center rounded-md p-1 text-xs font-medium uppercase hover:bg-gray-100 dark:hover:bg-gray-700 sm:text-sm"
+                className="inline-flex items-center rounded-md p-1 text-xs font-medium uppercase text-highlight-700 hover:bg-gray-100 dark:text-highlight-500 dark:hover:bg-gray-700 sm:text-sm"
               >
                 {moreInfo.text}
                 <svg
@@ -137,7 +146,7 @@ const CardComponent: FC<CardComponentProps> = ({
         <div
           className={`flex flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${
             isFullHeight ? "mt-4 h-full min-h-screen" : "h-auto"
-          } ${className}`}
+            } ${className}`}
         >
           {renderContent()}
         </div>
@@ -145,7 +154,7 @@ const CardComponent: FC<CardComponentProps> = ({
         <div
           className={`${
             isFullHeight ? "mt-4 h-full min-h-screen" : ""
-          } ${className}`}
+            } ${className}`}
         >
           {renderContent()}
         </div>
