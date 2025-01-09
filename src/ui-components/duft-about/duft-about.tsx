@@ -5,7 +5,8 @@ import { MdDashboard } from "react-icons/md";
 import { Modal } from "flowbite-react";
 import flowbiteTheme from "../../flowbite-theme";
 import { useAppState } from "../../context/AppStateContext";
-import { useLogFile } from "../../hooks/useLogFile";
+import { downloadLogs, useLogFile } from "../../hooks/useLogFile";
+import ExportButton from "../../3dl/utilities/export-data/export-button";
 
 interface DuftHeaderProps {
   version?: string;
@@ -283,9 +284,18 @@ const AboutDlg = ({
             <Tabs.Item title="Log File" icon={MdDashboard}>
               <div className="text-default mb-4 p-4">
                 <div>
-                  <h3 className="text-highlight-800 dark:text-highlight-200 pb-1 text-2xl font-semibold">
-                    Log File
-                  </h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-highlight-800 dark:text-highlight-200 pb-1 text-2xl font-semibold">
+                      Log File
+                    </h3>
+                    {!loading && !error && logs.length > 0 && (
+                      <div className="ml-2">
+                        <ExportButton
+                          onClick={() => downloadLogs(logs)}
+                        />
+                      </div>
+                    )}
+                  </div>
                   <div className="mt-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
                     {loading ? (
                       <div className="flex justify-center p-4">

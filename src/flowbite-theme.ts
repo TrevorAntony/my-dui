@@ -20,6 +20,16 @@ export const userDropdownTheme = {
 };
 
 const flowbiteTheme: CustomFlowbiteTheme = {
+  select: {
+    field: {
+      select: {
+        base: "block w-full border disabled:cursor-not-allowed disabled:opacity-50",
+        colors: {
+          gray: "bg-gray-50 border-gray-300 text-gray-900 focus:border-highlight-700 focus:ring-highlight-700 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-highlight-700 dark:focus:ring-highlight-700"
+        }
+      }
+    },
+  },
   
   badge: {
     root: {

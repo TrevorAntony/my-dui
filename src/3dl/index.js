@@ -51,3 +51,4 @@ export { default as InfoTag } from "./utilities/info-tag/info-tag";
 export { default as HtmlSnippet } from "./visuals/html-snippet";
 export { default as DataProvider } from "./utilities/data-provider";
 export { default as QueryData } from "./utilities/query-data";
+export { default as CascadeNode } from "../components/cascade-node";

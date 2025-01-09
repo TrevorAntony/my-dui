@@ -1,213 +1,132 @@
-import { useMemo, useState, useEffect, useContext, useCallback } from "react";
-import { DashboardContext } from "../utilities/Dashboard";
-import type { DashboardState } from "../../types/dashboard";
-import ApexTree from "apextree";
-import fetchCascade from "../../helpers/cascade-helpers";
-import DuftModal from "../../components/duft-modal";
-import CascadeSkeleton from "../../ui-components/cascade-skeleton";
-import { cascadeDefaultOptions } from "../../helpers/constants";
-import type { Cascade } from "../../types/cascade";
-import { DataContextProvider } from "../context/DataContext";
-import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
+import { useState, useCallback, useEffect, useRef } from "react";
+import {
+  createCascadeObject,
+  cleanEmptyChildren,
+} from "../../helpers/cascade-helpers";
+import { defaultCascadeOptions } from "../../helpers/constants";
+import type { Cascade, CascadeNodeProps } from "../../types/cascade";
 import type { VisualProps } from "../../types/visual-props";
-import CardComponent from "../../components/card-component";
+import CascadeChartContext from "../../context/CascadeChartContext";
+import { useRenderTree } from "../../hooks/useRenderTree";
 import getInfoTagContents from "../../helpers/get-info-tag-content";
+import { Button, Modal } from "flowbite-react";
+import useDuftQuery from "../../3dlcomponents/resources/useDuftQuery";
+import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
+import Dataset from "../utilities/data-set";
+import CardComponent from "../../components/card-component";
 
 const CascadeChart = ({
   container: Container,
   header,
   subHeader = "",
-  cascadeObject,
-  direction = cascadeDefaultOptions.direction,
-  nodeWidth = cascadeDefaultOptions.nodeWidth,
-  nodeHeight = cascadeDefaultOptions.nodeHeight,
-  resize,
+  direction = defaultCascadeOptions.direction,
+  nodeWidth = defaultCascadeOptions.nodeWidth,
+  nodeHeight = defaultCascadeOptions.nodeHeight,
+  cascadeScale = "standard",
+  cascadeSearchColumn,
   exportData,
   detailsComponent,
   children,
   DataStringQuery,
 }: VisualProps) => {
-  const { state } = useContext(DashboardContext) || {
-    state: {} as DashboardState,
-  };
+  const [nodes, setNodes] = useState<CascadeNodeProps[]>([]);
   const [cascadeData, setCascadeData] = useState<Cascade | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cascadeTitle, setCascadeTitle] = useState("");
-  const [modalCascadeHeadLabels, setModalCascadeHeadLabels] = useState([]);
-  const [modalCascadeData, setModalCascadeData] = useState([]);
+  const [modalCascadeState, setModalCascadeState] = useState({
+    cascadeTitle: "",
+    cascadeDetailsQuery: "",
+  });
+  const treeContainerRef = useRef<HTMLDivElement | null>(null);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
-  const cascade = useMemo(() => cascadeObject, [cascadeObject]);
-
-  const fetchCascadeData = useCallback(
-    async (dataStructure: Record<string, unknown>) => {
-      async function processNode(node: Record<string, unknown>) {
-        const { query } = node["data"] as { query: string };
-        const queryResult = await fetchCascade(query, state.filters);
-        const result: Cascade = {
-          id: node["id"] as string,
-          options: node["options"] ? node["options"] : [],
-          data: {
-            id: node["id"],
-            label: (node["data"] as { label: string }).label,
-            details: queryResult,
-            value: queryResult.length,
-          },
+  const addCascadeNode = useCallback((nodeData: CascadeNodeProps) => {
+    setNodes((prevNodes) => {
+      const existingNodeIndex = prevNodes.findIndex(
+        (node) => node.id === nodeData.id
+      );
+      if (existingNodeIndex !== -1) {
+        const updatedNodes = [...prevNodes];
+        updatedNodes[existingNodeIndex] = {
+          ...prevNodes[existingNodeIndex],
+          data: nodeData.data,
         };
-
-        if (node["children"] && (node["children"] as unknown[]).length > 0) {
-          const childResults = await Promise.allSettled(
-            (node["children"] as Record<string, unknown>[]).map(processNode)
-          );
-
-          result.children = childResults.map((childResult, index) => {
-            if (childResult.status === "fulfilled") {
-              return childResult.value;
-            } else {
-              console.error(
-                `Error processing child node ${(
-                  node["children"] as Record<string, unknown>[]
-                )[index]?.["id"]}:`,
-                (childResult as { reason: string }).reason
-              );
-              return {
-                id:
-                  (node["children"] as Record<string, unknown>[])[index]?.[
-                    "id"
-                  ] ?? null,
-                error: true,
-                message: "Failed to fetch data",
-                children: [],
-                options: [],
-                data: {
-                  id: (node["children"] as Record<string, unknown>[])[index]?.[
-                    "id"
-                  ],
-                  label: (
-                    node["children"] as Array<{ data: { label: string } }>
-                  )?.[index]?.data.label,
-                  details: null,
-                  value: 0,
-                },
-              };
-            }
-          });
-        }
-
-        return result;
+        return updatedNodes;
       }
-
-      try {
-        setCascadeData(null);
-        const results: Cascade = await processNode(dataStructure);
-        setCascadeData(results);
-      } catch (error) {
-        console.error("Error fetching data", error);
-      }
-    },
-    [state.filters]
-  );
-
-  useEffect(() => {
-    fetchCascadeData(cascade);
-  }, [cascade, fetchCascadeData]);
-
-  useEffect(() => {
-    if (!cascadeData) {
-      return undefined;
-    }
-
-    const svgElement = document.getElementById("svg-tree");
-    if (!svgElement) {
-      console.error("Element with id 'svg-tree' not found");
-      return undefined;
-    }
-
-    const parsedNodeWidth =
-      Number(nodeWidth) || cascadeDefaultOptions.nodeWidth;
-    const parsedNodeHeight =
-      Number(nodeHeight) || cascadeDefaultOptions.nodeHeight;
-
-    const tree = new ApexTree(svgElement, {
-      ...cascadeDefaultOptions,
-      direction,
-      nodeWidth: parsedNodeWidth,
-      nodeHeight: parsedNodeHeight,
+      return [...prevNodes, nodeData];
     });
-    tree.render(cascadeData);
+  }, []);
 
-    const toggleModal = (
-      label: string,
-      details: Record<string, unknown>[],
-      headLabels: string[]
-    ) => {
-      setModalCascadeData(details);
-      setCascadeTitle(label);
-      setModalCascadeHeadLabels(headLabels);
-      setIsModalOpen(!isModalOpen);
-    };
+  useEffect(() => {
+    const updatedCascadeData = createCascadeObject(nodes, cleanEmptyChildren);
+    setCascadeData(updatedCascadeData);
+  }, [nodes]);
 
-    const traverseNodes = (node: Cascade) => {
-      const { id, label, details } = node.data;
-      const headLabels = details.length > 0 ? Object.keys(details[0]) : [];
+  const parsedNodeWidth = Number(nodeWidth) || defaultCascadeOptions.nodeWidth;
+  const parsedNodeHeight =
+    Number(nodeHeight) || defaultCascadeOptions.nodeHeight;
 
-      const nodeElement = document.getElementById(id);
+  const toggleModal = useCallback((label: string, nodeQuery: string) => {
+    setModalCascadeState((prevState) => ({
+      ...prevState,
+      cascadeTitle: label,
+      cascadeDetailsQuery: nodeQuery,
+    }));
+    setIsModalOpen((prev) => !prev);
+  }, []);
 
-      if (nodeElement) {
-        nodeElement.addEventListener("click", () => {
-          toggleModal(label, details, headLabels);
-        });
-      }
-
-      if (node.children && node.children.length > 0) {
-        node.children.forEach((child: Cascade) => traverseNodes(child));
-      }
-    };
-
-    traverseNodes(cascadeData);
-
-    return () => {
-      if (tree && typeof tree.destroy === "function") {
-        tree.destroy();
-      } else {
-        svgElement.innerHTML = "";
-      }
-    };
-  }, [cascadeData, isModalOpen, direction, nodeWidth, nodeHeight]);
-
-  if (!cascadeData) {
-    return <CascadeSkeleton />;
-  }
+  useRenderTree(
+    treeContainerRef,
+    cascadeData,
+    direction,
+    parsedNodeWidth,
+    parsedNodeHeight,
+    cascadeScale,
+    toggleModal
+  );
 
   const content = (
     <>
-      <div
-        id="svg-tree"
-        style={{
-          width: "100%",
-          maxWidth: "100%",
-          height: "auto",
-          ...cascadeDefaultOptions.canvasStyle,
-        }}
-      ></div>
-      <DuftModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title={cascadeTitle}
-        resize={resize}
+      <CascadeChartContext.Provider value={{ addCascadeNode }}>
+        {children}
+        <div
+          ref={treeContainerRef}
+          id="svg-tree"
+          style={{
+            width: "100%",
+            maxWidth: "100%",
+            height: "auto",
+            ...defaultCascadeOptions.canvasStyle,
+          }}
+        ></div>
+      </CascadeChartContext.Provider>
+      <Modal
+        show={isModalOpen}
+        onClose={() => handleCloseModal()}
+        position="center"
+        size="7xl"
       >
-        <DataContextProvider value={{ data: modalCascadeData }}>
-          <InfiniteScrollTable
-            initialColumns={modalCascadeHeadLabels.join(",")}
-            exportData={false}
-            container={CardComponent}
-            variant="plain"
-          />
-        </DataContextProvider>
-      </DuftModal>
+        <Modal.Header>{modalCascadeState.cascadeTitle}</Modal.Header>
+        <Modal.Body className="flex flex-col overflow-hidden ">
+          <Dataset
+            useQuery={useDuftQuery}
+            query={modalCascadeState.cascadeDetailsQuery}
+            pageSize={20}
+            searchColumns={cascadeSearchColumn}
+          >
+            <InfiniteScrollTable container={CardComponent} variant="plain" />
+          </Dataset>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex w-full justify-end">
+            <Button onClick={() => handleCloseModal()} color="primary">
+              Close
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 

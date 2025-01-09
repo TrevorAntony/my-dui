@@ -58,6 +58,7 @@ import DuftTile from "../components/duft-tile";
 import DuftFilter from "../ui-components/filter-components";
 import DuftSingleView from "../ui-components/table-components";
 import DuftModal from "../components/duft-modal";
+import CascadeNode from "../components/cascade-node";
 import type { ContainerComponentProps } from "../3dl/types/types";
 import SingleTableLayoutTester from "../content-components/SingleTableLayoutTester";
 import DataString from "../components/dashboard-meta";
@@ -324,6 +325,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
             TabSet: DuftTabset,
             Tab: DuftTab,
             PreviewPage,
+            CascadeNode,
             JSONVisual,
             Row: DuftGridFullRow,
             TabHeader,

@@ -30,6 +30,12 @@ export const modalViewportHeightMap = {
   large: "80vh",
 };
 
+export const cascadeScaleMap = {
+  standard: "40vh",
+  medium: "60vh",
+  large: "80vh",
+};
+
 export const defaultSidebarConfig: NavigationConfig = {
   system: {
     settings: { appName: "", footer: "" },
@@ -55,14 +61,12 @@ export const defaultSidebarConfig: NavigationConfig = {
   },
 };
 
-export const cascadeDefaultOptions = {
+export const defaultCascadeOptions = {
   contentKey: "data",
   width: "100%",
-  height: "100%",
-  nodeWidth: 900,
-  nodeHeight: 300,
-  childrenSpacing: 200,
-  siblingSpacing: 100,
+  height: "40vh",
+  nodeWidth: 500,
+  nodeHeight: 180,
   fontSize: "20px",
   fontWeight: 300,
   fontColor: "black",
@@ -72,48 +76,36 @@ export const cascadeDefaultOptions = {
   nodeBGColor: "#eff8f4",
   highlightOnHover: true,
   enableExpandCollapse: false,
-  direction: "left",
+  childrenSpacing: 200,
+  siblingSpacing: 100,
+  direction: "top",
   enableToolbar: false,
   canvasStyle: {
-    background: "white",
+    background: "transparent",
   },
-  nodeTemplate: (node: Record<string, unknown>) => {
-    const { value } = node;
-    const formattedValue = Number(value).toLocaleString();
-    if (!value) {
-      return `
-      <div 
-      id=${node["id"]}
-        style="
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        height: 100%;
-        padding-left: 5%;
-        cursor: pointer;
-      "
-      >
-        <div style="font-size: 3.5em; line-height: 1.50; font-weight: 700">0</div>
-        <div style="font-size: 1.8em;">${node["label"]}</div>
-      </div>
-    `;
-    }
+  nodeTemplate: (content: Record<string, unknown>) => {
+    const nodeId = content["nodeId"];
+    const label = content["label"];
+    let value = content["value"];
+    const query = content["query"];
 
+    if (typeof value === "number") {
+      const formatter = new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      });
+      value = formatter.format(value);
+    }
     return `
-      <div 
-      id=${node["id"]}
-        style="
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        height: 100%;
-        padding-left: 5%;
-        cursor: pointer;
-      "
-      >
-        <div style="font-size: 3.5em; line-height: 1.50; font-weight: 700">${formattedValue}</div>
-        <div style="font-size: 1.8em;">${node["label"]}</div>
-      </div>
-    `;
+      <div
+        data-id="${nodeId}"
+        data-label="${label}"
+        data-value="${value}"
+        data-query="${query}"
+        class="apextree-node"
+        style="display: flex; flex-direction: column; align-items: flex-start; height: auto; cursor: pointer; padding: 5%; justify-content: space-between; border-radius: 10px;">
+        <div style="font-size: 1.5em; color: #333333;">${label}</div>
+        <div style="font-size: 2.5em; line-height: 1.50; font-weight: 400;">${value}</div>
+      </div>`;
   },
 };

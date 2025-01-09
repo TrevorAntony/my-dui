@@ -1,6 +1,7 @@
 export type CaseType = 'upper' | 'lower' | 'title' | 'sentence';
 
-export const transformCase = (text: string, caseType: CaseType): string => {
+export const transformCase = (text: string | null | undefined, caseType: CaseType): string => {
+  if (!text) return '';
   const cleanText = text.replace(/[_-]/g, ' ');
   
   switch (caseType) {

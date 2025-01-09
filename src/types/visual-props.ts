@@ -1,4 +1,5 @@
 import type { ContainerComponentProps } from "../3dl/types/types";
+import type { cascadeScaleMap } from "../helpers/constants";
 export interface VisualProps {
   container?: React.ComponentType<ContainerComponentProps>;
   header?: string;
@@ -8,9 +9,10 @@ export interface VisualProps {
   userOptions?: Record<string, unknown>;
   tableMaxHeight?: string;
   showToolbar?: boolean | string;
-  cascadeObject?: Record<string, unknown>;
   nodeWidth?: number | string;
   nodeHeight?: number | string;
+  cascadeScale?: keyof typeof cascadeScaleMap;
+  cascadeSearchColumn?: string;
   direction?: string;
   resize?: string;
   modalWidth?: "narrow" | "medium" | "wide";

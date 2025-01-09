@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { Dataset, ExportData } from "../3dl";
 import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
@@ -9,6 +9,7 @@ import { getDetailsComponent } from "./details-component-registry";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { Button, Modal } from "flowbite-react";
 import DataString from "./dashboard-meta";
+import { useDataContext } from "../3dl/context/DataContext";
 
 type MoreInfoProps = {
   text: string;
@@ -40,15 +41,14 @@ const CardComponent: FC<CardComponentProps> = ({
   className = "",
   variant = "card",
   exportData = "false",
-  query,
   detailsComponent,
   infoTagContent,
   DataStringQuery,
 }) => {
   const layout = useLayout();
-  const shouldExportData = exportData === "true";
+  const shouldExportData = exportData === "true" || exportData === true;
   const isFullHeight = layout === "single-layout";
-
+  const { query, searchText, searchColumns, sortColumn, currentPage, pageSize } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const detailsComponentKey =
     detailsComponent as keyof DetailsComponentRegistry;
@@ -57,6 +57,15 @@ const CardComponent: FC<CardComponentProps> = ({
     : undefined;
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
+  // Calculate export props once and memoize them
+  const exportProps = useMemo(() => ({
+    query,
+    searchText,
+    searchColumns,
+    sortColumn,
+    pageSize: currentPage && pageSize ? currentPage * Number(pageSize) : undefined,
+    currentPage,
+  }), [query, searchText, searchColumns, sortColumn, currentPage, pageSize]);
 
   const renderContent = () => (
     <>
@@ -78,13 +87,7 @@ const CardComponent: FC<CardComponentProps> = ({
             {infoTagContent ? infoTagContent : null}
             {shouldExportData && layout !== "single-layout" && (
               <div className="self-start pl-1">
-                {query ? (
-                  <Dataset query={query} useQuery={useDuftQuery}>
-                    <ExportData />
-                  </Dataset>
-                ) : (
-                  <ExportData />
-                )}
+                <ExportData {...exportProps} />
               </div>
             )}
             {DetailsComponent && (
@@ -143,7 +146,7 @@ const CardComponent: FC<CardComponentProps> = ({
         <div
           className={`flex flex-col justify-between rounded-lg bg-white p-3 shadow dark:bg-gray-800 sm:p-4 xl:p-5 ${
             isFullHeight ? "mt-4 h-full min-h-screen" : "h-auto"
-          } ${className}`}
+            } ${className}`}
         >
           {renderContent()}
         </div>
@@ -151,7 +154,7 @@ const CardComponent: FC<CardComponentProps> = ({
         <div
           className={`${
             isFullHeight ? "mt-4 h-full min-h-screen" : ""
-          } ${className}`}
+            } ${className}`}
         >
           {renderContent()}
         </div>

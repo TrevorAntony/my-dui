@@ -3,11 +3,11 @@ import React, { createContext, useContext } from "react";
 
 export interface DatasetParams {
   filters: any;
-  searchText: string;
-  searchColumns: string;
-  sortColumn: string;
-  currentPage: number;
-  pageSize: number;
+  searchText?: string;
+  searchColumns?: string;
+  sortColumn?: string;
+  pageSize?: string | number;
+  currentPage?: number;
   debug: boolean;
   appendData: boolean;
   loading?: boolean;
