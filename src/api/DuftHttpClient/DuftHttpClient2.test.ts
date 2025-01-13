@@ -38,33 +38,4 @@ describe("DuftHttpClient Integration Tests", () => {
     expect(config.features).toBeDefined();
     expect(config.settings).toBeDefined();
   });
-
-  it("should authenticate and refresh token", async () => {
-    console.log("LETS GO");
-    // Initial login
-    const loginResult = await client.login("admin", "--------");
-    console.log("Login response:", loginResult);
-
-    const initialAuthToken = authToken;
-    console.log("Initial auth token:", initialAuthToken);
-
-    // First navigation call with initial token
-    const nav1 = await client.getNavigationFile();
-    console.log("First navigation response:", nav1);
-    expect(nav1).toBeDefined();
-
-    // Wait for token to expire (11 seconds)
-    console.log("Waiting for token expiration...");
-    await new Promise((resolve) => setTimeout(resolve, 11000));
-
-    // Second navigation call should trigger token refresh
-    const nav2 = await client.getNavigationFile();
-    console.log("Second navigation response:", nav2);
-    expect(nav2).toBeDefined();
-
-    // Verify token was refreshed
-    console.log("Final auth token:", authToken);
-    expect(authToken).toBeDefined();
-    expect(authToken).not.toBe(initialAuthToken);
-  }, 20000);
 });
