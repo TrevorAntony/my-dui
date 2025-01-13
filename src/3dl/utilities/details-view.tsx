@@ -22,7 +22,7 @@ const DetailsView: React.FC<DetailsViewProps> = ({
           columnName,
           config,
         })
-      : child,
+      : child
   );
 
   return <>{modifiedChildren}</>;

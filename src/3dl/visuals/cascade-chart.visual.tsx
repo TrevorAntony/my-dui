@@ -68,20 +68,14 @@ const CascadeChart = ({
   const parsedNodeHeight =
     Number(nodeHeight) || defaultCascadeOptions.nodeHeight;
 
-  const toggleModal = useCallback(
-    (
-      label: string,
-      nodeQuery: string,
-    ) => {
-      setModalCascadeState((prevState) => ({
-        ...prevState,
-        cascadeTitle: label,
-        cascadeDetailsQuery: nodeQuery,
-      }));
-      setIsModalOpen((prev) => !prev);
-    },
-    []
-  );
+  const toggleModal = useCallback((label: string, nodeQuery: string) => {
+    setModalCascadeState((prevState) => ({
+      ...prevState,
+      cascadeTitle: label,
+      cascadeDetailsQuery: nodeQuery,
+    }));
+    setIsModalOpen((prev) => !prev);
+  }, []);
 
   useRenderTree(
     treeContainerRef,
@@ -116,11 +110,13 @@ const CascadeChart = ({
       >
         <Modal.Header>{modalCascadeState.cascadeTitle}</Modal.Header>
         <Modal.Body className="flex flex-col overflow-hidden ">
-          <Dataset useQuery={useDuftQuery} query={modalCascadeState.cascadeDetailsQuery} pageSize={20} searchColumns={cascadeSearchColumn}>
-          <InfiniteScrollTable
-            container={CardComponent}
-            variant="plain"
-          />
+          <Dataset
+            useQuery={useDuftQuery}
+            query={modalCascadeState.cascadeDetailsQuery}
+            pageSize={20}
+            searchColumns={cascadeSearchColumn}
+          >
+            <InfiniteScrollTable container={CardComponent} variant="plain" />
           </Dataset>
         </Modal.Body>
         <Modal.Footer>

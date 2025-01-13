@@ -36,20 +36,19 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
   searchHint,
   resize = "false",
   detailsTitle = "More Info",
-  headerCase = 'sentence',
+  headerCase = "sentence",
   DataStringQuery,
 }) => {
   const {
     data,
-    loading,
+    datasetParams,
     pageUpdater,
-    searchText,
     handleSearchChange,
     handleSortChange,
-    query,
-    searchColumns,
-    pageSize,
   } = useDataContext();
+
+  const { loading, searchText, searchColumns, pageSize, query } =
+    datasetParams || {};
 
   const layout = useLayout();
 

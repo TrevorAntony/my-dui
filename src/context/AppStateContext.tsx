@@ -12,7 +12,6 @@ const initialState: AppState = {
 };
 
 const updateGlobalState = (config: Config): GlobalState => {
-  console.log(config);
   if (!config.features.user_authentication) {
     return GlobalState.APP_READY;
   }

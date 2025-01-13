@@ -235,11 +235,7 @@ export class DuftHttpClient {
     });
 
     if (response.access && response.refresh) {
-      console.log(
-        "Login successful, setting tokens:",
-        response.access,
-        response.refresh
-      );
+      console.log("Login successful, setting tokens");
       this.setAuthToken(response.access, response.refresh);
     } else {
       console.log("Login failed, no tokens received");
