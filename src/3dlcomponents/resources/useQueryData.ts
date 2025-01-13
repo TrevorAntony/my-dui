@@ -19,7 +19,8 @@ interface QueryResult<T> {
 }
 
 type RequestData = {
-  query: string;
+  query?: string;
+  query_name?: string;
   data_connection_id: string;
   filters?: Record<string, unknown>;
   search_text?: string;
@@ -37,19 +38,40 @@ const defaultClient = new DuftHttpClient(
   getRefreshToken
 );
 
+const validatePayload = (payload: RequestData) => {
+  // console.log({ payload });
+  if (payload?.query && payload?.query_name) {
+    throw new Error(
+      "Invalid request payload: Cannot specify both 'query' and 'query_name'. Use only one."
+    );
+  }
+
+  if (!payload?.query && !payload?.query_name) {
+    throw new Error(
+      "Invalid request payload: Must specify either 'query' or 'query_name'."
+    );
+  }
+};
+
 const useQueryData = <T>(
   requestPayload: RequestData,
   customClient?: DuftHttpClient
 ): QueryResult<T> => {
   const client = customClient || defaultClient;
-
   const { data, isLoading, error } = useQuery({
     queryKey: ["queryData", requestPayload],
     queryFn: async () => {
-      const result = await client.getQueryData(requestPayload);
+      validatePayload(requestPayload);
+
+      const result = requestPayload?.query
+        ? await client.getQueryData(requestPayload)
+        : requestPayload?.query_name
+        ? await client.getServerQueryData(requestPayload)
+        : null;
       return result;
     },
-    enabled: !!requestPayload?.query,
+    // enabled: true,
+    enabled: !!requestPayload?.query || !!requestPayload?.query_name,
     refetchOnWindowFocus: false,
   });
 

@@ -12,7 +12,8 @@ import {
 // import { client } from "../..";
 
 interface UseDataSetLogicProps {
-  query: string;
+  query?: string;
+  queryName: string;
   staticData?: any;
   useQuery: any;
   filters?: Record<string, any>;
@@ -35,6 +36,7 @@ const defaultClient = new DuftHttpClient(
 
 const useDataSetLogic = ({
   query,
+  queryName,
   staticData,
   useQuery,
   filters = {},
@@ -51,11 +53,12 @@ const useDataSetLogic = ({
     dispatch: () => {},
   };
   const [modifiedQuery, setModifiedQuery] = useState<string>(query);
-  const [queryReady, setQueryReady] = useState<boolean>(false);
+  const [queryReady, setQueryReady] = useState<boolean>(!!queryName || false);
 
   const requestData = useMemo(
     () => ({
-      query: modifiedQuery,
+      ...(query && { query: modifiedQuery }),
+      ...(queryName && { query_name: queryName }),
       data_connection_id: config.dataConnection || "ANA",
       ...(filters && Object.keys(filters).length > 0 && { filters }),
       ...(searchText && { search_text: searchText }),
@@ -72,6 +75,7 @@ const useDataSetLogic = ({
       sortColumn,
       pageSize,
       currentPage,
+      queryName,
     ]
   );
 
