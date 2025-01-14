@@ -32,6 +32,7 @@ import {
   StackedBarChart,
   PercentStackedBarChart,
   ClusteredBarChart,
+  ClusteredLineChart,
   DetailsView,
   DetailsView2,
   PreviewQuery,
@@ -301,6 +302,20 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
                 <PercentStackedBarChart
                   {...(props as React.ComponentProps<
                     typeof PercentStackedBarChart
+                  >)}
+                  container={
+                    CardComponent as React.ComponentType<ContainerComponentProps>
+                  }
+                />
+              </ErrorBoundary>
+            ),
+            ClusteredLineChart: (
+              props: React.ComponentProps<typeof ClusteredLineChart>
+            ) => (
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <ClusteredLineChart
+                  {...(props as React.ComponentProps<
+                    typeof ClusteredLineChart
                   >)}
                   container={
                     CardComponent as React.ComponentType<ContainerComponentProps>
