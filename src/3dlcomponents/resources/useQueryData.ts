@@ -39,7 +39,6 @@ const defaultClient = new DuftHttpClient(
 );
 
 const validatePayload = (payload: RequestData) => {
-  // console.log({ payload });
   if (payload?.query && payload?.query_name) {
     throw new Error(
       "Invalid request payload: Cannot specify both 'query' and 'query_name'. Use only one."
@@ -70,7 +69,6 @@ const useQueryData = <T>(
         : null;
       return result;
     },
-    // enabled: true,
     enabled: !!requestPayload?.query || !!requestPayload?.query_name,
     refetchOnWindowFocus: false,
   });
