@@ -66,20 +66,6 @@ test("ServerQueryData context state transitions", async () => {
   const testQueryClient = createTestQueryClient();
   const queryName = "filters/age_group";
 
-  // const { result } = renderHook(() => useDataContext(), {
-  //   wrapper: () => (
-  //     <QueryClientProvider client={testQueryClient}>
-  //       <DataProvider pageSize={10}>
-  //         <ServerQueryData
-  //           useQuery={useQueryData}
-  //           client={client}
-  //           queryName={queryName}
-  //         />
-  //       </DataProvider>
-  //     </QueryClientProvider>
-  //   ),
-  // });
-
   const { result } = renderHook(() => useDataContext(), {
     wrapper: ({ children }) => (
       <QueryClientProvider client={testQueryClient}>
@@ -145,20 +131,6 @@ test("ServerQueryData filtering functionality", async () => {
         client,
       }),
     {
-      // wrapper: ({ children }) => (
-      //   <QueryClientProvider client={testQueryClient}>
-      //     <DataProvider>
-      //       <ServerQueryData
-      //         useQuery={useQueryData}
-      //         client={client}
-      //         queryName={queryName}
-      //       >
-      //         {children}
-      //       </ServerQueryData>
-      //     </DataProvider>
-      //   </QueryClientProvider>
-      // ),
-
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
           <DataProvider>
@@ -192,7 +164,7 @@ test("ServerQueryData sorting functionality", async () => {
   const testQueryClient = createTestQueryClient();
   const queryName = "filters/age_group";
 
-  // Test ascending sort
+  //Test ascending sort
   const { result: ascResult } = renderHook(
     () =>
       useDataSetLogic({
@@ -203,20 +175,6 @@ test("ServerQueryData sorting functionality", async () => {
         client,
       }),
     {
-      // wrapper: ({ children }) => (
-      //   <QueryClientProvider client={testQueryClient}>
-      //     <DataProvider>
-      //       <ServerQueryData
-      //         useQuery={useQueryData}
-      //         client={client}
-      //         queryName={queryName}
-      //       >
-      //         {children}
-      //       </ServerQueryData>
-      //     </DataProvider>
-      //   </QueryClientProvider>
-      // ),
-
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
           <DataProvider>
@@ -256,20 +214,6 @@ test("ServerQueryData pagination", async () => {
         client,
       }),
     {
-      // wrapper: ({ children }) => (
-      //   <QueryClientProvider client={testQueryClient}>
-      //     <DataProvider>
-      //       <ServerQueryData
-      //         useQuery={useQueryData}
-      //         client={client}
-      //         queryName={queryName}
-      //       >
-      //         {children}
-      //       </ServerQueryData>
-      //     </DataProvider>
-      //   </QueryClientProvider>
-      // ),
-
       wrapper: ({ children }) => (
         <QueryClientProvider client={testQueryClient}>
           <DataProvider>
@@ -288,6 +232,7 @@ test("ServerQueryData pagination", async () => {
   // Wait for query to complete
   await waitForState((state) => state !== null, result);
 
+  console.log(result.current.data?.length);
   // Verify pagination
   expect(result.current.data).toBeDefined();
   expect(result.current.data!.length).toBeLessThanOrEqual(pageSize);
