@@ -153,7 +153,13 @@ export class DuftHttpClient {
             if (token) {
               headers["Authorization"] = `Bearer ${token}`;
               console.log("Retrying request with new token:", token);
-              return this.makeRequest(method, endpoint, body, forceAuth, responseType); // Retry with refreshed token
+              return this.makeRequest(
+                method,
+                endpoint,
+                body,
+                forceAuth,
+                responseType
+              ); // Retry with refreshed token
             }
           } catch (error) {
             console.error(
@@ -214,7 +220,16 @@ export class DuftHttpClient {
 
   async getQueryData(requestPayload: Record<string, any>): Promise<any> {
     const { format, ...otherParams } = requestPayload;
-    const endpoint = `${this.baseUrl}/run-query/${format || 'json'}`;
+    const endpoint = `${this.baseUrl}/run-query/${format || "json"}`;
+    const responseType = format === "csv" ? "blob" : "json";
+    return this.makeRequest("POST", endpoint, otherParams, true, responseType);
+  }
+
+  async getServerQueryData(requestPayload: Record<string, any>): Promise<any> {
+    const { format, ...otherParams } = requestPayload;
+    const endpoint = format
+      ? `${this.baseUrl}/run-server-query/${format}`
+      : `${this.baseUrl}/run-server-query`;
     const responseType = format === "csv" ? "blob" : "json";
     return this.makeRequest("POST", endpoint, otherParams, true, responseType);
   }

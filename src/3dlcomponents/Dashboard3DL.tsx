@@ -45,6 +45,7 @@ import {
   HtmlSnippet,
   DataProvider,
   QueryData,
+  ServerQueryData,
 } from "../3dl";
 import {
   DuftGrid,
@@ -117,6 +118,15 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
             QueryData: (props: React.ComponentProps<typeof QueryData>) => (
               <QueryData
                 {...(props as React.ComponentProps<typeof QueryData>)}
+                useQuery={useQueryData}
+                client={client}
+              />
+            ),
+            ServerQueryData: (
+              props: React.ComponentProps<typeof ServerQueryData>
+            ) => (
+              <ServerQueryData
+                {...(props as React.ComponentProps<typeof ServerQueryData>)}
                 useQuery={useQueryData}
                 client={client}
               />
