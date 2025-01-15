@@ -46,6 +46,7 @@ import {
   DataProvider,
   QueryData,
   ServerQueryData,
+  ApiData,
 } from "../3dl";
 import {
   DuftGrid,
@@ -120,6 +121,17 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
                 {...(props as React.ComponentProps<typeof QueryData>)}
                 useQuery={useQueryData}
                 client={client}
+              />
+            ),
+            ApiData: (props: React.ComponentProps<typeof ApiData>) => (
+              <ApiData
+                {...(props as React.ComponentProps<typeof ApiData>)}
+                client={client}
+                queryKey={[
+                  "dashboard",
+                  props.url,
+                  JSON.stringify(props.params || {}),
+                ].filter(Boolean)}
               />
             ),
             ServerQueryData: (
