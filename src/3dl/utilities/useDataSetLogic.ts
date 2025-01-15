@@ -91,14 +91,27 @@ const useDataSetLogic = ({
     if (query) {
       let tempQuery = query;
       const stateFilters = state.filters || {};
-
+  
       const placeholders = query.match(/\$[a-zA-Z_]+/g) || [];
-      placeholders.forEach((placeholder: string) => {
+  
+      placeholders.forEach((placeholder) => {
         const filterKey = placeholder.substring(1);
         const filterValue = filters[filterKey] || stateFilters[filterKey] || "";
-        tempQuery = tempQuery.replace(placeholder, filterValue);
+  
+        if (Array.isArray(filterValue) && filterValue.length > 0) {
+          const escapedValues = filterValue.map(value => `'${value}'`).join(', ');
+          const conditions = [`${filterKey} IN (${escapedValues})`];
+  
+          if (conditions.length > 0) {
+            const whereClause = conditions.join(' OR ');
+            const regex = new RegExp(`\\(\\s*${filterKey}\\s*=\\s*'\\$${filterKey}'\\s*(OR)\\s*'\\$${filterKey}'\\s*=\\s*''\\s*\\)`, 'g');
+            tempQuery = tempQuery.replace(regex, whereClause);
+          }
+        } else {
+          tempQuery = tempQuery.replace(placeholder, filterValue);
+        }
       });
-
+  
       setModifiedQuery(tempQuery);
       setQueryReady(true);
     }
