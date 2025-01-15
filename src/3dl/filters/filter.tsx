@@ -27,6 +27,20 @@ const Filter: React.FC<FilterProps> = ({
   const [selectedValue, setSelectedValue] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { data: options, loading, error } = useQuery(values_query);
+  
+  useEffect(() => {
+    if (state.filters && state.filters[name] !== undefined) {
+      if (values_query && options) {
+        const matchingOption = (options as { label?: string; value?: string; [key: string]: string }[])
+          .find(option => option.value === state.filters[name] || Object.values(option)[0] === state.filters[name]);
+        setSelectedValue(matchingOption?.label || matchingOption?.value || Object.values(matchingOption || {})[0] || "");
+      } else {
+        setSelectedValue(state.filters[name]);
+      }
+    } else {
+      setSelectedValue("");
+    }
+  }, [state.filters, name, options, values_query]);
 
   useEffect(() => {
     if (!isLoaded && !loading) {
