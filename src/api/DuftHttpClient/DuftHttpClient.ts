@@ -193,6 +193,10 @@ export class DuftHttpClient {
     return responseType === "blob" ? response.blob() : response.json();
   }
 
+  async fetchData<T>(url: string): Promise<T> {
+    return this.makeRequest("GET", url);
+  }
+
   async getCurrentConfig(useAuthentication: boolean = true): Promise<Config> {
     const response = await this.makeRequest(
       "GET",

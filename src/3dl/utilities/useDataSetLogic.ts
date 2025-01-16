@@ -13,7 +13,7 @@ import {
 
 interface UseDataSetLogicProps {
   query?: string;
-  queryName: string;
+  queryName?: string;
   staticData?: any;
   useQuery: any;
   filters?: Record<string, any>;
