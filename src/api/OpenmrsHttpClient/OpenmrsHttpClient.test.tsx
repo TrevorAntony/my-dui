@@ -2,6 +2,7 @@ import { expect, test, beforeEach, vi } from "vitest";
 import { OpenMRSClient } from "./OpenmrsHttpClient";
 
 const BASE_URL = "https://dev3.openmrs.org/openmrs/ws/rest/v1";
+const PATIENT_ID = "03aa43ae-b8fa-40dc-8ded-d70f0ebd9255";
 let client: OpenMRSClient;
 
 beforeEach(() => {
@@ -116,3 +117,115 @@ test("constructs URLs with parameters correctly", async () => {
     global.fetch = originalFetch;
   }
 }, 15000);
+
+test("handles API errors gracefully", async () => {
+  // Test with a non-existent endpoint that should return a 404
+  await expect(
+    client.fetchResource("nonexistent/endpoint/12345")
+  ).rejects.toThrow("Error fetching nonexistent/endpoint/12345");
+
+  // Test with malformed UUID that should return an error
+  await expect(
+    client.fetchResource("patient/invalid-uuid-format")
+  ).rejects.toThrow("Error fetching patient/invalid-uuid-format");
+
+  // Test with invalid HTTP method
+  await expect(
+    client.fetchResource(
+      "patient",
+      {},
+      "POST", // POST to a GET-only endpoint
+      { invalidData: true }
+    )
+  ).rejects.toThrow();
+}, 15000);
+
+test("includes status code and error details in error messages", async () => {
+  // Test 404 Not Found
+  try {
+    await client.fetchResource("patient/non-existent-uuid");
+    fail("Expected error was not thrown");
+  } catch (error: any) {
+    expect(error.message).toContain("Status 404");
+  }
+
+  // Test 400 Bad Request with malformed UUID
+  try {
+    await client.fetchResource("patient");
+    fail("Expected error was not thrown");
+  } catch (error: any) {
+    expect(error.message).toContain("Status 400");
+  }
+}, 15000);
+
+test("fetchPatient method calls fetchResource with correct parameters", async () => {
+  const originalFetch = global.fetch;
+  const patientId = "test-patient-id";
+
+  try {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ uuid: patientId }),
+    });
+    global.fetch = mockFetch;
+
+    const result = await client.fetchPatient(patientId);
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${BASE_URL}/patient/${patientId}`,
+      expect.objectContaining({
+        method: "GET",
+        headers: expect.any(Headers),
+      })
+    );
+    expect(result).toEqual({ uuid: patientId });
+  } finally {
+    global.fetch = originalFetch;
+  }
+}, 15000);
+
+test("fetchEncounter method calls fetchResource with correct parameters", async () => {
+  const originalFetch = global.fetch;
+  const encounterId = "test-encounter-id";
+
+  try {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ uuid: encounterId }),
+    });
+    global.fetch = mockFetch;
+
+    const result = await client.fetchEncounter(encounterId);
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${BASE_URL}/encounter/${encounterId}`,
+      expect.objectContaining({
+        method: "GET",
+        headers: expect.any(Headers),
+      })
+    );
+    expect(result).toEqual({ uuid: encounterId });
+  } finally {
+    global.fetch = originalFetch;
+  }
+}, 15000);
+
+test("fetchPatient method fetches real patient data", async () => {
+  const patientId = PATIENT_ID;
+  const result = await client.fetchPatient(patientId);
+
+  expect(result).toBeDefined();
+  expect(result.uuid).toBe(patientId);
+  expect(result.person).toBeDefined();
+  expect(result.person.uuid).toBeDefined();
+  expect(result.identifiers).toBeDefined();
+}, 15000);
+//   const encounterId = "e859e7a7-2593-4979-a9a4-2d945410ce20";
+//   const result = await client.fetchEncounter(encounterId);
+
+//   expect(result).toBeDefined();
+//   expect(result.uuid).toBe(encounterId);
+//   expect(result.encounterType).toBeDefined();
+//   expect(result.patient).toBeDefined();
+//   expect(result.visit).toBeDefined();
+// }, 15000);

@@ -1,3 +1,5 @@
+import { extractErrorMessage } from "../../helpers/visual-helpers";
+
 export class OpenMRSClient {
   private baseURL: string;
   private headers: Headers;
@@ -14,7 +16,7 @@ export class OpenMRSClient {
 
   private getBasicAuthToken(): string {
     const credentials = `${OpenMRSClient.USERNAME}:${OpenMRSClient.PASSWORD}`;
-    return Buffer.from(credentials).toString("base64"); // Encode the credentials as Base64
+    return Buffer.from(credentials).toString("base64");
   }
 
   async fetchResource(
@@ -34,7 +36,12 @@ export class OpenMRSClient {
       });
 
       if (!response.ok) {
-        throw new Error(`Error fetching ${resource}: ${response.statusText}`);
+        const errorBody = await response.text();
+        throw new Error(
+          `Error fetching ${resource}: Status ${
+            response.status
+          } - ${extractErrorMessage(errorBody)}`
+        );
       }
 
       return await response.json();
