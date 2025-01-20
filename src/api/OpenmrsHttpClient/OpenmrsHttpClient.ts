@@ -16,7 +16,7 @@ export class OpenMRSClient {
 
   private getBasicAuthToken(): string {
     const credentials = `${OpenMRSClient.USERNAME}:${OpenMRSClient.PASSWORD}`;
-    return Buffer.from(credentials).toString("base64");
+    return btoa(credentials);
   }
 
   async fetchResource(
@@ -59,5 +59,3 @@ export class OpenMRSClient {
     return this.fetchResource(`encounter/${encounterId}`);
   }
 }
-
-export default new OpenMRSClient("https://dev3.openmrs.org/openmrs/ws/rest/v1");

@@ -18,6 +18,7 @@ import {
   getRefreshToken,
 } from "./api/DuftHttpClient/local-storage-functions";
 import { ThemeModeProvider, useThemeMode } from "./context/ThemeModeContext";
+import { OpenMRSClient } from "./api/OpenmrsHttpClient/OpenmrsHttpClient";
 
 const container = document.getElementById("root");
 
@@ -36,6 +37,10 @@ export const client = new DuftHttpClient(
   setTokenInLocalStorage,
   updateConfigFromHttpClient,
   getRefreshToken
+);
+
+export const openmrsClient = new OpenMRSClient(
+  "https://dev3.openmrs.org/openmrs/ws/rest/v1"
 );
 
 function Root() {
