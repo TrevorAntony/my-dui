@@ -108,7 +108,7 @@ const useDataSetLogic = ({
             tempQuery = tempQuery.replace(regex, whereClause);
           }
         } else {
-          tempQuery = tempQuery.replace(placeholder, filterValue);
+          tempQuery = tempQuery.replace(new RegExp(`\\$${filterKey}`, 'g'), filterValue);
         }
       });
   

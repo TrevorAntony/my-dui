@@ -33,13 +33,13 @@ const MultiSelectFilter: React.FC<MultiSelectFilterProps> = (
 
  useEffect(() => {
     if (!isLoaded && !loading) {
-      let loadedOptions: string[] = [];
-      if (values) {
-        loadedOptions = values.split(",");
-      } else if (values_query && options) {
-        loadedOptions = (options as { [key: string]: string }[]).map(
-          (option) => Object.values(option)[0] || ""
-        );
+      let loadedOptions: { label: string; value: string }[] = [];
+      if (values_query && options) {
+        // Map the options to include both label and value
+        loadedOptions = (options as { [key: string]: string }[]).map((option) => ({
+          label: option["label"] || Object.values(option)[0] || "",
+          value: option["value"] || Object.values(option)[1] || Object.values(option)[0] || ""
+        }));
       }
       dispatch({
         type: "SET_DATA",
@@ -56,31 +56,43 @@ const MultiSelectFilter: React.FC<MultiSelectFilterProps> = (
     }
   }, [dispatch, name, selectedValues, isLoaded]);
 
-  const toggleSelection = (optionId: string) => {
-    setSelectedValues(prevSelectedValues =>
-      prevSelectedValues.includes(optionId)
-        ? prevSelectedValues.filter(id => id !== optionId)
-        : [...prevSelectedValues, optionId]
-    );
+  useEffect(() => {
+    if (state.filters[name]) {
+      setSelectedValues(state.filters[name] as unknown as string[]);
+    }
+  }, [state.filters, name]);
+
+  const toggleSelection = (option: { label: string; value: string }) => {
+    const newSelectedValues = selectedValues.includes(option.value)
+      ? selectedValues.filter(id => id !== option.value)
+      : [...selectedValues, option.value];
+    
+    setSelectedValues(newSelectedValues);
+    setFilter(dispatch, name, newSelectedValues);
   };
 
   return (
     <div className={className}>
-    <Dropdown label={caption} color="gray"  dismissOnClick={false} inline >
-      {(state.data[name] || []).map((option: string, index: number) => (
-        <Dropdown.Item key={index}  className="hover:bg-highlight-600">
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={selectedValues.includes(option)}
-              onChange={() => toggleSelection(option)}
-              className="form-checkbox h-5 w-5 text-highlight-600 focus:ring-primary-300"
-            />
-            <span>{option}</span>
-          </label>
-        </Dropdown.Item>
-      ))}
-    </Dropdown>
+      <Dropdown label={caption} color="gray" dismissOnClick={false} inline theme={{
+        floating: {
+          base: "z-10 w-fit rounded-lg bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600",
+          content: "py-2 rounded-lg text-sm text-gray-700 dark:text-gray-200"
+        }
+      }}>
+        {((state.data[name] || []) as unknown as { label: string; value: string }[]).map((option, index) => (
+          <Dropdown.Item key={index} className="hover:bg-gray-100 dark:hover:bg-gray-600">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={selectedValues.includes(option.value)}
+                onChange={() => toggleSelection(option)}
+                className="form-checkbox h-5 w-5 text-highlight-600 focus:ring-highlight-300"
+              />
+              <span className="text-gray-700 dark:text-gray-200">{option.label}</span>
+            </label>
+          </Dropdown.Item>
+        ))}
+      </Dropdown>
     </div>
   );
 };
