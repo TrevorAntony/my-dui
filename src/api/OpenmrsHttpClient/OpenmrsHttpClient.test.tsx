@@ -2,11 +2,13 @@ import { expect, test, beforeEach, vi } from "vitest";
 import { OpenMRSClient } from "./OpenmrsHttpClient";
 
 const BASE_URL = "https://dev3.openmrs.org/openmrs/ws/rest/v1";
-const PATIENT_ID = "03aa43ae-b8fa-40dc-8ded-d70f0ebd9255";
+
+//If these tests fail then this patient was probably deleted 🥲
+const PATIENT_ID = "48a7f255-d499-4741-a2b8-5941e83d91f2";
 let client: OpenMRSClient;
 
 beforeEach(() => {
-  client = new OpenMRSClient(BASE_URL);
+  client = new OpenMRSClient(BASE_URL, true); // Enable test environment
 });
 
 test("searches appointments successfully (POST)", async () => {
@@ -33,7 +35,7 @@ test("searches appointments successfully (POST)", async () => {
 }, 15000);
 
 test("fetches specific patient data successfully (GET)", async () => {
-  const patientUuid = "6742ca0d-866f-4ae2-92bc-38dfab896512";
+  const patientUuid = PATIENT_ID;
   const response = await client.fetchResource(`patient/${patientUuid}`, {
     v: "full",
   });
@@ -220,12 +222,89 @@ test("fetchPatient method fetches real patient data", async () => {
   expect(result.person.uuid).toBeDefined();
   expect(result.identifiers).toBeDefined();
 }, 15000);
-//   const encounterId = "e859e7a7-2593-4979-a9a4-2d945410ce20";
-//   const result = await client.fetchEncounter(encounterId);
 
-//   expect(result).toBeDefined();
-//   expect(result.uuid).toBe(encounterId);
-//   expect(result.encounterType).toBeDefined();
-//   expect(result.patient).toBeDefined();
-//   expect(result.visit).toBeDefined();
-// }, 15000);
+test("fetchPatientsFromAppointments returns array of patients", async () => {
+  const startDate = "2025-01-20T00:00:00.000+0300";
+  const endDate = "2025-01-20T23:59:59.999+0300";
+
+  const patients = await client.fetchPatientsFromAppointments(
+    startDate,
+    endDate
+  );
+
+  expect(Array.isArray(patients)).toBe(true);
+  if (patients.length > 0) {
+    patients.forEach((patient) => {
+      expect(patient).toMatchObject({
+        OpenMRSID: expect.any(String),
+        identifier: expect.any(String),
+        gender: expect.any(String),
+        name: expect.any(String),
+        uuid: expect.any(String),
+        age: expect.any(Number),
+      });
+    });
+  }
+}, 15000);
+
+test("fetchPatientsFromAppointments handles errors correctly", async () => {
+  const startDate = "invalid-date";
+  const endDate = "invalid-date";
+
+  await expect(
+    client.fetchPatientsFromAppointments(startDate, endDate)
+  ).rejects.toThrow();
+}, 15000);
+
+test("fetchPatientsFromAppointments calls fetchResource with correct parameters", async () => {
+  const originalFetch = global.fetch;
+  const startDate = "2025-01-20T00:00:00.000+0300";
+  const endDate = "2025-01-20T23:59:59.999+0300";
+
+  try {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve([
+          {
+            patient: {
+              OpenMRSID: "test-id",
+              identifier: "test-id",
+              gender: "M",
+              name: "Test Patient",
+              uuid: "test-uuid",
+              age: 30,
+            },
+          },
+        ]),
+    });
+    global.fetch = mockFetch;
+
+    const result = await client.fetchPatientsFromAppointments(
+      startDate,
+      endDate
+    );
+
+    expect(mockFetch).toHaveBeenCalledWith(
+      `${BASE_URL}/appointments/search`,
+      expect.objectContaining({
+        method: "POST",
+        headers: expect.any(Headers),
+        body: JSON.stringify({ startDate, endDate }),
+      })
+    );
+
+    expect(result).toEqual([
+      {
+        OpenMRSID: "test-id",
+        identifier: "test-id",
+        gender: "M",
+        name: "Test Patient",
+        uuid: "test-uuid",
+        age: 30,
+      },
+    ]);
+  } finally {
+    global.fetch = originalFetch;
+  }
+}, 15000);

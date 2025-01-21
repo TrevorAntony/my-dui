@@ -11,6 +11,7 @@ interface UseOpenmrsFetchProps {
   queryKey?: string | string[];
   method?: "GET" | "POST";
   body?: object;
+  transformData?: string | boolean;
 }
 
 export const useOpenmrsFetch = ({
@@ -21,6 +22,7 @@ export const useOpenmrsFetch = ({
   queryKey = "openmrs-data",
   method = "GET",
   body,
+  transformData = false, //TO-DO: this should be a key to a function that transforms the data
 }: UseOpenmrsFetchProps) => {
   const { setData, setDatasetParams } = useDataContext();
 
@@ -28,7 +30,7 @@ export const useOpenmrsFetch = ({
     queryKey: [queryKey, resource, resourceId, params, method, body],
     queryFn: async () => {
       const path = resourceId ? `${resource}/${resourceId}` : resource;
-      return client.fetchResource(path, params, method, body);
+      return client.fetchResource(path, params, method, body, transformData);
     },
     enabled: !!resource,
   });
