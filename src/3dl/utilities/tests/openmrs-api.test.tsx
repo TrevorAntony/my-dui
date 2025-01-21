@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { expect, test, beforeEach, vi } from "vitest";
 import DataProvider from "../data-provider";
 import { useDataContext } from "../../context/DataContext";
-import OpenmrsData, { useOpenmrsFetch } from "../openmrs-api";
+import OpenmrsData, { useOpenmrsFetch } from "../openmrs-api/openmrs-api";
 import { OpenMRSClient } from "../../../api/OpenmrsHttpClient/OpenmrsHttpClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -152,6 +152,7 @@ test("OpenmrsData component handles parameters correctly", async () => {
             client={client}
             params={params}
             queryKey="test-params"
+            adapter="test-adapter"
           />
           {children}
         </DataProvider>
@@ -167,7 +168,7 @@ test("OpenmrsData component handles parameters correctly", async () => {
     params,
     "GET",
     undefined,
-    false
+    "test-adapter"
   );
 
   // Clean up spy
@@ -187,7 +188,6 @@ test("constructs URL correctly with resource and resourceId", async () => {
             resourceId={resourceId}
             client={client}
             queryKey="test-url-construction"
-            transformData={true}
           />
           {children}
         </DataProvider>
@@ -201,8 +201,146 @@ test("constructs URL correctly with resource and resourceId", async () => {
     undefined,
     "GET",
     undefined,
-    true
+    undefined
   );
 
   resourceSpy.mockRestore();
+}, 15000);
+
+test("OpenmrsData component uses adapter correctly", async () => {
+  const searchPayload = {
+    startDate: "2025-01-20T00:00:00.000+0300",
+    endDate: "2025-01-20T23:59:59.999+0300",
+  };
+
+  const { result } = renderHook(() => useDataContext(), {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={testQueryClient}>
+        <DataProvider>
+          <OpenmrsData
+            resource="appointments/search"
+            client={client}
+            queryKey="test-adapter"
+            method="POST"
+            body={searchPayload}
+            adapter="patientsFromAppointments"
+          />
+          {children}
+        </DataProvider>
+      </QueryClientProvider>
+    ),
+  });
+
+  await waitForState((state) => state !== null, result);
+
+  // Verify the data was transformed by the patient adapter
+  if (result.current.data?.length > 0) {
+    result.current.data.forEach((patient: any) => {
+      expect(patient).toMatchObject({
+        OpenMRSID: expect.any(String),
+        identifier: expect.any(String),
+        gender: expect.any(String),
+        name: expect.any(String),
+        uuid: expect.any(String),
+        age: expect.any(Number),
+      });
+    });
+  }
+}, 15000);
+
+test("OpenmrsData component works without adapter", async () => {
+  const { result } = renderHook(() => useDataContext(), {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={testQueryClient}>
+        <DataProvider>
+          <OpenmrsData
+            resource="patient"
+            resourceId={PATIENT_ID}
+            client={client}
+            queryKey="test-no-adapter"
+          />
+          {children}
+        </DataProvider>
+      </QueryClientProvider>
+    ),
+  });
+
+  await waitForState((state) => state !== null, result);
+
+  // Verify raw data structure is preserved
+  expect(result.current.data).toHaveProperty("uuid");
+  expect(result.current.data).toHaveProperty("person");
+}, 15000);
+
+test("OpenmrsData component handles invalid adapter keys", async () => {
+  const { result } = renderHook(() => useDataContext(), {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={testQueryClient}>
+        <DataProvider>
+          <OpenmrsData
+            resource="patient"
+            resourceId={PATIENT_ID}
+            client={client}
+            queryKey="test-invalid-adapter"
+            adapter="non-existent-adapter"
+          />
+          {children}
+        </DataProvider>
+      </QueryClientProvider>
+    ),
+  });
+
+  await waitForState((state) => state !== null, result);
+
+  // Verify raw data is returned when adapter is not found
+  expect(result.current.data).toHaveProperty("uuid");
+  expect(result.current.data).toHaveProperty("person");
+}, 15000);
+
+test("OpenmrsData component handles multiple invalid adapter scenarios", async () => {
+  const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+  const { result } = renderHook(() => useDataContext(), {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={testQueryClient}>
+        <DataProvider>
+          {/* Test multiple components with different invalid adapters */}
+          <OpenmrsData
+            resource="patient"
+            resourceId={PATIENT_ID}
+            client={client}
+            queryKey="test-invalid-adapter-1"
+            adapter="invalid-adapter-1"
+          />
+          <OpenmrsData
+            resource="patient"
+            resourceId={PATIENT_ID}
+            client={client}
+            queryKey="test-invalid-adapter-2"
+            adapter="invalid-adapter-2"
+          />
+          {children}
+        </DataProvider>
+      </QueryClientProvider>
+    ),
+  });
+
+  await waitForState((state) => state !== null, result);
+
+  // Verify warnings were logged for each invalid adapter
+  expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
+  expect(consoleWarnSpy).toHaveBeenCalledWith(
+    expect.stringContaining("invalid-adapter-1")
+  );
+  expect(consoleWarnSpy).toHaveBeenCalledWith(
+    expect.stringContaining("invalid-adapter-2")
+  );
+
+  // Verify the application continues to function with raw data
+  expect(result.current.data).toHaveProperty("uuid");
+  expect(result.current.data).toHaveProperty("person");
+  expect(result.current.datasetParams.loading).toBe(false);
+  expect(result.current.datasetParams.error).toBeNull();
+
+  consoleWarnSpy.mockRestore();
 }, 15000);

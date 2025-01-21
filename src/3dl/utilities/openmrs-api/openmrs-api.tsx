@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useDataContext } from "../context/DataContext";
-import { OpenMRSClient } from "../../api/OpenmrsHttpClient/OpenmrsHttpClient";
+import { useDataContext } from "../../context/DataContext";
+import { OpenMRSClient } from "../../../api/OpenmrsHttpClient/OpenmrsHttpClient";
 
 interface UseOpenmrsFetchProps {
   resource: string;
@@ -11,7 +11,7 @@ interface UseOpenmrsFetchProps {
   queryKey?: string | string[];
   method?: "GET" | "POST";
   body?: object;
-  transformData?: string | boolean;
+  adapter?: string;
 }
 
 export const useOpenmrsFetch = ({
@@ -22,7 +22,7 @@ export const useOpenmrsFetch = ({
   queryKey = "openmrs-data",
   method = "GET",
   body,
-  transformData = false, //TO-DO: this should be a key to a function that transforms the data
+  adapter,
 }: UseOpenmrsFetchProps) => {
   const { setData, setDatasetParams } = useDataContext();
 
@@ -30,7 +30,7 @@ export const useOpenmrsFetch = ({
     queryKey: [queryKey, resource, resourceId, params, method, body],
     queryFn: async () => {
       const path = resourceId ? `${resource}/${resourceId}` : resource;
-      return client.fetchResource(path, params, method, body, transformData);
+      return client.fetchResource(path, params, method, body, adapter);
     },
     enabled: !!resource,
   });

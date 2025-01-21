@@ -1,17 +1,5 @@
 import { extractErrorMessage } from "../../helpers/visual-helpers";
-
-interface Patient {
-  OpenMRSID: string;
-  identifier: string;
-  gender: string;
-  name: string;
-  uuid: string;
-  age: number;
-}
-//TO-DO: move this to a helper file, accessible via a hashmap whose key will be passed via 3DL
-export const patientExtractor = (appointments: any[]): Patient[] => {
-  return appointments.map((appointment) => appointment.patient);
-};
+import { getAdapter } from "../../3dl/utilities/openmrs-api/openmrs-adapter-registry";
 
 export class OpenMRSClient {
   private baseURL: string;
@@ -39,7 +27,7 @@ export class OpenMRSClient {
     params = {},
     method: "GET" | "POST" = "GET",
     body?: object,
-    transformData?: string | boolean
+    adapterKey?: string
   ) {
     const query = new URLSearchParams(params).toString();
     const url = `${this.baseURL}/${resource}${query ? `?${query}` : ""}`;
@@ -61,7 +49,10 @@ export class OpenMRSClient {
       }
 
       const responseData = await response.json();
-      return transformData ? patientExtractor(responseData) : responseData;
+      if (!adapterKey) return responseData;
+
+      const adapter = getAdapter(adapterKey);
+      return adapter ? adapter(responseData) : responseData;
     } catch (error) {
       console.error(`Error fetching ${resource}:`, error);
       throw error;
@@ -87,7 +78,7 @@ export class OpenMRSClient {
       {},
       "POST",
       searchPayload,
-      true // Enable transformation
+      "patientsFromAppointments"
     );
   }
 }

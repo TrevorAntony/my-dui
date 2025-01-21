@@ -55,4 +55,4 @@ export { default as QueryData } from "./utilities/query-data";
 export { default as CascadeNode } from "../components/cascade-node";
 export { default as ServerQueryData } from "./utilities/server-query-data";
 export { default as ApiData } from "./utilities/api";
-export { default as OpenmrsData } from "./utilities/openmrs-api";
+export { default as OpenmrsData } from "./utilities/openmrs-api/openmrs-api";

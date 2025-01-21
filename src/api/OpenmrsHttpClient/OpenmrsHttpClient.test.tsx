@@ -1,5 +1,6 @@
-import { expect, test, beforeEach, vi } from "vitest";
+import { expect, test, beforeEach, vi, describe, afterEach } from "vitest";
 import { OpenMRSClient } from "./OpenmrsHttpClient";
+import { getAdapter } from "../../3dl/utilities/openmrs-api/openmrs-adapter-registry";
 
 const BASE_URL = "https://dev3.openmrs.org/openmrs/ws/rest/v1";
 
@@ -308,3 +309,78 @@ test("fetchPatientsFromAppointments calls fetchResource with correct parameters"
     global.fetch = originalFetch;
   }
 }, 15000);
+
+describe("Adapter warning tests", () => {
+  let consoleWarnSpy: vi.SpyInstance;
+
+  beforeEach(() => {
+    consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleWarnSpy.mockRestore();
+  });
+
+  test("warns when invalid adapter key is used but returns raw data", async () => {
+    const invalidAdapterKey = "non-existent-adapter";
+    const response = await client.fetchResource(
+      `patient/${PATIENT_ID}`,
+      {},
+      "GET",
+      undefined,
+      invalidAdapterKey
+    );
+
+    // Verify warning was logged
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(`No adapter found for key "${invalidAdapterKey}"`)
+    );
+
+    // Verify raw data was returned
+    expect(response).toHaveProperty("uuid");
+    expect(response).toHaveProperty("person");
+  });
+
+  test("does not warn when valid adapter key is used", async () => {
+    await client.fetchPatientsFromAppointments(
+      "2025-01-20T00:00:00.000+0300",
+      "2025-01-20T23:59:59.999+0300"
+    );
+
+    // Verify no warning was logged
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+
+  test("handles multiple invalid adapter requests correctly", async () => {
+    const invalidKeys = ["bad-key-1", "bad-key-2", "bad-key-3"];
+
+    for (const key of invalidKeys) {
+      await client.fetchResource(
+        `patient/${PATIENT_ID}`,
+        {},
+        "GET",
+        undefined,
+        key
+      );
+    }
+
+    // Verify each invalid key generated exactly one warning
+    invalidKeys.forEach((key) => {
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`No adapter found for key "${key}"`)
+      );
+    });
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(invalidKeys.length);
+  });
+
+  test("getAdapter function returns undefined for invalid keys", () => {
+    const invalidKey = "non-existent-adapter";
+    const adapter = getAdapter(invalidKey);
+
+    expect(adapter).toBeUndefined();
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(`No adapter found for key "${invalidKey}"`)
+    );
+  });
+});
