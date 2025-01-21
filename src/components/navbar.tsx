@@ -8,8 +8,10 @@ import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
 import { useAppState } from "../context/AppStateContext";
 import { setTokenInLocalStorage } from "../api/DuftHttpClient/local-storage-functions";
 import { userDropdownTheme } from "../flowbite-theme";
+import { useNavigate } from 'react-router-dom';
 
 const ExampleNavbar: FC = function () {
+  const navigate = useNavigate();
   const { state } = useAppState();
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
@@ -17,6 +19,7 @@ const ExampleNavbar: FC = function () {
 
   const handleLogout = () => {
     setTokenInLocalStorage(null, null);
+    navigate('/');
   };
 
   return (
