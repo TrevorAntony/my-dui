@@ -6,13 +6,14 @@ import OpenmrsData, { useOpenmrsFetch } from "../openmrs-api";
 import { OpenMRSClient } from "../../../api/OpenmrsHttpClient/OpenmrsHttpClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const PATIENT_ID = "03aa43ae-b8fa-40dc-8ded-d70f0ebd9255";
+//If these tests fail then this patient was probably deleted 🥲
+const PATIENT_ID = "48a7f255-d499-4741-a2b8-5941e83d91f2";
 const BASE_URL = "https://dev3.openmrs.org/openmrs/ws/rest/v1";
 
 let client: OpenMRSClient;
 
 beforeEach(() => {
-  client = new OpenMRSClient(BASE_URL);
+  client = new OpenMRSClient(BASE_URL, true);
 });
 
 const createTestQueryClient = () =>
@@ -131,7 +132,7 @@ test("useOpenmrsFetch hook directly updates context", async () => {
   expect(result.current.data).toHaveProperty("uuid");
   expect(result.current.data).toHaveProperty("person");
   expect(result.current.datasetParams.loading).toBe(false);
-}, 10000);
+}, 15000);
 
 test("OpenmrsData component handles parameters correctly", async () => {
   const params = {
@@ -165,12 +166,13 @@ test("OpenmrsData component handles parameters correctly", async () => {
     `patient/${PATIENT_ID}`,
     params,
     "GET",
-    undefined
+    undefined,
+    false
   );
 
   // Clean up spy
   fetchResourceSpy.mockRestore();
-}, 10000);
+}, 15000);
 
 test("constructs URL correctly with resource and resourceId", async () => {
   const resourceSpy = vi.spyOn(client, "fetchResource");
@@ -185,6 +187,7 @@ test("constructs URL correctly with resource and resourceId", async () => {
             resourceId={resourceId}
             client={client}
             queryKey="test-url-construction"
+            transformData={true}
           />
           {children}
         </DataProvider>
@@ -197,7 +200,8 @@ test("constructs URL correctly with resource and resourceId", async () => {
     `encounter/${resourceId}`,
     undefined,
     "GET",
-    undefined
+    undefined,
+    true
   );
 
   resourceSpy.mockRestore();
