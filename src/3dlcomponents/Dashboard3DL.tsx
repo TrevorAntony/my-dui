@@ -3,7 +3,7 @@ import JSXParser from "react-jsx-parser";
 import CardComponent from "../components/card-component";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "../ui-components/error-fallback";
-
+import DuftMultiSelectFilter from "../ui-components/multi-select-filter-component";
 import {
   Dashboard,
   Filters,
@@ -103,6 +103,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
             Subheader: DuftSubheader,
             Filters,
             Filter: DuftFilter,
+            MultiSelectFilter: DuftMultiSelectFilter,
             Query,
             Visual1,
             Visual3,

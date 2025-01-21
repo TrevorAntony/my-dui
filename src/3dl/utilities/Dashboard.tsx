@@ -108,7 +108,7 @@ type DashboardDispatch = (action: DashboardAction) => void;
 const setFilter = (
   dispatch: DashboardDispatch,
   name: string,
-  value: string,
+  value: string[],
 ) => {
   dispatch({ type: SET_FILTER, payload: { name, value } });
 };
