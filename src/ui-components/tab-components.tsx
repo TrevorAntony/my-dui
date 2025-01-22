@@ -12,10 +12,10 @@ interface DuftTabChildren {
 const DuftTabset: React.FC<DuftTabChildren> = ({ children }) => {
   const processedChildren = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      const { icon, hasBadge, title, badgeQuery } = child.props as DuftTabProps;
-      const badge = hasBadge === "true";
+      const { icon, showBadge, title, badgeQuery } = child.props as DuftTabProps;
+      const isBadgeAvailable = showBadge === "true";
       const ResolvedIcon = icon ? iconMap[icon as string] : undefined;
-      const modifiedTitle = badge ? (
+      const modifiedTitle = isBadgeAvailable ? (
         <Dataset useQuery={useDuftQuery} query={badgeQuery}>
           <Badge title={title as string} />
         </Dataset>
@@ -42,7 +42,7 @@ interface DuftTabProps {
   children: ReactNode;
   active?: boolean;
   icon?: string | React.ElementType;
-  hasBadge?: string;
+  showBadge?: string;
   badgeQuery?: string;
 }
 
