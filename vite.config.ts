@@ -34,6 +34,14 @@ export default defineConfig({
   },
   server: {
     port: 3031,
+    //TO-DO: add support for multiple proxies for fetching URL data
+    proxy: {
+      "/omrsProxy": {
+        target: "https://dev3.openmrs.org/openmrs/ws/rest/v1",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/omrsProxy/, ""),
+      },
+    },
   },
   preview: {
     port: 3031,
