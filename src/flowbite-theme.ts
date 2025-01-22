@@ -34,9 +34,12 @@ const flowbiteTheme: CustomFlowbiteTheme = {
   badge: {
     root: {
       color: {
-        info: "bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-800 group-hover:bg-blue-200 dark:group-hover:bg-blue-300",
-        primary:
-          "bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-800 group-hover:bg-blue-200 dark:group-hover:bg-blue-300",
+        info: "bg-highlight-150 text-default dark:bg-highlight-700",
+        success: "bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100 group-hover:bg-green-100 dark:group-hover:bg-green-800",
+        warning: "bg-yellow-50 text-yellow-900 dark:bg-yellow-950 dark:text-yellow-100 group-hover:bg-yellow-100 dark:group-hover:bg-yellow-800",
+        failure: "bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100 group-hover:bg-red-100 dark:group-hover:bg-red-800",
+        primary: "bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-800 group-hover:bg-blue-200 dark:group-hover:bg-blue-300",
+        default: "bg-gray-200 text-default dark:bg-gray-400",
       },
       size: {
         xl: "px-3 py-2 text-base rounded-md",
