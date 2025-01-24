@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // TO:DO add data interface for this file
 import type { FC } from "react";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import type { PivotTableUIProps } from "react-pivottable/PivotTableUI";
 import PivotTableUI from "react-pivottable/PivotTableUI";
 import "react-pivottable/pivottable.css";
@@ -21,6 +21,12 @@ interface PivotTableProps {
   DataStringQuery?: string;
 }
 
+type PivotState = {
+  data: any[];
+  rows: string[];
+  cols: string[];
+};
+
 const PivotTable: FC<PivotTableProps> = ({
   container: ContainerComponent,
   header = "Pivot Table",
@@ -33,53 +39,46 @@ const PivotTable: FC<PivotTableProps> = ({
   resize = "false",
   DataStringQuery,
 }) => {
-  const initialPivotRows = pivotRows;
-  const initialPivotCols = pivotCols;
-
-  type PivotState = {
-    data: any[];
-    rows: string[];
-    cols: string[];
-  };
-
-  const [pivotState, setPivotState] = useState<PivotState>({
-    data: [],
-    rows: initialPivotRows,
-    cols: initialPivotCols,
-  });
 
   const { data } = useDataContext();
-
   const hasValidData = data && Array.isArray(data) && data.length > 0;
 
-  useEffect(() => {
-    if (hasValidData) {
-      const keys = Object.keys(data[0]);
+  const defaultPivotRows = useMemo(() => {
+    if (!hasValidData || pivotRows.length > 0) return pivotRows;
+    const keys = Object.keys(data[0]); 
+    return [keys[0]];
+  }, [data, pivotRows, hasValidData]);
 
-      const activePivotRows =
-        initialPivotRows.length > 0 ? initialPivotRows : [keys[0]];
+  const defaultPivotCols = useMemo(() => {
+    if (!hasValidData || pivotCols.length > 0) return pivotCols;
+    const keys = Object.keys(data[0]);
+    return keys.slice(1, 6);
+  }, [data, pivotCols, hasValidData]);
 
-      const validPivotRows = activePivotRows.filter(Boolean) as string[];
+  const processedData = useMemo(() => {
+    if (!hasValidData) return [];
+    const keys = Object.keys(data[0]);
+    const rows = data.map((row) => keys.map((key) => row[key]));
+    return [keys, ...rows];
+  }, [data, hasValidData]);
 
-      const activePivotCols =
-        initialPivotCols.length > 0 ? initialPivotCols : keys.slice(1, 6);
+  const [pivotState, setPivotState] = useState<PivotState>({
+    data: processedData,
+    rows: defaultPivotRows,
+    cols: defaultPivotCols,
+  });
 
-      setPivotState((prevState: PivotState) => {
-        if (
-          prevState.data !== data ||
-          JSON.stringify(prevState.rows) !== JSON.stringify(validPivotRows) ||
-          JSON.stringify(prevState.cols) !== JSON.stringify(activePivotCols)
-        ) {
-          return {
-            data: data,
-            rows: validPivotRows,
-            cols: activePivotCols,
-          };
-        }
-        return prevState;
-      });
-    }
-  }, [data, initialPivotRows, initialPivotCols, hasValidData]);
+  if (
+    pivotState.data !== processedData ||
+    JSON.stringify(pivotState.rows) !== JSON.stringify(defaultPivotRows) ||
+    JSON.stringify(pivotState.cols) !== JSON.stringify(defaultPivotCols)
+  ) {
+    setPivotState({
+      data: processedData,
+      rows: defaultPivotRows,
+      cols: defaultPivotCols,
+    });
+  }
 
   const content = hasValidData ? (
     <div>
