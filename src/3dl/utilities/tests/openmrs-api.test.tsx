@@ -1,19 +1,19 @@
 import { renderHook } from "@testing-library/react";
-import { expect, test, beforeEach, vi } from "vitest";
+import { expect, test, beforeAll, vi } from "vitest";
 import DataProvider from "../data-provider";
 import { useDataContext } from "../../context/DataContext";
 import OpenmrsData, { useOpenmrsFetch } from "../openmrs-api/openmrs-api";
 import { OpenMRSClient } from "../../../api/OpenmrsHttpClient/OpenmrsHttpClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { getTestPatient } from "./test-helpers";
 
-//If these tests fail then this patient was probably deleted 🥲
-const PATIENT_ID = "48a7f255-d499-4741-a2b8-5941e83d91f2";
 const BASE_URL = "https://dev3.openmrs.org/openmrs/ws/rest/v1";
-
+let PATIENT_ID: string;
 let client: OpenMRSClient;
 
-beforeEach(() => {
+beforeAll(async () => {
   client = new OpenMRSClient(BASE_URL, true);
+  PATIENT_ID = await getTestPatient(client);
 });
 
 const createTestQueryClient = () =>
