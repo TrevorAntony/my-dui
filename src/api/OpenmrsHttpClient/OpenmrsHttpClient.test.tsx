@@ -1,12 +1,25 @@
-import { expect, test, beforeEach, vi, describe, afterEach } from "vitest";
+import {
+  expect,
+  test,
+  beforeEach,
+  vi,
+  describe,
+  afterEach,
+  beforeAll,
+} from "vitest";
 import { OpenMRSClient } from "./OpenmrsHttpClient";
 import { getAdapter } from "../../3dl/utilities/openmrs-api/openmrs-adapter-registry";
+import { getTestPatient } from "../../3dl/utilities/tests/test-helpers";
 
 const BASE_URL = "https://dev3.openmrs.org/openmrs/ws/rest/v1";
-
-//If these tests fail then this patient was probably deleted 🥲
-const PATIENT_ID = "48a7f255-d499-4741-a2b8-5941e83d91f2";
+let PATIENT_ID: string;
 let client: OpenMRSClient;
+
+beforeAll(async () => {
+  client = new OpenMRSClient(BASE_URL, true);
+  PATIENT_ID = await getTestPatient(client);
+  console.log("Test setup complete with patient UUID:", PATIENT_ID);
+});
 
 beforeEach(() => {
   client = new OpenMRSClient(BASE_URL, true); // Enable test environment
@@ -36,13 +49,12 @@ test("searches appointments successfully (POST)", async () => {
 }, 15000);
 
 test("fetches specific patient data successfully (GET)", async () => {
-  const patientUuid = PATIENT_ID;
-  const response = await client.fetchResource(`patient/${patientUuid}`, {
+  const response = await client.fetchResource(`patient/${PATIENT_ID}`, {
     v: "full",
   });
 
   expect(response).toBeDefined();
-  expect(response.uuid).toBe(patientUuid);
+  expect(response.uuid).toBe(PATIENT_ID);
   expect(response.person).toBeDefined();
   expect(response.person.uuid).toBeDefined();
   expect(response.person.display).toBeDefined();
@@ -214,11 +226,10 @@ test("fetchEncounter method calls fetchResource with correct parameters", async 
 }, 15000);
 
 test("fetchPatient method fetches real patient data", async () => {
-  const patientId = PATIENT_ID;
-  const result = await client.fetchPatient(patientId);
+  const result = await client.fetchPatient(PATIENT_ID);
 
   expect(result).toBeDefined();
-  expect(result.uuid).toBe(patientId);
+  expect(result.uuid).toBe(PATIENT_ID);
   expect(result.person).toBeDefined();
   expect(result.person.uuid).toBeDefined();
   expect(result.identifiers).toBeDefined();
