@@ -159,7 +159,6 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       searchColumns={searchColumns}
       pageSize={pageSize}
       query={query}
-      exportData={exportData}
       searchHint={searchHint}
       resize={resize}
       detailsTitle={detailsTitle}

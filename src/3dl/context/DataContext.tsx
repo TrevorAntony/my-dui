@@ -23,6 +23,13 @@ interface DataContextType {
   setDatasetParams?: (
     params: DatasetParams | ((params: DatasetParams) => DatasetParams)
   ) => void;
+  // Direct context values for Dataset component
+  query?: string;
+  searchText?: string;
+  searchColumns?: string;
+  sortColumn?: string;
+  pageSize?: number | string;
+  currentPage?: number;
   resetPage: () => void;
   pageUpdater: () => void;
   handleSearchChange: (newSearchText: string) => void;
@@ -60,6 +67,13 @@ const defaultDataContext: DataContextType = {
     query: "",
     setQuery: () => {},
   },
+  // Add default values for direct context properties
+  query: "",
+  searchText: "",
+  searchColumns: "",
+  sortColumn: "",
+  pageSize: 10,
+  currentPage: 1,
   setDatasetParams: () => {},
   resetPage: () => {},
   pageUpdater: () => {},

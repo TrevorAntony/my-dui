@@ -5,30 +5,30 @@ import { client } from "../../../api/DuftHttpClient/local-storage-functions";
 import config from "../../../config";
 import { useDataContext } from "../../context/DataContext";
 
-// Props needed for Dataset component compatibility
-interface ExportDataProps {
-  query?: string;
-  searchText?: string;
-  searchColumns?: string;
-  sortColumn?: string;
-  pageSize?: number;
-  currentPage?: number;
-}
-
-function ExportData({ query: defaultQuery, ...defaultParams }: ExportDataProps = {}) {
+function ExportData() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { datasetParams } = useDataContext();
+  const {
+    // From DataProvider context
+    datasetParams,
+    // From Dataset context
+    query: datasetQuery,
+    searchText: directSearchText,
+    searchColumns: directSearchColumns,
+    sortColumn: directSortColumn,
+    pageSize: directPageSize,
+    currentPage: directCurrentPage,
+  } = useDataContext();
 
   const handleExport = async (format: string, scope: string) => {
     try {
-      // Use context values if available, otherwise fall back to props
+      // Prefer datasetParams values, fall back to direct context values
       const effectiveParams = {
-        query: datasetParams?.query || defaultQuery,
-        searchText: datasetParams?.searchText || defaultParams.searchText,
-        searchColumns: datasetParams?.searchColumns || defaultParams.searchColumns,
-        sortColumn: datasetParams?.sortColumn || defaultParams.sortColumn,
-        pageSize: datasetParams?.pageSize || defaultParams.pageSize,
-        currentPage: datasetParams?.currentPage || defaultParams.currentPage || 1,
+        query: datasetParams?.query || datasetQuery,
+        searchText: datasetParams?.searchText || directSearchText,
+        searchColumns: datasetParams?.searchColumns || directSearchColumns,
+        sortColumn: datasetParams?.sortColumn || directSortColumn,
+        pageSize: datasetParams?.pageSize || directPageSize,
+        currentPage: datasetParams?.currentPage || directCurrentPage || 1,
         filters: datasetParams?.filters || {}
       };
 
