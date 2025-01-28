@@ -109,14 +109,12 @@ const extractAndTrackProgress = async (resource7zPath, extractPath) => {
       }
     });
 
-    // Step 3: Handle nested extractions if needed
+    // Step 3: Handle nested extractions
     await handleNestedExtraction(extractPath);
 
     // Step 4: Extract portable virtual environment
     await extractPortableVenv();
 
-    // Step 5: Send completion update
-    sendProgressUpdate(100, `Setup complete`);
   } catch (err) {
     logError('Error during extraction:', err);
   }
