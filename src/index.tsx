@@ -29,7 +29,9 @@ const root = createRoot(container);
 const queryClient = new QueryClient();
 
 export const client = new DuftHttpClient(
-  config.apiBaseUrl || `${window.location.origin}/api/v2`,
+  config.apiBaseUrl
+    ? `${config.apiBaseUrl}/api/v2`
+    : `${window.location.origin}/api/v2`,
   getTokenFromLocalStorage,
   setTokenInLocalStorage,
   updateConfigFromHttpClient,

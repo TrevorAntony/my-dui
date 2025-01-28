@@ -2,7 +2,7 @@
   "name": "data-use-facility-tool",
   "author": "UCSF, IGHS | Global Programs <communications@globalhealth.ucsf.edu>",
   "type": "module",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "electron/electron.cjs",
   "description": "Platform for Facility Data Use",
   "license": "UNLICENSED",
@@ -164,7 +164,7 @@
     "compression": "maximum",
     "directories": {
       "buildResources": ".",
-      "output": "release"
+      "output": "dist"
     },
     "files": [
       "public/setup.html",
@@ -230,7 +230,6 @@
         "deb",
         "rpm"
       ],
-      "icon": "./duft_icon.png",
       "artifactName": "${productName}-${version}-${arch}-${implementationCode}.${ext}"
     },
     "nsis": {
