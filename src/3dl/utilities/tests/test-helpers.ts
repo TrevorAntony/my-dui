@@ -5,8 +5,8 @@ export const getPatientFromAppointments = async (
   client: OpenMRSClient
 ): Promise<string> => {
   const searchPayload = {
-    startDate: "2025-01-20T00:00:00.000+0300",
-    endDate: "2025-01-20T23:59:59.999+0300",
+    startDate: "2000-01-20T00:00:00.000+0300",
+    endDate: "2025-01-26T23:59:59.999+0300",
   };
 
   try {
