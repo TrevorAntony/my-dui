@@ -1,10 +1,13 @@
+import React from "react";
 import Chart from "react-apexcharts";
 import { useThemeContext } from "../utilities/Dashboard";
+import { useStaticDataContext } from "../utilities/static-data";
 import { useDataContext } from "../context/DataContext";
 import { deepCopy, deepMerge } from "../../helpers/visual-helpers";
 import EmptyState from "../ui-elements/empty-state";
 import ChartSkeleton from "../../ui-components/chart-skeleton";
 import type { VisualProps } from "../../types/visual-props";
+import { StaticDataContext } from "../utilities/static-data";
 type DataItem = {
   category?: string;
   value?: number;
@@ -21,7 +24,19 @@ const ClusteredLineChart = ({
   ...props
 }: VisualProps) => {
   const theme = useThemeContext();
-  const { data, loading } = useDataContext();
+
+  const isStaticDataAvailable = React.useContext(StaticDataContext) !== undefined;
+
+  let data: any[] = [];
+  let loading: boolean = false;
+
+  if (isStaticDataAvailable) {
+    data = useStaticDataContext();
+  } else {
+    const dataContext = useDataContext();
+    data = dataContext.data;
+    loading = dataContext.loading;
+  }
 
   if (loading) {
     return <ChartSkeleton />;

@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // TO:DO add data interface for this file
+import React from "react";
 import type { FC } from "react";
 import { useState, useEffect } from "react";
 import type { PivotTableUIProps } from "react-pivottable/PivotTableUI";
 import PivotTableUI from "react-pivottable/PivotTableUI";
 import "react-pivottable/pivottable.css";
+import { useStaticDataContext } from "../utilities/static-data";
 import { useDataContext } from "../context/DataContext";
 import TableSkeleton from "../../ui-components/table-skeleton";
+import { StaticDataContext } from "../utilities/static-data";
 
 interface PivotTableProps {
   container?: React.ElementType;
@@ -33,6 +36,8 @@ const PivotTable: FC<PivotTableProps> = ({
   resize = "false",
   DataStringQuery,
 }) => {
+  const isStaticDataAvailable =
+    React.useContext(StaticDataContext) !== undefined;
   const initialPivotRows = pivotRows;
   const initialPivotCols = pivotCols;
 
@@ -48,7 +53,14 @@ const PivotTable: FC<PivotTableProps> = ({
     cols: initialPivotCols,
   });
 
-  const { data } = useDataContext();
+  let data: any[] = [];
+
+  if (isStaticDataAvailable) {
+    data = useStaticDataContext();
+  } else {
+    const dataContext = useDataContext();
+    data = dataContext.data;
+  }
 
   const hasValidData = data && Array.isArray(data) && data.length > 0;
 
