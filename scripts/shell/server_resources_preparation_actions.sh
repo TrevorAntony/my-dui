@@ -152,8 +152,8 @@ pack_conda_env() {
   local env_name=$2
 
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
-  write_color "Packing Conda environment '$env_name' into portable-venv.tar.gz..." Blue
-  tar -czf "${server_app_dir}/portable-venv.tar.gz" --strip-components=1 -C "$server_app_dir" "$env_name"
+  write_color "Packing Conda environment '$env_name' into portable-venv.7z..." Blue
+  7z a -r -mx=9 "${server_app_dir}/portable-venv.7z" "$server_app_dir/$env_name"
   rm -rf "${server_app_dir:?}/${env_name}"
 
   if [ $? -eq 0 ]; then
@@ -168,7 +168,7 @@ pack_conda_env() {
 
 # Constants
 ZIP_DIR="duft_resources"
-ZIP_FILE="duft_resources.zip"
+ZIP_FILE="duft_resources.7z"
 ENV_NAME="portable-venv"
 PYTHON_VERSION="3.11"
 

@@ -4,7 +4,7 @@ const cors = require("cors");
 const os = require('os');
 const fs = require("fs");
 const { spawn, execSync } = require("child_process");
-const extract = require('extract-zip');
+const extractArchive = require('7zip-min');
 const tar = require('tar');
 const WebSocket = require('ws');
 const log = require('electron-log');
@@ -19,10 +19,10 @@ const AppConfig = {
   SERVER_APP_PID_FILE: path.join(app.getPath('userData'), 'serverApp.pid'),
   PLATFORM: os.platform(),
   APP_URL: 'http://localhost:8000',
-  RESOURCE_ZIP_PATH: path.join(process.resourcesPath, 'duft_resources.zip'),
+  RESOURCE_7ZIP_PATH: path.join(process.resourcesPath, 'duft_resources.7z'),
   USER_HOME_PATH: path.join(os.homedir()),
   EXTRACT_PATH: path.join(os.homedir(), 'duft_resources'),
-  TAR_PATH: path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv.tar.gz'),
+  SEVEN_ZIP_PATH: path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv.7z'),
   PYTHON_INTERPRETER_PATH: os.platform() === 'win32' ?
     path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv', 'python.exe') :
     path.join(os.homedir(), 'duft_resources', 'duft-server', 'portable-venv', 'bin', 'python'),
@@ -63,64 +63,121 @@ const startWebSocketServer = () => {
 };
 
 // Extraction Functions
-const extractAndTrackProgress = async (resourceZipPath, extractPath) => {
+
+const extractAndTrackProgress = async (resource7zPath, extractPath) => {
   try {
-    const { totalFiles } = await scanZipForProgress(resourceZipPath);
-    await extract(resourceZipPath, { dir: extractPath }, (entry, index) => {
-      const progress = Math.round((index / totalFiles) * 50); // Step 1 progress (0-50%)
-      sendProgressUpdate(progress, `Step 1/2: Initializing...`);
+
+    // Step 1: Get total file count for progress tracking
+    const { totalFiles } = await scan7zForProgress(resource7zPath);
+
+    // Ensure extractPath exists
+    if (!fs.existsSync(extractPath)) {
+      fs.mkdirSync(extractPath, { recursive: true });
+    }
+
+    // Step 2: Extract and track progress
+    await new Promise((resolve, reject) => {
+      let extractedFiles = 0;
+
+      const progressInterval = setInterval(() => {
+        const progress = Math.min(Math.round((extractedFiles / totalFiles) * 50), 50);
+        sendProgressUpdate(progress, `Step 1/2: Initializing...`);
+      }, 100);
+
+      extractArchive.unpack(resource7zPath, extractPath, err =>{
+        clearInterval(progressInterval);
+        if (err) {
+          logError('Error during extraction:', err);
+          return reject(err);
+        }
+        extractedFiles = totalFiles;
+        resolve();
+      })
+
+      // Set up watcher with error handling
+      let watcher;
+      try {
+        watcher = fs.watch(extractPath, { recursive: true }, () => {
+          extractedFiles++;
+        });
+
+        watcher.on('error', (watchErr) => {
+          watcher.close();
+        });
+      } catch (err) {
+        logError('Failed to watch directory:', extractPath, err.message);
+      }
     });
 
-    // Handle nested directories if needed
+    // Step 3: Handle nested extractions if needed
     await handleNestedExtraction(extractPath);
 
-    // Proceed to extract the tar.gz file
+    // Step 4: Extract portable virtual environment
     await extractPortableVenv();
+
+    // Step 5: Send completion update
     sendProgressUpdate(100, `Setup complete`);
   } catch (err) {
     logError('Error during extraction:', err);
   }
 };
 
-const scanZipForProgress = (zipPath) => {
-  return new Promise((resolve) => {
-    const zip = new require('adm-zip')(zipPath);
-    const totalFiles = zip.getEntries().length;
-    resolve({ totalFiles });
+const scan7zForProgress = (sevenZipPath) => {
+  return new Promise((resolve, reject) => {
+    const { list } = require('7zip-min');
+    list(sevenZipPath, (err, result) => {
+      if (err) {
+        logError('Error scanning .7z file:', err);
+        return reject(err);
+      }
+      const totalFiles = result.length;
+      resolve({ totalFiles });
+    });
   });
 };
 
 const extractPortableVenv = async () => {
   try {
-    const extractPath = path.join(AppConfig.EXTRACT_PATH, 'duft-server', 'portable-venv');
+    const destinationDirectoryPath = path.dirname(AppConfig.SEVEN_ZIP_PATH);
 
     // Ensure the directory for extraction exists
-    if (!fs.existsSync(extractPath)) {
-      fs.mkdirSync(extractPath, { recursive: true });
+    if (!fs.existsSync(destinationDirectoryPath)) {
+      fs.mkdirSync(destinationDirectoryPath, { recursive: true });
+    }
+
+    // Ensure the .7z file exists
+    if (!fs.existsSync(AppConfig.SEVEN_ZIP_PATH)) {
+      throw new Error(`7z file not found: ${AppConfig.SEVEN_ZIP_PATH}`);
     }
 
     let totalSize = 0;
     let processedSize = 0;
 
-    // Calculate total size of all entries in the tar file
-    await tar.t({
-      file: AppConfig.TAR_PATH,
-      onentry: (entry) => {
-        totalSize += entry.size;
-      }
-    });
+    // Calculate the total size of the .7z file for progress tracking
+    totalSize = fs.statSync(AppConfig.SEVEN_ZIP_PATH).size;
 
-    // Extract the tar.gz file with progress tracking
-    await tar.x({
-      file: AppConfig.TAR_PATH,
-      cwd: extractPath,
-      onentry: (entry) => {
-        processedSize += entry.size;
-        const progress = Math.round((processedSize * 50 / totalSize) + 50);
+    // Track extraction progress
+    await new Promise(async (resolve, reject) => {
+      const progressInterval = setInterval(() => {
+        const progress = Math.round(processedSize / totalSize) + 50; // 50%-100% for Step 2
         sendProgressUpdate(progress, `Step 2/2: Finalizing...`);
-      }
+      }, 100);
+
+      // Extract the .7z file
+      extractArchive.unpack(AppConfig.SEVEN_ZIP_PATH, AppConfig.USER_HOME_PATH, async err => {
+        clearInterval(progressInterval);
+        if (err) {
+          logError('Error during portable-venv extraction:', err);
+          return reject(err);
+        }
+
+        await handleNestedExtraction(destinationDirectoryPath);
+        resolve();
+      });
     });
 
+    // Notify completion
+    sendProgressUpdate(100, `Setup complete`);
   } catch (err) {
     logError('Error during portable-venv extraction:', err);
   }
@@ -292,7 +349,7 @@ const handleInitialSetup = async () => {
       fs.mkdirSync(AppConfig.EXTRACT_PATH, { recursive: true });
 
       try {
-        await extractAndTrackProgress(AppConfig.RESOURCE_ZIP_PATH, AppConfig.EXTRACT_PATH);
+        await extractAndTrackProgress(AppConfig.RESOURCE_7ZIP_PATH, AppConfig.EXTRACT_PATH);
       } catch (err) {
         logError('Error during initialization:', err);
         mainWindow.webContents.send("initialization-error", err.message);
