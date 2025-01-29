@@ -196,6 +196,19 @@ const ExampleSidebar: FC = function () {
 
 const channel = new BroadcastChannel("bottom-menu-channel");
 
+const createEventSource = (url: string) => {
+  try {
+    if (typeof EventSource === "undefined") {
+      console.warn("EventSource is not supported in this environment");
+      return null;
+    }
+    return new EventSource(url);
+  } catch (error) {
+    console.warn("Failed to create EventSource:", error);
+    return null;
+  }
+};
+
 const BottomMenu: FC = function () {
   const [data, setData] = useState<{
     isRunning?: boolean;
@@ -212,49 +225,53 @@ const BottomMenu: FC = function () {
   }, [modalContent]);
 
   useEffect(() => {
-    const eventSource = new EventSource(
+    const eventSource = createEventSource(
       `${config.apiBaseUrl || window.location.origin}/sse/dte/`
-    ); //use base url
+    );
 
-    eventSource.onmessage = (event) => {
-      const parsedData = JSON.parse(event.data);
+    if (eventSource) {
+      eventSource.onmessage = (event) => {
+        const parsedData = JSON.parse(event.data);
 
-      setData(parsedData);
+        setData(parsedData);
 
-      if (parsedData.isRunning) {
-        setIsModalOpen(true);
+        if (parsedData.isRunning) {
+          setIsModalOpen(true);
 
-        channel.postMessage({
-          type: "TOGGLE_MODAL",
-          isModalOpen: true,
-        });
-      }
+          channel.postMessage({
+            type: "TOGGLE_MODAL",
+            isModalOpen: true,
+          });
+        }
 
-      const { message, dataTask } = parsedData;
+        const { message, dataTask } = parsedData;
 
-      const maxLength = 150;
+        const maxLength = 150;
 
-      const isValidMessage =
-        dataTask &&
-        dataTask !== "script_start" &&
-        dataTask !== "script_complete" &&
-        dataTask !== "scriptError" &&
-        message?.length <= maxLength;
+        const isValidMessage =
+          dataTask &&
+          dataTask !== "script_start" &&
+          dataTask !== "script_complete" &&
+          dataTask !== "scriptError" &&
+          message?.length <= maxLength;
 
-      if (isValidMessage) {
-        setModalContent((prevContent) => [...prevContent, message]);
-      }
-    };
+        if (isValidMessage) {
+          setModalContent((prevContent) => [...prevContent, message]);
+        }
+      };
 
-    eventSource.onerror = () => {
-      console.error("Error with SSE connection");
-      eventSource.close();
-    };
+      eventSource.onerror = (error) => {
+        console.error("EventSource failed:", error);
+        eventSource.close();
+      };
 
-    return () => {
-      eventSource.close();
-    };
-  }, []);
+      return () => {
+        eventSource.close();
+      };
+    }
+
+    return undefined;
+  }, [config.apiBaseUrl]);
 
   useEffect(() => {
     channel.onmessage = (event) => {

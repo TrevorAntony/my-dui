@@ -1,28 +1,20 @@
-import { useEffect } from "react";
 import { useAppState } from "../context/AppStateContext";
 import App from "../App";
 import Login from "./login";
 import Splash from "./splash";
 import { GlobalState } from "../context/types";
-import { UnauthorizedError } from "../api/DuftHttpClient/ErrorClasses";
-import { client } from "../api/DuftHttpClient/local-storage-functions";
+import { useInitializeConfig } from "../hooks/useInitializeConfig";
+import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
 
-const AppInitializer: React.FC = () => {
+interface AppInitializerProps {
+  customHttpClient?: DuftHttpClient;
+}
+
+const AppInitializer: React.FC<AppInitializerProps> = ({
+  customHttpClient,
+}) => {
   const { state } = useAppState();
-
-  useEffect(() => {
-    const initConfig = async () => {
-      try {
-        await client.getCurrentConfig();
-      } catch (error) {
-        if (error instanceof UnauthorizedError) {
-          // This is the better way
-          await client.getCurrentConfig(false);
-        }
-      }
-    };
-    initConfig();
-  }, []);
+  useInitializeConfig(customHttpClient);
 
   if (state.state === GlobalState.SPLASH) {
     return <Splash />;
