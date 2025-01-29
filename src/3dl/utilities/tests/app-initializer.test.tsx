@@ -1,5 +1,5 @@
-import { render, renderHook } from "@testing-library/react";
-import { describe, expect, test, beforeAll, beforeEach, vi } from "vitest";
+import { renderHook } from "@testing-library/react";
+import { describe, expect, test, beforeEach, vi } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // App Components
@@ -16,6 +16,7 @@ import {
   updateConfigFromHttpClient,
   clearTokensFromLocalStorage,
 } from "../../../api/DuftHttpClient/local-storage-functions";
+import { makeAuthenticatedRequest, mockConfig } from "./test-helpers";
 
 const BASE_URL = "http://127.0.0.1:8000/api/v2";
 
@@ -30,36 +31,6 @@ const createTestQueryClient = () =>
   });
 
 // Test utilities
-const makeAuthenticatedRequest = async (
-  endpoint: string,
-  token?: string,
-  method: "GET" | "POST" = "GET",
-  body?: Record<string, any>
-): Promise<any> => {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
-  const response = await fetch(endpoint, {
-    method,
-    headers,
-    ...(body && { body: JSON.stringify(body) }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(
-      `Request failed: ${response.status} - ${JSON.stringify(errorData)}`
-    );
-  }
-
-  return response.json();
-};
 
 const waitForState = <T extends unknown>(
   condition: (state: T) => boolean,
@@ -226,43 +197,6 @@ describe("AppInitializer State Transitions", () => {
   });
 
   test("follows correct state transition path with auth disabled", async () => {
-    const mockConfig = {
-      features: {
-        user_authentication: false,
-        data_tasks: false,
-        log_level: "INFO",
-        server_uploads: false,
-        task_scheduler: false,
-      },
-      currentUser: null,
-      currentUserPermissions: [],
-      currentUserRoles: [],
-      settings: {
-        name: "Test Instance",
-        appName: "DUFT Test",
-        footer: "Test Footer",
-        custom: "custom-value",
-        version: "1.0.0",
-        logoURL: "https://example.com/logo.png",
-        repository: "https://github.com/example/repo",
-        credits: {
-          organisaton: "Test Org",
-          department: "Test Department",
-          website: "https://example.com",
-          productOwners: ["Owner 1", "Owner 2"],
-          developers: ["Dev 1", "Dev 2"],
-        },
-        additionalInfo: "Additional test information",
-        theme: {}, // Additional custom setting
-        layout: {}, // Additional custom setting
-      },
-      version: "1.0.0",
-      serverBaseURL: "http://localhost:8000",
-      pythonPath: "/usr/bin/python",
-      pythonVersion: "3.8.0",
-      directories: {},
-    };
-
     // Create client instance with mocked makeRequest
     const testClient = new DuftHttpClient(
       BASE_URL,
@@ -292,11 +226,6 @@ describe("AppInitializer State Transitions", () => {
         </QueryClientProvider>
       ),
     });
-
-    // Log mock function calls and return values
-    console.log("Mock function calls:", makeRequestSpy.mock.calls);
-    console.log("Mock function returns:", makeRequestSpy.mock.results);
-    console.log("Mock function returns:", makeRequestSpy);
 
     // Track initial render state
     expect(result.current.state.state).toBe(GlobalState.SPLASH);
