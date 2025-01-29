@@ -82,3 +82,8 @@ export class OpenMRSClient {
     );
   }
 }
+
+// Export a default instance
+export const openmrsClient = new OpenMRSClient(
+  "https://dev3.openmrs.org/openmrs/ws/rest/v1"
+);

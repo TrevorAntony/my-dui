@@ -5,7 +5,7 @@ import Login from "./login";
 import Splash from "./splash";
 import { GlobalState } from "../context/types";
 import { UnauthorizedError } from "../api/DuftHttpClient/ErrorClasses";
-import { client } from "..";
+import { client } from "../api/DuftHttpClient/local-storage-functions";
 
 const AppInitializer: React.FC = () => {
   const { state } = useAppState();

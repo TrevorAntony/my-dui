@@ -9,16 +9,7 @@ import theme from "./flowbite-theme";
 
 import "./index.css";
 import "./input.css";
-import { DuftHttpClient } from "./api/DuftHttpClient/DuftHttpClient";
-import config from "./config";
-import {
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-  updateConfigFromHttpClient,
-  getRefreshToken,
-} from "./api/DuftHttpClient/local-storage-functions";
 import { ThemeModeProvider, useThemeMode } from "./context/ThemeModeContext";
-import { OpenMRSClient } from "./api/OpenmrsHttpClient/OpenmrsHttpClient";
 
 const container = document.getElementById("root");
 
@@ -28,20 +19,6 @@ if (!container) {
 
 const root = createRoot(container);
 const queryClient = new QueryClient();
-
-export const client = new DuftHttpClient(
-  config.apiBaseUrl
-    ? `${config.apiBaseUrl}/api/v2`
-    : `${window.location.origin}/api/v2`,
-  getTokenFromLocalStorage,
-  setTokenInLocalStorage,
-  updateConfigFromHttpClient,
-  getRefreshToken
-);
-
-export const openmrsClient = new OpenMRSClient(
-  "https://dev3.openmrs.org/openmrs/ws/rest/v1"
-);
 
 function Root() {
   return (

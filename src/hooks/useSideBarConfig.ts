@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { defaultSidebarConfig } from "../helpers/constants";
 import type { NavigationConfig } from "../components/types";
-import { client } from "..";
+import { client } from "../api/DuftHttpClient/local-storage-functions";
 
 export const useSidebarConfig = () => {
   const [sidebarConfig, setSidebarConfig] = useState(defaultSidebarConfig);

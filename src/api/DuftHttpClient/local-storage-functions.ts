@@ -1,12 +1,16 @@
+import config from "../../config";
 import type { Config } from "../../context/types";
 import DispatchService from "../../services/dispatchService";
 import { DuftHttpClient } from "./DuftHttpClient";
 
 export const client = new DuftHttpClient(
-  "http://127.0.0.1:8000/api/v2",
+  config.apiBaseUrl
+    ? `${config.apiBaseUrl}/api/v2`
+    : `${window.location.origin}/api/v2`,
   getTokenFromLocalStorage,
   setTokenInLocalStorage,
-  updateConfigFromHttpClient
+  updateConfigFromHttpClient,
+  getRefreshToken
 );
 
 /**
