@@ -22,7 +22,6 @@ const ClusteredLineChart = ({
 }: VisualProps) => {
   const theme = useThemeContext();
   const { data, loading } = useDataContext();
-  console.log("Cluster: ", data)
 
   if (loading) {
     return <ChartSkeleton />;
