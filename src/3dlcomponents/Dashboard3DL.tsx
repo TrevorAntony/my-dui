@@ -70,7 +70,8 @@ import DataString from "../components/dashboard-meta";
 import useDashboardData from "./resources/useDashboardData";
 import useThemeData from "./resources/useTheme";
 import useQueryData from "./resources/useQueryData";
-import { client, openmrsClient } from "..";
+import { client } from "../api/DuftHttpClient/local-storage-functions";
+import { openmrsClient } from "../api/OpenmrsHttpClient/OpenmrsHttpClient";
 
 interface Dashboard3DLProps {
   defaultId?: string;
