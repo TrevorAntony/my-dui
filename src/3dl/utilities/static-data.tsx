@@ -1,31 +1,18 @@
-import { createContext, FC, ReactNode, useContext } from "react";
-
-type StaticDataType = any[];
-
-export const StaticDataContext = createContext<StaticDataType | undefined>(undefined);
+import React, { useEffect } from 'react';
+import { useDataContext } from '../context/DataContext';
 
 interface StaticDataProps {
-  data?: StaticDataType;
-  children: ReactNode;
+  data: any[];
 }
 
-const StaticData: FC<StaticDataProps> = ({ data = [], children }) => {
-  return (
-    <StaticDataContext.Provider value={data}>
-      {children}
-    </StaticDataContext.Provider>
-  );
-};
+const StaticData: React.FC<StaticDataProps> = ({ data }) => {
+  const { setData } = useDataContext();
 
-export const useStaticDataContext = () => {
-  const context = useContext(StaticDataContext);
-  if (context === undefined) {
-    throw new Error(
-      "useStaticDataContext must be used within a StaticData provider"
-    );
-  }
-  return context;
+  useEffect(() => {
+    setData(data);
+  }, [data, setData]);
+
+  return null;
 };
 
 export default StaticData;
-
