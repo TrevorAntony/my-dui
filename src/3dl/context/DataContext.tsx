@@ -13,30 +13,23 @@ export interface DatasetParams {
   loading?: boolean;
   error?: Error | null;
   query?: string;
+  queryName?: string;
   setQuery?: (query: string) => void;
 }
 
 interface DataContextType {
+  // Core data properties
   data: any[] | null;
   setData?: (data: any[] | null) => void;
+  // Dataset parameters and setters
   datasetParams?: DatasetParams;
   setDatasetParams?: (
     params: DatasetParams | ((params: DatasetParams) => DatasetParams)
   ) => void;
-  // Direct context values for Dataset component
-  query?: string;
-  searchText?: string;
-  searchColumns?: string;
-  sortColumn?: string;
-  pageSize?: number | string;
-  currentPage?: number;
-  resetPage: () => void;
-  pageUpdater: () => void;
-  handleSearchChange: (newSearchText: string) => void;
-  handleSortChange: (newSortText: string) => void;
-  //these additional types are added since we still support Dataset and DataProvider components
-  //once we deprecate the Dataset these types will be removed
+  //properties used by both Dataset and DataProvider
   filters?: any;
+  query?: string;
+  queryName?: string;
   searchText?: string;
   searchColumns?: string;
   sortColumn?: string;
@@ -46,8 +39,11 @@ interface DataContextType {
   appendData?: boolean;
   loading?: boolean;
   error?: Error | null;
-  query?: string;
   setQuery?: (query: string) => void;
+  resetPage: () => void;
+  pageUpdater: () => void;
+  handleSearchChange: (newSearchText: string) => void;
+  handleSortChange: (newSortText: string) => void;
 }
 
 const defaultDataContext: DataContextType = {
@@ -69,6 +65,7 @@ const defaultDataContext: DataContextType = {
   },
   // Add default values for direct context properties
   query: "",
+  queryName: "",  // Add default queryName
   searchText: "",
   searchColumns: "",
   sortColumn: "",

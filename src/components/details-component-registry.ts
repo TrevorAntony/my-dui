@@ -45,7 +45,7 @@ export interface DetailsComponentRegistry {
 }
 
 const detailsComponentRegistry: DetailsComponentRegistry = {
-  "bar-chart": BarChart, 
+  "bar-chart": BarChart,
   "line-chart": LineChart,
   "area-chart": AreaChart,
   "cascade-chart": CascadeChart,

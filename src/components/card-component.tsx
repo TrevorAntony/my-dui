@@ -85,9 +85,7 @@ const CardComponent: FC<CardComponentProps> = ({
           </div>
           <div className="flex items-center space-x-2">
             {infoTagContent ? infoTagContent : null}
-            {shouldExportData && 
-             layout !== "single-layout" &&
-             (
+            {shouldExportData && layout !== "single-layout" && (
               <div className="self-start pl-1">
                 <ExportData />
               </div>
