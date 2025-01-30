@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { client } from "../../index";
+import { client } from "../../api/DuftHttpClient/local-storage-functions";
 
 interface Param {
   name: string;

@@ -7,8 +7,8 @@ import config from "../config";
 import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
 import { useAppState } from "../context/AppStateContext";
 import { userDropdownTheme } from "../flowbite-theme";
-import { useNavigate } from 'react-router-dom';
-import { client } from "..";
+import { useNavigate } from "react-router-dom";
+import { client } from "../api/DuftHttpClient/local-storage-functions";
 
 const ExampleNavbar: FC = function () {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const ExampleNavbar: FC = function () {
 
   const handleLogout = () => {
     client.logout();
-    navigate('/');
+    navigate("/");
   };
 
   return (

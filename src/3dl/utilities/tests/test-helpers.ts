@@ -60,3 +60,71 @@ export const getTestPatient = async (
     }
   }
 };
+
+export const makeAuthenticatedRequest = async (
+  endpoint: string,
+  token?: string,
+  method: "GET" | "POST" = "GET",
+  body?: Record<string, any>
+): Promise<any> => {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(endpoint, {
+    method,
+    headers,
+    ...(body && { body: JSON.stringify(body) }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(
+      `Request failed: ${response.status} - ${JSON.stringify(errorData)}`
+    );
+  }
+
+  return response.json();
+};
+
+export const mockConfig = {
+  features: {
+    user_authentication: false,
+    data_tasks: false,
+    log_level: "INFO",
+    server_uploads: false,
+    task_scheduler: false,
+  },
+  currentUser: null,
+  currentUserPermissions: [],
+  currentUserRoles: [],
+  settings: {
+    name: "Test Instance",
+    appName: "DUFT Test",
+    footer: "Test Footer",
+    custom: "custom-value",
+    version: "1.0.0",
+    logoURL: "https://example.com/logo.png",
+    repository: "https://github.com/example/repo",
+    credits: {
+      organisaton: "Test Org",
+      department: "Test Department",
+      website: "https://example.com",
+      productOwners: ["Owner 1", "Owner 2"],
+      developers: ["Dev 1", "Dev 2"],
+    },
+    additionalInfo: "Additional test information",
+    theme: {}, // Additional custom setting
+    layout: {}, // Additional custom setting
+  },
+  version: "1.0.0",
+  serverBaseURL: "http://localhost:8000",
+  pythonPath: "/usr/bin/python",
+  pythonVersion: "3.8.0",
+  directories: {},
+};

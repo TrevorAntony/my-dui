@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { client } from "../..";
+import { client } from "../../api/DuftHttpClient/local-storage-functions";
 
 const useThemeData = () => {
   const [themeData, setThemeData] = useState({});
