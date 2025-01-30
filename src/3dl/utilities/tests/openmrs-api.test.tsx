@@ -96,7 +96,7 @@ test("OpenmrsData component handles error states", async () => {
   });
 
   await waitForState(
-    (state) => result.current.datasetParams.error !== null,
+    (_state) => result.current.datasetParams.error !== null,
     result
   );
 
@@ -179,7 +179,7 @@ test("constructs URL correctly with resource and resourceId", async () => {
   const resourceSpy = vi.spyOn(client, "fetchResource");
   const resourceId = "test-uuid-123";
 
-  const { result } = renderHook(() => useDataContext(), {
+  renderHook(() => useDataContext(), {
     wrapper: ({ children }) => (
       <QueryClientProvider client={testQueryClient}>
         <DataProvider>

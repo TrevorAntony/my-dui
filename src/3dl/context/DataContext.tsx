@@ -2,14 +2,14 @@ import type { ReactNode } from "react";
 import React, { createContext, useContext } from "react";
 
 export interface DatasetParams {
-  filters: any;
+  filters?: any;
   searchText?: string;
   searchColumns?: string;
   sortColumn?: string;
   pageSize?: string | number;
   currentPage?: number;
-  debug: boolean;
-  appendData: boolean;
+  debug?: boolean;
+  appendData?: boolean;
   loading?: boolean;
   error?: Error | null;
   query?: string;
@@ -18,15 +18,29 @@ export interface DatasetParams {
 
 interface DataContextType {
   data: any[] | null;
-  setData: (data: any[] | null) => void;
-  datasetParams: DatasetParams;
-  setDatasetParams: (
+  setData?: (data: any[] | null) => void;
+  datasetParams?: DatasetParams;
+  setDatasetParams?: (
     params: DatasetParams | ((params: DatasetParams) => DatasetParams)
   ) => void;
   resetPage: () => void;
   pageUpdater: () => void;
   handleSearchChange: (newSearchText: string) => void;
   handleSortChange: (newSortText: string) => void;
+  //these additional types are added since we still support Dataset and DataProvider components
+  //once we deprecate the Dataset these types will be removed
+  filters?: any;
+  searchText?: string;
+  searchColumns?: string;
+  sortColumn?: string;
+  pageSize?: string | number;
+  currentPage?: number;
+  debug?: boolean;
+  appendData?: boolean;
+  loading?: boolean;
+  error?: Error | null;
+  query?: string;
+  setQuery?: (query: string) => void;
 }
 
 const defaultDataContext: DataContextType = {

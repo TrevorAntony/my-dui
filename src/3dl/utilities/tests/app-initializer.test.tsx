@@ -209,7 +209,7 @@ describe("AppInitializer State Transitions", () => {
     // Spy on the private makeRequest method
     const makeRequestSpy = vi
       .spyOn(testClient as any, "makeRequest")
-      .mockImplementation(async (method: string, endpoint: string) => {
+      .mockImplementation(async (_method: string, endpoint: string) => {
         if (endpoint.includes("/get-current-config")) {
           return mockConfig;
         }
