@@ -5,6 +5,7 @@ import { client } from "../../../api/DuftHttpClient/local-storage-functions";
 import config from "../../../config";
 import { useDataContext } from "../../context/DataContext";
 
+// Props needed for Dataset component compatibility
 interface ExportDataProps {
   query?: string;
   searchText?: string;
@@ -12,55 +13,47 @@ interface ExportDataProps {
   sortColumn?: string;
   pageSize?: number;
   currentPage?: number;
-  dataConnectionId?: string;
 }
 
-function ExportData({
-  query,
-  searchText,
-  searchColumns,
-  sortColumn,
-  pageSize,
-  currentPage = 1,
-}: ExportDataProps) {
+function ExportData({ query: defaultQuery, ...defaultParams }: ExportDataProps = {}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const dataContext = useDataContext();
+  const { datasetParams } = useDataContext();
 
   const handleExport = async (format: string, scope: string) => {
     try {
-      // Use context params if available, otherwise fall back to props
-      const effectiveQuery = dataContext?.datasetParams?.query || query;
-      if (!effectiveQuery) {
+      // Use context values if available, otherwise fall back to props
+      const effectiveParams = {
+        query: datasetParams?.query || defaultQuery,
+        searchText: datasetParams?.searchText || defaultParams.searchText,
+        searchColumns: datasetParams?.searchColumns || defaultParams.searchColumns,
+        sortColumn: datasetParams?.sortColumn || defaultParams.sortColumn,
+        pageSize: datasetParams?.pageSize || defaultParams.pageSize,
+        currentPage: datasetParams?.currentPage || defaultParams.currentPage || 1,
+        filters: datasetParams?.filters || {}
+      };
+
+      if (!effectiveParams.query) {
         throw new Error("Query is required for export");
       }
 
       const basePayload = {
-        query: effectiveQuery,
+        query: effectiveParams.query,
         data_connection_id: config.dataConnection || "ANA",
-        current_page: dataContext?.datasetParams?.currentPage || currentPage,
+        current_page: effectiveParams.currentPage,
       };
 
-      // For filtered data, include search and sort parameters
       if (scope === "filtered") {
         const filterParams: Record<string, any> = {};
-        const contextParams = dataContext?.datasetParams;
 
-        // Prioritize context values over props
-        const effectiveSearchText = contextParams?.searchText ?? searchText;
-        const effectiveSearchColumns = contextParams?.searchColumns ?? searchColumns;
-        const effectiveSortColumn = contextParams?.sortColumn ?? sortColumn;
-        const effectivePageSize = contextParams?.pageSize ?? pageSize;
-        const effectiveFilters = contextParams?.filters;
-
-        if (effectiveSearchText) filterParams["search_text"] = effectiveSearchText;
-        if (effectiveSearchColumns) filterParams["search_columns"] = effectiveSearchColumns;
-        if (effectiveSortColumn) filterParams["sort_column"] = effectiveSortColumn;
-        if (effectiveFilters && Object.keys(effectiveFilters).length > 0) {
-          filterParams["filters"] = effectiveFilters;
+        if (effectiveParams.searchText) filterParams["search_text"] = effectiveParams.searchText;
+        if (effectiveParams.searchColumns) filterParams["search_columns"] = effectiveParams.searchColumns;
+        if (effectiveParams.sortColumn) filterParams["sort_column"] = effectiveParams.sortColumn;
+        if (effectiveParams.filters && Object.keys(effectiveParams.filters).length > 0) {
+          filterParams["filters"] = effectiveParams.filters;
         }
         
-        if (effectivePageSize) {
-          const numPageSize = Number(effectivePageSize);
+        if (effectiveParams.pageSize) {
+          const numPageSize = Number(effectiveParams.pageSize);
           if (!isNaN(numPageSize) && numPageSize > 0) {
             filterParams["page_size"] = numPageSize;
           }
