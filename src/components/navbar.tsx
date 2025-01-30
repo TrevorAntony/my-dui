@@ -6,17 +6,20 @@ import isSmallScreen from "../helpers/is-small-screen";
 import config from "../config";
 import { useSidebarConfigContext } from "../3dl/context/SidebarConfigContext";
 import { useAppState } from "../context/AppStateContext";
-import { setTokenInLocalStorage } from "../api/DuftHttpClient/local-storage-functions";
 import { userDropdownTheme } from "../flowbite-theme";
+import { useNavigate } from "react-router-dom";
+import { client } from "../api/DuftHttpClient/local-storage-functions";
 
 const ExampleNavbar: FC = function () {
+  const navigate = useNavigate();
   const { state } = useAppState();
   const { isOpenOnSmallScreens, isPageWithSidebar, setOpenOnSmallScreens } =
     useSidebarContext();
   const sidebarConfig = useSidebarConfigContext();
 
   const handleLogout = () => {
-    setTokenInLocalStorage(null, null);
+    client.logout();
+    navigate("/");
   };
 
   return (

@@ -48,6 +48,7 @@ import {
   QueryData,
   ServerQueryData,
   ApiData,
+  OpenmrsData,
 } from "../3dl";
 import {
   DuftGrid,
@@ -68,7 +69,8 @@ import DataString from "../components/dashboard-meta";
 import useDashboardData from "./resources/useDashboardData";
 import useThemeData from "./resources/useTheme";
 import useQueryData from "./resources/useQueryData";
-import { client } from "..";
+import { client } from "../api/DuftHttpClient/local-storage-functions";
+import { openmrsClient } from "../api/OpenmrsHttpClient/OpenmrsHttpClient";
 
 interface Dashboard3DLProps {
   defaultId?: string;
@@ -143,6 +145,12 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
                 {...(props as React.ComponentProps<typeof ServerQueryData>)}
                 useQuery={useQueryData}
                 client={client}
+              />
+            ),
+            OpenmrsData: (props: React.ComponentProps<typeof OpenmrsData>) => (
+              <OpenmrsData
+                {...(props as React.ComponentProps<typeof OpenmrsData>)}
+                client={openmrsClient}
               />
             ),
             PieChart: (props: React.ComponentProps<typeof PieChart>) => (

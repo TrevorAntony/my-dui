@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { processQuery, transposeData } from "./visual-helpers";
+import {
+  extractErrorMessage,
+  processQuery,
+  transposeData,
+} from "./visual-helpers";
 
 describe("processQuery", () => {
   it("replaces placeholders with corresponding values from the config", () => {
@@ -100,4 +104,48 @@ describe("transposeData", () => {
 
   //   expect(transposeData(data)).toEqual(expected);
   // });
+});
+
+describe("extractErrorMessage", () => {
+  it("extracts error message from valid JSON error response", () => {
+    const errorBody = JSON.stringify({
+      error: {
+        message: "Patient not found",
+      },
+    });
+
+    expect(extractErrorMessage(errorBody)).toBe("Patient not found");
+  });
+
+  it("returns 'Unknown error occurred' for JSON without error message", () => {
+    const errorBody = JSON.stringify({
+      someOtherField: "value",
+    });
+
+    expect(extractErrorMessage(errorBody)).toBe("Unknown error occurred");
+  });
+
+  it("returns 'Invalid error body format' for non-JSON input", () => {
+    const errorBody = "This is not JSON";
+
+    expect(extractErrorMessage(errorBody)).toBe("Invalid error body format");
+  });
+
+  it("handles null or undefined error body", () => {
+    expect(extractErrorMessage(null)).toBe("Invalid error body format");
+    expect(extractErrorMessage(undefined)).toBe("Invalid error body format");
+  });
+
+  it("handles nested error objects", () => {
+    const errorBody = JSON.stringify({
+      error: {
+        message: "Validation failed",
+        details: {
+          field: "name",
+        },
+      },
+    });
+
+    expect(extractErrorMessage(errorBody)).toBe("Validation failed");
+  });
 });

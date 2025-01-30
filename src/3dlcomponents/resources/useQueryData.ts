@@ -7,7 +7,7 @@ import {
   getRefreshToken,
 } from "../../api/DuftHttpClient/local-storage-functions";
 import config from "../../config";
-// import { client } from "../..";
+
 // This is commented out for tests to pass, since the http client which is exported from the index file
 // is not provided in the context of the test and throws an error
 // TO-DO: create the singleton client in a location that is accessibqle to the tests and then reinstatiate this import and its usage.

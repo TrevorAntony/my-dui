@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { client } from "../index";
+import { client } from "../api/DuftHttpClient/local-storage-functions";
 
 export const useLogFile = (isOpen: boolean) => {
   const [logs, setLogs] = useState<string[]>([]);
@@ -28,18 +28,17 @@ export const useLogFile = (isOpen: boolean) => {
 };
 
 export const downloadLogs = (logs: string[]) => {
-  
-  const content = logs.join('\n');
-  const blob = new Blob([content], { type: 'text/plain' });
-  
+  const content = logs.join("\n");
+  const blob = new Blob([content], { type: "text/plain" });
+
   const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = url;
-  link.download = `duft-logs-${new Date().toISOString().split('T')[0]}.txt`;
-  
+  link.download = `duft-logs-${new Date().toISOString().split("T")[0]}.txt`;
+
   document.body.appendChild(link);
   link.click();
-  
+
   document.body.removeChild(link);
   window.URL.revokeObjectURL(url);
 };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { client } from "..";
+import { client } from "../api/DuftHttpClient/local-storage-functions";
 
 const Login = () => {
   const [username, setUsername] = useState("");
