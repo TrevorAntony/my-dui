@@ -94,7 +94,7 @@ const useDataSetLogic = ({
       const placeholders = query.match(/\$[a-zA-Z_]+/g) || [];
 
       placeholders.forEach((placeholder) => {
-        const filterKey = placeholder.substring(1);
+        const filterKey = placeholder.substring(1) as string;
         const filterValue = filters[filterKey] || stateFilters[filterKey] || "";
 
         if (Array.isArray(filterValue) && filterValue.length > 0) {
@@ -138,7 +138,7 @@ const useDataSetLogic = ({
       if (debug === true || debug === "true") {
         try {
           const debugClient = client || defaultClient;
-          const data = await debugClient.getQueryData(requestData);
+          await debugClient.getQueryData(requestData);
           //TO-DO: send request to /build-query instead of /run-query
         } catch (error) {
           console.error("Debug - Error fetching /run-query:", error);
