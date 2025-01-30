@@ -340,4 +340,129 @@ describe("Export Data Functionality - Real API Integration", () => {
       format: "csv"
     })).rejects.toThrow("Unauthorized");
   });
+
+  it("should handle DataSet exports", async () => {
+    const sqlQuery = "SELECT * FROM dim_client LIMIT 5";
+    const formats = ["csv", "json"];
+
+    for (const format of formats) {
+      const response = await client.getQueryData({
+        query: sqlQuery,
+        data_connection_id: "ANA",
+        format,
+        page_size: undefined,
+        search_columns: undefined
+      });
+
+      expect(response).toBeDefined();
+      if (format === "csv") {
+        expect(response.type).toContain('csv');
+      } else {
+        expect(Array.isArray(response)).toBe(true);
+      }
+    }
+  });
+
+  it("should handle DataProvider exports", async () => {
+    const queryName = "filters/age_group";
+    const filters = { age_group: "20-24" };
+
+    const response = await client.getQueryData({
+      query_name: queryName,
+      data_connection_id: "ANA",
+      format: "csv",
+      filters,
+      page_size: undefined,
+      search_text: undefined,
+      search_columns: undefined,
+      sort_column: undefined
+    });
+
+    expect(response).toBeDefined();
+    expect(response.type).toContain('csv');
+    const text = await response.text();
+    expect(text).toContain("age_group_id");
+  });
+
+  // Test QueryData export
+  it("should handle QueryData exports", async () => {
+    const sqlQuery = `
+      SELECT year AS category, COUNT(first_art_date) AS value 
+      FROM fact_sentinel_event se 
+      INNER JOIN dim_client c ON se.client_id=c.client_id 
+      INNER JOIN dim_first_art_date d ON se.first_art_date=d.full_date 
+      WHERE is_currently_on_art=1 
+      GROUP BY year
+    `;
+
+    const response = await client.getQueryData({
+      query: sqlQuery,
+      data_connection_id: "ANA",
+      format: "json"
+    });
+
+    expect(response).toBeDefined();
+    expect(Array.isArray(response)).toBe(true);
+    expect(response[0]).toHaveProperty("category");
+    expect(response[0]).toHaveProperty("value");
+  });
+
+  // Test ServerQueryData export
+  it("should handle ServerQueryData exports", async () => {
+    const queryName = "filters/age_group";
+
+    const response = await client.getQueryData({
+      query_name: queryName,
+      data_connection_id: "ANA",
+      format: "csv",
+      page_size: undefined
+    });
+
+    expect(response).toBeDefined();
+    expect(response.type).toContain('csv');
+    const text = await response.text();
+    expect(text).toContain("age_group_id");
+  });
+
+  it("should handle exports from multiple data components in the same dashboard", async () => {
+    const exports = [
+      {
+        type: "Dataset",
+        payload: {
+          query: "SELECT * FROM dim_client LIMIT 5",
+          format: "csv",
+          data_connection_id: "ANA"
+        }
+      },
+      {
+        type: "DataProvider",
+        payload: {
+          query_name: "filters/age_group",
+          format: "json",
+          data_connection_id: "ANA"
+        }
+      },
+      {
+        type: "QueryData",
+        payload: {
+          query: "SELECT year, COUNT(*) as count FROM dim_first_art_date GROUP BY year",
+          format: "csv",
+          data_connection_id: "ANA"
+        }
+      }
+    ];
+
+    const responses = await Promise.all(
+      exports.map(exp => client.getQueryData(exp.payload))
+    );
+
+    responses.forEach((response, index) => {
+      expect(response).toBeDefined();
+      if (exports[index].payload.format === "csv") {
+        expect(response.type).toContain('csv');
+      } else {
+        expect(Array.isArray(response)).toBe(true);
+      }
+    });
+  });
 });
