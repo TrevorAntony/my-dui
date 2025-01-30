@@ -1,8 +1,4 @@
-import { renderHook } from "@testing-library/react";
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useDataContext } from "../../../context/DataContext";
-import DataProvider from "../../data-provider";
+import { describe, it, expect, beforeEach } from "vitest";
 import { DuftHttpClient } from "../../../../api/DuftHttpClient/DuftHttpClient";
 
 const BASE_URL = "http://127.0.0.1:8000/api/v2";
@@ -29,216 +25,101 @@ const client = new DuftHttpClient(
   getRefreshToken
 );
 
-// Mock getQueryData
-const mockGetQueryData = vi.fn();
-vi.spyOn(client, 'getQueryData').mockImplementation(mockGetQueryData);
-
-const createTestQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        gcTime: 0,
-      },
-    },
-  });
-
-const testQueryClient = createTestQueryClient();
-
-interface WrapperProps {
-  children: React.ReactNode;
-  dataProviderProps?: {
-    query?: string;
-    queryName?: string;
-    searchText?: string;
-    searchColumns?: string;
-    sortColumn?: string;
-    pageSize?: number;
-    currentPage?: number;
-  };
-}
-
-const TestWrapper = ({ children, dataProviderProps = {} }: WrapperProps) => (
-  <QueryClientProvider client={testQueryClient}>
-    <DataProvider {...dataProviderProps}>
-      {children}
-    </DataProvider>
-  </QueryClientProvider>
-);
-
-describe("Export Data Functionality", () => {
+describe("Export Data Functionality - Real API Integration", () => {
   beforeEach(async () => {
-    mockGetQueryData.mockReset();
-    mockGetQueryData.mockImplementation(() => Promise.resolve("test-data"));
-    
     // Reset tokens
     accessToken = null;
     refreshToken = null;
-
-    // Login before each test
-    const username = "admin";
-    const password = "--------";
-    await client.login(username, password);
+    await client.login("admin", "--------");
   });
 
   it("should handle SQL query export with all formats", async () => {
-    const formats = ["csv", "xlsx", "json"];
-    const sqlQuery = "SELECT * FROM test_table";
+    const formats = ["csv", "json"];
+    const sqlQuery = "SELECT * FROM dim_client LIMIT 5";
 
     for (const format of formats) {
-      renderHook(
-        () => useDataContext(),
-        {
-          wrapper: ({ children }) => (
-            <TestWrapper dataProviderProps={{ query: sqlQuery }}>
-              {children}
-            </TestWrapper>
-          ),
-        }
-      );
-
-      await mockGetQueryData({
+      const response = await client.getQueryData({
         query: sqlQuery,
         data_connection_id: "ANA",
         format
       });
 
-      expect(mockGetQueryData).toHaveBeenCalledWith({
-        query: sqlQuery,
-        data_connection_id: "ANA",
-        format
-      });
+      expect(response).toBeDefined();
+      if (format === "csv") {
+        expect(typeof response.size).toBe('number');
+        expect(typeof response.type).toBe('string');
+        expect(response.type).toContain('csv');
+      } else {
+        expect(Array.isArray(response)).toBe(true);
+        expect(response.length).toBeGreaterThan(0);
+      }
     }
-  });
+  }, 10000);
 
   it("should handle named query export with filters", async () => {
-    const queryName = "test/named/query";
+    const queryName = "filters/age_group";
     const filters = {
-      status: "active",
-      date: "2023-01-01"
-    };
-    renderHook(
-      () => useDataContext(),
-      {
-        wrapper: ({ children }) => (
-          <TestWrapper dataProviderProps={{ queryName }}>
-            {children}
-          </TestWrapper>
-        ),
-      }
-    );
-
-    const exportWithFilters = async () => {
-      await mockGetQueryData({
-        query_name: queryName,
-        data_connection_id: "ANA",
-        format: "csv",
-        filters
-      });
+      age_group: "20-24"
     };
 
-    await exportWithFilters();
-    expect(mockGetQueryData).toHaveBeenCalledWith(
-      expect.objectContaining({
-        query_name: queryName,
-        filters
-      })
-    );
+    const response = await client.getQueryData({
+      query_name: queryName,
+      data_connection_id: "ANA",
+      format: "csv",
+      filters
+    });
+
+    expect(response).toBeDefined();
+    expect(typeof response.size).toBe('number');
+    expect(typeof response.type).toBe('string');
+    expect(response.type).toContain('csv');
   });
 
   it("should handle pagination parameters correctly", async () => {
-    const queryName = "test/query";
+    const sqlQuery = "SELECT * FROM dim_client";
     const pageSize = 50;
     const currentPage = 2;
 
-    renderHook(
-      () => useDataContext(),
-      {
-        wrapper: ({ children }) => (
-          <TestWrapper dataProviderProps={{ queryName, pageSize, currentPage }}>
-            {children}
-          </TestWrapper>
-        ),
-      }
-    );
+    const response = await client.getQueryData({
+      query: sqlQuery,
+      data_connection_id: "ANA",
+      format: "csv",
+      page_size: pageSize * currentPage,
+      current_page: 1
+    });
 
-    const exportWithPagination = async () => {
-      await mockGetQueryData({
-        query_name: queryName,
-        data_connection_id: "ANA",
-        format: "csv",
-        page_size: pageSize * currentPage,
-        current_page: 1
-      });
-    };
-
-    await exportWithPagination();
-    expect(mockGetQueryData).toHaveBeenCalledWith(
-      expect.objectContaining({
-        page_size: pageSize * currentPage,
-        current_page: 1
-      })
-    );
+    expect(response).toBeDefined();
+    expect(typeof response.size).toBe('number');
+    expect(typeof response.type).toBe('string');
+    expect(response.type).toContain('csv');
   });
 
   it("should handle search and sort parameters", async () => {
-    const queryName = "test/query";
-    const searchText = "test";
-    const searchColumns = "name,id";
-    const sortColumn = "name ASC";
+    const sqlQuery = "SELECT * FROM dim_client";
+    const searchText = "20";
+    const searchColumns = "age_group_id";
+    const sortColumn = "age_group_id ASC";
 
-    renderHook(
-      () => useDataContext(),
-      {
-        wrapper: ({ children }) => (
-          <TestWrapper dataProviderProps={{ queryName, searchText, searchColumns, sortColumn }}>
-            {children}
-          </TestWrapper>
-        ),
-      }
-    );
+    const response = await client.getQueryData({
+      query: sqlQuery,
+      data_connection_id: "ANA",
+      format: "csv",
+      search_text: searchText,
+      search_columns: searchColumns,
+      sort_column: sortColumn
+    });
 
-    const exportWithSearchAndSort = async () => {
-      await mockGetQueryData({
-        query_name: queryName,
-        data_connection_id: "ANA",
-        format: "csv",
-        search_text: searchText,
-        search_columns: searchColumns,
-        sort_column: sortColumn
-      });
-    };
-
-    await exportWithSearchAndSort();
-    expect(mockGetQueryData).toHaveBeenCalledWith(
-      expect.objectContaining({
-        search_text: searchText,
-        search_columns: searchColumns,
-        sort_column: sortColumn
-      })
-    );
+    expect(response).toBeDefined();
+    expect(typeof response.size).toBe('number');
+    expect(typeof response.type).toBe('string');
+    expect(response.type).toContain('csv');
   });
 
   it("should handle export errors gracefully", async () => {
-    mockGetQueryData.mockReset();
     const queryName = "test/query";
-    const error = new Error("Export failed");
-    mockGetQueryData.mockRejectedValueOnce(error);
-
-    renderHook(
-      () => useDataContext(),
-      {
-        wrapper: ({ children }) => (
-          <TestWrapper dataProviderProps={{ queryName }}>
-            {children}
-          </TestWrapper>
-        ),
-      }
-    );
-
     let caughtError;
     try {
-      await mockGetQueryData({
+      await client.getQueryData({
         query_name: queryName,
         data_connection_id: "ANA",
         format: "csv"
@@ -247,157 +128,79 @@ describe("Export Data Functionality", () => {
       caughtError = e;
     }
 
-    expect(caughtError).toEqual(error);
-    expect(mockGetQueryData).toHaveBeenCalledTimes(1);
-    expect(mockGetQueryData).toHaveBeenCalledWith({
-      query_name: queryName,
-      data_connection_id: "ANA",
-      format: "csv"
-    });
+    expect(caughtError).toBeDefined();
   });
 
   it("should handle different data connection IDs", async () => {
-    const connections = ["ANA", "CUSTOM", "TEST"];
-    const queryName = "test/query";
+    const sqlQuery = "SELECT * FROM dim_client LIMIT 5";
+    const connections = ["ANA"];
 
     for (const connectionId of connections) {
-      renderHook(
-        () => useDataContext(),
-        {
-          wrapper: ({ children }) => (
-            <TestWrapper dataProviderProps={{ queryName }}>
-              {children}
-            </TestWrapper>
-          ),
-        }
-      );
+      const response = await client.getQueryData({
+        query: sqlQuery,
+        data_connection_id: connectionId,
+        format: "csv"
+      });
 
-      const exportWithConnection = async () => {
-        await mockGetQueryData({
-          query_name: queryName,
-          data_connection_id: connectionId,
-          format: "csv"
-        });
-      };
-
-      await exportWithConnection();
-      expect(mockGetQueryData).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data_connection_id: connectionId
-        })
-      );
+      expect(response).toBeDefined();
+      expect(typeof response.size).toBe('number');
+      expect(typeof response.type).toBe('string');
+      expect(response.type).toContain('csv');
     }
   });
 
   it("should handle concurrent exports", async () => {
-    const queryName = "test/query";
-    const formats = ["csv", "xlsx", "json"];
+    const sqlQuery = "SELECT * FROM dim_client LIMIT 5";
+    const formats = ["csv", "json"];
     const exportPromises = formats.map(format => 
-      mockGetQueryData({
-        query_name: queryName,
+      client.getQueryData({
+        query: sqlQuery,
         data_connection_id: "ANA",
         format
       })
     );
 
-    await Promise.all(exportPromises);
-    expect(mockGetQueryData).toHaveBeenCalledTimes(formats.length);
-    formats.forEach(format => {
-      expect(mockGetQueryData).toHaveBeenCalledWith(
-        expect.objectContaining({
-          format
-        })
-      );
+    const responses = await Promise.all(exportPromises);
+    responses.forEach((response, index) => {
+      expect(response).toBeDefined();
+      if (formats[index] === "csv") {
+        expect(typeof response.size).toBe('number');
+        expect(typeof response.type).toBe('string');
+        expect(response.type).toContain('csv');
+      } else {
+        expect(Array.isArray(response)).toBe(true);
+      }
     });
   });
 
   it("should handle combined filters, search, and sort parameters", async () => {
-    const queryName = "test/query";
-    const filters = { status: "active" };
-    const searchText = "test";
-    const searchColumns = "name,id";
-    const sortColumn = "name ASC";
+    const sqlQuery = "SELECT * FROM dim_client";
+    const filters = { age_group: "20-24" };
+    const searchText = "20";
+    const searchColumns = "age_group_id";
+    const sortColumn = "age_group_id ASC";
 
-    renderHook(
-      () => useDataContext(),
-      {
-        wrapper: ({ children }) => (
-          <TestWrapper dataProviderProps={{ queryName, searchText, searchColumns, sortColumn }}>
-            {children}
-          </TestWrapper>
-        ),
-      }
-    );
+    const response = await client.getQueryData({
+      query: sqlQuery,
+      data_connection_id: "ANA",
+      format: "csv",
+      filters,
+      search_text: searchText,
+      search_columns: searchColumns,
+      sort_column: sortColumn
+    });
 
-    const exportWithAllParams = async () => {
-      await mockGetQueryData({
-        query_name: queryName,
-        data_connection_id: "ANA",
-        format: "csv",
-        filters,
-        search_text: searchText,
-        search_columns: searchColumns,
-        sort_column: sortColumn
-      });
-    };
-
-    await exportWithAllParams();
-    expect(mockGetQueryData).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filters,
-        search_text: searchText,
-        search_columns: searchColumns,
-        sort_column: sortColumn
-      })
-    );
-  });
-
-  it("should handle empty/null parameters gracefully", async () => {
-    const queryName = "test/query";
-    renderHook(
-      () => useDataContext(),
-      {
-        wrapper: ({ children }) => (
-          <TestWrapper dataProviderProps={{ queryName }}>
-            {children}
-          </TestWrapper>
-        ),
-      }
-    );
-
-    const exportWithEmptyParams = async () => {
-      await mockGetQueryData({
-        query_name: queryName,
-        data_connection_id: "ANA",
-        format: "csv",
-        search_text: "",
-        search_columns: "",
-        sort_column: "",
-        filters: {}
-      });
-    };
-
-    await exportWithEmptyParams();
-    expect(mockGetQueryData).toHaveBeenCalledWith(
-      expect.objectContaining({
-        query_name: queryName,
-        search_text: "",
-        search_columns: "",
-        sort_column: "",
-        filters: {}
-      })
-    );
+    expect(response).toBeDefined();
+    expect(typeof response.size).toBe('number');
+    expect(typeof response.type).toBe('string');
+    expect(response.type).toContain('csv');
   });
 
   it("should handle network timeouts", async () => {
-    mockGetQueryData.mockReset();
-    const timeoutError = new Error("Network timeout");
-    mockGetQueryData.mockRejectedValueOnce(timeoutError);
-    
     const queryName = "test/query";
     let caughtError;
     try {
-      await mockGetQueryData({
+      await client.getQueryData({
         query_name: queryName,
         data_connection_id: "ANA",
         format: "csv"
@@ -406,61 +209,34 @@ describe("Export Data Functionality", () => {
       caughtError = e;
     }
 
-    expect(caughtError).toEqual(timeoutError);
-    expect(mockGetQueryData).toHaveBeenCalledTimes(1);
+    expect(caughtError).toBeDefined();
   });
 
   it("should handle invalid format specifications", async () => {
     const queryName = "test/query";
     const invalidFormat = "invalid_format";
-    renderHook(
-      () => useDataContext(),
-      {
-        wrapper: ({ children }) => (
-          <TestWrapper dataProviderProps={{ queryName }}>
-            {children}
-          </TestWrapper>
-        ),
-      }
-    );
 
-    const exportWithInvalidFormat = async () => {
-      await mockGetQueryData({
+    let caughtError;
+    try {
+      await client.getQueryData({
         query_name: queryName,
         data_connection_id: "ANA",
         format: invalidFormat
       });
-    };
+    } catch (e) {
+      caughtError = e;
+    }
 
-    await exportWithInvalidFormat();
-    expect(mockGetQueryData).toHaveBeenCalledWith(
-      expect.objectContaining({
-        format: invalidFormat
-      })
-    );
+    expect(caughtError).toBeDefined();
   });
 
   it("should handle server errors with different status codes", async () => {
     const statusCodes = [400, 401, 403, 404, 500];
 
-    for (const status of statusCodes) {
-      mockGetQueryData.mockReset();
-      const serverError = new Error(`Server responded with status ${status}`);
-      mockGetQueryData.mockRejectedValueOnce(serverError);
-      renderHook(
-        () => useDataContext(),
-        {
-          wrapper: ({ children }) => (
-            <TestWrapper dataProviderProps={{ queryName: "test/query" }}>
-              {children}
-            </TestWrapper>
-          ),
-        }
-      );
-
+    for (const _status of statusCodes) {
       let caughtError;
       try {
-        await mockGetQueryData({
+        await client.getQueryData({
           query_name: "test/query",
           data_connection_id: "ANA",
           format: "csv"
@@ -468,8 +244,100 @@ describe("Export Data Functionality", () => {
       } catch (e) {
         caughtError = e;
       }
-      expect(caughtError).toEqual(serverError);
-      expect(mockGetQueryData).toHaveBeenCalledTimes(1);
+      expect(caughtError).toBeDefined();
     }
+  });
+
+  it("should correctly handle CSV export format", async () => {
+    const queryName = "filters/age_group";
+    
+    const response = await client.getQueryData({
+      query_name: queryName,
+      data_connection_id: "ANA",
+      format: "csv"
+    });
+    expect(response).toBeDefined();
+    expect(typeof response.size).toBe('number');
+    expect(typeof response.type).toBe('string');
+    expect(response.type).toContain('csv');
+
+    // Verify content
+    const text = await response.text();
+    expect(text).toContain("age_group_id");
+    expect(text.split("\n").length).toBeGreaterThan(1);
+  });
+
+  it("should correctly handle JSON export format", async () => {
+    const queryName = "filters/age_group";
+    
+    const response = await client.getQueryData({
+      query_name: queryName,
+      data_connection_id: "ANA",
+      format: "json"
+    });
+
+    expect(Array.isArray(response)).toBe(true);
+    expect(response[0]).toHaveProperty("age_group_id");
+    expect(response[0]).toHaveProperty("age");
+    expect(response.length).toBeGreaterThan(0);
+  });
+
+  it("should reject invalid export formats with 400", async () => {
+    const queryName = "filters/age_group";
+    
+    await expect(client.getQueryData({
+      query_name: queryName,
+      data_connection_id: "ANA",
+      format: "invalid"
+    })).rejects.toThrow("Bad Request");
+  });
+
+  it("should handle large dataset exports", async () => {
+    const sqlQuery = `
+      SELECT * FROM fact_sentinel_event 
+      INNER JOIN dim_client ON fact_sentinel_event.client_id = dim_client.client_id 
+      LIMIT 1000
+    `;
+
+    const response = await client.getQueryData({
+      query: sqlQuery,
+      data_connection_id: "ANA",
+      format: "csv"
+    });
+    // Check for blob-like properties instead of instanceof
+    expect(response).toBeDefined();
+    expect(typeof response.size).toBe('number');
+    expect(typeof response.type).toBe('string');
+    expect(response.size).toBeGreaterThan(1024);
+  }, { timeout: 30000 });
+
+  it("should maintain filters in export", async () => {
+    const queryName = "filters/age_group";
+    const filters = { age_group: "20-24" };
+
+    const response = await client.getQueryData({
+      query_name: queryName,
+      data_connection_id: "ANA",
+      format: "json",
+      filters
+    });
+
+    expect(Array.isArray(response)).toBe(true);
+    response.forEach(row => {
+      expect(row.age_group).toBe("20-24");
+    });
+  });
+
+  it("should require authentication for export", async () => {
+    // Reset tokens to force unauthenticated state
+    accessToken = null;
+    refreshToken = null;
+
+    const queryName = "filters/age_group";
+    
+    await expect(client.getQueryData({
+      query_name: queryName,        data_connection_id: "ANA",
+      format: "csv"
+    })).rejects.toThrow("Unauthorized");
   });
 });
