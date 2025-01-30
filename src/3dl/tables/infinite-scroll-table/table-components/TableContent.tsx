@@ -11,8 +11,6 @@ import SearchBar from "./SearchBar";
 import TableBody from "./TableBody";
 import TableHeader from "./TableHeader";
 import ExportData from "../../../utilities/export-data/export-data";
-import Dataset from "../../../utilities/data-set";
-import useDuftQuery from "../../../../3dlcomponents/resources/useDuftQuery";
 import EmptyState from "../../../ui-elements/empty-state";
 import { Button, Modal } from "flowbite-react";
 import { Spinner } from "flowbite-react";
@@ -34,7 +32,6 @@ const TableContent = ({
   searchColumns,
   pageSize,
   exportData = "false",
-  query,
   searchHint,
   detailsTitle,
   headerCase = "sentence",
