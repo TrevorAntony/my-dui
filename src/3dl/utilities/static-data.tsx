@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDataContext } from '../context/DataContext';
 
 interface StaticDataProps {
@@ -8,9 +8,7 @@ interface StaticDataProps {
 const StaticData: React.FC<StaticDataProps> = ({ data }) => {
   const { setData } = useDataContext();
 
-  useEffect(() => {
-    setData(data);
-  }, [data, setData]);
+  setData(data);
 
   return null;
 };
