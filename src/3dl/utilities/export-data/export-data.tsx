@@ -55,7 +55,29 @@ function ExportData() {
         if (effectiveParams.pageSize) {
           const numPageSize = Number(effectiveParams.pageSize);
           if (!isNaN(numPageSize) && numPageSize > 0) {
-            filterParams["page_size"] = numPageSize;
+            filterParams["page_size"] = numPageSize * effectiveParams.currentPage;
+            filterParams["current_page"] = 1;
+          }
+        }
+
+        Object.assign(basePayload, filterParams);
+      }
+
+      if (scope === "all") {
+        const filterParams: Record<string, any> = {};
+
+        if (effectiveParams.searchText) filterParams["search_text"] = effectiveParams.searchText;
+        if (effectiveParams.searchColumns) filterParams["search_columns"] = effectiveParams.searchColumns;
+        if (effectiveParams.sortColumn) filterParams["sort_column"] = effectiveParams.sortColumn;
+        if (effectiveParams.filters && Object.keys(effectiveParams.filters).length > 0) {
+          filterParams["filters"] = effectiveParams.filters;
+        }
+        
+        if (effectiveParams.pageSize) {
+          const numPageSize = Number(effectiveParams.pageSize);
+          if (!isNaN(numPageSize) && numPageSize > 0) {
+            filterParams["page_size"] = numPageSize * effectiveParams.currentPage;
+            filterParams["current_page"] = 1;
           }
         }
 

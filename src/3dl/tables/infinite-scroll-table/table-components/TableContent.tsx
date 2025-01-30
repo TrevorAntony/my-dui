@@ -128,13 +128,7 @@ const TableContent = ({
           />
           {shouldExportData && (
             <div className={`self-start pr-1 pt-1.5`}>
-              {query ? (
-                <Dataset query={query} useQuery={useDuftQuery}>
-                  <ExportData />
-                </Dataset>
-              ) : (
-                <ExportData />
-              )}
+              <ExportData />
             </div>
           )}
         </div>
