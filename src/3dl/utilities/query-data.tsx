@@ -74,7 +74,7 @@ const QueryData: React.FC<DataSetProps> = ({
     searchText,
     searchColumns,
     sortColumn,
-    pageSize,
+    pageSize: typeof pageSize === "string" ? parseInt(pageSize, 10) : pageSize,
     currentPage,
     debug,
     client,

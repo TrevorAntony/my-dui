@@ -4,6 +4,7 @@ export interface Features {
   server_uploads: boolean;
   task_scheduler: boolean;
   user_authentication: boolean;
+  enforce_user_authentication: boolean;
 }
 
 interface User {

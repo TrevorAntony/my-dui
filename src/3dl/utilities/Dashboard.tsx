@@ -27,7 +27,7 @@ const LayoutContext = createContext("");
 
 const dashboardReducer = (
   state: DashboardState,
-  action: DashboardAction,
+  action: DashboardAction
 ): DashboardState => {
   switch (action.type) {
     case SET_FILTER:
@@ -108,7 +108,7 @@ type DashboardDispatch = (action: DashboardAction) => void;
 const setFilter = (
   dispatch: DashboardDispatch,
   name: string,
-  value: string[],
+  value: string | string[]
 ) => {
   dispatch({ type: SET_FILTER, payload: { name, value } });
 };

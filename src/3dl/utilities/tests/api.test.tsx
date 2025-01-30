@@ -78,10 +78,7 @@ test("API component handles error states with invalid URL", async () => {
   });
 
   // Wait for error state
-  await waitForState(
-    (state) => result.current.datasetParams.error !== null,
-    result
-  );
+  await waitForState(() => result.current.datasetParams.error !== null, result);
 
   // Verify error state
   expect(result.current.data).toBeNull();
