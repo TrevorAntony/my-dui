@@ -3,6 +3,7 @@ import ExportButton from "./export-button";
 import ExportDataDialog from "./export-data-dialog";
 import { client } from "../../../api/DuftHttpClient/local-storage-functions";
 import config from "../../../config";
+import { useDataContext } from "../../context/DataContext";
 
 interface ExportDataProps {
   query?: string;
@@ -23,27 +24,43 @@ function ExportData({
   currentPage = 1,
 }: ExportDataProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const dataContext = useDataContext();
 
   const handleExport = async (format: string, scope: string) => {
     try {
-      if (!query) {
+      // Use context params if available, otherwise fall back to props
+      const effectiveQuery = dataContext?.datasetParams?.query || query;
+      if (!effectiveQuery) {
         throw new Error("Query is required for export");
       }
 
       const basePayload = {
-        query,
+        query: effectiveQuery,
         data_connection_id: config.dataConnection || "ANA",
-        current_page: currentPage,
+        current_page: dataContext?.datasetParams?.currentPage || currentPage,
       };
 
       // For filtered data, include search and sort parameters
       if (scope === "filtered") {
         const filterParams: Record<string, any> = {};
-        if (searchText) filterParams["search_text"] = searchText;
-        if (searchColumns) filterParams["search_columns"] = searchColumns;
-        if (sortColumn) filterParams["sort_column"] = sortColumn;
-        if (pageSize) {
-          const numPageSize = Number(pageSize);
+        const contextParams = dataContext?.datasetParams;
+
+        // Prioritize context values over props
+        const effectiveSearchText = contextParams?.searchText ?? searchText;
+        const effectiveSearchColumns = contextParams?.searchColumns ?? searchColumns;
+        const effectiveSortColumn = contextParams?.sortColumn ?? sortColumn;
+        const effectivePageSize = contextParams?.pageSize ?? pageSize;
+        const effectiveFilters = contextParams?.filters;
+
+        if (effectiveSearchText) filterParams["search_text"] = effectiveSearchText;
+        if (effectiveSearchColumns) filterParams["search_columns"] = effectiveSearchColumns;
+        if (effectiveSortColumn) filterParams["sort_column"] = effectiveSortColumn;
+        if (effectiveFilters && Object.keys(effectiveFilters).length > 0) {
+          filterParams["filters"] = effectiveFilters;
+        }
+        
+        if (effectivePageSize) {
+          const numPageSize = Number(effectivePageSize);
           if (!isNaN(numPageSize) && numPageSize > 0) {
             filterParams["page_size"] = numPageSize;
           }
