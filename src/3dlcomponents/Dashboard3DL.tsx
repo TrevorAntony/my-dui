@@ -49,6 +49,7 @@ import {
   ServerQueryData,
   ApiData,
   OpenmrsData,
+  StaticData,
 } from "../3dl";
 import {
   DuftGrid,
@@ -118,6 +119,11 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               <Dataset
                 {...(props as React.ComponentProps<typeof Dataset>)}
                 useQuery={useDuftQuery}
+              />
+            ),
+            StaticData: (props: React.ComponentProps<typeof StaticData>) => (
+              <StaticData
+                {...(props as React.ComponentProps<typeof StaticData>)}
               />
             ),
             QueryData: (props: React.ComponentProps<typeof QueryData>) => (
