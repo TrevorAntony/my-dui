@@ -179,8 +179,8 @@ function Pack-Conda-Env {
   )
 
   # Packing Conda environment 'portable-venv' into portable-venv.tar.gz
-  Write-Color "Packing Conda environment '$EnvName' into portable-venv.tar.gz..." Blue
-  & tar -czf "$ServerAppDir\portable-venv.tar.gz" --strip-components=1 -C "$ServerAppDir" "$EnvName"
+  Write-Color "Packing Conda environment '$EnvName' into portable-venv.7z..." Blue
+  & 7z a -r -mx=9 "$ServerAppDir\portable-venv.7z" "$ServerAppDir\$EnvName"
   Remove-Item -Path "$ServerAppDir\$EnvName" -Recurse -Force
 
   if ($?) {
@@ -195,7 +195,7 @@ function Pack-Conda-Env {
 
 # Constants
 $ZIP_DIR = "duft_resources"
-$ZIP_FILE = "duft_resources.zip"
+$ZIP_FILE = "duft_resources.7z"
 $ENV_NAME = "portable-venv"
 $PYTHON_VERSION = "3.11"
 
