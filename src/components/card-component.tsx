@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import { useState, useMemo } from "react";
+import { useState} from "react";
 import { NavLink } from "react-router-dom";
 import { Dataset, ExportData } from "../3dl";
 import useDuftQuery from "../3dlcomponents/resources/useDuftQuery";
@@ -9,8 +9,6 @@ import { getDetailsComponent } from "./details-component-registry";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { Button, Modal } from "flowbite-react";
 import DataString from "./dashboard-meta";
-import { useDataContext } from "../3dl/context/DataContext";
-
 type MoreInfoProps = {
   text: string;
   link: string;
@@ -48,7 +46,6 @@ const CardComponent: FC<CardComponentProps> = ({
   const layout = useLayout();
   const shouldExportData = exportData === "true" || exportData === true;
   const isFullHeight = layout === "single-layout";
-  const { query, searchText, searchColumns, sortColumn, currentPage, pageSize } = useDataContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const detailsComponentKey =
     detailsComponent as keyof DetailsComponentRegistry;
@@ -58,15 +55,6 @@ const CardComponent: FC<CardComponentProps> = ({
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
   // Calculate export props once and memoize them
-  const exportProps = useMemo(() => ({
-    query,
-    searchText,
-    searchColumns,
-    sortColumn,
-    pageSize: currentPage && pageSize ? currentPage * Number(pageSize) : undefined,
-    currentPage,
-  }), [query, searchText, searchColumns, sortColumn, currentPage, pageSize]);
-
   const renderContent = () => (
     <>
       {variant !== "plain" && (header || subHeader) && (
@@ -87,7 +75,7 @@ const CardComponent: FC<CardComponentProps> = ({
             {infoTagContent ? infoTagContent : null}
             {shouldExportData && layout !== "single-layout" && (
               <div className="self-start pl-1">
-                <ExportData {...exportProps} />
+                <ExportData />
               </div>
             )}
             {DetailsComponent && (

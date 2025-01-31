@@ -184,7 +184,7 @@ const InfiniteScrollTable: React.FC<InfiniteScrollTableProps> = ({
       query={query}
       detailsComponent={detailsComponent as string}
       DataStringQuery={DataStringQuery}
-      exportData={exportData}
+      // exportData={exportData}
     >
       {wrappedContent}
     </ContainerComponent>
