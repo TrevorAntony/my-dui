@@ -57,11 +57,11 @@ function ExportData() {
         throw new Error("Either query or queryName is required for export");
       }
 
-      // For "all" scope, include dashboard filters
+      // For "all" scope, never include dashboard filters
       if (scope === "all") {
         const basePayload = effectiveParams.query 
           ? {
-              query: interpolateQuery(effectiveParams.query, dashboardFilters),
+              query: interpolateQuery(effectiveParams.query, {}),
               data_connection_id: config.dataConnection || "ANA",
               format: format.toLowerCase()
             }
@@ -69,7 +69,7 @@ function ExportData() {
               query_name: effectiveParams.queryName,
               data_connection_id: config.dataConnection || "ANA",
               format: format.toLowerCase(),
-              filters: dashboardFilters // Keep filters for server queries
+              filters: {} // Always use empty filters
             };
 
         const response = await (effectiveParams.query 
