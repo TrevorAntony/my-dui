@@ -222,7 +222,7 @@ create_and_install_conda_env "$DUFT_SERVER_DIR" "$DUFT_CONFIG_DIR" "$ENV_NAME" "
 pack_conda_env "$DUFT_SERVER_DIR" "$ENV_NAME"
 
 # Zip the duft_resources directory
-zip -rq "$ZIP_FILE" "$ZIP_DIR"
+7z a -r -mx=9 "$ZIP_FILE" "$ZIP_DIR"
 if [ $? -eq 0 ]; then
   write_color "duft_resources directory zipped successfully." Green
 else

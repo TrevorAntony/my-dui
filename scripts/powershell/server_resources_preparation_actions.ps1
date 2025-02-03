@@ -263,7 +263,7 @@ Create-And-Install-Conda-Env -ServerAppDir $DUFT_SERVER_DIR -ConfigDir $DUFT_CON
 Pack-Conda-Env -ServerAppDir $DUFT_SERVER_DIR -EnvName $ENV_NAME
 
 # Zip the duft_resources directory
-Compress-Archive -Path $ZIP_DIR -DestinationPath $ZIP_FILE -Force
+& 7z a -r -mx=9 $ZIP_FILE $ZIP_DIR
 if ($?) {
   Write-Color "duft_resources directory zipped successfully." Green
 } else {
