@@ -4,9 +4,11 @@ import ExportDataDialog from "./export-data-dialog";
 import { client } from "../../../api/DuftHttpClient/local-storage-functions";
 import config from "../../../config";
 import { useDataContext } from "../../context/DataContext";
+import { useDashboardContext } from "../Dashboard";
 
 function ExportData() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const dashboardContext = useDashboardContext();
   const {
     // From DataProvider context
     datasetParams,
@@ -19,6 +21,21 @@ function ExportData() {
     pageSize: directPageSize,
     currentPage: directCurrentPage,
   } = useDataContext();
+
+  const interpolateQuery = (query: string, filters: Record<string, any>) => {
+    let interpolatedQuery = query;
+    // Replace all filter placeholders with empty string when no filters
+    if (!filters || Object.keys(filters).length === 0) {
+      return interpolatedQuery.replace(/\$\w+/g, '');
+    }
+
+    // Replace each placeholder with its value or empty string
+    Object.entries(filters).forEach(([key, value]) => {
+      const placeholder = `$${key}`;
+      interpolatedQuery = interpolatedQuery.split(placeholder).join(value || '');
+    });
+    return interpolatedQuery;
+  };
 
   const handleExport = async (format: string, scope: string) => {
     try {
@@ -33,20 +50,31 @@ function ExportData() {
         currentPage: datasetParams?.currentPage || directCurrentPage || 1,
         filters: datasetParams?.filters || {}
       };
+      // Get dashboard filters if they exist
+      const dashboardFilters = dashboardContext?.state?.filters || {};
 
       if (!effectiveParams.query && !effectiveParams.queryName) {
         throw new Error("Either query or queryName is required for export");
       }
 
-      // For "all" scope, only include the essential parameters
+      // For "all" scope, never include dashboard filters
       if (scope === "all") {
-        const basePayload = {
-          ...(effectiveParams.query ? { query: effectiveParams.query } : { query_name: effectiveParams.queryName }),
-          data_connection_id: config.dataConnection || "ANA",
-          format: format.toLowerCase(),
-        };
+        const basePayload = effectiveParams.query 
+          ? {
+              query: interpolateQuery(effectiveParams.query, {}),
+              data_connection_id: config.dataConnection || "ANA",
+              format: format.toLowerCase()
+            }
+          : {
+              query_name: effectiveParams.queryName,
+              data_connection_id: config.dataConnection || "ANA",
+              format: format.toLowerCase(),
+              filters: {} // Always use empty filters
+            };
 
-        const response = await client.getQueryData(basePayload);
+        const response = await (effectiveParams.query 
+          ? client.getQueryData(basePayload)
+          : client.getServerQueryData(basePayload));
         if (!response) {
           throw new Error("No response received from server");
         }
@@ -66,21 +94,25 @@ function ExportData() {
         return;
       }
 
-      // For filtered scope, include all filters and pagination
+      // For filtered scope, include all filters, pagination, and dashboard filters
       if (scope === "filtered") {
-        const basePayload = {
-          ...(effectiveParams.query ? { query: effectiveParams.query } : { query_name: effectiveParams.queryName }),
-          data_connection_id: config.dataConnection || "ANA",
-          current_page: effectiveParams.currentPage,
-        };
+        const basePayload = effectiveParams.query
+          ? {
+              query: interpolateQuery(effectiveParams.query, dashboardFilters),
+              data_connection_id: config.dataConnection || "ANA",
+              current_page: effectiveParams.currentPage
+            }
+          : {
+              query_name: effectiveParams.queryName,
+              data_connection_id: config.dataConnection || "ANA",
+              current_page: effectiveParams.currentPage,
+              filters: dashboardFilters // Keep filters for server queries
+            };
 
         const filterParams: Record<string, any> = {};
         if (effectiveParams.searchText) filterParams["search_text"] = effectiveParams.searchText;
         if (effectiveParams.searchColumns) filterParams["search_columns"] = effectiveParams.searchColumns;
         if (effectiveParams.sortColumn) filterParams["sort_column"] = effectiveParams.sortColumn;
-        if (effectiveParams.filters && Object.keys(effectiveParams.filters).length > 0) {
-          filterParams["filters"] = effectiveParams.filters;
-        }
         
         if (effectiveParams.pageSize) {
           const numPageSize = Number(effectiveParams.pageSize);
@@ -90,11 +122,17 @@ function ExportData() {
           }
         }
 
-        const response = await client.getQueryData({
-          ...basePayload,
-          ...filterParams,
-          format: format.toLowerCase(),
-        });
+        const response = await (effectiveParams.query
+          ? client.getQueryData({
+              ...basePayload,
+              ...filterParams,
+              format: format.toLowerCase(),
+            })
+          : client.getServerQueryData({
+              ...basePayload,
+              ...filterParams,
+              format: format.toLowerCase(),
+            }));
 
         if (!response) {
           throw new Error("No response received from server");
