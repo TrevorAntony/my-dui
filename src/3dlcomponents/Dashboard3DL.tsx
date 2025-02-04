@@ -21,6 +21,7 @@ import {
   LineChart,
   AreaChart,
   HeatmapChart,
+  WaterFallChart,
   RadarChart,
   CascadeChart,
   ScoreCardTable,
@@ -217,6 +218,18 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <LineChart
                   {...(props as React.ComponentProps<typeof LineChart>)}
+                  container={
+                    CardComponent as React.ComponentType<ContainerComponentProps>
+                  }
+                />
+              </ErrorBoundary>
+            ),
+            WaterFallChart:(
+              props: React.ComponentProps<typeof WaterFallChart>
+            ) => (
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <WaterFallChart
+                  {...(props as React.ComponentProps<typeof WaterFallChart>)}
                   container={
                     CardComponent as React.ComponentType<ContainerComponentProps>
                   }

@@ -20,4 +20,15 @@ export interface VisualProps {
   children?: React.ReactNode;
   infoTagContent?: React.ReactNode;
   DataStringQuery?: string;
+  waterfallOptions?: WaterfallOptions;
+  waterfallType?: "standard" | "cumulative" | "bridged" | "minimal";
+}
+
+
+interface WaterfallOptions {
+  summaryXLabel?: string;
+  barWidth?: number;
+  positiveBarColor?: string;
+  negativeBarColor?: string;
+  summaryBarColor?: string;
 }
