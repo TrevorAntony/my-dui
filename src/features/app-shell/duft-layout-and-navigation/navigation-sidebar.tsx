@@ -6,8 +6,8 @@ import { SidebarNavLink } from "./sidebar-nav-link";
 import { Sidebar } from "flowbite-react";
 
 import type { MenuItem, DataTaskItem, NavigationConfig } from "./types";
-import { useSidebarConfigContext } from "../../context/SidebarConfigContext";
-import { DataTaskNavLink } from "../../../_components/data-task-nav-link";
+import { useSidebarConfigContext } from "../../../core/context/SidebarConfigContext";
+import { DataTaskNavLink } from "./data-task-nav-link";
 
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,

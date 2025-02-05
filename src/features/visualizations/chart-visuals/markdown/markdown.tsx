@@ -4,11 +4,12 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import type { VisualProps } from "../../types/visual-props";
+
+import EmptyState from "../../visual-utils/empty-state";
 import {
-  markdownComponents,
   extractTextFromChildren,
-} from "../../helpers/markdown-component-helper";
-import EmptyState from "../ui-elements/empty-state";
+  markdownComponents,
+} from "./markdown-component-helper";
 
 const Markdown = ({
   container: Container,

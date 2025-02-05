@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Sidebar } from "flowbite-react";
-import { executeDataTask } from "../helpers/data-task-helpers";
+import { executeDataTask } from "./data-task-helpers";
 import type { DataTaskItem } from "./types";
 import DataTaskDialog from "./data-task-dialog";
 
@@ -29,10 +29,10 @@ export const DataTaskNavLink: React.FC<DataTaskNavLinkProps> = ({
   };
 
   const handleExecute = async () => {
-      const result = await executeDataTask(task.task);
-      if (result?.message) {
-        setIsOpen(false);
-      } else {
+    const result = await executeDataTask(task.task);
+    if (result?.message) {
+      setIsOpen(false);
+    } else {
       setError("Data task operation failed.");
     }
   };

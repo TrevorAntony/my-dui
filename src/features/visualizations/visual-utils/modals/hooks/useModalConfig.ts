@@ -1,8 +1,8 @@
 import { useRef, useMemo } from "react";
 import { useModalSize } from "./useModalSize";
 import type { Position } from "../types/modal";
-import { useModalPosition } from "../../../../hooks/useModalPosition";
-import { calculateInitialModalSizeConfig } from "../visualizations/visual-utils/modals/modal-size-config";
+import { useModalPosition } from "./useModalPosition";
+import { calculateInitialModalSizeConfig } from "../helpers/modal-size-config";
 import type { ModalConfigParams } from "../types/modal";
 import {
   modalSymbolicWidthMap,

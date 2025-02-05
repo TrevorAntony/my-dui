@@ -4,9 +4,9 @@ import { expect, test, beforeEach } from "vitest";
 import DataProvider from "./data-provider/data-provider";
 import QueryData from "./query-data";
 import useQueryData from "./hooks/useQueryData";
-import { DuftHttpClient } from "../../../api/DuftHttpClient/DuftHttpClient";
-import { useDataContext } from "../../context/DataContext";
+import { DuftHttpClient } from "../../core/api/DuftHttpClient/DuftHttpClient";
 import useDataSetLogic from "./hooks/useDataSetLogic";
+import { useDataContext } from "../../core/context/DataContext";
 
 const BASE_URL = "http://127.0.0.1:8000/api/v2";
 

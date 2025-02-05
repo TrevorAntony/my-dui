@@ -1,12 +1,15 @@
 import type { FC, PropsWithChildren } from "react";
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { SidebarProvider, useSidebarContext } from "./context/SidebarContext";
-import Navbar from "./core/duft-core-components/duft-layout-and-navigation/navbar";
-import Sidebar from "./core/duft-core-components/duft-layout-and-navigation/sidebar";
+import Navbar from "./features/app-shell/duft-layout-and-navigation/navbar";
+import Sidebar from "./features/app-shell/duft-layout-and-navigation/sidebar";
 import classNames from "classnames";
 import { SidebarConfigProvider } from "./core/context/SidebarConfigContext";
-import { useAppState } from "./context/AppStateContext";
+import { useAppState } from "./core/context/AppStateContext";
+import {
+  SidebarProvider,
+  useSidebarContext,
+} from "./core/context/SidebarContext";
 
 interface NavbarSidebarLayoutProps {
   isFooter?: boolean;

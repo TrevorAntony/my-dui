@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from "react";
 import { Sidebar } from "flowbite-react";
-import { useSidebarContext } from "../context/SidebarContext";
+import { useSidebarContext } from "../../../core/context/SidebarContext";
 
 type SidebarGroupProps = {
   title?: string;

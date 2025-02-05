@@ -1,4 +1,4 @@
-import { client } from "../api/DuftHttpClient/local-storage-functions";
+import { client } from "../../../core/api/DuftHttpClient/local-storage-functions";
 import type { DataTaskResponse } from "./data-task";
 
 export const executeDataTask = async (

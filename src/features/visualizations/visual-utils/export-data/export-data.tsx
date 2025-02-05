@@ -3,8 +3,8 @@ import ExportButton from "./export-button";
 import ExportDataDialog from "./export-data-dialog";
 import { client } from "../../../../core/api/DuftHttpClient/local-storage-functions";
 import config from "../../../../config";
-import { useDataContext } from "../../context/DataContext";
-import { useDashboardContext } from "../dashboard/Dashboard";
+import { useDashboardContext } from "../../dashboard/Dashboard";
+import { useDataContext } from "../../../../core/context/DataContext";
 
 function ExportData() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

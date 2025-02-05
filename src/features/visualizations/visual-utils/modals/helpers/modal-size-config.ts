@@ -1,7 +1,7 @@
 import {
-  modalViewportHeightRatioMap,
   modalPixelWidthMap,
-} from "../../../utils/constants";
+  modalViewportHeightRatioMap,
+} from "../../../../../utils/constants";
 
 export const calculateInitialModalSizeConfig = (
   modalWidth: keyof typeof modalPixelWidthMap,

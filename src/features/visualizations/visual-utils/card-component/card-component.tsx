@@ -1,14 +1,16 @@
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Dataset, ExportData } from "../../core/dashboard-3dl-parser";
-import useDuftQuery from "../../core/duft-core-components/data-components/hooks/useDuftQuery";
-import { useLayout } from "../../core/duft-core-components/layout-components/single-layout";
-import type { DetailsComponentRegistry } from "../../components/details-component-registry";
-import { getDetailsComponent } from "../../components/details-component-registry";
+import useDuftQuery from "../../../data-components/hooks/useDuftQuery";
+import { useLayout } from "../../layout-components/single-layout";
+import type { DetailsComponentRegistry } from "../details-view/registry/details-component-registry";
+import { getDetailsComponent } from "../details-view/registry/details-component-registry";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { Button, Modal } from "flowbite-react";
-import DataString from "../../utils/dashboard-meta";
+import DataString from "../../../../utils/dashboard-meta";
+import Dataset from "../../../data-components/data-set";
+import ExportData from "../export-data/export-data";
+
 type MoreInfoProps = {
   text: string;
   link: string;

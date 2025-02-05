@@ -1,9 +1,9 @@
 import React, { FC, ReactNode, ReactElement } from "react";
 import { Tabs } from "flowbite-react";
-import iconMap from "./helpers/tab-icons-registry";
+import iconMap from "../../../features/visualizations/tabs/helpers/tab-icons-registry";
 import { useDataContext } from "../../../core/context/DataContext";
-import useDuftQuery from "../data-components/hooks/useDuftQuery";
-import Dataset from "../data-components/data-set";
+import useDuftQuery from "../../../features/data-components/hooks/useDuftQuery";
+import Dataset from "../../../features/data-components/data-set";
 
 interface DuftTabChildren {
   children: ReactNode;

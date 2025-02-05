@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useContext, useMemo } from "react";
-import { DashboardContext } from "../../dashboard/Dashboard";
-import config from "../../../../config";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
+import config from "../../../config";
+import { DuftHttpClient } from "../../../core/api/DuftHttpClient/DuftHttpClient";
 import {
   getTokenFromLocalStorage,
   setTokenInLocalStorage,
   updateConfigFromHttpClient,
   getRefreshToken,
-} from "../../api/DuftHttpClient/local-storage-functions";
+} from "../../../core/api/DuftHttpClient/local-storage-functions";
+import { DashboardContext } from "../../visualizations/dashboard/Dashboard";
 
 interface UseDataSetLogicProps {
   query?: string;

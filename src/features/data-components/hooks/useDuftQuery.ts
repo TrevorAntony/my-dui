@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { client } from "../../api/DuftHttpClient/local-storage-functions";
+import { client } from "../../../core/api/DuftHttpClient/local-storage-functions";
 
 interface DuftQueryResult<T> {
   data: T | undefined;

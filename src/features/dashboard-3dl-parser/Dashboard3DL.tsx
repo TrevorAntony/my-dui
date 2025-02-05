@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import JSXParser from "react-jsx-parser";
-import CardComponent from "../visualizations/visual-utils/card-component";
+import CardComponent from "../../features/visualizations/visual-utils/card-component/card-component";
 import { ErrorBoundary } from "react-error-boundary";
-import ErrorFallback from "../visualizations/visual-utils/error-fallback-component/error-fallback";
-import DuftMultiSelectFilter from "../duft-core-components/filters/multi-select-filter-component";
+import ErrorFallback from "../../features/visualizations/visual-utils/error-fallback-component/error-fallback";
+import DuftMultiSelectFilter from "../../features/visualizations/filters/multi-select-filter-component";
 import {
   Dashboard,
   Filters,
@@ -56,25 +56,25 @@ import {
   DuftGridFullRow,
   DuftGridHeader,
   DuftSubheader,
-} from "../duft-core-components/layout-components/grid-components";
-import useDuftQuery from "../duft-core-components/data-components/hooks/useDuftQuery";
+} from "../../features/visualizations/layout-components/grid-components";
+import useDuftQuery from "../../features/data-components/hooks/useDuftQuery";
 import {
   DuftTabset,
   DuftTab,
-} from "../duft-core-components/tabs/tab-components";
-import DuftTile from "../../_components/duft-tile";
-import DuftFilter from "../duft-core-components/filters/duft-filter";
+} from "../../features/visualizations/tabs/tab-components";
+import DuftTile from "../../features/visualizations/duft-overrides/duft-tile";
+import DuftFilter from "../../features/visualizations/filters/duft-filter";
 import DuftSingleView from "../../_playground/_ui-components/table-components";
-import DuftModal from "../../_components/duft-modal";
-import CascadeNode from "../visualizations/visual-utils/cascade-node";
-import type { ContainerComponentProps } from "../visualizations/types/types";
-import SingleTableLayoutTester from "../../_content-components/SingleTableLayoutTester";
+import DuftModal from "../../features/visualizations/visual-utils/modals/duft-modal";
+import CascadeNode from "../../features/visualizations/chart-visuals/cascade-chart/cascade-components/cascade-node";
+import type { ContainerComponentProps } from "../../features/visualizations/types/types";
+import SingleTableLayoutTester from "../../_playground/_content-components/SingleTableLayoutTester";
 import DataString from "../../utils/dashboard-meta";
-import useDashboardData from "./hooks/useDashboardData";
-import useThemeData from "./hooks/useTheme";
-import useQueryData from "../duft-core-components/data-components/hooks/useQueryData";
-import { client } from "../api/DuftHttpClient/local-storage-functions";
-import { openmrsClient } from "../api/OpenmrsHttpClient/OpenmrsHttpClient";
+import useDashboardData from "../../features/dashboard-3dl-parser/hooks/useDashboardData";
+import useThemeData from "../../features/dashboard-3dl-parser/hooks/useTheme";
+import useQueryData from "../../features/data-components/hooks/useQueryData";
+import { client } from "../../core/api/DuftHttpClient/local-storage-functions";
+import { openmrsClient } from "../../core/api/OpenmrsHttpClient/OpenmrsHttpClient";
 
 interface Dashboard3DLProps {
   defaultId?: string;
@@ -408,7 +408,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
               <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <HtmlSnippet
                   {...(props as React.ComponentProps<typeof HtmlSnippet>)}
-                  //@ts-expect-error This error comes from mismatch between html snippet and the card component. Will discuss and update with Fitti.
+                  //@ts-ignore will refactor types for this
                   container={
                     CardComponent as React.ComponentType<ContainerComponentProps>
                   }

@@ -1,6 +1,6 @@
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useThemeMode } from "../context/ThemeModeContext";
+import { useThemeMode } from "../../../../core/context/ThemeModeContext";
 
 const ChartSkeleton = () => {
   const { mode } = useThemeMode();

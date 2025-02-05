@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { DuftHttpClient } from "../../../../api/DuftHttpClient/DuftHttpClient";
+import { DuftHttpClient } from "../../../../../core/api/DuftHttpClient/DuftHttpClient";
 
 const BASE_URL = "http://127.0.0.1:8000/api/v2";
 
@@ -41,14 +41,14 @@ describe("Export Data Functionality - Real API Integration", () => {
       const response = await client.getQueryData({
         query: sqlQuery,
         data_connection_id: "ANA",
-        format
+        format,
       });
 
       expect(response).toBeDefined();
       if (format === "csv") {
-        expect(typeof response.size).toBe('number');
-        expect(typeof response.type).toBe('string');
-        expect(response.type).toContain('csv');
+        expect(typeof response.size).toBe("number");
+        expect(typeof response.type).toBe("string");
+        expect(response.type).toContain("csv");
       } else {
         expect(Array.isArray(response)).toBe(true);
         expect(response.length).toBeGreaterThan(0);
@@ -59,20 +59,20 @@ describe("Export Data Functionality - Real API Integration", () => {
   it("should handle named query export with filters", async () => {
     const queryName = "filters/age_group";
     const filters = {
-      age_group: "20-24"
+      age_group: "20-24",
     };
 
     const response = await client.getQueryData({
       query_name: queryName,
       data_connection_id: "ANA",
       format: "csv",
-      filters
+      filters,
     });
 
     expect(response).toBeDefined();
-    expect(typeof response.size).toBe('number');
-    expect(typeof response.type).toBe('string');
-    expect(response.type).toContain('csv');
+    expect(typeof response.size).toBe("number");
+    expect(typeof response.type).toBe("string");
+    expect(response.type).toContain("csv");
   });
 
   it("should handle pagination parameters correctly", async () => {
@@ -85,13 +85,13 @@ describe("Export Data Functionality - Real API Integration", () => {
       data_connection_id: "ANA",
       format: "csv",
       page_size: pageSize * currentPage,
-      current_page: 1
+      current_page: 1,
     });
 
     expect(response).toBeDefined();
-    expect(typeof response.size).toBe('number');
-    expect(typeof response.type).toBe('string');
-    expect(response.type).toContain('csv');
+    expect(typeof response.size).toBe("number");
+    expect(typeof response.type).toBe("string");
+    expect(response.type).toContain("csv");
   });
 
   it("should handle search and sort parameters", async () => {
@@ -106,13 +106,13 @@ describe("Export Data Functionality - Real API Integration", () => {
       format: "csv",
       search_text: searchText,
       search_columns: searchColumns,
-      sort_column: sortColumn
+      sort_column: sortColumn,
     });
 
     expect(response).toBeDefined();
-    expect(typeof response.size).toBe('number');
-    expect(typeof response.type).toBe('string');
-    expect(response.type).toContain('csv');
+    expect(typeof response.size).toBe("number");
+    expect(typeof response.type).toBe("string");
+    expect(response.type).toContain("csv");
   });
 
   it("should handle export errors gracefully", async () => {
@@ -122,7 +122,7 @@ describe("Export Data Functionality - Real API Integration", () => {
       await client.getQueryData({
         query_name: queryName,
         data_connection_id: "ANA",
-        format: "csv"
+        format: "csv",
       });
     } catch (e) {
       caughtError = e;
@@ -139,24 +139,24 @@ describe("Export Data Functionality - Real API Integration", () => {
       const response = await client.getQueryData({
         query: sqlQuery,
         data_connection_id: connectionId,
-        format: "csv"
+        format: "csv",
       });
 
       expect(response).toBeDefined();
-      expect(typeof response.size).toBe('number');
-      expect(typeof response.type).toBe('string');
-      expect(response.type).toContain('csv');
+      expect(typeof response.size).toBe("number");
+      expect(typeof response.type).toBe("string");
+      expect(response.type).toContain("csv");
     }
   });
 
   it("should handle concurrent exports", async () => {
     const sqlQuery = "SELECT * FROM dim_client LIMIT 5";
     const formats = ["csv", "json"];
-    const exportPromises = formats.map(format => 
+    const exportPromises = formats.map((format) =>
       client.getQueryData({
         query: sqlQuery,
         data_connection_id: "ANA",
-        format
+        format,
       })
     );
 
@@ -164,9 +164,9 @@ describe("Export Data Functionality - Real API Integration", () => {
     responses.forEach((response, index) => {
       expect(response).toBeDefined();
       if (formats[index] === "csv") {
-        expect(typeof response.size).toBe('number');
-        expect(typeof response.type).toBe('string');
-        expect(response.type).toContain('csv');
+        expect(typeof response.size).toBe("number");
+        expect(typeof response.type).toBe("string");
+        expect(response.type).toContain("csv");
       } else {
         expect(Array.isArray(response)).toBe(true);
       }
@@ -187,13 +187,13 @@ describe("Export Data Functionality - Real API Integration", () => {
       filters,
       search_text: searchText,
       search_columns: searchColumns,
-      sort_column: sortColumn
+      sort_column: sortColumn,
     });
 
     expect(response).toBeDefined();
-    expect(typeof response.size).toBe('number');
-    expect(typeof response.type).toBe('string');
-    expect(response.type).toContain('csv');
+    expect(typeof response.size).toBe("number");
+    expect(typeof response.type).toBe("string");
+    expect(response.type).toContain("csv");
   });
 
   it("should handle network timeouts", async () => {
@@ -203,7 +203,7 @@ describe("Export Data Functionality - Real API Integration", () => {
       await client.getQueryData({
         query_name: queryName,
         data_connection_id: "ANA",
-        format: "csv"
+        format: "csv",
       });
     } catch (e) {
       caughtError = e;
@@ -221,7 +221,7 @@ describe("Export Data Functionality - Real API Integration", () => {
       await client.getQueryData({
         query_name: queryName,
         data_connection_id: "ANA",
-        format: invalidFormat
+        format: invalidFormat,
       });
     } catch (e) {
       caughtError = e;
@@ -239,7 +239,7 @@ describe("Export Data Functionality - Real API Integration", () => {
         await client.getQueryData({
           query_name: "test/query",
           data_connection_id: "ANA",
-          format: "csv"
+          format: "csv",
         });
       } catch (e) {
         caughtError = e;
@@ -250,16 +250,16 @@ describe("Export Data Functionality - Real API Integration", () => {
 
   it("should correctly handle CSV export format", async () => {
     const queryName = "filters/age_group";
-    
+
     const response = await client.getQueryData({
       query_name: queryName,
       data_connection_id: "ANA",
-      format: "csv"
+      format: "csv",
     });
     expect(response).toBeDefined();
-    expect(typeof response.size).toBe('number');
-    expect(typeof response.type).toBe('string');
-    expect(response.type).toContain('csv');
+    expect(typeof response.size).toBe("number");
+    expect(typeof response.type).toBe("string");
+    expect(response.type).toContain("csv");
 
     // Verify content
     const text = await response.text();
@@ -269,11 +269,11 @@ describe("Export Data Functionality - Real API Integration", () => {
 
   it("should correctly handle JSON export format", async () => {
     const queryName = "filters/age_group";
-    
+
     const response = await client.getQueryData({
       query_name: queryName,
       data_connection_id: "ANA",
-      format: "json"
+      format: "json",
     });
 
     expect(Array.isArray(response)).toBe(true);
@@ -284,32 +284,38 @@ describe("Export Data Functionality - Real API Integration", () => {
 
   it("should reject invalid export formats with 400", async () => {
     const queryName = "filters/age_group";
-    
-    await expect(client.getQueryData({
-      query_name: queryName,
-      data_connection_id: "ANA",
-      format: "invalid"
-    })).rejects.toThrow("Bad Request");
+
+    await expect(
+      client.getQueryData({
+        query_name: queryName,
+        data_connection_id: "ANA",
+        format: "invalid",
+      })
+    ).rejects.toThrow("Bad Request");
   });
 
-  it("should handle large dataset exports", async () => {
-    const sqlQuery = `
+  it(
+    "should handle large dataset exports",
+    async () => {
+      const sqlQuery = `
       SELECT * FROM fact_sentinel_event 
       INNER JOIN dim_client ON fact_sentinel_event.client_id = dim_client.client_id 
       LIMIT 1000
     `;
 
-    const response = await client.getQueryData({
-      query: sqlQuery,
-      data_connection_id: "ANA",
-      format: "csv"
-    });
-    // Check for blob-like properties instead of instanceof
-    expect(response).toBeDefined();
-    expect(typeof response.size).toBe('number');
-    expect(typeof response.type).toBe('string');
-    expect(response.size).toBeGreaterThan(1024);
-  }, { timeout: 30000 });
+      const response = await client.getQueryData({
+        query: sqlQuery,
+        data_connection_id: "ANA",
+        format: "csv",
+      });
+      // Check for blob-like properties instead of instanceof
+      expect(response).toBeDefined();
+      expect(typeof response.size).toBe("number");
+      expect(typeof response.type).toBe("string");
+      expect(response.size).toBeGreaterThan(1024);
+    },
+    { timeout: 30000 }
+  );
 
   it("should maintain filters in export", async () => {
     const queryName = "filters/age_group";
@@ -319,11 +325,11 @@ describe("Export Data Functionality - Real API Integration", () => {
       query_name: queryName,
       data_connection_id: "ANA",
       format: "json",
-      filters
+      filters,
     });
 
     expect(Array.isArray(response)).toBe(true);
-    response.forEach(row => {
+    response.forEach((row) => {
       expect(row.age_group).toBe("20-24");
     });
   });
@@ -334,11 +340,14 @@ describe("Export Data Functionality - Real API Integration", () => {
     refreshToken = null;
 
     const queryName = "filters/age_group";
-    
-    await expect(client.getQueryData({
-      query_name: queryName,        data_connection_id: "ANA",
-      format: "csv"
-    })).rejects.toThrow("Unauthorized");
+
+    await expect(
+      client.getQueryData({
+        query_name: queryName,
+        data_connection_id: "ANA",
+        format: "csv",
+      })
+    ).rejects.toThrow("Unauthorized");
   });
 
   it("should handle DataSet exports", async () => {
@@ -351,12 +360,12 @@ describe("Export Data Functionality - Real API Integration", () => {
         data_connection_id: "ANA",
         format,
         page_size: undefined,
-        search_columns: undefined
+        search_columns: undefined,
       });
 
       expect(response).toBeDefined();
       if (format === "csv") {
-        expect(response.type).toContain('csv');
+        expect(response.type).toContain("csv");
       } else {
         expect(Array.isArray(response)).toBe(true);
       }
@@ -375,11 +384,11 @@ describe("Export Data Functionality - Real API Integration", () => {
       page_size: undefined,
       search_text: undefined,
       search_columns: undefined,
-      sort_column: undefined
+      sort_column: undefined,
     });
 
     expect(response).toBeDefined();
-    expect(response.type).toContain('csv');
+    expect(response.type).toContain("csv");
     const text = await response.text();
     expect(text).toContain("age_group_id");
   });
@@ -398,7 +407,7 @@ describe("Export Data Functionality - Real API Integration", () => {
     const response = await client.getQueryData({
       query: sqlQuery,
       data_connection_id: "ANA",
-      format: "json"
+      format: "json",
     });
 
     expect(response).toBeDefined();
@@ -415,11 +424,11 @@ describe("Export Data Functionality - Real API Integration", () => {
       query_name: queryName,
       data_connection_id: "ANA",
       format: "csv",
-      page_size: undefined
+      page_size: undefined,
     });
 
     expect(response).toBeDefined();
-    expect(response.type).toContain('csv');
+    expect(response.type).toContain("csv");
     const text = await response.text();
     expect(text).toContain("age_group_id");
   });
@@ -431,35 +440,36 @@ describe("Export Data Functionality - Real API Integration", () => {
         payload: {
           query: "SELECT * FROM dim_client LIMIT 5",
           format: "csv",
-          data_connection_id: "ANA"
-        }
+          data_connection_id: "ANA",
+        },
       },
       {
         type: "DataProvider",
         payload: {
           query_name: "filters/age_group",
           format: "json",
-          data_connection_id: "ANA"
-        }
+          data_connection_id: "ANA",
+        },
       },
       {
         type: "QueryData",
         payload: {
-          query: "SELECT year, COUNT(*) as count FROM dim_first_art_date GROUP BY year",
+          query:
+            "SELECT year, COUNT(*) as count FROM dim_first_art_date GROUP BY year",
           format: "csv",
-          data_connection_id: "ANA"
-        }
-      }
+          data_connection_id: "ANA",
+        },
+      },
     ];
 
     const responses = await Promise.all(
-      exports.map(exp => client.getQueryData(exp.payload))
+      exports.map((exp) => client.getQueryData(exp.payload))
     );
 
     responses.forEach((response, index) => {
       expect(response).toBeDefined();
       if (exports[index].payload.format === "csv") {
-        expect(response.type).toContain('csv');
+        expect(response.type).toContain("csv");
       } else {
         expect(Array.isArray(response)).toBe(true);
       }

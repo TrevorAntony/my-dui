@@ -1,9 +1,9 @@
 import { renderHook } from "@testing-library/react";
 import { expect, test, beforeEach } from "vitest";
 import DataProvider from "./data-provider/data-provider";
-import { useDataContext } from "../../context/DataContext";
+import { useDataContext } from "../../core/context/DataContext";
 import API, { useApiFetch } from "./api";
-import { DuftHttpClient } from "../../../api/DuftHttpClient/DuftHttpClient";
+import { DuftHttpClient } from "../../core/api/DuftHttpClient/DuftHttpClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const API_URL = "https://jsonplaceholder.typicode.com/users";

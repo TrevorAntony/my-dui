@@ -1,5 +1,5 @@
-import { OpenMRSClient } from "../../../api/OpenmrsHttpClient/OpenmrsHttpClient";
-import { patientExtractor } from "../core/duft-core-components/data-components/openmrs-api/openmrs-api-utils";
+import { OpenMRSClient } from "../../core/api/OpenmrsHttpClient/OpenmrsHttpClient";
+import { patientExtractor } from "../../features/data-components/openmrs-api/openmrs-api-utils";
 
 export const getPatientFromAppointments = async (
   client: OpenMRSClient

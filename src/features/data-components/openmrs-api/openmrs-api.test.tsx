@@ -1,11 +1,11 @@
 import { renderHook } from "@testing-library/react";
 import { expect, test, beforeAll, vi } from "vitest";
 import DataProvider from "../data-provider/data-provider";
-import { useDataContext } from "../../../context/DataContext";
+import { useDataContext } from "../../../core/context/DataContext";
 import OpenmrsData, { useOpenmrsFetch } from "./openmrs-api";
-import { OpenMRSClient } from "../../../api/OpenmrsHttpClient/OpenmrsHttpClient";
+import { OpenMRSClient } from "../../../core/api/OpenmrsHttpClient/OpenmrsHttpClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { getTestPatient } from "../../../../test-utilities/test-helpers";
+import { getTestPatient } from "../../../utils/test-utilities/test-helpers";
 
 const BASE_URL = "https://dev3.openmrs.org/openmrs/ws/rest/v1";
 let PATIENT_ID: string;

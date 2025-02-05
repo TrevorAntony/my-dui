@@ -1,14 +1,14 @@
 import type { FC } from "react";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { HiMenuAlt1, HiX } from "react-icons/hi";
-import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../../../utils/is-small-screen";
 import config from "../../../config";
-import { useSidebarConfigContext } from "../../context/SidebarConfigContext";
-import { useAppState } from "../context/AppStateContext";
+import { useAppState } from "../../../core/context/AppStateContext";
 import { userDropdownTheme } from "../../../flowbite-theme";
 import { useNavigate } from "react-router-dom";
-import { client } from "../api/DuftHttpClient/local-storage-functions";
+import { client } from "../../../core/api/DuftHttpClient/local-storage-functions";
+import { useSidebarContext } from "../../../core/context/SidebarContext";
+import { useSidebarConfigContext } from "../../../core/context/SidebarConfigContext";
 
 const ExampleNavbar: FC = function () {
   const navigate = useNavigate();

@@ -10,11 +10,11 @@ import ColumnToggle from "./ColumnToggle";
 import SearchBar from "./SearchBar";
 import TableBody from "./TableBody";
 import TableHeader from "./TableHeader";
-import ExportData from "../../../utilities/export-data/export-data";
-import EmptyState from "../../../ui-elements/empty-state";
+import ExportData from "../../../../../3dl/utilities/export-data/export-data";
+import EmptyState from "../../../visual-utils/empty-state";
 import { Button, Modal } from "flowbite-react";
 import { Spinner } from "flowbite-react";
-import { CaseType } from "../../../utilities/CaseTransform";
+import { CaseType } from "../../../../../utils/CaseTransform";
 
 const TableContent = ({
   data,

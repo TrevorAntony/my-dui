@@ -1,6 +1,6 @@
 import React from "react";
 import type { FallbackProps } from "react-error-boundary";
-import CardComponent from "../visualizations/visual-utils/card-component";
+import CardComponent from "../card-component/card-component";
 
 const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
   console.error("Fallback Error: ", error.message);

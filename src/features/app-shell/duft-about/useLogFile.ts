@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { client } from "../api/DuftHttpClient/local-storage-functions";
+import { client } from "../../../core/api/DuftHttpClient/local-storage-functions";
 
 export const useLogFile = (isOpen: boolean) => {
   const [logs, setLogs] = useState<string[]>([]);

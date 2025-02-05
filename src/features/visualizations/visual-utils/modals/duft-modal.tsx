@@ -1,17 +1,15 @@
 import React from "react";
 import { Modal } from "flowbite-react";
-import { renderModalContent } from "../helpers/modalContentHelper";
 import StaticModalContainer from "./modal-components/static-modal-container";
 import DraggableResizableModalContainer from "./modal-components/draggable-resizable-modal-container";
-import { useModalConfig } from "../hooks/useModalConfig";
-import type {
+import { useModalConfig } from "./hooks/useModalConfig";
+import {
   modalPixelWidthMap,
-  modalViewportHeightRatioMap,
-} from "../helpers/constants";
-import type {
   modalSymbolicWidthMap,
   modalViewportHeightMap,
-} from "../helpers/constants";
+  modalViewportHeightRatioMap,
+} from "../../../../utils/constants";
+import { renderModalContent } from "./helpers/modalContentHelper";
 
 type ModalContent =
   | string

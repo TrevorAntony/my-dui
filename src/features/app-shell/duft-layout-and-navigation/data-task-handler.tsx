@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import DuftModal from "../components/duft-modal";
+import DuftModal from "../../visualizations/visual-utils/modals/duft-modal";
 import type { DataTask } from "./data-task";
 import { executeDataTask } from "./data-task-helpers";
-import { useSidebarConfigContext } from "../../context/SidebarConfigContext";
+import { useSidebarConfigContext } from "../../../core/context/SidebarConfigContext";
 
 const DataTaskHandler: React.FC = () => {
   const sidebarConfig = useSidebarConfigContext();

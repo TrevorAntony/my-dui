@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { Button, Modal } from "flowbite-react";
 import ToastNotification from "../../../../utils/notification-toast";
 import type { Connection, DataConnectionFormProps } from "../resources";
-import { client } from "../../../api/DuftHttpClient/local-storage-functions";
+import { client } from "../../../../core/api/DuftHttpClient/local-storage-functions";
 
 const DataConnectionForm: FC<DataConnectionFormProps> = ({
   connection,

@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
+import { DuftHttpClient } from "../../../core/api/DuftHttpClient/DuftHttpClient";
+
+import config from "../../../config";
 import {
   getTokenFromLocalStorage,
   setTokenInLocalStorage,
   updateConfigFromHttpClient,
   getRefreshToken,
-} from "../../api/DuftHttpClient/local-storage-functions";
-import config from "../../../../config";
+} from "../../../core/api/DuftHttpClient/local-storage-functions";
 
 // This is commented out for tests to pass, since the http client which is exported from the index file
 // is not provided in the context of the test and throws an error

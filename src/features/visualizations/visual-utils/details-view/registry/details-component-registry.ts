@@ -1,25 +1,25 @@
+import PivotTable from "react-pivottable/PivotTable";
 import {
-  LineChart,
-  BarChart,
-  AreaChart,
   CascadeChart,
   CascadeNode,
-  ClusteredBarChart,
-  ClusteredLineChart,
-  DonutChart,
-  HeatmapChart,
-  PercentStackedBarChart,
-  PieChart,
-  PolarAreaChart,
-  RadarChart,
-  RadialBarChart,
-  ScoreCardTable,
-  StackedBarChart,
-  Tile,
-  PivotTable,
-  DataTable,
   InfiniteScrollTable,
-} from "../../../../core/dashboard-3dl-parser";
+} from "../../../../dashboard-3dl-parser";
+import AreaChart from "../../../chart-visuals/area-chart.visual";
+import BarChart from "../../../chart-visuals/bar-chart.visual";
+import ClusteredBarChart from "../../../chart-visuals/clustered-bar-chart.visual";
+import ClusteredLineChart from "../../../chart-visuals/clustered-line-chart.visual";
+import DonutChart from "../../../chart-visuals/donut-chart.visual";
+import HeatmapChart from "../../../chart-visuals/heat-map-chart.visual";
+import LineChart from "../../../chart-visuals/line-chart.visual";
+import PercentStackedBarChart from "../../../chart-visuals/percent-stacked-bar-chart.visual";
+import PieChart from "../../../chart-visuals/pie-chart.visual";
+import PolarAreaChart from "../../../chart-visuals/polar-area-chart.visual";
+import RadarChart from "../../../chart-visuals/radar-chart.visual";
+import RadialBarChart from "../../../chart-visuals/radial-bar-chart.visual";
+import StackedBarChart from "../../../chart-visuals/stacked-bar-chart.visual";
+import Tile from "../../../chart-visuals/tile.visual";
+import DataTable from "../../../tables/DataTable";
+import ScoreCardTable from "../../../tables/score-card-table.visual";
 
 export interface DetailsComponentRegistry {
   "bar-chart": typeof BarChart;

@@ -4,8 +4,12 @@ import Navbar from "./navbar";
 import Sidebar from "./sidebar";
 import { MdFacebook } from "react-icons/md";
 import { FaDribbble, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
-import { SidebarProvider, useSidebarContext } from "../context/SidebarContext";
+
 import classNames from "classnames";
+import {
+  SidebarProvider,
+  useSidebarContext,
+} from "../../../core/context/SidebarContext";
 
 interface NavbarSidebarLayoutProps {
   isFooter?: boolean;

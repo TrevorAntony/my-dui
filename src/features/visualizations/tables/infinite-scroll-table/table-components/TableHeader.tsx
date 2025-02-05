@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CaseType, transformCase } from "../../../utilities/CaseTransform";
+import { CaseType, transformCase } from "../../../../../utils/CaseTransform";
 
 interface TableHeaderProps {
   headers: string[];
@@ -15,7 +15,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   visibleColumns,
   sortState,
   handleSort,
-  caseType = 'sentence',
+  caseType = "sentence",
   isInModal = false,
 }) => {
   const [preservedHeaders, setPreservedHeaders] = useState<string[]>(headers);
@@ -36,7 +36,9 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     : "hover:bg-gray-200 dark:hover:bg-gray-500";
 
   return (
-    <thead className={`text-sm uppercase text-gray-700 dark:text-gray-400 ${bgClasses}`}>
+    <thead
+      className={`text-sm uppercase text-gray-700 dark:text-gray-400 ${bgClasses}`}
+    >
       <tr>
         {preservedHeaders
           ?.filter((header) => visibleColumns[header])
@@ -48,13 +50,16 @@ const TableHeader: React.FC<TableHeaderProps> = ({
               onClick={() => handleSort(header)}
             >
               <div className="flex items-center min-h-[24px]">
-              <span className="flex-1"> {transformCase(header, caseType)}</span>
+                <span className="flex-1">
+                  {" "}
+                  {transformCase(header, caseType)}
+                </span>
                 <svg
                   className={`ml-1.5 h5 w-5 flex-shrink-0 ${
                     sortState[header]
                       ? "text-highlight-600 dark:text-highlight-600"
                       : "text-gray-600 dark:text-gray-300"
-                    }`}
+                  }`}
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"

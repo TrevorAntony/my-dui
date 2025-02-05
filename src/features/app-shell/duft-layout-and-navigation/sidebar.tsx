@@ -12,7 +12,6 @@ import {
 } from "react-icons/hi";
 import { MdOutlineSettings } from "react-icons/md";
 
-import { useSidebarContext } from "../context/SidebarContext";
 import isSmallScreen from "../../../utils/is-small-screen";
 import { SidebarNavLink } from "./sidebar-nav-link";
 import SidebarCollapse from "./sidebar-collapse";
@@ -22,6 +21,7 @@ import { renderModalContent } from "../../../features/visualizations/visual-util
 import SettingsDisplay from "../duft-settings/duft-settings-components/settings-display";
 import AboutDlg from "../duft-about/duft-about";
 import DataTaskDialog from "./data-task-dialog";
+import { useSidebarContext } from "../../../core/context/SidebarContext";
 
 const ExampleSidebar: FC = function () {
   const { isOpenOnSmallScreens: isSidebarOpenOnSmallScreens } =

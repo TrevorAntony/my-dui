@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DuftModal from "../../components/duft-modal";
+import DuftModal from "../../visualizations/visual-utils/modals/duft-modal";
 import SettingsDisplay from "./duft-settings-components/settings-display";
 
 const Settings = () => {

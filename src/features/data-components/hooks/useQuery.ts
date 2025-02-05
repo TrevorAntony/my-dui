@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import config from "../../../../config";
-import { client } from "../../../api/DuftHttpClient/local-storage-functions";
+import config from "../../../config";
+import { client } from "../../../core/api/DuftHttpClient/local-storage-functions";
 
 const useQuery = (query) => {
   const [data, setData] = useState([]);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Filter } from "../../../core/dashboard-3dl-parser";
-import type { FilterProps } from "../3dl/filters/filter";
+import type { FilterProps } from "./filter";
 
 const DuftFilter: React.FC<FilterProps> = ({
   name,
