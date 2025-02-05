@@ -9,14 +9,14 @@ import type {
   CascadeNodeProps,
 } from "../../features/visualizations/chart-visuals/cascade-chart/types/cascade";
 import type { VisualProps } from "../../features/visualizations/types/visual-props";
-import CascadeChartContext from "../../context/CascadeChartContext";
+import CascadeChartContext from "../../core/context/CascadeChartContext";
 import { useRenderTree } from "../../features/visualizations/chart-visuals/cascade-chart/hooks/useRenderTree";
 import getInfoTagContents from "../../features/visualizations/visual-utils/info-tag/helpers/get-info-tag-content";
 import { Button, Modal } from "flowbite-react";
-import useDuftQuery from "../../core/duft-core-components/data-components/hooks/useDuftQuery";
-import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
-import Dataset from "../../core/duft-core-components/data-components/data-set";
-import CardComponent from "../../features/visualizations/visual-utils/card-component";
+import useDuftQuery from "../../features/data-components/hooks/useDuftQuery";
+import { InfiniteScrollTable } from "../../features/dashboard-3dl-parser";
+import Dataset from "../../features/data-components/data-set";
+import CardComponent from "../../features/visualizations/visual-utils/card-component/card-component";
 
 const CascadeChart = ({
   container: Container,

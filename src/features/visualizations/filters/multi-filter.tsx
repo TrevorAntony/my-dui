@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown } from "flowbite-react";
-import { useDashboardContext, setFilter } from "../utilities/Dashboard";
-import useQuery from "../utilities/useQuery";
+import { useDashboardContext, setFilter } from "../dashboard/Dashboard";
+import useQuery from "../../data-components/hooks/useQuery";
 
 export interface MultiSelectFilterProps {
   name: string;

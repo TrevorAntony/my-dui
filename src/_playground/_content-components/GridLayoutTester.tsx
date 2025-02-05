@@ -6,11 +6,11 @@ import {
   DuftGrid,
   DuftGridFullRow,
   DuftGridHeader,
-} from "../core/duft-core-components/layout-components/grid-components";
+} from "../../features/visualizations/layout-components/grid-components";
 import {
   DuftTabset,
   DuftTab,
-} from "../core/duft-core-components/tabs/tab-components";
+} from "../../features/visualizations/tabs/tab-components";
 
 const GridLayoutTester: React.FC = () => {
   return (

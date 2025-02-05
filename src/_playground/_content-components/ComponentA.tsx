@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { DuftGrid } from "../core/duft-core-components/layout-components/grid-components";
+import { DuftGrid } from "../../features/visualizations/layout-components/grid-components";
 
 type ComponentAParams = {
   id?: string;

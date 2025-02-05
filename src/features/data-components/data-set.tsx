@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useRef, useMemo, useCallback } from "react";
-import { DataContextProvider } from "../../context/DataContext";
+import { DataContextProvider } from "../../core/context/DataContext";
 import useDataSetLogic from "./hooks/useDataSetLogic";
-import { processQuery, transposeData } from "../../../utils/visual-helpers";
+import { processQuery, transposeData } from "../../utils/visual-helpers";
 
 interface DuftQueryResult<T> {
   data: T | undefined;

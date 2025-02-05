@@ -5,16 +5,16 @@ import {
   Navigate,
 } from "react-router-dom";
 import AppLayout from "../AppLayout";
-import ComponentA from "../_content-components/ComponentA";
-import ComponentB from "../_content-components/ComponentB";
-import ComponentC from "../_content-components/ComponentC";
-import ComponentD from "../_content-components/ComponentD";
-import Dashboard3DL from "../core/dashboard-3dl-parser/Dashboard3DL";
-import GridLayoutTester from "../_content-components/GridLayoutTester";
-import TabLayoutTester from "../_content-components/TabLayoutTester";
-import SingleTableLayoutTester from "../_content-components/SingleTableLayoutTester";
-import DataTaskHandler from "../core/duft-core-components/duft-layout-and-navigation/data-task-handler";
-import Settings from "../core/duft-core-components/duft-settings/duft-settings";
+import ComponentA from "../_playground/_content-components/ComponentA";
+import ComponentB from "../_playground/_content-components/ComponentB";
+import ComponentC from "../content-components/ComponentC";
+import ComponentD from "../_playground/_content-components/ComponentD";
+import Dashboard3DL from "../features/dashboard-3dl-parser/Dashboard3DL";
+import GridLayoutTester from "../_playground/_content-components/GridLayoutTester";
+import TabLayoutTester from "../_playground/_content-components/TabLayoutTester";
+import SingleTableLayoutTester from "../_playground/_content-components/SingleTableLayoutTester";
+import DataTaskHandler from "../features/app-shell/duft-layout-and-navigation/data-task-handler";
+import Settings from "../features/app-shell/duft-settings/duft-settings";
 import Login from "../authentication/login";
 import "./App.css";
 

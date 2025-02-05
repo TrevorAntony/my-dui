@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useDataContext } from "../../../../core/context/DataContext";
 import type { ContainerComponentProps } from "../../types/types";
-import { useLayout } from "../../ui-elements/single-layout";
+import { useLayout } from "../../layout-components/single-layout
 import TableContent from "./table-components/TableContent";
-import { CaseType } from "../../utilities/CaseTransform";
+import { CaseType } from "../../../../utils/CaseTransform";
 
 interface InfiniteScrollTableProps {
   container?: React.ComponentType<ContainerComponentProps>;

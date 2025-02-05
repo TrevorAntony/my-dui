@@ -1,5 +1,5 @@
 import React from "react";
-import { useDataContext } from "../../context/DataContext";
+import { useDataContext } from "../../core/context/DataContext";
 
 type QueryProps = {
   children: React.ReactNode;

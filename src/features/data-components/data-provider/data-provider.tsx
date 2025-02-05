@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import {
   DataContextProvider,
   type DatasetParams,
-} from "../../../context/DataContext";
+} from "../../../core/context/DataContext";
 
 interface DataProviderProps {
   children: React.ReactNode;

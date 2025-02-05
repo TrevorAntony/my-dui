@@ -11,8 +11,8 @@ import {
 //@ts-ignore this is not a problem, the tests pass, the module exports the function but does not reflect, should be a typescript bug!!!
 import type { SpyInstance } from "vitest";
 import { OpenMRSClient } from "./OpenmrsHttpClient";
-import { getAdapter } from "../../3dl/utilities/openmrs-api/openmrs-adapter-registry";
-import { getTestPatient } from "../../3dl/utilities/tests/test-helpers";
+import { getAdapter } from "../../../features/data-components/openmrs-api/openmrs-adapter-registry";
+import { getTestPatient } from "../../../utils/test-utilities/test-helpers";
 import { fail } from "assert";
 
 const BASE_URL = "https://dev3.openmrs.org/openmrs/ws/rest/v1";

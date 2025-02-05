@@ -3,10 +3,10 @@
 import { MantineReactTable } from "mantine-react-table";
 import { Box } from "@mantine/core";
 import { useDataContext } from "../../../core/context/DataContext";
-import { useLayout } from "../utilities/Dashboard";
+import { useLayout } from "../dashboard/Dashboard";
 import type { VisualProps } from "../types/visual-props";
 import getInfoTagContents from "../visual-utils/info-tag/helpers/get-info-tag-content";
-import EmptyState from "../ui-elements/empty-state";
+import EmptyState from "../visual-utils/empty-state";
 import ChartSkeleton from "../visual-utils/loading-skeleton/chart-skeleton";
 
 const ScoreCardTable = ({

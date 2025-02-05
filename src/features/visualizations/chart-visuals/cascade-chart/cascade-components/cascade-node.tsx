@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
-import CascadeChartContext from "../context/CascadeChartContext";
-import { useDataContext } from "../../core/context/DataContext";
-import type { CascadeNodeProps } from "../../types/cascade";
+import CascadeChartContext from "../../../../../core/context/CascadeChartContext";
+import { useDataContext } from "../../../../../core/context/DataContext";
+import type { CascadeNodeProps } from "../types/cascade";
 
 const CascadeNode: React.FC<CascadeNodeProps> = ({
   id,

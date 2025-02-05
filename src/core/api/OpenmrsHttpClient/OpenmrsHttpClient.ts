@@ -1,5 +1,5 @@
-import { extractErrorMessage } from "../../helpers/visual-helpers";
-import { getAdapter } from "../../3dl/utilities/openmrs-api/openmrs-adapter-registry";
+import { extractErrorMessage } from "../../../utils/visual-helpers"; //this should come from a file called general-utils
+import { getAdapter } from "../../../features/data-components/openmrs-api/openmrs-adapter-registry";
 
 export class OpenMRSClient {
   private baseURL: string;

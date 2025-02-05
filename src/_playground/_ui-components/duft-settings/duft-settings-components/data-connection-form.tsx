@@ -4,9 +4,12 @@
 import type { FC } from "react";
 import { useEffect, useState, useRef } from "react";
 import { Button, Modal } from "flowbite-react";
-import ToastNotification from "../../../../ui-components/notification-toast";
-import type { Connection, DataConnectionFormProps } from "../resources";
-import { client } from "../../../api/DuftHttpClient/local-storage-functions";
+import ToastNotification from "../../../../utils/notification-toast";
+import type {
+  Connection,
+  DataConnectionFormProps,
+} from "../../../../features/app-shell/duft-settings/resources";
+import { client } from "../../../../core/api/DuftHttpClient/local-storage-functions";
 
 const DataConnectionForm: FC<DataConnectionFormProps> = ({
   connection,

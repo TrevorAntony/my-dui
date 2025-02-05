@@ -2,21 +2,21 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import {
   createCascadeObject,
   cleanEmptyChildren,
-} from "../../visualizations/chart-visuals/cascade-chart/helpers/cascade-helpers";
-import { defaultCascadeOptions } from "../../utils/constants";
+} from "../../../features/visualizations/chart-visuals/cascade-chart/helpers/cascade-helpers";
+import { defaultCascadeOptions } from "../../../utils/constants";
 import type {
   Cascade,
   CascadeNodeProps,
-} from "../../visualizations/chart-visuals/cascade-chart/types/cascade";
-import type { VisualProps } from "../../visualizations/types/visual-props";
-import CascadeChartContext from "../../context/CascadeChartContext";
-import { useRenderTree } from "../../visualizations/chart-visuals/cascade-chart/hooks/useRenderTree";
-import getInfoTagContents from "../../visualizations/visual-utils/info-tag/helpers/get-info-tag-content";
+} from "../../../features/visualizations/chart-visuals/cascade-chart/types/cascade";
+import type { VisualProps } from "../../../features/visualizations/types/visual-props";
+import CascadeChartContext from "../../../core/context/CascadeChartContext";
+import { useRenderTree } from "../../../features/visualizations/chart-visuals/cascade-chart/hooks/useRenderTree";
+import getInfoTagContents from "../../../features/visualizations/visual-utils/info-tag/helpers/get-info-tag-content";
 import { Button, Modal } from "flowbite-react";
-import useDuftQuery from "../../core/duft-core-components/data-components/hooks/useDuftQuery";
-import InfiniteScrollTable from "../tables/infinite-scroll-table/infinite-scroll-table";
-import Dataset from "../../core/duft-core-components/data-components/data-set";
-import CardComponent from "../../visualizations/visual-utils/card-component";
+import useDuftQuery from "../../../features/data-components/hooks/useDuftQuery";
+import InfiniteScrollTable from "../../../features/visualizations/tables/infinite-scroll-table/infinite-scroll-table";
+import Dataset from "../../../features/data-components/data-set";
+import CardComponent from "../../../features/visualizations/visual-utils/card-component/card-component";
 
 const CascadeChart = ({
   container: Container,

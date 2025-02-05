@@ -1,4 +1,4 @@
-import BaseXYChart from "../base-visuals/base-xy-chart";
+import BaseXYChart from "../../features/visualizations/base-visuals/base-xy-chart";
 import type { VisualProps } from "../../features/visualizations/types/visual-props";
 import getInfoTagContents from "../../features/visualizations/visual-utils/info-tag/helpers/get-info-tag-content";
 

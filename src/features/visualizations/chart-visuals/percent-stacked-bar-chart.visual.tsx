@@ -1,8 +1,8 @@
 import Chart from "react-apexcharts";
-import { useThemeContext } from "../utilities/Dashboard"; // Importing the theme context
+import { useThemeContext } from "../dashboard/Dashboard";
 import { useDataContext } from "../../../core/context/DataContext";
 import { deepCopy, deepMerge } from "../../../utils/visual-helpers"; // Importing deepCopy and deepMerge
-import EmptyState from "../ui-elements/empty-state";
+import EmptyState from "../visual-utils/empty-state";
 import type { VisualProps } from "../types/visual-props";
 import getInfoTagContents from "../visual-utils/info-tag/helpers/get-info-tag-content";
 import ChartSkeleton from "../visual-utils/loading-skeleton/chart-skeleton";

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import React from "react";
-import { useDashboardContext, setFilter } from "../utilities/Dashboard";
+import { useDashboardContext, setFilter } from "../dashboard/Dashboard";
 
 interface FiltersProps {
   children: ReactNode;
@@ -10,20 +10,28 @@ const Filters: React.FC<FiltersProps> = ({ children }) => {
   const context = useDashboardContext();
   // Context check should be immediately after getting the context
   if (!context) {
-    throw new Error("useDashboardContext must be used within a DashboardProvider");
+    throw new Error(
+      "useDashboardContext must be used within a DashboardProvider"
+    );
   }
 
   const { state, dispatch } = context;
 
-  const areAnyFiltersSet = (filters: Record<string, string[] | string>): boolean => {
-    return Object.values(filters).some(value =>
-      (Array.isArray(value) && value.length > 0) ||
-      (typeof value === 'string' && value.trim() !== '')
+  const areAnyFiltersSet = (
+    filters: Record<string, string[] | string>
+  ): boolean => {
+    return Object.values(filters).some(
+      (value) =>
+        (Array.isArray(value) && value.length > 0) ||
+        (typeof value === "string" && value.trim() !== "")
     );
   };
 
-  const handleRemoveFilters = (state: typeof context.state, dispatch: typeof context.dispatch): void => {
-    Object.keys(state.filters).forEach(filterName => {
+  const handleRemoveFilters = (
+    state: typeof context.state,
+    dispatch: typeof context.dispatch
+  ): void => {
+    Object.keys(state.filters).forEach((filterName) => {
       setFilter(dispatch, filterName, []);
     });
   };

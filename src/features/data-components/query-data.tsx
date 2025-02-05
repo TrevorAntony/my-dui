@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import useDataSetLogic from "./hooks/useDataSetLogic";
-import { processQuery } from "../../../utils/visual-helpers";
-import { useDetailsViewContext } from "../../../visualizations/visual-utils/details-view/details-view-context";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
-import { useDataContext, DatasetParams } from "../../context/DataContext";
+import { processQuery } from "../../utils/visual-helpers";
+import { useDetailsViewContext } from "../visualizations/visual-utils/details-view/details-view-context";
+import { DuftHttpClient } from "../../core/api/DuftHttpClient/DuftHttpClient";
+import { useDataContext, DatasetParams } from "../../core/context/DataContext";
 
 interface DuftQueryResult<T> {
   data: T | undefined;

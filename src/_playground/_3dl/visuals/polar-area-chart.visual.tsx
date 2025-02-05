@@ -1,6 +1,6 @@
-import BaseCircularChart from "../base-visuals/base-circular-chart";
-import type { VisualProps } from "../../visualizations/types/visual-props";
-import getInfoTagContents from "../../visualizations/visual-utils/info-tag/helpers/get-info-tag-content";
+import BaseCircularChart from "../../../features/visualizations/base-visuals/base-circular-chart";
+import type { VisualProps } from "../../../features/visualizations/types/visual-props";
+import getInfoTagContents from "../../../features/visualizations/visual-utils/info-tag/helpers/get-info-tag-content";
 
 const PolarAreaChart = ({
   container: Container,

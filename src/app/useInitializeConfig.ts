@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { UnauthorizedError } from "../api/DuftHttpClient/ErrorClasses";
-import { client } from "../api/DuftHttpClient/local-storage-functions";
-import type { Config } from "../context/types";
-import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
+import { UnauthorizedError } from "../core/api/DuftHttpClient/ErrorClasses";
+import { client } from "../core/api/DuftHttpClient/local-storage-functions";
+import type { Config } from "../core/context/types";
+import { DuftHttpClient } from "../core/api/DuftHttpClient/DuftHttpClient";
 
 export const useInitializeConfig = (customHttpClient?: DuftHttpClient) => {
   const [config, setConfig] = useState<Config | null>(null);

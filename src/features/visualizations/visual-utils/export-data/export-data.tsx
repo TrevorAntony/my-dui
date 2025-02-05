@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ExportButton from "./export-button";
 import ExportDataDialog from "./export-data-dialog";
-import { client } from "../../../api/DuftHttpClient/local-storage-functions";
+import { client } from "../../../../core/api/DuftHttpClient/local-storage-functions";
 import config from "../../../../config";
 import { useDataContext } from "../../context/DataContext";
 import { useDashboardContext } from "../dashboard/Dashboard";

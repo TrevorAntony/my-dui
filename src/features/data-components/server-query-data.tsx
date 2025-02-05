@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import useDataSetLogic from "./hooks/useDataSetLogic";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
-import { useDataContext, DatasetParams } from "../../context/DataContext";
+import { DuftHttpClient } from "../../core/api/DuftHttpClient/DuftHttpClient";
+import { useDataContext, DatasetParams } from "../../core/context/DataContext";
 
 interface DuftQueryResult<T> {
   data: T | undefined;

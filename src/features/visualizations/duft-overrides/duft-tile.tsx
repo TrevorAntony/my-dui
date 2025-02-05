@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useDataContext } from "../core/context/DataContext";
+import { useDataContext } from "../../../core/context/DataContext";
 import { HiOutlineExternalLink } from "react-icons/hi";
-import TileSkeleton from "../ui-components/tile-skeleton";
+import TileSkeleton from "../visual-utils/loading-skeleton/tile-skeleton";
 import { Button, Modal } from "flowbite-react";
 
 interface DuftTileProps {

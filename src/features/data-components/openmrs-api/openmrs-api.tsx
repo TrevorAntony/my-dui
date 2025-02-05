@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useDataContext } from "../../../context/DataContext";
-import { OpenMRSClient } from "../../../api/OpenmrsHttpClient/OpenmrsHttpClient";
+import { useDataContext } from "../../../core/context/DataContext";
+import { OpenMRSClient } from "../../../core/api/OpenmrsHttpClient/OpenmrsHttpClient";
 
 interface UseOpenmrsFetchProps {
   resource: string;

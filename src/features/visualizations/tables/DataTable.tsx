@@ -1,8 +1,8 @@
 import React from "react";
 import { useDataContext } from "../../../core/context/DataContext";
-import { useLayout } from "../ui-elements/single-layout";
+import { useLayout } from "../layout-components/single-layout";
 import TableSkeleton from "../visual-utils/loading-skeleton/table-skeleton";
-import { CaseType, transformCase } from "../utilities/CaseTransform";
+import { CaseType, transformCase } from "../../../utils/CaseTransform";
 
 // Define types for props and data
 interface DataTableProps {

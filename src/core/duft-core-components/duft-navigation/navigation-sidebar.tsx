@@ -1,13 +1,17 @@
 import React from "react";
 import { HiHome, HiChartPie, HiHashtag, HiOutlineFolder } from "react-icons/hi";
-import SidebarCollapse from "./sidebar-collapse";
-import SidebarGroup from "./sidebar-group";
-import { SidebarNavLink } from "./sidebar-nav-link";
+import SidebarCollapse from "../../../features/app-shell/duft-layout-and-navigation/sidebar-collapse";
+import SidebarGroup from "../../../features/app-shell/duft-layout-and-navigation/sidebar-group";
+import { SidebarNavLink } from "../../../features/app-shell/duft-layout-and-navigation/sidebar-nav-link";
 import { Sidebar } from "flowbite-react";
 
-import type { MenuItem, DataTaskItem, NavigationConfig } from "./types";
+import type {
+  MenuItem,
+  DataTaskItem,
+  NavigationConfig,
+} from "../../../features/app-shell/duft-layout-and-navigation/types";
 import { useSidebarConfigContext } from "../../../core/context/SidebarConfigContext";
-import { DataTaskNavLink } from "../../../_components/data-task-nav-link";
+import { DataTaskNavLink } from "../../../features/app-shell/duft-layout-and-navigation/data-task-nav-link";
 
 const iconMap: { [key: string]: React.FC<React.SVGProps<SVGSVGElement>> } = {
   "home-icon": HiHome,

@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppState } from "../context/AppStateContext";
+import { useAppState } from "../core/context/AppStateContext";
 import { checkAuthEnabled, checkUserLoggedIn } from "../utils/auth-utils";
 
 const PrivateRoute = () => {

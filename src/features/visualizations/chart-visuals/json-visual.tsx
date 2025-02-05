@@ -1,5 +1,5 @@
 import ChartSkeleton from "../visual-utils/loading-skeleton/chart-skeleton";
-import EmptyState from "../ui-elements/empty-state";
+import EmptyState from "../visual-utils/empty-state";
 
 // Helper function to recursively render JSON data
 const renderJson = (data) => {

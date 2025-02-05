@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useDataContext } from "../../context/DataContext";
-import { DuftHttpClient } from "../../api/DuftHttpClient/DuftHttpClient";
+import { useDataContext } from "../../core/context/DataContext";
+import { DuftHttpClient } from "../../core/api/DuftHttpClient/DuftHttpClient";
 
 interface UseApiFetchProps {
   url: string;

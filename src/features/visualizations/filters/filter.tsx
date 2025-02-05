@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDashboardContext, setFilter } from "../utilities/Dashboard";
-import useQuery from "../utilities/useQuery";
+import { useDashboardContext, setFilter } from "../dashboard/Dashboard";
+import useQuery from "../../data-components/hooks/useQuery";
 
 export interface FilterProps {
   name: string;
@@ -20,20 +20,30 @@ const Filter: React.FC<FilterProps> = ({
   const context = useDashboardContext();
   if (!context) {
     throw new Error(
-      "useDashboardContext must be used within a DashboardProvider",
+      "useDashboardContext must be used within a DashboardProvider"
     );
   }
   const { state, dispatch } = context;
   const [selectedValue, setSelectedValue] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const { data: options, loading, error } = useQuery(values_query);
-  
+
   useEffect(() => {
     if (state.filters && state.filters[name] !== undefined) {
       if (values_query && options) {
-        const matchingOption = (options as { label?: string; value?: string; [key: string]: string }[])
-          .find(option => option.value === state.filters[name] || Object.values(option)[0] === state.filters[name]);
-        setSelectedValue(matchingOption?.label || matchingOption?.value || Object.values(matchingOption || {})[0] || "");
+        const matchingOption = (
+          options as { label?: string; value?: string; [key: string]: string }[]
+        ).find(
+          (option) =>
+            option.value === state.filters[name] ||
+            Object.values(option)[0] === state.filters[name]
+        );
+        setSelectedValue(
+          matchingOption?.label ||
+            matchingOption?.value ||
+            Object.values(matchingOption || {})[0] ||
+            ""
+        );
       } else {
         setSelectedValue(state.filters[name]);
       }
@@ -82,7 +92,7 @@ const Filter: React.FC<FilterProps> = ({
     ).find(
       (option) =>
         option.label === selectedLabel ||
-        Object.values(option)[0] === selectedLabel,
+        Object.values(option)[0] === selectedLabel
     );
 
     const value =

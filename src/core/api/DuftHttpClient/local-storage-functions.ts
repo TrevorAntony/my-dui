@@ -1,6 +1,6 @@
-import config from "../../config";
+import config from "../../../config";
 import type { Config } from "../../context/types";
-import DispatchService from "../../services/dispatchService";
+import DispatchService from "../../../services/dispatchService";
 import { DuftHttpClient } from "./DuftHttpClient";
 
 export const client = new DuftHttpClient(

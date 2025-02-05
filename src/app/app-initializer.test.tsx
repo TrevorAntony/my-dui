@@ -3,23 +3,20 @@ import { describe, expect, test, beforeEach, vi } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // App Components
-import {
-  AppStateProvider,
-  useAppState,
-} from "../../../context/AppStateContext";
+import { AppStateProvider, useAppState } from "../core/context/AppStateContext";
 import AppInitializer from "./app-initializer";
-import { GlobalState } from "../../../context/types";
+import { GlobalState } from "../core/context/types";
 
 // HTTP Client and utilities
-import { DuftHttpClient } from "../../../api/DuftHttpClient/DuftHttpClient";
+import { DuftHttpClient } from "../core/api/DuftHttpClient/DuftHttpClient";
 import {
   updateConfigFromHttpClient,
   clearTokensFromLocalStorage,
-} from "../../../api/DuftHttpClient/local-storage-functions";
+} from "../core/api/DuftHttpClient/local-storage-functions";
 import {
   makeAuthenticatedRequest,
   mockConfig,
-} from "../test-utilities/test-helpers";
+} from "../utils/test-utilities/test-helpers";
 
 const BASE_URL = "http://127.0.0.1:8000/api/v2";
 

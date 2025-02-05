@@ -8,7 +8,7 @@ import {
   markdownComponents,
   extractTextFromChildren,
 } from "../chart-visuals/markdown/markdown-component-helper";
-import EmptyState from "../ui-elements/empty-state";
+import EmptyState from "../visual-utils/empty-state";
 
 const Markdown = ({
   container: Container,

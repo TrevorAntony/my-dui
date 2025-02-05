@@ -3,7 +3,7 @@ import { Button } from "flowbite-react";
 import {
   DuftGrid,
   DuftGridHeader,
-} from "../core/duft-core-components/layout-components/grid-components";
+} from "../../features/visualizations/layout-components/grid-components";
 
 const ComponentB: React.FC = () => {
   return (

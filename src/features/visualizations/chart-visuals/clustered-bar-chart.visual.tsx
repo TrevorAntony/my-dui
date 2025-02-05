@@ -1,11 +1,11 @@
 import Chart from "react-apexcharts";
-import { useThemeContext } from "../utilities/Dashboard";
+import { useThemeContext } from "../dashboard/Dashboard";
 import { useDataContext } from "../../../core/context/DataContext";
 import { deepCopy, deepMerge } from "../../../utils/visual-helpers";
 import type { VisualProps } from "../types/visual-props";
 import getInfoTagContents from "../visual-utils/info-tag/helpers/get-info-tag-content";
 
-import EmptyState from "../ui-elements/empty-state";
+import EmptyState from "../visual-utils/empty-state";
 import ChartSkeleton from "../visual-utils/loading-skeleton/chart-skeleton";
 type DataItem = {
   category?: string;

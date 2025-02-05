@@ -1,8 +1,8 @@
 import React from "react";
-import CardComponent from "../visualizations/visual-utils/card-component";
+import CardComponent from "../../features/visualizations/visual-utils/card-component/card-component";
 import CardRow from "../_components/card-row";
 import PieChartComponent from "./PieChartComponent";
-import { DuftGrid } from "../core/duft-core-components/layout-components/grid-components";
+import { DuftGrid } from "../../features/visualizations/layout-components/grid-components";
 
 const ComponentC: React.FC = () => {
   const labels = ["Apple", "Mango", "Orange", "Banana"];

@@ -4,9 +4,12 @@ import { HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { Modal } from "flowbite-react";
 import flowbiteTheme from "../../../flowbite-theme";
-import { useAppState } from "../../context/AppStateContext";
-import { downloadLogs, useLogFile } from "./useLogFile";
-import ExportButton from "../../core/duft-core-components/export-data/export-button";
+import { useAppState } from "../../../core/context/AppStateContext";
+import {
+  downloadLogs,
+  useLogFile,
+} from "../../../features/app-shell/duft-about/useLogFile";
+import ExportButton from "../../../features/visualizations/visual-utils/export-data/export-button";
 
 interface DuftHeaderProps {
   version?: string;

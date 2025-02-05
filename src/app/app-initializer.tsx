@@ -1,10 +1,10 @@
-import { useAppState } from "../context/AppStateContext";
+import { useAppState } from "../core/context/AppStateContext";
 import App from "./App";
 import Login from "../authentication/login";
 import Splash from "./splash";
-import { GlobalState } from "../context/types";
+import { GlobalState } from "../core/context/types";
 import { useInitializeConfig } from "./useInitializeConfig";
-import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
+import { DuftHttpClient } from "../core/api/DuftHttpClient/DuftHttpClient";
 
 interface AppInitializerProps {
   customHttpClient?: DuftHttpClient;
