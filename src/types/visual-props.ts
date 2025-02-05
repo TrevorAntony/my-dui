@@ -1,5 +1,6 @@
 import type { ContainerComponentProps } from "../3dl/types/types";
 import type { cascadeScaleMap } from "../helpers/constants";
+import type { WaterfallType } from "../helpers/waterfall-helpers";
 export interface VisualProps {
   container?: React.ComponentType<ContainerComponentProps>;
   header?: string;
@@ -21,9 +22,8 @@ export interface VisualProps {
   infoTagContent?: React.ReactNode;
   DataStringQuery?: string;
   waterfallOptions?: WaterfallOptions;
-  waterfallType?: "standard" | "cumulative" | "bridged" | "minimal";
+  waterfallType?: WaterfallType;
 }
-
 
 interface WaterfallOptions {
   summaryXLabel?: string;
