@@ -48,7 +48,7 @@ export { default as QueryProvider } from "../../core/context/QueryContext";
 export { default as Query } from "../../features/data-components/query-component";
 export { default as InfiniteScrollTable } from "../../features/visualizations/tables/infinite-scroll-table/infinite-scroll-table";
 export { default as ExportData } from "../../features/visualizations/visual-utils/export-data/export-data";
-export { default as Markdown } from "../../features/visualizations/visuals/markdown";
+export { default as Markdown } from "../../features/visualizations/chart-visuals/markdown/markdown";
 export { default as MultiSelectFilter } from "../../features/visualizations/filters/multi-filter";
 export { default as InfoTag } from "../../features/visualizations/visual-utils/info-tag/info-tag";
 export { default as HtmlSnippet } from "../../features/visualizations/chart-visuals/html-snippet";

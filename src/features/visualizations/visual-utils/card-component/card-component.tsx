@@ -49,8 +49,10 @@ const CardComponent: FC<CardComponentProps> = ({
   const shouldExportData = exportData === "true" || exportData === true;
   const isFullHeight = layout === "single-layout";
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const detailsComponentKey =
     detailsComponent as keyof DetailsComponentRegistry;
+
   const DetailsComponent = detailsComponent
     ? getDetailsComponent(detailsComponentKey)
     : undefined;
@@ -161,6 +163,7 @@ const CardComponent: FC<CardComponentProps> = ({
         >
           <Modal.Header>{header}</Modal.Header>
           <Modal.Body className="flex flex-col overflow-hidden ">
+            {/* @ts-ignore will do some digging why this isn't working */}
             <DetailsComponent
               container={
                 detailsComponent === "infinite-scroll-table"

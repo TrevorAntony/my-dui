@@ -1,22 +1,4 @@
 import React, { useState } from "react";
-import Dashboard from "../../core/duft-core-components/dashboard/Dashboard";
-import Filters from "../filters/filters";
-import Filter from "../filters/filter";
-import DataSet from "../../core/duft-core-components/data-components/data-set";
-import JSXParser from "react-jsx-parser";
-import Visual1 from "../old-visuals/Visual1";
-import Visual3 from "../old-visuals/Visual3";
-import Visual5 from "../old-visuals/Visual5";
-import Section from "../../core/duft-core-components/layout-components/Section";
-import PieChart from "../visuals/pie-chart.visual";
-import DonutChart from "../visuals/donut-chart.visual";
-import RadialBarChart from "../visuals/radial-bar-chart.visual";
-import PolarAreaChart from "../visuals/polar-area-chart.visual";
-import BarChart from "../visuals/bar-chart.visual";
-import LineChart from "../visuals/line-chart.visual";
-import HeatmapChart from "../visuals/heat-map-chart.visual";
-import RadarChart from "../visuals/radar-chart.visual";
-
 const PreviewPage = () => {
   const [input3DL, setInput3DL] = useState(`
     <Dashboard>

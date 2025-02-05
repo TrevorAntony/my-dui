@@ -1,6 +1,5 @@
 import React from "react";
 import Chart from "react-apexcharts";
-import { useDataContext } from "../../core/context/DataContext";
 import PropTypes from "prop-types"; // Add this import
 
 // Visual4 component using data from its DataContainer

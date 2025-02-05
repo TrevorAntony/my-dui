@@ -1,5 +1,4 @@
 import React from "react";
-import { useDataContext } from "../../core/context/DataContext";
 
 // Visual5 component implementing a basic data tile
 const Visual5 = ({ title, backgroundColor = "#f0f0f0", color = "#333" }) => {

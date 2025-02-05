@@ -1,10 +1,10 @@
 import { useState } from "react";
 import ExportButton from "../../../features/visualizations/visual-utils/export-data/export-button";
-import ExportDataDialog from "./export-data-dialog";
 import { client } from "../../../core/api/DuftHttpClient/local-storage-functions";
 import config from "../../../config";
 import { useDataContext } from "../../../core/context/DataContext";
 import { useDashboardContext } from "../../../features/visualizations/dashboard/Dashboard";
+import ExportDataDialog from "../../../features/visualizations/visual-utils/export-data/export-data-dialog";
 
 function ExportData() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
