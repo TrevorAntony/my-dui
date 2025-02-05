@@ -2,10 +2,10 @@ import type { FC, PropsWithChildren } from "react";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider, useSidebarContext } from "./context/SidebarContext";
-import Navbar from "./components/navbar";
-import Sidebar from "./components/sidebar";
+import Navbar from "./core/duft-core-components/duft-layout-and-navigation/navbar";
+import Sidebar from "./core/duft-core-components/duft-layout-and-navigation/sidebar";
 import classNames from "classnames";
-import { SidebarConfigProvider } from "./3dl/context/SidebarConfigContext";
+import { SidebarConfigProvider } from "./core/context/SidebarConfigContext";
 import { useAppState } from "./context/AppStateContext";
 
 interface NavbarSidebarLayoutProps {
@@ -36,7 +36,7 @@ const MainContent: FC<PropsWithChildren<NavbarSidebarLayoutProps>> = function ({
     <main
       className={classNames(
         "flex flex-col min-h-[calc(100vh-50px)] bg-gray-50 dark:bg-gray-900 p-0",
-        isSidebarOpen ? "lg:ml-16" : "lg:ml-64",
+        isSidebarOpen ? "lg:ml-16" : "lg:ml-64"
       )}
     >
       <div className="grow overflow-y-auto">

@@ -4,9 +4,12 @@ import {
   DuftGrid,
   DuftGridFullRow,
   DuftGridHeader,
-} from "../ui-components/grid-components";
-import { DuftTabset, DuftTab } from "../ui-components/tab-components";
-import CardComponent from "../components/card-component";
+} from "../core/duft-core-components/layout-components/grid-components";
+import {
+  DuftTabset,
+  DuftTab,
+} from "../features/visualizations/tabs/tab-components";
+import CardComponent from "../features/visualizations/visual-utils/card-component";
 import type { FC } from "react";
 
 const SingleTableLayoutTester: React.FC = () => {

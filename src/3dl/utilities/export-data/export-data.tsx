@@ -4,7 +4,7 @@ import ExportDataDialog from "./export-data-dialog";
 import { client } from "../../../api/DuftHttpClient/local-storage-functions";
 import config from "../../../config";
 import { useDataContext } from "../../context/DataContext";
-import { useDashboardContext } from "../Dashboard";
+import { useDashboardContext } from "../../../features/visualizations/dashboard/Dashboard";
 
 function ExportData() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -26,13 +26,15 @@ function ExportData() {
     let interpolatedQuery = query;
     // Replace all filter placeholders with empty string when no filters
     if (!filters || Object.keys(filters).length === 0) {
-      return interpolatedQuery.replace(/\$\w+/g, '');
+      return interpolatedQuery.replace(/\$\w+/g, "");
     }
 
     // Replace each placeholder with its value or empty string
     Object.entries(filters).forEach(([key, value]) => {
       const placeholder = `$${key}`;
-      interpolatedQuery = interpolatedQuery.split(placeholder).join(value || '');
+      interpolatedQuery = interpolatedQuery
+        .split(placeholder)
+        .join(value || "");
     });
     return interpolatedQuery;
   };
@@ -48,7 +50,7 @@ function ExportData() {
         sortColumn: datasetParams?.sortColumn || directSortColumn,
         pageSize: datasetParams?.pageSize || directPageSize,
         currentPage: datasetParams?.currentPage || directCurrentPage || 1,
-        filters: datasetParams?.filters || {}
+        filters: datasetParams?.filters || {},
       };
       // Get dashboard filters if they exist
       const dashboardFilters = dashboardContext?.state?.filters || {};
@@ -59,20 +61,20 @@ function ExportData() {
 
       // For "all" scope, never include dashboard filters
       if (scope === "all") {
-        const basePayload = effectiveParams.query 
+        const basePayload = effectiveParams.query
           ? {
               query: interpolateQuery(effectiveParams.query, {}),
               data_connection_id: config.dataConnection || "ANA",
-              format: format.toLowerCase()
+              format: format.toLowerCase(),
             }
           : {
               query_name: effectiveParams.queryName,
               data_connection_id: config.dataConnection || "ANA",
               format: format.toLowerCase(),
-              filters: {} // Always use empty filters
+              filters: {}, // Always use empty filters
             };
 
-        const response = await (effectiveParams.query 
+        const response = await (effectiveParams.query
           ? client.getQueryData(basePayload)
           : client.getServerQueryData(basePayload));
         if (!response) {
@@ -100,24 +102,28 @@ function ExportData() {
           ? {
               query: interpolateQuery(effectiveParams.query, dashboardFilters),
               data_connection_id: config.dataConnection || "ANA",
-              current_page: effectiveParams.currentPage
+              current_page: effectiveParams.currentPage,
             }
           : {
               query_name: effectiveParams.queryName,
               data_connection_id: config.dataConnection || "ANA",
               current_page: effectiveParams.currentPage,
-              filters: dashboardFilters // Keep filters for server queries
+              filters: dashboardFilters, // Keep filters for server queries
             };
 
         const filterParams: Record<string, any> = {};
-        if (effectiveParams.searchText) filterParams["search_text"] = effectiveParams.searchText;
-        if (effectiveParams.searchColumns) filterParams["search_columns"] = effectiveParams.searchColumns;
-        if (effectiveParams.sortColumn) filterParams["sort_column"] = effectiveParams.sortColumn;
-        
+        if (effectiveParams.searchText)
+          filterParams["search_text"] = effectiveParams.searchText;
+        if (effectiveParams.searchColumns)
+          filterParams["search_columns"] = effectiveParams.searchColumns;
+        if (effectiveParams.sortColumn)
+          filterParams["sort_column"] = effectiveParams.sortColumn;
+
         if (effectiveParams.pageSize) {
           const numPageSize = Number(effectiveParams.pageSize);
           if (!isNaN(numPageSize) && numPageSize > 0) {
-            filterParams["page_size"] = numPageSize * effectiveParams.currentPage;
+            filterParams["page_size"] =
+              numPageSize * effectiveParams.currentPage;
             filterParams["current_page"] = 1;
           }
         }

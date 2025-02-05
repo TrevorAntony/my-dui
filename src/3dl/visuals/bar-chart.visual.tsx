@@ -1,6 +1,6 @@
 import BaseXYChart from "../base-visuals/base-xy-chart";
-import type { VisualProps } from "../../types/visual-props";
-import getInfoTagContents from "../../helpers/get-info-tag-content";
+import type { VisualProps } from "../../features/visualizations/types/visual-props";
+import getInfoTagContents from "../../features/visualizations/visual-utils/info-tag/helpers/get-info-tag-content";
 const BarChart = ({
   container: Container,
   header = "Bar Chart",
