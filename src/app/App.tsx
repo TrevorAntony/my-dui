@@ -7,7 +7,6 @@ import {
 import AppLayout from "../AppLayout";
 import ComponentA from "../_playground/_content-components/ComponentA";
 import ComponentB from "../_playground/_content-components/ComponentB";
-import ComponentC from "../content-components/ComponentC";
 import ComponentD from "../_playground/_content-components/ComponentD";
 import Dashboard3DL from "../features/dashboard-3dl-parser/Dashboard3DL";
 import GridLayoutTester from "../_playground/_content-components/GridLayoutTester";
@@ -17,6 +16,7 @@ import DataTaskHandler from "../features/app-shell/duft-layout-and-navigation/da
 import Settings from "../features/app-shell/duft-settings/duft-settings";
 import Login from "../authentication/login";
 import "./App.css";
+import ComponentC from "../_playground/_content-components/ComponentC";
 
 const App: React.FC = () => {
   return (
