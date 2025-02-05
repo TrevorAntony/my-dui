@@ -1,5 +1,5 @@
 import type { Dispatch } from "react";
-import type { AppStateAction } from "../context/types";
+import type { AppStateAction } from "../core/context/types";
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class DispatchService {

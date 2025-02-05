@@ -1,0 +1,100 @@
+import React, { useState } from "react";
+import { CaseType, transformCase } from "../../../../../utils/CaseTransform";
+
+interface TableHeaderProps {
+  headers: string[];
+  visibleColumns: Record<string, boolean>;
+  sortState: Record<string, "ASC" | "DESC" | null>;
+  handleSort: (column: string) => void;
+  caseType?: CaseType;
+  isInModal?: boolean;
+}
+
+const TableHeader: React.FC<TableHeaderProps> = ({
+  headers,
+  visibleColumns,
+  sortState,
+  handleSort,
+  caseType = "sentence",
+  isInModal = false,
+}) => {
+  const [preservedHeaders, setPreservedHeaders] = useState<string[]>(headers);
+
+  if (
+    headers.length > 0 &&
+    JSON.stringify(headers) !== JSON.stringify(preservedHeaders)
+  ) {
+    setPreservedHeaders(headers);
+  }
+
+  const bgClasses = isInModal
+    ? "bg-gray-200 dark:bg-gray-800"
+    : "bg-gray-100 dark:bg-gray-600";
+
+  const hoverClasses = isInModal
+    ? "hover:bg-gray-400 dark:hover:bg-gray-600"
+    : "hover:bg-gray-200 dark:hover:bg-gray-500";
+
+  return (
+    <thead
+      className={`text-sm uppercase text-gray-700 dark:text-gray-400 ${bgClasses}`}
+    >
+      <tr>
+        {preservedHeaders
+          ?.filter((header) => visibleColumns[header])
+          .map((header) => (
+            <th
+              key={header}
+              scope="col"
+              className={`sticky top-0 cursor-pointer px-6 py-3 ${bgClasses} ${hoverClasses}`}
+              onClick={() => handleSort(header)}
+            >
+              <div className="flex items-center min-h-[24px]">
+                <span className="flex-1">
+                  {" "}
+                  {transformCase(header, caseType)}
+                </span>
+                <svg
+                  className={`ml-1.5 h5 w-5 flex-shrink-0 ${
+                    sortState[header]
+                      ? "text-highlight-600 dark:text-highlight-600"
+                      : "text-gray-600 dark:text-gray-300"
+                  }`}
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  {sortState[header] ? (
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d={
+                        sortState[header] === "ASC"
+                          ? "M8 20V10m0 10-3-3m3 3 3-3" // Up
+                          : "M8 10v10m0-10-3 3m3-3 3 3" // Down
+                      }
+                    />
+                  ) : (
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 20V10m0 10-3-3m3 3 3-3m5-13v10m0-10 3 3m-3-3-3 3"
+                    />
+                  )}
+                </svg>
+              </div>
+            </th>
+          ))}
+      </tr>
+    </thead>
+  );
+};
+
+export default TableHeader;
