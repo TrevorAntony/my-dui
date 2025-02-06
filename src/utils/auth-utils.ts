@@ -1,4 +1,4 @@
-import type { AppState } from "../context/types";
+import type { AppState } from "../core/context/types";
 
 export const checkAuthEnabled = (state: AppState): boolean => {
   return state.config?.features?.user_authentication ?? false;

@@ -1,15 +1,18 @@
 import { StrictMode, useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppStateProvider } from "./context/AppStateContext";
-import AppInitializer from "./ui-components/app-initializer";
+import AppInitializer from "./app/app-initializer";
 
 import { Flowbite } from "flowbite-react";
 import theme from "./flowbite-theme";
 
 import "./index.css";
 import "./input.css";
-import { ThemeModeProvider, useThemeMode } from "./context/ThemeModeContext";
+import { AppStateProvider } from "./core/context/AppStateContext";
+import {
+  ThemeModeProvider,
+  useThemeMode,
+} from "./core/context/ThemeModeContext";
 
 const container = document.getElementById("root");
 
