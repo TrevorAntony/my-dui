@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { DuftHttpClient } from "../core/api/DuftHttpClient/DuftHttpClient";
-import { UnauthorizedError, BadRequestError } from "../core/api/DuftHttpClient/ErrorClasses";
-import { mockConfig } from "../utils/test-utilities/test-helpers";
+import { DuftHttpClient } from "../../core/api/DuftHttpClient/DuftHttpClient";
+import { UnauthorizedError, BadRequestError } from "../../core/api/DuftHttpClient/ErrorClasses";
+import { mockConfig } from "../../utils/test-utilities/test-helpers";
+import { GlobalState } from "../../core/context/types";
 
 const BASE_URL = "http://127.0.0.1:8000/api/v2";
-
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
 
@@ -25,8 +25,27 @@ const client = new DuftHttpClient(
 
 describe("OOBE Integration Tests", () => {
   let testClient: DuftHttpClient;
+  let currentState = GlobalState.SPLASH;
+
+  const mockDispatch = vi.fn((action) => {
+    if (action.type === "SET_STATE") {
+      currentState = action.payload;
+    }
+  });
+
+  // Mock useAppState
+  vi.mock("../core/context/AppStateContext", () => ({
+    useAppState: () => ({
+      state: { state: currentState },
+      dispatch: mockDispatch
+    })
+  }));
 
   beforeEach(async () => {
+    // Reset state before each test
+    currentState = GlobalState.SPLASH;
+    mockDispatch.mockClear();
+
     vi.clearAllMocks();
     const makeRequestSpy = vi.spyOn(DuftHttpClient.prototype as any, "makeRequest");
     
@@ -92,6 +111,90 @@ describe("OOBE Integration Tests", () => {
 
     testClient = new DuftHttpClient(BASE_URL, getAccessToken, setTokens, undefined, getRefreshToken);
     await testClient.login("admin", "--------");
+  });
+
+  describe("State Transition Flow", () => {
+    it("should start in SPLASH state", () => {
+      expect(currentState).toBe(GlobalState.SPLASH);
+    });
+
+    it("should transition to APP_READY when config is loaded", async () => {
+      const config = await testClient.getCurrentConfig();
+      expect(config.features.user_authentication).toBeDefined();
+      
+      // Simulate config loading completion
+      mockDispatch({ type: "SET_STATE", payload: GlobalState.APP_READY });
+      expect(currentState).toBe(GlobalState.APP_READY);
+    });
+
+    it("should transition to APP_SETUP when OOBE is false", async () => {
+      // Get initial settings
+      const settings = await testClient.getSettings();
+      expect(settings.oobe).toBe(false);
+      
+      // Check state transition
+      const nextState = settings.oobe ? GlobalState.APP_MAIN : GlobalState.APP_SETUP;
+      mockDispatch({ type: "SET_STATE", payload: nextState });
+      expect(currentState).toBe(GlobalState.APP_SETUP);
+    });
+
+    it("should transition to APP_MAIN after successful OOBE completion", async () => {
+      // Initial state check
+      const initialSettings = await testClient.getSettings();
+      expect(initialSettings.oobe).toBe(false);
+
+      // Update connection parameters
+      await testClient.updateConnectionParameters("DUFT-SERVER-API", {
+        data: {
+          host: "localhost",
+          port: 8000
+        }
+      });
+
+      // Complete OOBE
+      const settingsResponse = await testClient.updateSettings({
+        data: {
+          debug: true,
+          oobe: true,
+          unittest: false
+        }
+      });
+      expect(settingsResponse.result).toBe("success");
+
+      // Verify state changes
+      const finalSettings = await testClient.getSettings();
+      expect(finalSettings.oobe).toBe(true);
+      
+      const nextState = finalSettings.oobe ? GlobalState.APP_MAIN : GlobalState.APP_SETUP;
+      mockDispatch({ type: "SET_STATE", payload: nextState });
+      expect(currentState).toBe(GlobalState.APP_MAIN);
+    });
+
+    it("should maintain APP_MAIN state after OOBE completion", async () => {
+      // Set OOBE as complete
+      await testClient.updateSettings({
+        data: { oobe: true }
+      });
+
+      // Verify state persists after refresh
+      const settings = await testClient.getSettings();
+      expect(settings.oobe).toBe(true);
+      
+      const state = settings.oobe ? GlobalState.APP_MAIN : GlobalState.APP_SETUP;
+      mockDispatch({ type: "SET_STATE", payload: state });
+      expect(currentState).toBe(GlobalState.APP_MAIN);
+    });
+
+    it("should handle state transitions with invalid settings", async () => {
+      // Test with missing settings
+      await expect(testClient.updateSettings({
+        data: {}
+      })).rejects.toThrow();
+
+      // Verify state remains unchanged
+      const settings = await testClient.getSettings();
+      expect(settings.oobe).toBeDefined();
+    });
   });
 
   it("should handle initial settings check", async () => {

@@ -11,6 +11,7 @@ export interface Connection {
   id: string;
   name: string;
   description: string;
+  testquery?: string;
   allowQueryEngine?: string;
   params: Param[];
 }
