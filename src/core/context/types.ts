@@ -52,6 +52,8 @@ export enum GlobalState {
   AUTH_REQUIRED = "AUTH_REQUIRED",
   AUTH_REFRESH_REQUIRED = "AUTH_REFRESH_REQUIRED",
   APP_READY = "APP_READY",
+  APP_SETUP = "APP_SETUP",
+  APP_MAIN = "APP_MAIN"
 }
 export interface AppState {
   config: Config | null;
