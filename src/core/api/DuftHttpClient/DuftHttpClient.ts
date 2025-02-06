@@ -294,7 +294,8 @@ export class DuftHttpClient {
   }
 
   async getSettings(): Promise<{ debug: boolean; oobe: boolean; unittest: boolean }> {
-    return this.makeRequest("GET", `${this.baseUrl}/settings`);
+    const response = await this.makeRequest("GET", `${this.baseUrl}/settings`);
+    return response.data || response; // Handle both wrapped and unwrapped responses
   }
 
   async updateSettings(settings: Record<string, any>): Promise<{
@@ -303,6 +304,7 @@ export class DuftHttpClient {
     data: any;
     status: number;
   }> {
-    return this.makeRequest("POST", `${this.baseUrl}/settings`, settings);
+    const response = await this.makeRequest("POST", `${this.baseUrl}/settings`, settings);
+    return response;
   }
 }
