@@ -1,11 +1,6 @@
-<<<<<<< HEAD:src/types/visual-props.ts
-import type { ContainerComponentProps } from "../3dl/types/types";
-import type { cascadeScaleMap } from "../helpers/constants";
-import type { WaterfallType } from "../helpers/waterfall-helpers";
-=======
 import type { ContainerComponentProps } from "./types";
 import type { cascadeScaleMap } from "../../../utils/constants";
->>>>>>> a37cd99e032853681a90a00f8cf2d1bdfff75ae5:src/features/visualizations/types/visual-props.ts
+import type { WaterfallType } from "../visual-utils/waterfall/helpers";
 export interface VisualProps {
   container?: React.ComponentType<ContainerComponentProps>;
   header?: string;

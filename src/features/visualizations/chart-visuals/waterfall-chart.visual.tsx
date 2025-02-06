@@ -1,12 +1,12 @@
 import { useState } from "react";
 import WaterfallChart from "@keyvaluesystems/react-waterfall-chart";
-import type { VisualProps } from "../../types/visual-props";
-import getInfoTagContents from "../../helpers/get-info-tag-content";
-import { useDataContext } from "../context/DataContext";
-import EmptyState from "../ui-elements/empty-state";
-import ChartSkeleton from "../../ui-components/chart-skeleton";
-import WaterFallTooltip from "../../components/waterfall-tooltip";
-import { getChartProps } from "../../helpers/waterfall-helpers";
+import type { VisualProps } from "../types/visual-props";
+import getInfoTagContents from "../visual-utils/info-tag/helpers/get-info-tag-content";
+import { useDataContext } from "../../../core/context/DataContext";
+import EmptyState from "../visual-utils/empty-state";
+import ChartSkeleton from "../visual-utils/loading-skeleton/chart-skeleton";
+import WaterFallTooltip from "../visual-utils/waterfall/tooltip";
+import { getChartProps } from "../visual-utils/waterfall/helpers";
 
 const WaterFallChart = ({
   container: Container,
