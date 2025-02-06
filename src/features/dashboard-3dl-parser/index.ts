@@ -58,3 +58,4 @@ export { default as CascadeNode } from "../../features/visualizations/chart-visu
 export { default as ServerQueryData } from "../../features/data-components/server-query-data/server-query-data";
 export { default as ApiData } from "../../features/data-components/urlData/api";
 export { default as OpenmrsData } from "../../features/data-components/openmrs-api/openmrs-api";
+export { default as PrefilteredDashboard } from "../visualizations/dashboard/prefiltered-dashboard";
