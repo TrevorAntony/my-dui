@@ -1,4 +1,4 @@
-import type { NavigationConfig } from "../features/app-shell/duft-layout-and-navigation/types";
+import type { NavigationConfig } from "../features/app-shell/duft-layout-and-navigation/app-layout/side-navigation-bar/types";
 
 //This constants file should be split into domain specific files, and only shared contants should be kept here.
 export const modalPixelWidthMap = {

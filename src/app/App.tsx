@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import AppLayout from "../AppLayout";
+import AppLayout from "../features/app-shell/duft-layout-and-navigation/app-layout/AppLayout";
 import ComponentA from "../_playground/_content-components/ComponentA";
 import ComponentB from "../_playground/_content-components/ComponentB";
 import ComponentD from "../_playground/_content-components/ComponentD";
@@ -12,7 +12,7 @@ import Dashboard3DL from "../features/dashboard-3dl-parser/Dashboard3DL";
 import GridLayoutTester from "../_playground/_content-components/GridLayoutTester";
 import TabLayoutTester from "../_playground/_content-components/TabLayoutTester";
 import SingleTableLayoutTester from "../_playground/_content-components/SingleTableLayoutTester";
-import DataTaskHandler from "../features/app-shell/duft-layout-and-navigation/data-task-handler";
+import DataTaskHandler from "../features/app-shell/duft-layout-and-navigation/app-layout/side-navigation-bar/data-tasks/data-task-handler";
 import Settings from "../features/app-shell/duft-settings/duft-settings";
 import Login from "../authentication/login";
 import "./App.css";

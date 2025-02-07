@@ -8,7 +8,7 @@ import { useAppState } from "../../../core/context/AppStateContext";
 import {
   downloadLogs,
   useLogFile,
-} from "../../../features/app-shell/duft-about/useLogFile";
+} from "../../../features/app-shell/duft-about/hooks/useLogFile";
 import ExportButton from "../../../features/visualizations/visual-utils/export-data/export-button";
 
 interface DuftHeaderProps {
