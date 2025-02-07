@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import React, { createContext, useContext } from "react";
 import { useSidebarConfig } from "../../features/app-shell/duft-layout-and-navigation/hooks/useSideBarConfig";
-import type { NavigationConfig } from "../../features/app-shell/duft-layout-and-navigation/types";
+import type { NavigationConfig } from "../../features/app-shell/duft-layout-and-navigation/app-layout/side-navigation-bar/types";
 
 const SidebarConfigContext = createContext<NavigationConfig>(undefined);
 

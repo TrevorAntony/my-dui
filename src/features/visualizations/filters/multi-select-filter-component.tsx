@@ -1,6 +1,6 @@
 import React from "react";
-import { MultiSelectFilter } from "../../../core/dashboard-3dl-parser";
 import type { MultiSelectFilterProps } from "./multi-filter";
+import MultiSelectFilter from "./multi-filter";
 
 const DuftMultiSelectFilter: React.FC<MultiSelectFilterProps> = ({
   name,

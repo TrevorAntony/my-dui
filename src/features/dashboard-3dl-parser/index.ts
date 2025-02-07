@@ -53,8 +53,8 @@ export { default as MultiSelectFilter } from "../../features/visualizations/filt
 export { default as InfoTag } from "../../features/visualizations/visual-utils/info-tag/info-tag";
 export { default as HtmlSnippet } from "../../features/visualizations/chart-visuals/html-snippet";
 export { default as DataProvider } from "../../features/data-components/data-provider/data-provider";
-export { default as QueryData } from "../../features/data-components/query-data";
+export { default as QueryData } from "../../features/data-components/query-data/query-data";
 export { default as CascadeNode } from "../../features/visualizations/chart-visuals/cascade-chart/cascade-components/cascade-node";
-export { default as ServerQueryData } from "../../features/data-components/server-query-data";
-export { default as ApiData } from "../../features/data-components/api";
+export { default as ServerQueryData } from "../../features/data-components/server-query-data/server-query-data";
+export { default as ApiData } from "../../features/data-components/urlData/api";
 export { default as OpenmrsData } from "../../features/data-components/openmrs-api/openmrs-api";
