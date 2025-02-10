@@ -1,14 +1,10 @@
-import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import dotenv from "dotenv";
+import path from "path";
+// Add this import
+import { defineConfig as defineVitestConfig } from "vitest/config";
 
-// Load environment variables from `.env` files
-dotenv.config();
-
-// ----------------------------------------------------------------------
-
-//@ts-expect-error the defineConfig type is not correct, it should include the test property
+// Merge configurations
 export default defineConfig({
   plugins: [react()],
   base: "./",
@@ -34,7 +30,6 @@ export default defineConfig({
   },
   server: {
     port: 3031,
-    //TO-DO: add support for multiple proxies for fetching URL data
     proxy: {
       "/omrsProxy": {
         target: "https://dev3.openmrs.org/openmrs/ws/rest/v1",
@@ -46,8 +41,18 @@ export default defineConfig({
   preview: {
     port: 3031,
   },
+  // Add test configuration here
+  define: {
+    "import.meta.vitest": "undefined",
+  },
+} as any);
+
+// Add separate Vitest config
+export const vitestConfig = defineVitestConfig({
   test: {
+    globals: true,
     environment: "jsdom",
-    setupFiles: "./setupTests.ts", // Path to your test setup file
+    setupFiles: ["./src/setupTests.ts"],
+    include: ["**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
   },
 });

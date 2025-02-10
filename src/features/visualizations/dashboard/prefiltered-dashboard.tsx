@@ -1,12 +1,12 @@
 import React from "react";
 import { useDashboardContext } from "./Dashboard";
 
-interface PrefiltepinkDashboardProps {
+interface PrefilteredDashboardProps {
   children: React.ReactNode;
   filters: string; // Format: "filter1,filter2,filter3"
 }
 
-const PrefilteredDashboard: React.FC<PrefiltepinkDashboardProps> = ({
+const PrefilteredDashboard: React.FC<PrefilteredDashboardProps> = ({
   children,
   filters,
 }) => {
