@@ -95,6 +95,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
   return (
     <>
       {dashboardData ? (
+        // @ts-expect-error: JSXParser allows multiple props, but expects specific props.
         <JSXParser
           components={{
             Dashboard: (props: React.ComponentProps<typeof Dashboard>) => (
