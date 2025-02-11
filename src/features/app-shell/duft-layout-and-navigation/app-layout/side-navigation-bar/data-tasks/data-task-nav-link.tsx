@@ -56,7 +56,7 @@ export const DataTaskNavLink: React.FC<DataTaskNavLinkProps> = ({
         executeButtonText="Execute"
         cancelButtonText="Cancel"
       >
-        <p>Are you sure?</p>
+        <p>{task?.prompt || `Are you sure?`}</p>
         {error && <p className="text-red-600">{error}</p>}
       </DataTaskDialog>
     </>
