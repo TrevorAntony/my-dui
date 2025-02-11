@@ -18,6 +18,7 @@ export interface DataTaskItem {
   icon: string;
   task: string;
   dashboard: string;
+  prompt?: string;
 }
 
 export interface SystemConfig {
