@@ -26,6 +26,7 @@ export { default as HeatmapChart } from "../../features/visualizations/chart-vis
 export { default as RadarChart } from "../../features/visualizations/chart-visuals/radar-chart.visual";
 export { default as CascadeChart } from "../../features/visualizations/chart-visuals/cascade-chart/cascade-chart.visual";
 export { default as ScoreCardTable } from "../../features/visualizations/tables/score-card-table.visual";
+export { default as WaterFallChart } from "../../features/visualizations/chart-visuals/waterfall-chart.visual";
 export { default as DataTable } from "../../features/visualizations/tables/DataTable";
 export { default as PreviewPage } from "../../_playground/_3dl/designers/PreviewPage";
 export { default as PivotTable } from "../../features/visualizations/tables/PivotTable";
