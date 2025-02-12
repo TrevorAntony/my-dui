@@ -20,6 +20,7 @@ import StackedBarChart from "../../../chart-visuals/stacked-bar-chart.visual";
 import Tile from "../../../chart-visuals/tile.visual";
 import DataTable from "../../../tables/DataTable";
 import ScoreCardTable from "../../../tables/score-card-table.visual";
+import WaterFallChart from "../../../chart-visuals/waterfall-chart.visual";
 
 export interface DetailsComponentRegistry {
   "bar-chart": typeof BarChart;
@@ -42,6 +43,7 @@ export interface DetailsComponentRegistry {
   "pivot-table": typeof PivotTable;
   "data-table": typeof DataTable;
   "infinite-scroll-table": typeof InfiniteScrollTable;
+  "waterfall-chart": typeof WaterFallChart;
 }
 
 const detailsComponentRegistry: DetailsComponentRegistry = {
@@ -65,6 +67,7 @@ const detailsComponentRegistry: DetailsComponentRegistry = {
   "pivot-table": PivotTable,
   "data-table": DataTable,
   "infinite-scroll-table": InfiniteScrollTable,
+  "waterfall-chart": WaterFallChart,
 };
 
 export const getDetailsComponent = <K extends keyof DetailsComponentRegistry>(
