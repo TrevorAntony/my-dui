@@ -1,17 +1,10 @@
 <div align="center">
-  <h1>flowbite-pro-react-admin-dashboard</h1>
-  <p>
-    Get started with a premium admin dashboard layout built with React, Tailwind CSS and Flowbite featuring 21 example pages including charts, kanban board, mailing system, and more.
-  </p>
-  <p>
-    <a href="https://discord.com/invite/4eeurUVvTy">
-      <img src="https://img.shields.io/discord/902911619032576090?color=%237289da&label=Discord" alt="Flowbite on Discord" />
-    </a>
-  </p>
+  <h1>DUFT UI</h1>
+  <p></p>
 </div>
 <div align="center">
   <a href="https://flowbite-react-admin-dashboard.vercel.app/">
-    <img src="https://i.postimg.cc/vmW12Pqh/Screenshot.png" />
+    <img src="./public/images/duft-homepage.png" />
   </a>
   <br />
 </div>
@@ -21,27 +14,11 @@
 
 ## Table of Contents
 
-- [How to use in your own project](#how-to-use-in-your-own-project)
 - [How to install](#how-to-install)
   - [Assumptions](#assumptions)
 - [How to develop locally](#how-to-develop-locally)
 - [How to build for production](#how-to-build-for-production)
 - [How to deploy](#how-to-deploy)
-
-## How to use in your own project
-
-In this case, we assume you already have a `nodejs` project with a `package.json`.
-
-You can copy any of the code from the `.tsx` files in `src/pages` to your own `nodejs` project. Some pages contain optional dependencies discussed further below. Pages might also use some of the static files found in `public`.
-
-Your project will need to have [`flowbite-react`](https://github.com/bacali95/flowbite-react) installed. That's it! If you're unfamiliar, see [the open-source guide on how to install `flowbite-react`](https://github.com/themesberg/flowbite-react#getting-started).
-
-Optional dependencies include:
-
-- [`react-icons`](https://react-icons.github.io/react-icons/) for most of the many icons used
-- [`react-apexcharts`](https://github.com/apexcharts/react-apexcharts) for charts/graphs found on [Dashboard page](https://github.com/themesberg/flowbite-react-admin-dashboard/blob/main/src/pages/index.tsx)
-- [`react-sortablejs`](https://github.com/SortableJS/react-sortablejs) for Kanban-style boards found on [Kanban page](https://github.com/themesberg/flowbite-react-admin-dashboard/blob/main/src/pages/kanban.tsx)
-- [`svgmap`](https://github.com/StephanWagner/svgMap) for maps found on [Dashboard page](https://github.com/themesberg/flowbite-react-admin-dashboard/blob/main/src/pages/kanban.tsx)
 
 ## How to install
 
@@ -60,8 +37,8 @@ npm i -g yarn
 Clone this repository
 
 ```sh
-git clone https://github.com/themesberg/flowbite-react-admin-dashboard.git
-cd flowbite-react-admin-dashboard
+git clone https://github.com/UCSF-IGHS/duft-ui
+cd duft-ui
 ```
 
 Install dependencies for this project
