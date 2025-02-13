@@ -5,6 +5,7 @@ import type { Config } from "./types";
 import { GlobalState, type AppState, type AppStateAction } from "./types";
 import { clearTokensFromLocalStorage } from "../api/DuftHttpClient/local-storage-functions";
 import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
+import config from "../../config";
 
 const initialState: AppState = {
   config: null,
@@ -60,7 +61,11 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
     DispatchService.setDispatch(dispatch);
 
     if (state.state === GlobalState.APP_READY) {
-      const client = new DuftHttpClient("http://localhost:8000/api/v2");    
+      const baseUrl = config.apiBaseUrl 
+        ? `${config.apiBaseUrl}/api/v2`
+        : `${window.location.origin}/api/v2`;
+      
+      const client = new DuftHttpClient(baseUrl);    
       client.getSettings().then(settings => {
         const isOobeComplete = settings.oobe; 
         const nextState = isOobeComplete ? GlobalState.APP_MAIN : GlobalState.APP_SETUP;
