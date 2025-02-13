@@ -51,6 +51,7 @@ import {
   ApiData,
   OpenmrsData,
   StaticData,
+  PrefilteredDashboard,
 } from ".";
 import {
   DuftGrid,
@@ -112,6 +113,7 @@ const Dashboard3DL: React.FC<Dashboard3DLProps> = ({
             Filter: DuftFilter,
             MultiSelectFilter: DuftMultiSelectFilter,
             Query,
+            PrefilteredDashboard,
             Visual1,
             Visual3,
             Visual4,
