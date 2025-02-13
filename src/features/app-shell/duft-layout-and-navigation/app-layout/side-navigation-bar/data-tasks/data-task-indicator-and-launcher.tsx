@@ -106,10 +106,11 @@ const DataTaskIndicatorAndLauncher: FC = function () {
       <DataTaskDialog
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        title="Data Refresh"
+        title="Running data task "
         executeButtonText="Run data task"
         disableButtons={data?.isRunning}
         hideCloseButton={data?.isRunning}
+        isLoading={data?.isRunning}
       >
         <div ref={contentRef} className="h-[180px] overflow-y-auto pb-8">
           {content}
