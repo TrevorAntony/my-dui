@@ -4,8 +4,9 @@ import DispatchService from "../../services/dispatchService";
 import type { Config } from "./types";
 import { GlobalState, type AppState, type AppStateAction } from "./types";
 import { clearTokensFromLocalStorage } from "../api/DuftHttpClient/local-storage-functions";
+import { DuftHttpClient } from "../api/DuftHttpClient/DuftHttpClient";
+import config from "../../config";
 
-// First add the enum
 const initialState: AppState = {
   config: null,
   state: GlobalState.SPLASH,
@@ -56,10 +57,28 @@ export const AppStateProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [state, dispatch] = useReducer(appStateReducer, initialState);
 
-  // Initialize the dispatch service
   useEffect(() => {
     DispatchService.setDispatch(dispatch);
-  }, []);
+
+    if (state.state === GlobalState.APP_READY) {
+      const baseUrl = config.apiBaseUrl 
+        ? `${config.apiBaseUrl}/api/v2`
+        : `${window.location.origin}/api/v2`;
+      
+      const client = new DuftHttpClient(baseUrl);    
+      client.getSettings().then(settings => {
+        const isOobeComplete = settings.oobe; 
+        const nextState = isOobeComplete ? GlobalState.APP_MAIN : GlobalState.APP_SETUP;
+        
+        dispatch({
+          type: "SET_STATE",
+          payload: nextState
+        });
+      }).catch(error => {
+        console.error('Error fetching settings:', error);
+      });
+    }
+  }, [state.state]);
 
   return (
     <AppStateContext.Provider value={{ state, dispatch }}>

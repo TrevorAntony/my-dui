@@ -12,7 +12,8 @@ class HttpError extends Error {
 
 export class BadRequestError extends HttpError {
   constructor(details?: any) {
-    super(400, "Bad Request", details);
+    const message = typeof details === 'string' ? details : details?.message || "Bad Request";
+    super(400, message, details);
     Object.setPrototypeOf(this, BadRequestError.prototype);
   }
 }

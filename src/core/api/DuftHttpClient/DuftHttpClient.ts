@@ -292,4 +292,19 @@ export class DuftHttpClient {
   async getLogFile(): Promise<{ content: string[] }> {
     return this.makeRequest("GET", `${this.baseUrl}/log`);
   }
+
+  async getSettings(): Promise<{ debug: boolean; oobe: boolean; unittest: boolean }> {
+    const response = await this.makeRequest("GET", `${this.baseUrl}/settings`);
+    return response.data || response; // Handle both wrapped and unwrapped responses
+  }
+
+  async updateSettings(settings: Record<string, any>): Promise<{
+    result: string;
+    message: string;
+    data: any;
+    status: number;
+  }> {
+    const response = await this.makeRequest("POST", `${this.baseUrl}/settings`, settings);
+    return response;
+  }
 }
